@@ -16,5 +16,6 @@ logging:
   level:
     com.com.goodjob: debug #
 
+
 openai:
   token: { OPENAI_API_KEY }
