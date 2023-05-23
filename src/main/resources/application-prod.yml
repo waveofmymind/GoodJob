@@ -1,21 +1,16 @@
 spring:
   datasource:
-    url: { DB_URL }
-    username: { DB_USERNAME }
-    password: { DB_PASSWORD }
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
-
-
-logging:
-  level:
-    com.com.goodjob: debug #
+        dialect: org.hibernate.dialect.MySQLDialect
 
 
 openai:
-  token: { OPENAI_API_KEY }
+  token: ${OPENAI_API_KEY}
