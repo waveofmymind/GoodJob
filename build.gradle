@@ -46,13 +46,16 @@ dependencies {
 
     //redis
 
+    //jasypt
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
+
+
     //lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
     // open ai
     implementation 'com.theokanning.openai-gpt3-java:api:0.11.1'
-    //implementation 'com.theokanning.openai-gpt3-java:client:0.11.1'
     implementation 'com.theokanning.openai-gpt3-java:service:0.11.1'
 
     //test
