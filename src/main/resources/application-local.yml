@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/goodjob
-    username: ENC(V2xu30BaZ4DCNxCxywbxtg==)
-    password: ENC(YUgZosy6QAqosywMXGIpqg==)
+    username: root
+    password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
