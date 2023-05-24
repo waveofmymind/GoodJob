@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ENC(Ky9jQ1kTz+u49I9lPjBVauNEcLKZlG712RWT1lM9g0eL2KmGHiVXYEpiVW7gKIhyZ29XRuK6GRFuZERsBeSEXTrjtj9p3X86QEdjRdsPdX946UGJG45Xp9oDvBtA1uva)
+    username: ENC(mAVSIC58xLOew8Eoqox+hA==)
+    password: ENC(SJoUAh3qgBbC8t7APRidV6fgQ3+npv3n)
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -11,6 +11,3 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
 
-
-openai:
-  token: ${OPENAI_API_KEY}

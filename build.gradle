@@ -42,8 +42,13 @@ dependencies {
 
     //Disk I/O
     runtimeOnly 'com.mysql:mysql-connector-j'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
     //redis
+
+    //jasypt
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
+
 
     //lombok
     compileOnly 'org.projectlombok:lombok'
@@ -51,12 +56,14 @@ dependencies {
 
     // open ai
     implementation 'com.theokanning.openai-gpt3-java:api:0.11.1'
-    //implementation 'com.theokanning.openai-gpt3-java:client:0.11.1'
     implementation 'com.theokanning.openai-gpt3-java:service:0.11.1'
 
     //test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+
+
+
 }
 
 tasks.named('test') {
