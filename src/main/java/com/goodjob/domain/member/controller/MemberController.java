@@ -1,15 +1,17 @@
 package com.goodjob.domain.member.controller;
 
-import com.goodjob.domain.member.dto.request.MemberRequestDto;
+import com.goodjob.domain.member.dto.request.JoinRequestDto;
+import com.goodjob.domain.member.dto.request.LoginRequestDto;
 import com.goodjob.domain.member.entity.Member;
 import com.goodjob.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,10 +25,16 @@ public class MemberController {
     }
 
     @PostMapping("/join")
-    public Member join(MemberRequestDto memberRequestDto) {
-        Member member = memberService.join(memberRequestDto);
+    public String join(JoinRequestDto joinRequestDto, Model model) {
+        boolean isJoinable = memberService.canJoin(joinRequestDto);
 
-        return member;
+        if (!isJoinable) {
+            return "F-1, 실패 메시지: 중복된 계정 or 이메일입니다.";
+        }
+        Member member = memberService.join(joinRequestDto);
+        model.addAttribute("member", member);
+
+        return "S-1, redirect: 회원가입 완료 메시지 & 로그인 창";
     }
 
     @GetMapping("/login")
@@ -35,8 +43,15 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public String login(MemberRequestDto memberRequestDto) {
-        // TODO: 로그인기능
-        return null;
+    public String login(LoginRequestDto loginRequestDto, Model model) {
+        Member member = memberService.findByAccount(loginRequestDto.getAccount()).orElse(null);
+
+        if (member == null) {
+            return "F-1, 실패 메시지: 아이디 혹은 비밀번호가 틀립니다.";
+        }
+
+        model.addAttribute("loginedMember", member);
+
+        return "S-1, redirect: 메인화면";
     }
 }
