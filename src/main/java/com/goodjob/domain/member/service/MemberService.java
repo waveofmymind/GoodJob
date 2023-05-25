@@ -17,14 +17,14 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public boolean canJoin(JoinRequestDto joinRequestDto) {
-        Optional<Member> opEmail = findByEmail(joinRequestDto.getEmail());
         Optional<Member> opAccount = findByAccount(joinRequestDto.getAccount());
+        Optional<Member> opEmail = findByEmail(joinRequestDto.getEmail());
 
-        if (opEmail.isPresent()) {
+        if (opAccount.isPresent()) { // 로그인 계정이 중복인 경우
             return false;
         }
 
-        if (opAccount.isPresent()) {
+        if (opEmail.isPresent()) { // 이메일이 중복인 경우
             return false;
         }
 
@@ -46,6 +46,14 @@ public class MemberService {
                 .build();
 
         return memberRepository.save(member);
+    }
+
+    private Optional<Member> findByEmail(String email) {
+        return memberRepository.findByEmail(email);
+    }
+
+    public Optional<Member> findByAccount(String account) {
+        return memberRepository.findByAccount(account);
     }
 
     @Transactional(readOnly = true)
