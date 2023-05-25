@@ -2,6 +2,7 @@ package com.goodjob.domain.article.entity;
 
 import com.goodjob.domain.comment.entity.Comment;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
@@ -15,6 +16,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @NoArgsConstructor
 @SuperBuilder
+@Getter
 public class Article {
     @Id
     @GeneratedValue(strategy = IDENTITY)
