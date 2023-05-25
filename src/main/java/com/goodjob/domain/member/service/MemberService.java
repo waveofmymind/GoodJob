@@ -16,6 +16,21 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
 
+    public boolean canJoin(JoinRequestDto joinRequestDto) {
+        Optional<Member> opEmail = findByEmail(joinRequestDto.getEmail());
+        Optional<Member> opAccount = findByAccount(joinRequestDto.getAccount());
+
+        if (opEmail.isPresent()) {
+            return false;
+        }
+
+        if (opAccount.isPresent()) {
+            return false;
+        }
+
+        return true;
+    }
+
     @Transactional
     public Member join(JoinRequestDto joinRequestDto) {
         String password = passwordEncoder.encode(joinRequestDto.getPassword());
@@ -33,6 +48,9 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
+    private Optional<Member> findByEmail(String email) {
+        return memberRepository.findByEmail(email);
+    }
     public Optional<Member> findByAccount(String account) {
         return memberRepository.findByAccount(account);
     }
