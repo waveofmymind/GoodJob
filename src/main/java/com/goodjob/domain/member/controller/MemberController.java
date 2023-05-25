@@ -29,11 +29,6 @@ public class MemberController {
         return member;
     }
 
-    @GetMapping("/list")
-    public List<Member> list() {
-
-    }
-
     @GetMapping("/login")
     public String showLoginForm() {
         return "/member/login";
