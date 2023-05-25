@@ -32,4 +32,9 @@ public class MemberService {
 
         return memberRepository.save(member);
     }
+
+    @Transactional(readOnly = true)
+    public Optional<Member> findByUsername(String username) {
+        return memberRepository.findByUsername(username);
+    }
 }
