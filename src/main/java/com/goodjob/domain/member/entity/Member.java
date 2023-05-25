@@ -1,5 +1,6 @@
 package com.goodjob.domain.member.entity;
 
+import com.goodjob.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +17,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @NoArgsConstructor
 @SuperBuilder
-public class Member {
+public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
