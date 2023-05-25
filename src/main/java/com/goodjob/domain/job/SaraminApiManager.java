@@ -7,9 +7,7 @@ import com.goodjob.domain.job.jsonproperty.Job;
 import com.goodjob.domain.job.jsonproperty.JobsWrapper;
 
 
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 public class SaraminApiManager extends JobStatistic{
 
@@ -18,7 +16,7 @@ public class SaraminApiManager extends JobStatistic{
 
     public void saraminStatistic() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        JobsWrapper jobsWrapper = objectMapper.readValue(Constant.SARAMIN, JobsWrapper.class);
+        JobsWrapper jobsWrapper = objectMapper.readValue(Constants.SARAMIN, JobsWrapper.class);
 
         for (Job job : jobsWrapper.getJobs().getJob()) {
             String company = job.getCompany().getDetail().getName();
@@ -27,8 +25,9 @@ public class SaraminApiManager extends JobStatistic{
             String sector = job.getPosition().getIndustry().getName();
             LocalDateTime createDate = LocalDateTime.parse(job.getPostingTimestamp());
             LocalDateTime deadLine = LocalDateTime.parse(job.getExpirationDate());
+            int career = job.getPosition().getExperienceLevel().getCareer();
 
-            JobResponseDto jobResponseDto = new JobResponseDto(company, subject, url, sector, createDate, deadLine);
+            JobResponseDto jobResponseDto = new JobResponseDto(company, subject, url, sector, createDate, deadLine, career);
             setJobDtos(jobResponseDto);
         }
     }

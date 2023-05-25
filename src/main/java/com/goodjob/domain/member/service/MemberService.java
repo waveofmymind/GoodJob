@@ -48,10 +48,8 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    private Optional<Member> findByEmail(String email) {
-        return memberRepository.findByEmail(email);
-    }
-    public Optional<Member> findByAccount(String account) {
-        return memberRepository.findByAccount(account);
+    @Transactional(readOnly = true)
+    public Optional<Member> findByUsername(String username) {
+        return memberRepository.findByUsername(username);
     }
 }

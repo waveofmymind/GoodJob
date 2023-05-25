@@ -12,4 +12,7 @@ public class Position {
 
     @JsonProperty("industry")
     private Industry industry;
+
+    @JsonProperty("experience-level")
+    private ExperienceLevel experienceLevel;
 }

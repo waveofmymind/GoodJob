@@ -62,8 +62,15 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 
+    // Spring Batch
+    implementation("org.springframework.boot:spring-boot-starter-batch")
 
+    // xml
+    implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '4.0.2'
+}
 
+jar {
+    enabled = false
 }
 
 tasks.named('test') {
