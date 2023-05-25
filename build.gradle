@@ -64,6 +64,8 @@ dependencies {
 
     // Spring Batch
     implementation("org.springframework.boot:spring-boot-starter-batch")
+
+    // xml
     implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '4.0.2'
 }
 
