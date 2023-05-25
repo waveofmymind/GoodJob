@@ -1,0 +1,82 @@
+
+<html xmlns:layout=""
+      data-theme="dark">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <!-- 제이쿼리 불러오기 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+  <!-- toastr 불러오기 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+  <link rel="stylesheet" href="https://jhs512.github.io/toastr/toastr.css">
+
+  <!-- 공통 JS 불러오기 -->
+  <script src="/common/common.js"></script>
+  <!-- 공통 CSS 불러오기 -->
+  <link rel="stylesheet" href="/common/common.css">
+  <!-- 폰트어썸 아이콘 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+</head>
+<body>
+<!-- 데이지 UI 불러오기 -->
+<link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.5/dist/full.css" rel="stylesheet" type="text/css"/>
+<!-- 테일윈드 불러오기 -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+
+<!-- nav-bar 시작 -->
+<div th:replace="~{layout/navbar :: navbarFragment}"></div>
+<!-- nav-bar 끝 -->
+
+<!-- body 시작 -->
+<main layout:fragment="content" ></main>
+<!-- body 끝 -->
+
+<script th:inline="javascript">
+  // 타임리프 문법(파라미터, ? 뒤에 입력된 매개변수들)
+  const params = /*[[ ${param} ]]*/ null;
+
+  if (params.msg) {
+    toastNotice(params.msg[0]);
+  }
+
+  if (params.errorMsg) {
+    toastWarning(params.errorMsg[0]);
+  }
+
+  // history.back 에 의해서 돌아온 경우에 실행됨
+  // 평소에도 실행됨
+  $(window).bind("pageshow", function (event) {
+    const localStorageKeyAboutHistoryBackErrorMsg = "historyBackErrorMsg___" + location.href;
+
+    if (localStorage.getItem(localStorageKeyAboutHistoryBackErrorMsg)) {
+      toastWarning(localStorage.getItem(localStorageKeyAboutHistoryBackErrorMsg));
+      localStorage.removeItem(localStorageKeyAboutHistoryBackErrorMsg);
+    } else {
+      const localStorageKeyAboutHistoryBackErrorMsg = "historyBackErrorMsg___null";
+
+      if (localStorage.getItem(localStorageKeyAboutHistoryBackErrorMsg)) {
+        toastWarning(localStorage.getItem(localStorageKeyAboutHistoryBackErrorMsg));
+        localStorage.removeItem(localStorageKeyAboutHistoryBackErrorMsg);
+      }
+    }
+  });
+
+  $(function () {
+    $("#flexSwitchCheckChecked").click(function () {
+      $("#Toggle").toggle();
+    });
+  });
+</script>
+
+</body>
+</html>
