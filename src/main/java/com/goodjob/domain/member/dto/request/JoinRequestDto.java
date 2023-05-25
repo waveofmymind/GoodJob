@@ -3,7 +3,7 @@ package com.goodjob.domain.member.dto.request;
 import lombok.Getter;
 
 @Getter
-public class MemberRequestDto {
+public class JoinRequestDto {
     private String account;
     private String password;
     private String username;
