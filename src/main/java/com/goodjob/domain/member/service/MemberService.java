@@ -1,6 +1,6 @@
 package com.goodjob.domain.member.service;
 
-import com.goodjob.domain.member.dto.request.MemberRequestDto;
+import com.goodjob.domain.member.dto.request.JoinRequestDto;
 import com.goodjob.domain.member.entity.Member;
 import com.goodjob.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,19 +17,23 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Member join(MemberRequestDto memberRequestDto) {
-        String password = passwordEncoder.encode(memberRequestDto.getPassword());
+    public Member join(JoinRequestDto joinRequestDto) {
+        String password = passwordEncoder.encode(joinRequestDto.getPassword());
 
         Member member = Member
                 .builder()
-                .account(memberRequestDto.getAccount())
+                .account(joinRequestDto.getAccount())
                 .password(password)
-                .username(memberRequestDto.getUsername())
-                .email(memberRequestDto.getEmail())
-                .phone(memberRequestDto.getPhone())
+                .username(joinRequestDto.getUsername())
+                .email(joinRequestDto.getEmail())
+                .phone(joinRequestDto.getPhone())
                 .isDeleted(false)
                 .build();
 
         return memberRepository.save(member);
+    }
+
+    public Optional<Member> findByAccount(String account) {
+        return memberRepository.findByAccount(account);
     }
 }
