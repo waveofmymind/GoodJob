@@ -19,4 +19,6 @@ public class JobResponseDto {
     private LocalDateTime createDate; // 생성일
 
     private LocalDateTime deadLine; // 마감일
+
+    private int carrer; // 경력
 }
