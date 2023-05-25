@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/member")
@@ -25,6 +27,11 @@ public class MemberController {
         Member member = memberService.join(memberRequestDto);
 
         return member;
+    }
+
+    @GetMapping("/list")
+    public List<Member> list() {
+
     }
 
     @GetMapping("/login")

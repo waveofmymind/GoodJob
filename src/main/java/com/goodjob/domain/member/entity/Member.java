@@ -28,8 +28,11 @@ public class Member {
     private String account;
     private String password;
     private String username;
+    @Column(unique = true)
     private String email;
     private String phone;
-    private String userRole;
+    private String userRole; // user, admin
     private boolean isDeleted;
+
+    // TODO: 의존관계
 }

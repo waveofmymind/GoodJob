@@ -344,3 +344,5 @@ gradle-app.setting
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,java,gradle,intellij,intellij+all,intellij+iml
 
+# 로컬 설정파일
+application-local.yml
