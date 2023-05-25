@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Profile;
 
 
 @Configuration
-@Profile("local")
 @EnableEncryptableProperties
 public class JasyptConfig {
 
