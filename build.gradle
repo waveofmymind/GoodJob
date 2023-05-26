@@ -67,6 +67,10 @@ dependencies {
 
     // xml
     implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '4.0.2'
+
+    //mapstruct
+    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 }
 
 jar {

@@ -1,0 +1,18 @@
+<table>
+    <thead>
+    <tr>
+        <th>제목</th>
+        <th>작성일시</th>
+        <th>좋아요수</th>
+        <th>조회수</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="articleResponseDto : ${articleResponseDtoList}">
+        <td th:text="${articleResponseDto.title}"></td>
+        <td th:text="${articleResponseDto.content}"></td>
+        <td th:text="${articleResponseDto.likeCount}"></td>
+        <td th:text="${articleResponseDto.viewCount}"></td>
+    </tr>
+    </tbody>
+</table>
