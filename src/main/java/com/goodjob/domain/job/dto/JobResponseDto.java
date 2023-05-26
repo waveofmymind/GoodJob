@@ -20,5 +20,5 @@ public class JobResponseDto {
 
     private LocalDateTime deadLine; // 마감일
 
-    private int carrer; // 경력
+    private int career; // 경력
 }
