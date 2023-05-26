@@ -17,6 +17,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public boolean canJoin(JoinRequestDto joinRequestDto) {
+        findByNickname(joinRequestDto.getNickname());
         Optional<Member> opAccount = findByAccount(joinRequestDto.getAccount());
         Optional<Member> opEmail = findByEmail(joinRequestDto.getEmail());
 
@@ -39,9 +40,8 @@ public class MemberService {
                 .builder()
                 .account(joinRequestDto.getAccount())
                 .password(password)
-                .username(joinRequestDto.getUsername())
+                .nickname(joinRequestDto.getNickname())
                 .email(joinRequestDto.getEmail())
-                .phone(joinRequestDto.getPhone())
                 .isDeleted(false)
                 .build();
 
@@ -57,7 +57,7 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Member> findByUsername(String username) {
-        return memberRepository.findByUsername(username);
+    public Optional<Member> findByNickname(String nickname) {
+        return memberRepository.findByNickname(nickname);
     }
 }

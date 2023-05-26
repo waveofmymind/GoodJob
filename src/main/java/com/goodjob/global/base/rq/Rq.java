@@ -76,7 +76,7 @@ public class Rq {
 
         // 데이터가 없는지 체크
         if (member == null) {
-            member = memberService.findByUsername(user.getUsername()).orElseThrow();
+            member = memberService.findByNickname(user.getUsername()).orElseThrow();
         }
 
         return member;
