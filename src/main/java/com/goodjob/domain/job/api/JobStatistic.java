@@ -1,4 +1,4 @@
-package com.goodjob.domain.job;
+package com.goodjob.domain.job.api;
 
 import com.goodjob.domain.job.dto.JobResponseDto;
 import lombok.Getter;
