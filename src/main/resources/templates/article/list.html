@@ -9,8 +9,10 @@
     </thead>
     <tbody>
     <tr th:each="articleResponseDto : ${articleResponseDtoList}">
-        <td th:text="${articleResponseDto.title}"></td>
-        <td th:text="${articleResponseDto.content}"></td>
+        <td>
+            <a th:href="@{|/article/detail/${articleResponseDto.id}|}" th:text="${articleResponseDto.title}"></a>
+        </td>
+        <td th:text="${articleResponseDto.createDate}"></td>
         <td th:text="${articleResponseDto.likeCount}"></td>
         <td th:text="${articleResponseDto.viewCount}"></td>
     </tr>

@@ -35,7 +35,9 @@ public class JobKoreaApiManager extends JobStatistic {
 
             LocalDateTime createDate = LocalDateTime.parse(items.getCreateData());
             LocalDateTime deadLine = LocalDateTime.parse(items.getDeadLine());
-            JobResponseDto jobResponseDto = new JobResponseDto(items.getCompany(), items.getSubject(), items.getUrl(), items.getSector(), createDate, deadLine);
+            int career = items.getCareer();
+
+            JobResponseDto jobResponseDto = new JobResponseDto(items.getCompany(), items.getSubject(), items.getUrl(), items.getSector(), createDate, deadLine, career);
             setJobDtos(jobResponseDto);
         } catch (JAXBException e) {
             log.error("Jaxb 디펜던시 수정 필요");

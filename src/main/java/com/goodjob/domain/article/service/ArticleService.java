@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,5 +23,10 @@ public class ArticleService {
         return articles.stream()
                 .map(articleMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    public ArticleResponseDto getArticle(Long id) {
+        Article article = this.articleRepository.findById(id).orElseThrow();
+        return articleMapper.toDto(article);
     }
 }

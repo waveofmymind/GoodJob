@@ -29,6 +29,8 @@ public class ArticleController {
 
     @GetMapping("/detail/{id}")
     public String detail (Model model, @PathVariable("id") Long id) {
+        ArticleResponseDto article = this.articleService.getArticle(id);
+        model.addAttribute("article", article);
         return "/article/detailArticle";
 
     }
