@@ -1,9 +1,10 @@
-package com.goodjob.domain.job;
+package com.goodjob.domain.job.api;
 
 
+import com.goodjob.domain.job.Constants;
 import com.goodjob.domain.job.dto.JobResponseDto;
-import com.goodjob.domain.job.jaxb.DataListTag;
-import com.goodjob.domain.job.jaxb.Items;
+import com.goodjob.domain.job.api.jaxb.DataListTag;
+import com.goodjob.domain.job.api.jaxb.Items;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
