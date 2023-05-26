@@ -1,10 +1,7 @@
-package com.goodjob.domain.job;
+package com.goodjob.domain.job.entity;
 
 import com.goodjob.domain.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,8 +24,10 @@ public class Company {
 
     private String company;
 
+    @Column(unique = true)
     private String subject;
 
+    @Column(unique = true)
     private String url;
 
     private String sector;

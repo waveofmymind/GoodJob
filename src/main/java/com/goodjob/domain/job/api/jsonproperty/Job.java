@@ -1,4 +1,4 @@
-package com.goodjob.domain.job.jsonproperty;
+package com.goodjob.domain.job.api.jsonproperty;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;

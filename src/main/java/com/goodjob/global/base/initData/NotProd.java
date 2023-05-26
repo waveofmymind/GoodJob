@@ -26,7 +26,7 @@ public class NotProd {
                         .builder()
                         .account("test-account")
                         .password("1234")
-                        .username("test")
+                        .nickname("test")
                         .build();
 
                 memberRepository.save(member1);
