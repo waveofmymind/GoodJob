@@ -35,7 +35,11 @@ public class ArticleService {
                 .collect(Collectors.toList());
     }
 
-    public ArticleResponseDto getArticle(Long id) {
+    public ArticleResponseDto getArticleResponseDto(Long id) {
         return articleMapper.toDto(articleRepository.findById(id).orElseThrow());
+    }
+
+    public Article getArticle(Long id) {
+        return articleRepository.findById(id).orElseThrow();
     }
 }

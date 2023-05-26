@@ -32,8 +32,8 @@ public class ArticleController {
 
     @GetMapping("/detail/{id}")
     public String detail (Model model, @PathVariable("id") Long id) {
-        ArticleResponseDto article = articleService.getArticle(id);
-        model.addAttribute("article", article);
+        ArticleResponseDto articleResponseDto = articleService.getArticleResponseDto(id);
+        model.addAttribute("articleResponseDto", articleResponseDto);
         return "/article/detailArticle";
 
     }

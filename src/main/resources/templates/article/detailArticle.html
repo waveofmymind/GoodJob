@@ -1,2 +1,7 @@
-<h1 th:text="${article.title}"></h1>
-<div th:text="${article.content}"></div>
+<h1 th:text="${articleResponseDto.title}"></h1>
+<div th:text="${articleResponseDto.content}"></div>
+
+<form th:action="@{|/comment/create/${articleResponseDto.id}|}" method="post">
+    <textarea name="content" id="content" rows="15"></textarea>
+    <input type="submit" value="답변등록">
+</form>

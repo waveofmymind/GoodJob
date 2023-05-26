@@ -42,7 +42,18 @@ public class NotProd {
                         .viewCount(0L)
                         .build();
 
+                Article article2 = Article
+                        .builder()
+                        .createDate(LocalDateTime.now())
+                        .modifiedDate(LocalDateTime.now())
+                        .title("테스트2")
+                        .content("내용테스트2")
+                        .likeCount(0L)
+                        .viewCount(0L)
+                        .build();
+
                 articleRepository.save(article1);
+                articleRepository.save(article2);
             }
         };
     }
