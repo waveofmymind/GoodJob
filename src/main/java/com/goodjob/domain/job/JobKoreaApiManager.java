@@ -21,6 +21,7 @@ public class JobKoreaApiManager extends JobStatistic {
 
     public void jobKoreaStatistic()  {
         URL url = null;
+        int career = 0;
         try {
             url = new URL(Constants.JOBKOREA); // api 발급시 url + key 입력
         } catch (MalformedURLException e) {
@@ -33,9 +34,10 @@ public class JobKoreaApiManager extends JobStatistic {
             DataListTag dataListTag = (DataListTag) unmarshaller.unmarshal(url);
             Items items = dataListTag.getItems();
 
+            career = items.getCareer();
             LocalDateTime createDate = LocalDateTime.parse(items.getCreateData());
             LocalDateTime deadLine = LocalDateTime.parse(items.getDeadLine());
-            JobResponseDto jobResponseDto = new JobResponseDto(items.getCompany(), items.getSubject(), items.getUrl(), items.getSector(), createDate, deadLine);
+            JobResponseDto jobResponseDto = new JobResponseDto(items.getCompany(), items.getSubject(), items.getUrl(), items.getSector(), createDate, deadLine, career);
             setJobDtos(jobResponseDto);
         } catch (JAXBException e) {
             log.error("Jaxb 디펜던시 수정 필요");
