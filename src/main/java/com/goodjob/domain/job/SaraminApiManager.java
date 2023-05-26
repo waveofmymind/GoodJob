@@ -15,6 +15,8 @@ public class SaraminApiManager extends JobStatistic{
 
 
     public void saraminStatistic() throws JsonProcessingException {
+
+
         ObjectMapper objectMapper = new ObjectMapper();
         JobsWrapper jobsWrapper = objectMapper.readValue(Constants.SARAMIN, JobsWrapper.class);
 
