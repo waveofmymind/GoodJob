@@ -4,9 +4,6 @@ server:
 spring:
   profiles:
     active: local
-  thymeleaf:
-    cache: false
-    prefix: file:src/main/resources/templates/
   jpa:
     show-sql: true
     open-in-view: false

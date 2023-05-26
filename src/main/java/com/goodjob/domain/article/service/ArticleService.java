@@ -4,6 +4,7 @@ import com.goodjob.domain.article.dto.response.ArticleResponseDto;
 import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.article.mapper.ArticleMapper;
 import com.goodjob.domain.article.repository.ArticleRepository;
+import com.goodjob.global.base.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,15 +19,23 @@ public class ArticleService {
     private final ArticleMapper articleMapper;
 
     public List<ArticleResponseDto> getList() {
-        List<Article> articles = this.articleRepository.findAll();
+        List<Article> articles = articleRepository.findAll();
 
         return articles.stream()
                 .map(articleMapper::toDto)
                 .collect(Collectors.toList());
     }
 
+    public List<ArticleResponseDto> findAll() {
+        List<Article> articles = articleRepository.findAll();
+
+        return articles
+                .stream()
+                .map(articleMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
     public ArticleResponseDto getArticle(Long id) {
-        Article article = this.articleRepository.findById(id).orElseThrow();
-        return articleMapper.toDto(article);
+        return articleMapper.toDto(articleRepository.findById(id).orElseThrow());
     }
 }

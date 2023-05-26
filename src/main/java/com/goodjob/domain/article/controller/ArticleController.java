@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,14 +23,16 @@ public class ArticleController {
 
     @GetMapping("/list")
     public String list(Model model) {
-        List<ArticleResponseDto> articleResponseDtoList = this.articleService.getList();
-        model.addAttribute(articleResponseDtoList);
+        List<ArticleResponseDto> articleList = articleService.findAll();
+
+        model.addAttribute(articleList);
+
         return "/article/list";
     }
 
     @GetMapping("/detail/{id}")
     public String detail (Model model, @PathVariable("id") Long id) {
-        ArticleResponseDto article = this.articleService.getArticle(id);
+        ArticleResponseDto article = articleService.getArticle(id);
         model.addAttribute("article", article);
         return "/article/detailArticle";
 
