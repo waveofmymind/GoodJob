@@ -6,7 +6,7 @@ import lombok.Getter;
 public class JoinRequestDto {
     private String account;
     private String password;
-    private String username;
+    private String nickname;
     private String email;
     private String phone;
 }

@@ -1,9 +1,9 @@
 spring:
   datasource:
-    url: jdbc:mariadb://127.0.0.1:3306/goodjob?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
-    username: ENC(7JY14CMZTTa1RORczVt2Hw==)
-    password: ENC(dSo9G4/D9uroek5yMfBnKw/+w16gkSpf)
-    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/goodjob?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: create
