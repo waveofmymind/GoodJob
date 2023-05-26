@@ -17,9 +17,13 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public boolean canJoin(JoinRequestDto joinRequestDto) {
-        findByNickname(joinRequestDto.getNickname());
+        Optional<Member> opNickname = findByNickname(joinRequestDto.getNickname());
         Optional<Member> opAccount = findByAccount(joinRequestDto.getAccount());
         Optional<Member> opEmail = findByEmail(joinRequestDto.getEmail());
+
+        if (opNickname.isPresent()) { // 닉네임이 중복인 경우
+            return false;
+        }
 
         if (opAccount.isPresent()) { // 로그인 계정이 중복인 경우
             return false;
