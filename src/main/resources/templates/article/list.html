@@ -8,13 +8,13 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="articleResponseDto : ${articleResponseDtoList}">
+    <tr th:each="article : ${articleList}">
         <td>
-            <a th:href="@{|/article/detail/${articleResponseDto.id}|}" th:text="${articleResponseDto.title}"></a>
+            <a th:href="@{|/article/detail/${article.id}|}" th:text="${article.title}"></a>
         </td>
-        <td th:text="${articleResponseDto.createDate}"></td>
-        <td th:text="${articleResponseDto.likeCount}"></td>
-        <td th:text="${articleResponseDto.viewCount}"></td>
+        <td th:text="${#temporals.format(article.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text="${article.likeCount}"></td>
+        <td th:text="${article.viewCount}"></td>
     </tr>
     </tbody>
 </table>

@@ -3,6 +3,7 @@ package com.goodjob.domain.comment.entity;
 import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.member.entity.Member;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
@@ -15,6 +16,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @NoArgsConstructor
 @SuperBuilder
+@Getter
 public class Comment {
     @Id
     @GeneratedValue(strategy = IDENTITY)

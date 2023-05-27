@@ -25,7 +25,7 @@ public class ArticleController {
     public String list(Model model) {
         List<ArticleResponseDto> articleList = articleService.findAll();
 
-        model.addAttribute(articleList);
+        model.addAttribute("articleList", articleList);
 
         return "/article/list";
     }
@@ -33,7 +33,7 @@ public class ArticleController {
     @GetMapping("/detail/{id}")
     public String detail (Model model, @PathVariable("id") Long id) {
         ArticleResponseDto articleResponseDto = articleService.getArticleResponseDto(id);
-        model.addAttribute("articleResponseDto", articleResponseDto);
+        model.addAttribute("article", articleResponseDto);
         return "/article/detailArticle";
 
     }

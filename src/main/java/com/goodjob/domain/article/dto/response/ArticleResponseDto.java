@@ -1,5 +1,6 @@
 package com.goodjob.domain.article.dto.response;
 
+import com.goodjob.domain.comment.dto.response.CommentResponseDto;
 import com.goodjob.domain.comment.entity.Comment;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,4 +18,5 @@ public class ArticleResponseDto {
     private String content;
     private Long likeCount;
     private Long viewCount;
+    private List<CommentResponseDto> commentList;
 }

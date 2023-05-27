@@ -28,7 +28,8 @@ public class Article {
     private LocalDateTime modifiedDate;
     @ManyToOne
     private Member member;
-    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
+    //ResponseDto 매핑 과정에서 오류가 발생해서 즉시 로딩으로 변경
+    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<Comment> commentList;
     private String title;
     private String content;

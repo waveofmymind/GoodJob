@@ -7,6 +7,7 @@ import com.goodjob.domain.article.repository.ArticleRepository;
 import com.goodjob.global.base.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,7 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final ArticleMapper articleMapper;
 
+    @Transactional
     public List<ArticleResponseDto> getList() {
         List<Article> articles = articleRepository.findAll();
 
