@@ -14,7 +14,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // TODO: security 설정
         http
                 .formLogin(
                         formLogin ->
@@ -23,8 +22,6 @@ public class SecurityConfig {
                 ).logout(
                         logout ->
                                 logout.logoutUrl("/member/logout")
-                ).csrf(
-                        csrfConfigurer -> csrfConfigurer.disable()
                 );
 
                 return http.build();
