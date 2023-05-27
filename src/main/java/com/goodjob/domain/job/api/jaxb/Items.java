@@ -1,4 +1,4 @@
-package com.goodjob.domain.job.jaxb;
+package com.goodjob.domain.job.api.jaxb;
 
 import jakarta.xml.bind.annotation.XmlElement;
 import lombok.Data;

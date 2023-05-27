@@ -2,11 +2,12 @@ server:
   port: 8080
 
 spring:
+  batch:
+    jdbc:
+      initialize-schema: always
   profiles:
     active: local
-  thymeleaf:
-    cache: false
-    prefix: file:src/main/resources/templates/
+
   jpa:
     show-sql: true
     open-in-view: false
@@ -23,3 +24,6 @@ jasypt:
 openai:
   token: ENC(2s7L+EDKX4PVEWHg43Ucs7pKFygFMQg4o8XBKynBx6cB3lUUeTh3yW1HcAMJcYImHWcXHN8c+PuUVnb1vUrViw==)
 
+scheduler:
+  cron:
+    job: "0 */5 * * * *"

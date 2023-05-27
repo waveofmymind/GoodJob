@@ -1,10 +1,11 @@
-package com.goodjob.domain.job;
+package com.goodjob.domain.job.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.goodjob.domain.job.Constants;
 import com.goodjob.domain.job.dto.JobResponseDto;
-import com.goodjob.domain.job.jsonproperty.Job;
-import com.goodjob.domain.job.jsonproperty.JobsWrapper;
+import com.goodjob.domain.job.api.jsonproperty.Job;
+import com.goodjob.domain.job.api.jsonproperty.JobsWrapper;
 
 
 import java.time.LocalDateTime;
