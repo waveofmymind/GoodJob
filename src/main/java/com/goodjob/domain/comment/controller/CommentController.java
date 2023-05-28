@@ -5,6 +5,8 @@ import com.goodjob.domain.article.dto.response.ArticleResponseDto;
 import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.article.service.ArticleService;
 import com.goodjob.domain.comment.dto.request.CommentRequestDto;
+import com.goodjob.domain.comment.dto.response.CommentResponseDto;
+import com.goodjob.domain.comment.entity.Comment;
 import com.goodjob.domain.comment.service.CommentService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -12,13 +14,13 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,7 +30,7 @@ public class CommentController {
     private final ArticleService articleService;
 
     @PostMapping("/create/{id}")
-    public String createAnswer(Model model, @PathVariable("id") Long id, @Valid CommentForm commentForm, BindingResult bindingResult) {
+    public String createComment(Model model, @PathVariable("id") Long id, @Valid CommentForm commentForm, BindingResult bindingResult) {
         Article article = articleService.getArticle(id);
         if (bindingResult.hasErrors()) {
             model.addAttribute("article", article);
@@ -38,10 +40,47 @@ public class CommentController {
         return String.format("redirect:/article/detail/%s", id);
     }
 
-    @AllArgsConstructor
     @Getter
+    @Setter
     public static class CommentForm {
         @NotBlank(message="내용을 작성해주셔야 합니다.")
-        private final String content;
+        private String content;
+    }
+
+//    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modify/{id}")
+    public String commentModify(CommentForm commentForm, @PathVariable("id") Long id, Principal principal) {
+        CommentResponseDto commentResponseDto = commentService.getCommentResponseDto(id);
+//        if (!commentResponseDto.getMember().getUsername().equals(principal.getName())) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+//        }
+        commentForm.setContent(commentResponseDto.getContent());
+        return "/article/answerForm";
+    }
+
+//    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/modify/{id}")
+    public String commentModify(@Valid CommentForm commentForm, BindingResult bindingResult,
+                               @PathVariable("id") Long id, Principal principal) {
+//        if (bindingResult.hasErrors()) {
+//            return "answer_form";
+//        }
+        Comment comment = commentService.getComment(id);
+//        if (!commentResponseDto.getMember().getUsername().equals(principal.getName())) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+//        }
+        commentService.modify(comment, commentForm.getContent());
+        return String.format("redirect:/article/detail/%s", comment.getArticle().getId());
+    }
+
+//    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/delete/{id}")
+    public String commentDelete(Principal principal, @PathVariable("id") Long id) {
+        Comment comment = commentService.getComment(id);
+//        if (!commentResponseDto.getMember().getUsername().equals(principal.getName())) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+//        }
+        commentService.delete(comment);
+        return String.format("redirect:/article/detail/%s", comment.getArticle().getId());
     }
 }

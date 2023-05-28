@@ -1,6 +1,7 @@
 package com.goodjob.domain.article.controller;
 
 import com.goodjob.domain.article.dto.response.ArticleResponseDto;
+import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.article.service.ArticleService;
 import com.goodjob.domain.comment.controller.CommentController;
 import jakarta.validation.Valid;
@@ -9,6 +10,8 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -56,15 +60,52 @@ public class ArticleController {
         return "redirect:/article/list";
     }
 
-    @AllArgsConstructor
     @Getter
+    @Setter
     public static class ArticleForm {
         @NotBlank(message="제목을 작성해주셔야 합니다.")
         @Size(max=200)
-        private final String title;
+        private String title;
         @NotBlank(message="내용을 작성해주셔야 합니다.")
-        private final String content;
+        private String content;
     }
 
 
+//    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modify/{id}")
+    public String articleModify(ArticleForm articleForm, @PathVariable("id") Long id, Principal principal) {
+        ArticleResponseDto articleResponseDto = articleService.getArticleResponseDto(id);
+//        if(!article.getMember().getUsername().equals(principal.getName())) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+//        }
+        articleForm.setTitle(articleResponseDto.getTitle());
+        articleForm.setContent(articleResponseDto.getContent());
+        return "/article/articleForm";
+    }
+
+//    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/modify/{id}")
+    public String articleModify(@Valid ArticleForm articleForm, BindingResult bindingResult,
+                                 Principal principal, @PathVariable("id") Long id) {
+        if (bindingResult.hasErrors()) {
+            return "/article/articleForm";
+        }
+        Article article = articleService.getArticle(id);
+//        if (!articleResponseDto.getMember().getUsername().equals(principal.getName())) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+//        }
+        articleService.modify(article, articleForm.getTitle(), articleForm.getContent());
+        return String.format("redirect:/article/detail/%s", id);
+    }
+
+//    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/delete/{id}")
+    public String articleDelete(Principal principal, @PathVariable("id") Long id) {
+        Article article = articleService.getArticle(id);
+//        if (!article.getMember().getUsername().equals(principal.getName())) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
+//        }
+        articleService.delete(article);
+        return "redirect:/article/list";
+    }
 }

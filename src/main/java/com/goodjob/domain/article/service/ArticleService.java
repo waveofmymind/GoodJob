@@ -19,17 +19,9 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final ArticleMapper articleMapper;
 
-    @Transactional
-    public List<ArticleResponseDto> getList() {
-        List<Article> articles = articleRepository.findAll();
-
-        return articles.stream()
-                .map(articleMapper::toDto)
-                .collect(Collectors.toList());
-    }
 
     public List<ArticleResponseDto> findAll() {
-        List<Article> articles = articleRepository.findAll();
+        List<Article> articles = articleRepository.findByIsDeletedFalse();
 
         return articles
                 .stream()
@@ -61,7 +53,20 @@ public class ArticleService {
                 .isDeleted(false)
                 .build();
 
-        this.articleRepository.save(article);
+        articleRepository.save(article);
     }
 
+    @Transactional
+    public void modify(Article article, String title, String content) {
+        article.setTitle(title);
+        article.setContent(content);
+
+        articleRepository.save(article);
+    }
+
+    @Transactional
+    public void delete(Article article) {
+        article.setDeleted(true);
+        articleRepository.save(article);
+    }
 }
