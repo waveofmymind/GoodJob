@@ -1,9 +1,8 @@
 package com.goodjob.domain.article.controller;
 
 import com.goodjob.domain.article.dto.response.ArticleResponseDto;
-import com.goodjob.domain.article.entity.Article;
-import com.goodjob.domain.article.repository.ArticleRepository;
 import com.goodjob.domain.article.service.ArticleService;
+import com.goodjob.domain.comment.controller.CommentController;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -13,10 +12,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ public class ArticleController {
     }
 
     @GetMapping("/detail/{id}")
-    public String detail (Model model, @PathVariable("id") Long id) {
+    public String detail (Model model, @PathVariable("id") Long id, CommentController.CommentForm commentForm) {
         ArticleResponseDto articleResponseDto = articleService.getArticleResponseDto(id);
         model.addAttribute("article", articleResponseDto);
         return "/article/detailArticle";

@@ -5,14 +5,12 @@ import com.goodjob.domain.article.dto.response.ArticleResponseDto;
 import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.article.mapper.ArticleMapper;
 import com.goodjob.domain.article.repository.ArticleRepository;
-import com.goodjob.global.base.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,4 +63,5 @@ public class ArticleService {
 
         this.articleRepository.save(article);
     }
+
 }
