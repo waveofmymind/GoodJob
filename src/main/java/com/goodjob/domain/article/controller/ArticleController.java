@@ -29,6 +29,15 @@ import java.util.List;
 public class ArticleController {
     private final ArticleService articleService;
 
+    @GetMapping("/main")
+    public String main(Model model) {
+        List<ArticleResponseDto> articleList = articleService.findAll();
+
+        model.addAttribute("articleList", articleList);
+
+        return "/article/main";
+    }
+
     @GetMapping("/list")
     public String list(Model model) {
         List<ArticleResponseDto> articleList = articleService.findAll();

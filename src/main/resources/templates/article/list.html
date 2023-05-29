@@ -1,20 +1,35 @@
-<table>
-    <thead>
-    <tr>
-        <th>제목</th>
-        <th>작성일시</th>
-        <th>좋아요수</th>
-        <th>조회수</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="article : ${articleList}">
-        <td>
-            <a th:href="@{|/article/detail/${article.id}|}" th:text="${article.title}"></a>
-        </td>
-        <td th:text="${#temporals.format(article.createDate, 'yyyy-MM-dd HH:mm')}"></td>
-        <td th:text="${article.likeCount}"></td>
-        <td th:text="${article.viewCount}"></td>
-    </tr>
-    </tbody>
-</table>
+<html layout:decorate="~{layout/layout}">
+<div layout:fragment="content" class="container my-3">
+    <div class="container mx-auto p-8 w-2/3">
+        <div class="flex items-center justify-between border-b">
+            <h1 class="text-2xl font-bold">전체 게시글</h1>
+            <a th:href="@{/article/create}" class="ml-2 my-3 bg-info text-white px-4 py-2 rounded-lg text-sm">게시글 작성</a>
+        </div>
+        <ul class="container">
+            <li class="bg-info text-white p-3 flex justify-between border-b h-11">
+                <div class="text-sm flex-grow">게시글 제목</div>
+                <div class="text-sm mx-4 w-16">글쓴이</div>
+                <div class="text-sm mx-4 w-16">추천수</div>
+                <div class="text-sm mx-4 w-16">댓글수</div>
+                <div class="text-sm mx-4 w-16">조회수</div>
+            </li>
+            <li th:each="article : ${articleList}" class="bg-white p-3 flex justify-between border-b h-11">
+                <a th:href="@{|/article/detail/${article.id}|}" th:text="${article.title}" class="text-sm flex-grow"></a>
+                <p class="text-sm mx-4 w-16">글쓴이1</p>
+                <div th:text="${article.likeCount}" class="text-sm mx-4 w-16"></div>
+                <p th:text="${#lists.size(article.commentList)}" class="text-sm mx-4 w-16"></p>
+                <p th:text="${article.viewCount}" class="text-sm mx-4 w-16"></p>
+            </li>
+
+        </ul>
+
+    </div>
+
+    <div class="flex justify-center">
+        <div class="flex items-center border border-gray-300 rounded-md px-4 py-2 w-96">
+            <input type="text" class="focus:outline-none flex-grow" placeholder="검색어를 입력하세요">
+            <a href="#" class="text-blue-500">🔍</a>
+        </div>
+    </div>
+</div>
+</html>
