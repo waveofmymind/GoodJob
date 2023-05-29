@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -44,13 +43,11 @@ public class MemberController {
 
     @PostMapping("/login")
     public String login(@Valid LoginRequestDto loginRequestDto) {
-        RsData loginRsData = memberService.canLogin(loginRequestDto.getAccount(), loginRequestDto.getPassword());
+        RsData loginRsData = memberService.genAccessToken(loginRequestDto.getAccount(), loginRequestDto.getPassword());
 
         if (loginRsData.isFail()) {
             return rq.historyBack(loginRsData);
         }
-
-        // TODO: jwt 토큰 발급,
 
         return rq.redirectWithMsg("/home/index", loginRsData);
     }

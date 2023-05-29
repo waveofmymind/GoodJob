@@ -19,6 +19,11 @@ public class SecurityConfig {
                         formLogin ->
                                 formLogin.loginPage("/member/login")
                                         .usernameParameter("account")
+                ).authorizeHttpRequests(
+                        authorizeHttpRequests ->
+                                authorizeHttpRequests
+                                        .requestMatchers("*")
+                                        .permitAll()
                 ).logout(
                         logout ->
                                 logout.logoutUrl("/member/logout")

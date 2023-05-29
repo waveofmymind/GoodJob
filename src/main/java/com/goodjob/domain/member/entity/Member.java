@@ -4,6 +4,8 @@ import com.goodjob.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Map;
+
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -30,4 +32,11 @@ public class Member extends BaseEntity {
     private String userRole; // user, admin
 
     private boolean isDeleted;
+
+    public Map<String, Object> toClaims() {
+        return Map.of(
+                "id", getId(),
+                "account", getAccount()
+        );
+    }
 }

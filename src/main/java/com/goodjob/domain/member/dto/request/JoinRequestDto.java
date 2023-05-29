@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class JoinRequestDto {
     @NotBlank
-    @Size(min = 3, max = 30)
+    @Size(min = 4, max = 30)
     private String account;
     @NotBlank
     @Size(min = 4, max = 15)

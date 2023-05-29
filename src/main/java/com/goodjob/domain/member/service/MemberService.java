@@ -3,6 +3,7 @@ package com.goodjob.domain.member.service;
 import com.goodjob.domain.member.dto.request.JoinRequestDto;
 import com.goodjob.domain.member.entity.Member;
 import com.goodjob.domain.member.repository.MemberRepository;
+import com.goodjob.global.base.jwt.JwtProvider;
 import com.goodjob.global.base.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
+    private final JwtProvider jwtProvider;
 
     private RsData canJoin(JoinRequestDto joinRequestDto) {
         log.info("joinRequestDto= {}", joinRequestDto.toString());
@@ -66,21 +68,23 @@ public class MemberService {
         return RsData.of("S-1", "%s님의 회원가입이 완료되었습니다.".formatted(joinRequestDto.getNickname()), member);
     }
 
-    public RsData canLogin(String account, String password) {
+    public RsData genAccessToken(String account, String password) {
         Member member = findByAccount(account).orElse(null);
-        log.info("member ={}", member.toString());
 
-        if (member == null) { // 계정이 존재하지 않는 경우
+        if (member == null) {
             return RsData.of("F-1", "아이디 혹은 비밀번호가 틀립니다.");
         }
 
-        String encodedPassword = passwordEncoder.encode(password);
-
-        if (!encodedPassword.equals(member.getPassword())) { // 비밀번호가 다른 경우
+        if (!passwordEncoder.matches(password, member.getPassword())) {
             return RsData.of("F-1", "아이디 혹은 비밀번호가 틀립니다.");
         }
 
-        return RsData.of("S-1", "로그인 가능합니다.");
+        return RsData.of("S-1", "로그인 가능합니다.", jwtProvider.genToken(member.toClaims()));
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Member> findByNickname(String nickname) {
+        return memberRepository.findByNickname(nickname);
     }
 
     private Optional<Member> findByEmail(String email) {
@@ -89,10 +93,5 @@ public class MemberService {
 
     private Optional<Member> findByAccount(String account) {
         return memberRepository.findByAccount(account);
-    }
-
-    @Transactional(readOnly = true)
-    public Optional<Member> findByNickname(String nickname) {
-        return memberRepository.findByNickname(nickname);
     }
 }
