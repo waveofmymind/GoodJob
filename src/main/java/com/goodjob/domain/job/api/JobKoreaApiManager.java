@@ -8,19 +8,36 @@ import com.goodjob.domain.job.api.jaxb.Items;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
-public class JobKoreaApiManager extends JobStatistic {
+public class JobKoreaApiManager {
+    private static JobKoreaApiManager instance = null;
+    private static final List<JobResponseDto> jobResponseDtos;
 
     private String key;
+    static {
+        instance = new JobKoreaApiManager();
+        jobResponseDtos = new ArrayList<>();
+    }
 
 
-    public void jobKoreaStatistic()  {
+    public static List<JobResponseDto> getJobResponseDtos() {
+        return jobResponseDtos;
+    }
+    public static void setJobDtos(JobResponseDto jobDtos) {
+        jobResponseDtos.add(jobDtos);
+    }
+
+
+    public static void jobKoreaStatistic()  {
         URL url = null;
         int career = 0;
         try {
@@ -31,15 +48,19 @@ public class JobKoreaApiManager extends JobStatistic {
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(DataListTag.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-
             DataListTag dataListTag = (DataListTag) unmarshaller.unmarshal(url);
-            Items items = dataListTag.getItems();
 
-            career = items.getCareer();
-            LocalDateTime createDate = LocalDateTime.parse(items.getCreateData());
-            LocalDateTime deadLine = LocalDateTime.parse(items.getDeadLine());
-            JobResponseDto jobResponseDto = new JobResponseDto(items.getCompany(), items.getSubject(), items.getUrl(), items.getSector(), createDate, deadLine, career);
-            setJobDtos(jobResponseDto);
+            for (Items item : dataListTag.getItems()) {
+                career = item.getCareer();
+                LocalDateTime createDate = LocalDateTime.parse(item.getCreateData());
+                LocalDateTime deadLine = LocalDateTime.parse(item.getDeadLine());
+
+                JobResponseDto jobResponseDto = new JobResponseDto(
+                        item.getCompany(), item.getSubject(), item.getUrl(),
+                        item.getSector(), createDate, deadLine, career);
+
+                setJobDtos(jobResponseDto);
+            }
         } catch (JAXBException e) {
             log.error("Jaxb 디펜던시 수정 필요");
         }

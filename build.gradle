@@ -74,6 +74,10 @@ dependencies {
 
     //레이아웃
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+
+    // selenium
+    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.9.1'
+
 }
 
 jar {
@@ -83,3 +87,4 @@ jar {
 tasks.named('test') {
     useJUnitPlatform()
 }
+

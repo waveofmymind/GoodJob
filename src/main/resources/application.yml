@@ -27,3 +27,6 @@ openai:
 scheduler:
   cron:
     job: "0 */5 * * * *"
+
+accessKey:
+  saramin: ENC(vAiGCHWxA7xlfVU04DkiksG8V05r4NKVzDoqYA8WbkmF7O6g6pZ/RxidyvQ4YppZd9suBjOz0lHSBVSFQ0NqkA==)

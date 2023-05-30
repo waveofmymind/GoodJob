@@ -1,53 +1,133 @@
 package com.goodjob.batch;
 
+import com.goodjob.domain.job.api.JobKoreaApiManager;
+import com.goodjob.domain.job.api.SaraminApiManager;
+import com.goodjob.domain.job.dto.JobResponseDto;
 import com.goodjob.domain.job.service.CompanyService;
 import lombok.RequiredArgsConstructor;
+import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.*;
+import org.springframework.batch.core.configuration.annotation.JobScope;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
-import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRepository;
-import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import java.util.Date;
+import java.util.List;
+
 
 @Configuration
 @Slf4j
 @RequiredArgsConstructor
 public class BatchConfiguration {
     private final CompanyService companyService;
+    private final PlatformTransactionManager transactionManager;
 
     @Bean
-    public Job job1(JobRepository jobRepository, Step step1) {
+    public Job job1(JobRepository jobRepository) {
         return new JobBuilder("job1", jobRepository)
-                .start(step1)
+                .start(step1(jobRepository))
+                .next(step2(jobRepository))
+                .next(step3(jobRepository))
                 .build();
     }
 
     @Bean
-    public Step step1(JobRepository jobRepository, Tasklet tasklet1, PlatformTransactionManager transactionManager) {
-        return new StepBuilder("step1", jobRepository)
-                .tasklet(tasklet1, transactionManager)
+    @JobScope
+    public Step step1(JobRepository jobRepository) {
+        return new StepBuilder("Saramin", jobRepository)
+                .tasklet(taskletSaramin(), transactionManager)
                 .build();
     }
 
     @Bean
-    public Tasklet tasklet1() {
+    @StepScope
+    public Tasklet taskletSaramin() {
         return (contribution, chunkContext) -> {
-            System.out.println("테스크렛 1");
+            System.out.println("사람인 테스크렛");
+            // 사람인 공고 기간 필터로직 추가
+            SaraminApiManager.saraminStatistic();
             return RepeatStatus.FINISHED;
         };
     }
+
+    @Bean
+    @JobScope
+    public Step step2(JobRepository jobRepository) {
+        return new StepBuilder("JobKorea", jobRepository)
+                .tasklet(taskletJobKorea(), transactionManager)
+                .build();
+    }
+
+    @Bean
+    @StepScope
+    public Tasklet taskletJobKorea() {
+        return (contribution, chunkContext) -> {
+            System.out.println("JobKorea 테스크렛");
+            // 잡코리아 공고 기간 필터로직 추가
+            JobKoreaApiManager.jobKoreaStatistic();
+            return RepeatStatus.FINISHED;
+        };
+    }
+
+    @JobScope
+    @Bean
+    public Step step3(JobRepository jobRepository) {
+        return new StepBuilder("DB 작업", jobRepository)
+                .tasklet(taskletStatistic(), transactionManager)
+                .build();
+
+    }
+
+    @StepScope
+    @Bean
+    public Tasklet taskletStatistic() {
+        return (contribution, chunkContext) -> {
+            List<JobResponseDto> pureSaram = SaraminApiManager.getJobResponseDtos();
+            List<JobResponseDto> pureJobKorea = JobKoreaApiManager.getJobResponseDtos();
+            // 사람인 에서 받은것 잡코리아 동일내용 필터
+            List<JobResponseDto> saram = companyService.getFilterDto(pureSaram, pureJobKorea);
+            // 잡코리아 에서 받은것 사람인 동일내용 필터
+            List<JobResponseDto> jobKorea = companyService.getFilterDto(pureJobKorea, pureSaram);
+
+            for (JobResponseDto dto : saram) {
+                companyService.create(dto);
+            }
+            for (JobResponseDto dto : jobKorea) {
+                companyService.create(dto);
+            }
+            return RepeatStatus.FINISHED;
+        };
+    }
+
+    /**
+     * Chunk Processing
+     * @return
+     */
+
+//    @Bean
+//    @StepScope
+//    public ItemReader<JobResponseDto> saraminReader() {
+//        // 검색일 최소, 최대 값 설정으로 이후 값만 받아오기
+//        saramin.saraminStatistic();
+//        List<JobResponseDto> jobResponseDtos = saramin.getJobResponseDtos();
+//        return new ListItemReader<>(jobResponseDtos);
+//    }
+//
+//    @Bean
+//    @StepScope
+//    public ItemProcessor<JobResponseDto, JobResponseDto> saraminProcessor() {
+//
+//        return
+//    }
+    
 }
 
 
