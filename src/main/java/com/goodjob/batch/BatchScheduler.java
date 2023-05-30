@@ -1,6 +1,7 @@
 package com.goodjob.batch;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersInvalidException;
@@ -18,18 +19,19 @@ import java.util.Date;
 
 @Configuration
 @RequiredArgsConstructor
+@Slf4j
 public class BatchScheduler {
     private final JobLauncher jobLauncher;
     private final BatchConfiguration batchConfiguration;
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
-    private final Tasklet tasklet;
 
 
     @Scheduled(cron = "${scheduler.cron.job}")
-    public void runJob() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
-        System.out.println("스케줄링 하는중임");
-        jobLauncher.run(batchConfiguration.job1(jobRepository, batchConfiguration.step1(jobRepository, tasklet, transactionManager)),
+    public void runJob() throws JobParametersInvalidException, JobExecutionAlreadyRunningException
+            , JobRestartException, JobInstanceAlreadyCompleteException {
+        log.debug("스케줄링 하는중");
+        jobLauncher.run(batchConfiguration.job1(jobRepository),
                 new JobParametersBuilder().addDate("date", new Date()).toJobParameters());
     }
 }

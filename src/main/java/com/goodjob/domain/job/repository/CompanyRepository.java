@@ -3,5 +3,8 @@ package com.goodjob.domain.job.repository;
 import com.goodjob.domain.job.entity.Company;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface CompanyRepository extends JpaRepository<Company, Long> {
+    List<Company> findBySubjectAndUrl(String subject, String url);
 }
