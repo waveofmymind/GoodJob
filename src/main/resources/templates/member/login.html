@@ -1,12 +1,12 @@
 <h1>로그인 폼</h1>
 <body>
-    <form action="/member/login" method="post">
+    <form th:action="@{/member/login}" method="post">
         <div>
-            <label for="account">ID</label>
-            <input type="text" id="account" name="account" required>
+            <label for="username">ID</label>
+            <input type="text" id="username" name="username" required>
         </div>
         <div>
-            <label for="password">Password:</label>
+            <label for="password">Password</label>
             <input type="password" id="password" name="password" required>
         </div>
         <div>

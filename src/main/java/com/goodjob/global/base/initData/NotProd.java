@@ -3,7 +3,6 @@ package com.goodjob.global.base.initData;
 import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.article.repository.ArticleRepository;
 import com.goodjob.domain.member.dto.request.JoinRequestDto;
-import com.goodjob.domain.member.entity.Member;
 import com.goodjob.domain.member.service.MemberService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -19,15 +18,14 @@ import java.time.LocalDateTime;
 public class NotProd {
 
     @Bean
-    CommandLineRunner initData(MemberService memberService, PasswordEncoder passwordEncoder, ArticleRepository articleRepository) {
+    CommandLineRunner initData(MemberService memberService, ArticleRepository articleRepository) {
         return new CommandLineRunner() {
             @Override
             @Transactional
             public void run(String... args) throws Exception {
                 JoinRequestDto joinRequestDto = new JoinRequestDto();
-                joinRequestDto.setAccount("test");
-                String password = passwordEncoder.encode("1234");
-                joinRequestDto.setPassword(password);
+                joinRequestDto.setUsername("test");
+                joinRequestDto.setPassword("1234");
                 joinRequestDto.setNickname("tester");
                 joinRequestDto.setEmail("test@naver.com");
 

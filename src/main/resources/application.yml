@@ -30,4 +30,4 @@ scheduler:
 
 custom:
   jwt:
-    secretKey: ENC(5jHbdNHZR5Ypu89H/pob721s5mNdUU9iM7nG8fI6F1c=)
+    secretKey: ENC(td8jcP/eOBMP9/6Nph0R0lmIzC5mhwk5ln46rp4GVt1mfwzI+J9YkA/bnu9dGxkzxRZk9k2dTWGmNUL2BLxVwQ==)

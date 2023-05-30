@@ -25,16 +25,16 @@ public class MemberService {
     private RsData canJoin(JoinRequestDto joinRequestDto) {
         log.info("joinRequestDto= {}", joinRequestDto.toString());
 
+        Optional<Member> opUsername = findByUsername(joinRequestDto.getUsername());
         Optional<Member> opNickname = findByNickname(joinRequestDto.getNickname());
-        Optional<Member> opAccount = findByAccount(joinRequestDto.getAccount());
         Optional<Member> opEmail = findByEmail(joinRequestDto.getEmail());
+
+        if (opUsername.isPresent()) { // 로그인 계정이 중복인 경우
+            return RsData.of("F-1", "이미 존재하는 계정입니다.");
+        }
 
         if (opNickname.isPresent()) { // 닉네임이 중복인 경우
             return RsData.of("F-1", "이미 존재하는 닉네임입니다.");
-        }
-
-        if (opAccount.isPresent()) { // 로그인 계정이 중복인 경우
-            return RsData.of("F-1", "이미 존재하는 계정입니다.");
         }
 
         if (opEmail.isPresent()) { // 이메일이 중복인 경우
@@ -56,7 +56,7 @@ public class MemberService {
 
         Member member = Member
                 .builder()
-                .account(joinRequestDto.getAccount())
+                .username(joinRequestDto.getUsername())
                 .password(password)
                 .nickname(joinRequestDto.getNickname())
                 .email(joinRequestDto.getEmail())
@@ -68,22 +68,28 @@ public class MemberService {
         return RsData.of("S-1", "%s님의 회원가입이 완료되었습니다.".formatted(joinRequestDto.getNickname()), member);
     }
 
-    public RsData genAccessToken(String account, String password) {
-        Member member = findByAccount(account).orElse(null);
+    public RsData genAccessToken(String username, String password) {
+        Member member = findByUsername(username).orElse(null);
+        log.info("member ={}", member.toString());
 
         if (member == null) {
             return RsData.of("F-1", "아이디 혹은 비밀번호가 틀립니다.");
         }
 
-        if (!passwordEncoder.matches(password, member.getPassword())) {
+        boolean matches = passwordEncoder.matches(password, member.getPassword());
+        log.info("mathces ={}", matches);
+
+        if (!matches) {
             return RsData.of("F-1", "아이디 혹은 비밀번호가 틀립니다.");
         }
 
-        return RsData.of("S-1", "로그인 가능합니다.", jwtProvider.genToken(member.toClaims()));
+        String accessToken = jwtProvider.genToken(member.toClaims());
+        log.info("accessToken ={}", accessToken);
+
+        return RsData.of("S-1", "로그인 가능합니다.", accessToken);
     }
 
-    @Transactional(readOnly = true)
-    public Optional<Member> findByNickname(String nickname) {
+    private Optional<Member> findByNickname(String nickname) {
         return memberRepository.findByNickname(nickname);
     }
 
@@ -91,7 +97,11 @@ public class MemberService {
         return memberRepository.findByEmail(email);
     }
 
-    private Optional<Member> findByAccount(String account) {
-        return memberRepository.findByAccount(account);
+    public Optional<Member> findByUsername(String username) {
+        return memberRepository.findByUsername(username);
+    }
+
+    public void delete(Long id) {
+        memberRepository.deleteById(id);
     }
 }

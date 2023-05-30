@@ -15,6 +15,8 @@ import java.util.Map;
 @Component
 public class JwtProvider {
     private SecretKey cachedSecretKey;
+    private final static long TOKEN_VALIDATION_SECOND = 1000L * 60 * 60;
+    private final static long REFRESH_TOKEN_VALIDATION_SECOND = 1000L * 60 * 60 * 24 * 15;
 
     @Value("${custom.jwt.secretKey}")
     private String secretKeyPlain;
@@ -37,7 +39,7 @@ public class JwtProvider {
     public String genToken(Map<String, Object> claims) {
         long now = new Date().getTime();
         // 지금으로부터 1시간의 유효기간 가지는 accessToken 생성
-        Date accessTokenExpiresIn = new Date(now + 1000L * 60 * 60);
+        Date accessTokenExpiresIn = new Date(now + TOKEN_VALIDATION_SECOND);
 
         return Jwts.builder()
                 .claim("body", Ut.json.toStr(claims))

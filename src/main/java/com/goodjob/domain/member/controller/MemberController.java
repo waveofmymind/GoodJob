@@ -8,24 +8,27 @@ import com.goodjob.global.base.rq.Rq;
 import com.goodjob.global.base.rsData.RsData;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/member")
+@Slf4j
 public class MemberController {
     private final Rq rq;
     private final MemberService memberService;
 
     @GetMapping("/join")
-    public String showJoinForm() {
+    @PreAuthorize("isAnonymous()")
+    public String showJoin() {
         return "/member/join";
     }
 
     @PostMapping("/join")
+    @PreAuthorize("isAnonymous()")
     public String join(@Valid JoinRequestDto joinRequestDto) {
         RsData<Member> joinRsData = memberService.join(joinRequestDto);
 
@@ -37,18 +40,39 @@ public class MemberController {
     }
 
     @GetMapping("/login")
-    public String showLoginForm() {
+    @PreAuthorize("isAnonymous()")
+    public String showLogin() {
+        log.info("get login 요청 받음!");
+
+        // TODO: 추후 경로 수정
         return "/member/login";
     }
 
     @PostMapping("/login")
+    @PreAuthorize("isAnonymous()")
     public String login(@Valid LoginRequestDto loginRequestDto) {
-        RsData loginRsData = memberService.genAccessToken(loginRequestDto.getAccount(), loginRequestDto.getPassword());
+        log.info("loginRequestDto= {}", loginRequestDto.toString());
+
+        RsData loginRsData = memberService.genAccessToken(loginRequestDto.getUsername(), loginRequestDto.getPassword());
+        log.info("loginRsData.ResultCode ={}", loginRsData.getResultCode());
+        log.info("loginRsData.Data ={}", loginRsData.getData());
 
         if (loginRsData.isFail()) {
-            return rq.historyBack(loginRsData);
+            // TODO: 추후 경로 수정
+            return "/member/join";
         }
 
-        return rq.redirectWithMsg("/home/index", loginRsData);
+        // TODO: 추후 경로 수정
+        return "/member/join";
+    }
+
+    // TODO: 삭제안됨.. 추후 수정
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String delete(@PathVariable Long id) {
+        log.info("id ={}", id);
+        memberService.delete(id);
+        // TODO: 추후 경로 수정
+        return "/member/join";
     }
 }

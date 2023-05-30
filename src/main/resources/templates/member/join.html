@@ -1,1 +1,24 @@
 <h1>회원가입 폼</h1>
+<body>
+<form action="/member/join" method="post">
+    <div>
+        <label for="username">ID</label>
+        <input type="text" id="username" name="username" required>
+    </div>
+    <div>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+    </div>
+    <div>
+        <label for="nickname">Nickname</label>
+        <input type="text" id="nickname" name="nickname" required>
+    </div>
+    <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+    </div>
+    <div>
+        <input type="submit" value="Join">
+    </div>
+</form>
+</body>
