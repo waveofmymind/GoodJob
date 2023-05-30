@@ -23,7 +23,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable).
                 sessionManagement(AbstractHttpConfigurer::disable).
                 authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/resumes/**").permitAll()
+                        .requestMatchers("/resumes/**", "/member/**").permitAll()
                 ).
                 formLogin(AbstractHttpConfigurer::disable);
 
