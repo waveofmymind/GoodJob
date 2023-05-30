@@ -38,6 +38,7 @@ public class SaraminApiManager {
         key = value;
     }
 
+
     public static List<JobResponseDto> getJobResponseDtos() {
         return jobResponseDtos;
     }
