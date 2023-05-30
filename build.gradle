@@ -76,9 +76,10 @@ dependencies {
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 }
 
-jar {
-    enabled = false
+bootJar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
+
 
 tasks.named('test') {
     useJUnitPlatform()
