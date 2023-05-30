@@ -5,9 +5,11 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @XmlRootElement(name = "DataList")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class DataListTag {
-    private Items items;
+    private List<Items> items;
 }

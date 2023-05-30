@@ -1,6 +1,5 @@
 package com.goodjob.global.config;
 
-import com.goodjob.global.base.security.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,10 +20,11 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        //TODO: 추후 게시글 작성 경로 권한 추가 필요
         http.csrf(AbstractHttpConfigurer::disable).
                 sessionManagement(AbstractHttpConfigurer::disable).
                 authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/resumes/**", "/member/**").permitAll()
+                        .requestMatchers("/resumes/**", "/member/**","/article/**").permitAll()
                 ).
                 formLogin(AbstractHttpConfigurer::disable);
 
