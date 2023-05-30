@@ -343,4 +343,7 @@ gradle-app.setting
 
 /src/main/resources/application-local.yml
 
+### main 폴더 내의 /generated 폴더 추가
+/src/main/generated/**
+
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,java,gradle,intellij,intellij+all,intellij+iml
