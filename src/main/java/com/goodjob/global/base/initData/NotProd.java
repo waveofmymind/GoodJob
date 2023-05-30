@@ -32,17 +32,18 @@ public class NotProd {
                 memberRepository.save(member1);
 
 
-                Article article1 = Article
-                        .builder()
-                        .createDate(LocalDateTime.now())
-                        .modifiedDate(LocalDateTime.now())
-                        .title("테스트1")
-                        .content("내용테스트1")
-                        .likeCount(0L)
-                        .viewCount(0L)
-                        .build();
-
-                articleRepository.save(article1);
+                for(int i = 1; i <= 20; i++) {
+                    Article article = Article
+                            .builder()
+                            .createDate(LocalDateTime.now())
+                            .modifiedDate(LocalDateTime.now())
+                            .title("테스트%s".formatted(i))
+                            .content("내용테스트%s".formatted(i))
+                            .likeCount(0L)
+                            .viewCount(0L)
+                            .build();
+                    articleRepository.save(article);
+                }
             }
         };
     }
