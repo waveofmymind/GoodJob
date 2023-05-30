@@ -1,5 +1,6 @@
 package com.goodjob.global.config;
 
+import com.goodjob.global.base.security.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,12 +12,14 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
+    private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -26,7 +29,11 @@ public class SecurityConfig {
                 authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/resumes/**", "/member/**","/article/**").permitAll()
                 ).
-                formLogin(AbstractHttpConfigurer::disable);
+                formLogin(AbstractHttpConfigurer::disable)
+                .addFilterBefore(
+                        jwtAuthorizationFilter, // 액세스 토큰으로부터 로그인 처리
+                        UsernamePasswordAuthenticationFilter.class
+                );
 
         return http.build();
     }
