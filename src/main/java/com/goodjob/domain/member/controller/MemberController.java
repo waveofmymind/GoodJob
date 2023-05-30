@@ -4,54 +4,75 @@ import com.goodjob.domain.member.dto.request.JoinRequestDto;
 import com.goodjob.domain.member.dto.request.LoginRequestDto;
 import com.goodjob.domain.member.entity.Member;
 import com.goodjob.domain.member.service.MemberService;
+import com.goodjob.global.base.rq.Rq;
+import com.goodjob.global.base.rsData.RsData;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.Optional;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/member")
+@Slf4j
 public class MemberController {
+    private final Rq rq;
     private final MemberService memberService;
 
     @GetMapping("/join")
-    public String showJoinForm() {
+    @PreAuthorize("isAnonymous()")
+    public String showJoin() {
         return "/member/join";
     }
 
     @PostMapping("/join")
-    public String join(JoinRequestDto joinRequestDto, Model model) {
-        boolean isJoinable = memberService.canJoin(joinRequestDto);
+    @PreAuthorize("isAnonymous()")
+    public String join(@Valid JoinRequestDto joinRequestDto) {
+        RsData<Member> joinRsData = memberService.join(joinRequestDto);
 
-        if (!isJoinable) {
-            return "F-1, 실패 메시지: 중복된 계정 or 이메일입니다.";
+        if (joinRsData.isFail()) {
+            return rq.historyBack(joinRsData);
         }
-        Member member = memberService.join(joinRequestDto);
-        model.addAttribute("member", member);
 
-        return "S-1, redirect: 회원가입 완료 메시지 & 로그인 창";
+        return rq.redirectWithMsg("/member/login", joinRsData);
     }
 
     @GetMapping("/login")
-    public String showLoginForm() {
+    @PreAuthorize("isAnonymous()")
+    public String showLogin() {
+        log.info("get login 요청 받음!");
+
+        // TODO: 추후 경로 수정
         return "/member/login";
     }
 
     @PostMapping("/login")
-    public String login(LoginRequestDto loginRequestDto, Model model) {
-        Member member = memberService.findByAccount(loginRequestDto.getAccount()).orElse(null);
+    @PreAuthorize("isAnonymous()")
+    public String login(@Valid LoginRequestDto loginRequestDto) {
+        log.info("loginRequestDto= {}", loginRequestDto.toString());
 
-        if (member == null) {
-            return "F-1, 실패 메시지: 아이디 혹은 비밀번호가 틀립니다.";
+        RsData loginRsData = memberService.genAccessToken(loginRequestDto.getUsername(), loginRequestDto.getPassword());
+        log.info("loginRsData.ResultCode ={}", loginRsData.getResultCode());
+        log.info("loginRsData.Data ={}", loginRsData.getData());
+
+        if (loginRsData.isFail()) {
+            // TODO: 추후 경로 수정
+            return "/member/join";
         }
 
-        model.addAttribute("loginedMember", member);
+        // TODO: 추후 경로 수정
+        return "/member/join";
+    }
 
-        return "S-1, redirect: 메인화면";
+    // TODO: 삭제안됨.. 추후 수정
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String delete(@PathVariable Long id) {
+        log.info("id ={}", id);
+        memberService.delete(id);
+        // TODO: 추후 경로 수정
+        return "/member/join";
     }
 }
