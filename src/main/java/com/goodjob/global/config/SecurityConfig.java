@@ -16,7 +16,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // TODO: security 설정
-        http.
+        http.csrf(AbstractHttpConfigurer::disable).
+                sessionManagement(AbstractHttpConfigurer::disable).
+                authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/resumes/**").permitAll()
+                ).
                 formLogin(AbstractHttpConfigurer::disable);
 
 
