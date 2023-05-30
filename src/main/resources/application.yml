@@ -27,3 +27,7 @@ openai:
 scheduler:
   cron:
     job: "0 */5 * * * *"
+
+custom:
+  jwt:
+    secretKey: ENC(td8jcP/eOBMP9/6Nph0R0lmIzC5mhwk5ln46rp4GVt1mfwzI+J9YkA/bnu9dGxkzxRZk9k2dTWGmNUL2BLxVwQ==)
