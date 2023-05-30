@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,7 +16,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // TODO: security 설정
         http.csrf(AbstractHttpConfigurer::disable).
                 sessionManagement(AbstractHttpConfigurer::disable).
                 authorizeHttpRequests(authorize -> authorize
@@ -24,10 +24,15 @@ public class SecurityConfig {
                 formLogin(AbstractHttpConfigurer::disable);
 
 
-
-                return http.build();
+        return http.build();
 
     }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers("/static/**","/templates/**");
+    }
+
 
     @Bean
     PasswordEncoder passwordEncoder() {
