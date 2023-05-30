@@ -50,7 +50,7 @@ public class MemberController {
 
     @PostMapping("/login")
     @PreAuthorize("isAnonymous()")
-    public String login(@Valid LoginRequestDto loginRequestDto) {
+    public RsData login(@Valid LoginRequestDto loginRequestDto) {
         log.info("loginRequestDto= {}", loginRequestDto.toString());
 
         RsData loginRsData = memberService.genAccessToken(loginRequestDto.getUsername(), loginRequestDto.getPassword());
@@ -59,11 +59,11 @@ public class MemberController {
 
         if (loginRsData.isFail()) {
             // TODO: 추후 경로 수정
-            return "/member/join";
+            return loginRsData;
         }
 
         // TODO: 추후 경로 수정
-        return "/member/join";
+        return loginRsData;
     }
 
     // TODO: 삭제안됨.. 추후 수정

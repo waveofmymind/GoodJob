@@ -1,5 +1,6 @@
 package com.goodjob.global.config;
 
+import com.goodjob.global.base.security.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
