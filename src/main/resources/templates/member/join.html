@@ -1,1 +1,39 @@
-<h1>회원가입 폼</h1>
+<html layout:decorate="~{layout/layout}">
+<div layout:fragment="content" class="container my-3">
+    <div class="flex justify-center items-center min-h-screen">
+        <div class="w-96 bg-white p-8 rounded-lg">
+            <h2 class="text-2xl font-semibold mb-4">회원가입</h2>
+            <div>
+                <label for="username" class="block mb-2 text-sm">아이디</label>
+                <div class="flex items-center">
+                    <input type="text" id="username" class="border-b border-info px-2 py-2 w-full focus:outline-none" placeholder="아이디를 입력하세요">
+                    <button class="ml-2 bg-info text-white px-4 py-2 rounded-lg text-sm">중복확인</button>
+                </div>
+            </div>
+            <div>
+                <label for="password" class="block mb-2 mt-4 text-sm">비밀번호</label>
+                <input type="password" id="password" class="border-b border-info px-2 py-2 w-full focus:outline-none" placeholder="비밀번호를 입력하세요">
+            </div>
+            <div>
+                <label for="confirmPassword" class="block mb-2 mt-4 text-sm">비밀번호 확인</label>
+                <input type="password" id="confirmPassword" class="border-b border-info px-2 py-2 w-full focus:outline-none" placeholder="비밀번호를 다시 한 번 입력하세요">
+            </div>
+            <div>
+                <label for="nickname" class="block mb-2 mt-4 text-sm">닉네임</label>
+                <div class="flex items-center">
+                    <input type="text" id="nickname" class="border-b border-info px-2 py-2 w-full focus:outline-none" placeholder="닉네임을 입력하세요">
+                    <button class="ml-2 bg-info text-white px-4 py-2 rounded-lg text-sm">중복확인</button>
+                </div>
+            </div>
+            <div>
+                <label for="email" class="block mb-2 mt-4 text-sm">이메일</label>
+                <div class="flex items-center">
+                    <input type="email" id="email" class="border-b border-info px-2 py-2 w-full focus:outline-none" placeholder="이메일을 입력하세요">
+                    <button class="ml-2 bg-info text-white px-4 py-2 rounded-lg text-sm">중복확인</button>
+                </div>
+            </div>
+            <button class="mt-8 bg-info text-white px-4 py-2 rounded-lg text-sm">가입하기</button>
+        </div>
+    </div>
+</div>
+</html>
