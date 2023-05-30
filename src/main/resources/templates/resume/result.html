@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout/layout}">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -10,13 +10,15 @@
 
     <title>Resume Review Results</title>
 </head>
-<body class="flex justify-center items-center h-screen">
-<div class="w-full max-w-2xl mx-auto">
-    <h1 class="text-center mb-6">예상 면접 질문</h1>
-    <div th:each="predictionResponse : ${predictionResponses}">
-        <div class="border-t-2 py-6">
-            <h2 class="text-2xl mb-2" th:text="${predictionResponse.question}">Question</h2>
-            <p th:text="${predictionResponse.bestAnswer}">Best answer</p>
+<body>
+<div layout:fragment="content" class="flex justify-center items-center h-auto mt-16">
+    <div class="w-full max-w-2xl mx-auto">
+        <h1 class="text-center mb-6">예상 면접 질문</h1>
+        <div th:each="predictionResponse : ${predictionResponses}">
+            <div class="border-t-2 py-6">
+                <h2 class="text-2xl mb-2" th:text="${predictionResponse.question}">Question</h2>
+                <p th:text="${predictionResponse.bestAnswer}">Best answer</p>
+            </div>
         </div>
     </div>
 </div>
