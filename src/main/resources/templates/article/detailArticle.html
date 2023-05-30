@@ -1,0 +1,66 @@
+<html layout:decorate="~{layout/layout}">
+<div layout:fragment="content" class="container my-3">
+
+    <div class="container mx-auto py-8 w-1/2">
+        <div class="flex justify-between">
+            <h1 class="text-2xl font-bold flex-grow" th:text="${article.title}"></h1>
+            <p class="flex-grow text-xs mt-2" th:text="${#temporals.format(article.createDate, 'yyyy-MM-dd HH:mm')}"></p>
+            <a th:href="@{|/article/modify/${article.id}|}" class="text-xs text-black mt-2 underline">수정</a>
+            <a href="javascript:void(0);" th:data-uri="@{|/article/delete/${article.id}|}" class="delete text-xs text-black mt-2 mx-2 underline">삭제</a>
+            <p class="text-xs mt-2 mr-2" th:text="|조회:${article.viewCount}|"></p>
+            <p class="text-xs mt-2 mr-2" th:text="|추천:${article.likeCount}|"></p>
+            <p class="text-xs mt-2" th:text="|댓글:${#lists.size(article.commentList)}|"></p>
+        </div>
+        <hr class="border-info mb-4">
+        <p class="text-sm min-h-[200px]" th:text="${article.content}"></p>
+        <div class="flex justify-center">
+            <button class="bg-info border-gray-300 text-white px-4 py-1 rounded-md mr-2 hover:bg-blue-500"><i class="fa-sharp fa-regular fa-thumbs-up text-xl"><p class="text-xs mt-1">추천</p></i></button>
+        </div>
+        <hr class="border-info mt-4 mb-4">
+            <form th:action="@{|/comment/create/${article.id}|}" th:object="${commentForm}" method="post" class="flex mb-4 justify-between items-start">
+                <textarea th:field="*{content}" class="form-textarea border border-info rounded-md px-4 py-2 flex-grow focus:outline-none min-h-[100px]" placeholder="댓글을 작성하세요"></textarea>
+                <button type="submit" class="register bg-info text-white px-4 py-2 rounded-md ml-2 flex-start text-xs hover:bg-blue-500">등록</button>
+            </form>
+
+        <hr class="border-info mt-4">
+        <ul class="container" th:each="comment : ${article.commentList}">
+            <li class="bg-white text-black p-1 justify-between border-b border-info">
+                <div class="flex justify-between">
+                    <div class="flex items-end pb-2">
+                        <div class="text-sm mr-2">글쓴이</div>
+                        <div class="text-xs" th:text="${#temporals.format(comment.createDate, '(yyyy-MM-dd HH:mm)')}"></div>
+                    </div>
+                    <div class="flex items-end pb-2">
+                        <a th:href="@{|/comment/modify/${comment.id}|}" class="text-xs text-black underline">수정</a>
+                        <a href="javascript:void(0);" th:data-uri="@{|/comment/delete/${comment.id}|}" class="delete text-xs text-black mx-2 underline">삭제</a>
+                        <button class="bg-info border-gray-300 text-white px-3 py-1 rounded-md mr-2 hover:bg-blue-500"><i class="fa-sharp fa-regular fa-thumbs-up text-xs"> 0</i></button>
+
+                    </div>
+                </div>
+                <p class="text-sm min-h-[40px] mt-2"th:text="${comment.content}">
+                </p>
+            </li>
+        </ul>
+    </div>
+</div>
+<script layout:fragment="script" type='text/javascript'>
+    const delete_elements = document.getElementsByClassName("delete");
+    Array.from(delete_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            if(confirm("정말로 삭제하시겠습니까?")) {
+                location.href = this.dataset.uri;
+            };
+        });
+    });
+
+
+    const btn = document.querySelector('.register');
+    const textarea = document.querySelector('.form-textarea');
+
+    btn.addEventListener('click', function() {
+        if (textarea.value === '') {
+            confirm('내용을 입력해야 합니다.');
+        }
+    });
+</script>
+</html>

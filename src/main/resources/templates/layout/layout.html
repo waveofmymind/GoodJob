@@ -1,0 +1,57 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <!-- 제이쿼리 불러오기 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+  <!-- toastr 불러오기 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+  <link rel="stylesheet" href="https://jhs512.github.io/toastr/toastr.css">
+
+  <!-- 폰트어썸 아이콘 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- 아이콘 목록 : https://fontawesome.com/search?o=r&m=free -->
+
+  <!-- 공통 JS 불러오기 -->
+  <script src="/resource/common/common.js"></script>
+  <!-- 공통 CSS 불러오기 -->
+  <link rel="stylesheet" href="/resource/common/common.css">
+</head>
+
+<body>
+
+<!-- 데이지 UI 불러오기 -->
+<link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.5/dist/full.css" rel="stylesheet" type="text/css"/>
+<!-- 테일윈드 불러오기 -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<div class="navbar bg-white shadow border-b-2 border-info">
+  <div class="flex-1">
+    <a class="btn btn-ghost normal-case text-xl" href="/">
+      <img class="h-12 w-auto" src="https://i.ibb.co/QJr89md/image2.png" alt="로고">
+    </a>
+    <a class="btn btn-ghost normal-case text-xl">이력서</a>
+    <a class="btn btn-ghost normal-case text-xl">채용 공고</a>
+    <a class="btn btn-ghost normal-case text-xl" href="/article/main">커뮤니티</a>
+  </div>
+  <div class="flex-none">
+    <ul class="menu menu-horizontal px-1">
+      <li><a href="/member/login">로그인</a></li>
+
+      <li><a href="/member/join">회원가입</a></li>
+    </ul>
+  </div>
+</div>
+<!-- 기본 템플릿 안에 삽입될 내용 Start -->
+<th:block layout:fragment="content"></th:block>
+<!-- 기본 템플릿 안에 삽입될 내용 End -->
+
+<!-- 자바스크립트 Start -->
+<th:block layout:fragment="script"></th:block>
+<!-- 자바스크립트 End -->
+</body>
+</html>

@@ -1,13 +1,17 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/goodjob
-    username: ENC(V2xu30BaZ4DCNxCxywbxtg==)
-    password: ENC(YUgZosy6QAqosywMXGIpqg==)
     driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/goodjob?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
+    username: root
+    password: 1234
+
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
 
+scheduler:
+  cron:
+    job: "0 */3 * * * *"
