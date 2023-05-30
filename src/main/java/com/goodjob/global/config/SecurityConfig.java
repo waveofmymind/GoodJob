@@ -1,18 +1,16 @@
 package com.goodjob.global.config;
 
-import com.goodjob.global.base.jwt.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
 @RequiredArgsConstructor
@@ -22,26 +20,21 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrfConfigurer ->
-                        csrfConfigurer
-                                .disable()
-                ).httpBasic(httpBasic ->
-                        httpBasic.disable()
-                ).formLogin(
-                        formLogin ->
-                                formLogin.disable()
-                ).sessionManagement(sessionManagement ->
-                        sessionManagement
-                                .sessionCreationPolicy(STATELESS)
-                ).authorizeHttpRequests(
-                        authorizeHttpRequests ->
-                                authorizeHttpRequests
-                                        .anyRequest().permitAll()
-                );
+        http.csrf(AbstractHttpConfigurer::disable).
+                sessionManagement(AbstractHttpConfigurer::disable).
+                authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/resumes/**").permitAll()
+                ).
+                formLogin(AbstractHttpConfigurer::disable);
 
         return http.build();
     }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers("/static/**","/templates/**");
+    }
+
 
     @Bean
     PasswordEncoder passwordEncoder() {
