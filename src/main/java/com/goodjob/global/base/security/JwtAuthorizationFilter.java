@@ -20,7 +20,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Map;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
@@ -36,10 +36,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
             if (jwtProvider.verify(token)) {
                 Map<String, Object> claims = jwtProvider.getClaims(token);
-                String username = (String) claims.get("username");
+                long id = (long) claims.get("id");
 
-                Member member = memberService.findByUsername(username).orElseThrow(() ->
-                        new UsernameNotFoundException(username));
+                Member member = memberService.findById(id).orElseThrow();
 
                 forceAuthentication(member);
             }

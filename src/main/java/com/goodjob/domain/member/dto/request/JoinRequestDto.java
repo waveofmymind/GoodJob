@@ -14,12 +14,19 @@ public class JoinRequestDto {
     @NotBlank
     @Size(min = 4, max = 30)
     private String username;
+
     @NotBlank
     @Size(min = 4, max = 15)
     private String password;
+
+    @NotBlank
+    @Size(min = 4, max = 15)
+    private String confirmPassword;
+
     @NotBlank
     @Size(min = 2, max = 20)
     private String nickname;
+
     @NotBlank
     @Email
     private String email;
