@@ -31,7 +31,7 @@ public class ResumeController {
         log.info(generated.toString());
         model.addAttribute("predictionResponses", generated.predictionResponse());
 
-        return "/resume/question-result";
+        return "resume/question-result";
     }
 
     @GetMapping("/advices")
@@ -46,7 +46,7 @@ public class ResumeController {
         log.info(generated.toString());
         model.addAttribute("improveResponses", generated.improvementResponse());
 
-        return "/resume/advice-result";
+        return "resume/advice-result";
     }
 
 
