@@ -1,29 +1,46 @@
 <html layout:decorate="~{layout/layout}">
 <div layout:fragment="content" class="container my-3">
     <div class="container mx-auto p-8 w-2/3">
-        <div class="flex items-center justify-between border-b">
+        <div class="flex items-center justify-between">
             <h1 class="text-2xl font-bold">전체 게시글</h1>
-            <a th:href="@{/article/create}" class="ml-2 my-3 bg-info text-white px-4 py-2 rounded-lg text-sm">게시글 작성</a>
+            <a th:href="@{/article/create}" class="ml-2 my-3 bg-info text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-500">게시글 작성</a>
         </div>
         <ul class="container">
             <li class="bg-info text-white p-3 flex justify-between border-b h-11">
-                <div class="text-sm flex-grow">게시글 제목</div>
-                <div class="text-sm mx-4 w-16">글쓴이</div>
-                <div class="text-sm mx-4 w-16">추천수</div>
-                <div class="text-sm mx-4 w-16">댓글수</div>
-                <div class="text-sm mx-4 w-16">조회수</div>
+                <div class="text-sm flex-grow ">게시글 제목</div>
+                <div class="text-sm w-16 text-center">글쓴이</div>
+                <div class="text-sm  w-16 text-center">추천수</div>
+                <div class="text-sm  w-16 text-center">댓글수</div>
+                <div class="text-sm  w-16 text-center">조회수</div>
             </li>
-            <li th:each="article : ${articleList}" class="bg-white p-3 flex justify-between border-b h-11">
+            <li th:each="article, loop : ${paging}" class="bg-white p-3 flex justify-between border-b h-11">
                 <a th:href="@{|/article/detail/${article.id}|}" th:text="${article.title}" class="text-sm flex-grow"></a>
-                <p class="text-sm mx-4 w-16">글쓴이1</p>
-                <div th:text="${article.likeCount}" class="text-sm mx-4 w-16"></div>
-                <p th:text="${#lists.size(article.commentList)}" class="text-sm mx-4 w-16"></p>
-                <p th:text="${article.viewCount}" class="text-sm mx-4 w-16"></p>
+                <p class="text-xs  w-16 text-center">글쓴이1</p>
+                <div th:text="${article.likeCount}" class="text-xs  w-16 text-center"></div>
+                <p th:text="${#lists.size(article.commentList)}" class="text-xs  w-16 text-center"></p>
+                <p th:text="${article.viewCount}" class="text-xs  w-16 text-center"></p>
             </li>
 
         </ul>
 
     </div>
+
+    <!-- 페이징처리 시작 -->
+    <div th:if="${!paging.isEmpty()}" class="flex justify-center mb-6">
+        <div class="flex w-1/2 justify-center">
+            <a class="page-link btn btn-sm btn-ghost grid-0 m-1" th:href="@{|?page=${paging.number-1}|}" th:classappend="${!paging.hasPrevious} ? 'invisible'">
+                <span>&lt; 이전</span>
+            </a>
+            <a th:text="${page} + 1" class="page-link btn btn-sm btn-ghost m-1" th:href="@{|?page=${page}|}"
+               th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+               th:if="${page >= paging.number / 10 * 10 and page <= paging.number/10*10 + 9}"
+               th:classappend="${page == paging.number} ? 'btn-outline pointer-events-none'"></a>
+            <a class="page-link btn btn-sm btn-ghost m-1" th:href="@{|?page=${paging.number+1}|}" th:classappend="${!paging.hasNext()} ? 'invisible'">
+                <span>다음 &gt;</span>
+            </a>
+        </div>
+    </div>
+    <!-- 페이징처리 끝 -->
 
     <div class="flex justify-center">
         <div class="flex items-center border border-gray-300 rounded-md px-4 py-2 w-96">

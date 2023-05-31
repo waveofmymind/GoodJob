@@ -10,38 +10,38 @@
         <ul class="container">
             <li class="bg-info text-white p-3 flex justify-between border-b h-11">
                 <div class="text-sm flex-grow">게시글 제목</div>
-                <div class="text-sm mx-4 w-16">글쓴이</div>
-                <div class="text-sm mx-4 w-16">추천수</div>
-                <div class="text-sm mx-4 w-16">댓글수</div>
-                <div class="text-sm mx-4 w-16">조회수</div>
+                <div class="text-sm mx-4 w-16 text-center">글쓴이</div>
+                <div class="text-sm mx-4 w-16 text-center">추천수</div>
+                <div class="text-sm mx-4 w-16 text-center">댓글수</div>
+                <div class="text-sm mx-4 w-16 text-center">조회수</div>
             </li>
             <li class="bg-white p-3 flex justify-between border-b h-11">
                 <h3 class="text-sm flex-grow">게시글1</h3>
-                <p class="text-sm mx-4 w-16">글쓴이1</p>
-                <div class="text-sm mx-4 w-16">추천수1</div>
-                <p class="text-sm mx-4 w-16">댓글수1</p>
-                <p class="text-sm mx-4 w-16">조회수1</p>
+                <p class="text-sm mx-4 w-16 text-center">글쓴이1</p>
+                <div class="text-sm mx-4 w-16 text-center">추천수1</div>
+                <p class="text-sm mx-4 w-16 text-center">댓글수1</p>
+                <p class="text-sm mx-4 w-16 text-center">조회수1</p>
             </li>
             <li class="bg-white p-3 flex justify-between border-b h-11">
                 <h3 class="text-sm flex-grow">게시글2</h3>
-                <p class="text-sm mx-4 w-16">글쓴이2</p>
-                <div class="text-sm mx-4 w-16">추천수2</div>
-                <p class="text-sm mx-4 w-16">댓글수2</p>
-                <p class="text-sm mx-4 w-16">조회수2</p>
+                <p class="text-sm mx-4 w-16 text-center">글쓴이2</p>
+                <div class="text-sm mx-4 w-16 text-center">추천수2</div>
+                <p class="text-sm mx-4 w-16 text-center">댓글수2</p>
+                <p class="text-sm mx-4 w-16 text-center">조회수2</p>
             </li>
             <li class="bg-white p-3 flex justify-between border-b h-11">
                 <h3 class="text-sm flex-grow">게시글3</h3>
-                <p class="text-sm mx-4 w-16">글쓴이3</p>
-                <div class="text-sm mx-4 w-16">추천수3</div>
-                <p class="text-sm mx-4 w-16">댓글수3</p>
-                <p class="text-sm mx-4 w-16">조회수3</p>
+                <p class="text-sm mx-4 w-16 text-center">글쓴이3</p>
+                <div class="text-sm mx-4 w-16 text-center">추천수3</div>
+                <p class="text-sm mx-4 w-16 text-center">댓글수3</p>
+                <p class="text-sm mx-4 w-16 text-center">조회수3</p>
             </li>
             <li class="bg-white p-3 flex justify-between border-b h-11">
                 <h3 class="text-sm flex-grow">게시글4</h3>
-                <p class="text-sm mx-4 w-16">글쓴이4</p>
-                <div class="text-sm mx-4 w-16">추천수4</div>
-                <p class="text-sm mx-4 w-16">댓글수4</p>
-                <p class="text-sm mx-4 w-16">조회수4</p>
+                <p class="text-sm mx-4 w-16 text-center">글쓴이4</p>
+                <div class="text-sm mx-4 w-16 text-center">추천수4</div>
+                <p class="text-sm mx-4 w-16 text-center">댓글수4</p>
+                <p class="text-sm mx-4 w-16 text-center">조회수4</p>
             </li>
 
         </ul>
@@ -55,17 +55,17 @@
         <ul class="container">
             <li class="bg-info text-white p-3 flex justify-between border-b h-11 ">
                 <div class="text-sm flex-grow">게시글 제목</div>
-                <div class="text-sm mx-4 w-16">글쓴이</div>
-                <div class="text-sm mx-4 w-16">추천수</div>
-                <div class="text-sm mx-4 w-16">댓글수</div>
-                <div class="text-sm mx-4 w-16">조회수</div>
+                <div class="text-sm mx-4 w-16 text-center">글쓴이</div>
+                <div class="text-sm mx-4 w-16 text-center">추천수</div>
+                <div class="text-sm mx-4 w-16 text-center">댓글수</div>
+                <div class="text-sm mx-4 w-16 text-center">조회수</div>
             </li>
-            <li th:each="article : ${articleList}" class="bg-white p-3 flex justify-between border-b h-11">
+            <li th:each="article, loop : ${paging}" class="bg-white p-3 flex justify-between border-b h-11">
                 <a th:href="@{|/article/detail/${article.id}|}" th:text="${article.title}" class="text-sm flex-grow"></a>
-                <p class="text-sm mx-4 w-16">글쓴이1</p>
-                <div th:text="${article.likeCount}" class="text-sm mx-4 w-16"></div>
-                <p th:text="${#lists.size(article.commentList)}" class="text-sm mx-4 w-16"></p>
-                <p th:text="${article.viewCount}" class="text-sm mx-4 w-16"></p>
+                <p class="text-sm mx-4 w-16 text-center">글쓴이1</p>
+                <div th:text="${article.likeCount}" class="text-sm mx-4 w-16 text-center"></div>
+                <p th:text="${#lists.size(article.commentList)}" class="text-sm mx-4 w-16 text-center"></p>
+                <p th:text="${article.viewCount}" class="text-sm mx-4 w-16 text-center"></p>
             </li>
         </ul>
     </div>

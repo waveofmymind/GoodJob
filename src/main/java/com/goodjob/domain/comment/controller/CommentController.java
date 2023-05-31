@@ -36,7 +36,7 @@ public class CommentController {
             model.addAttribute("article", article);
             return "/article/detailArticle";
         }
-        commentService.create(article, commentForm.getContent());
+        commentService.createComment(article, commentForm.getContent());
         return String.format("redirect:/article/detail/%s", id);
     }
 
@@ -47,20 +47,10 @@ public class CommentController {
         private String content;
     }
 
-//    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/modify/{id}")
-    public String commentModify(CommentForm commentForm, @PathVariable("id") Long id, Principal principal) {
-        CommentResponseDto commentResponseDto = commentService.getCommentResponseDto(id);
-//        if (!commentResponseDto.getMember().getUsername().equals(principal.getName())) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
-//        }
-        commentForm.setContent(commentResponseDto.getContent());
-        return "/article/answerForm";
-    }
 
 //    @PreAuthorize("isAuthenticated()")
-    @PostMapping("/modify/{id}")
-    public String commentModify(@Valid CommentForm commentForm, BindingResult bindingResult,
+    @PostMapping("/update/{id}")
+    public String updateComment(@Valid CommentForm commentForm, BindingResult bindingResult,
                                @PathVariable("id") Long id, Principal principal) {
 //        if (bindingResult.hasErrors()) {
 //            return "answer_form";
@@ -69,18 +59,18 @@ public class CommentController {
 //        if (!commentResponseDto.getMember().getUsername().equals(principal.getName())) {
 //            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 //        }
-        commentService.modify(comment, commentForm.getContent());
+        commentService.updateComment(comment, commentForm.getContent());
         return String.format("redirect:/article/detail/%s", comment.getArticle().getId());
     }
 
 //    @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
-    public String commentDelete(Principal principal, @PathVariable("id") Long id) {
+    public String deleteComment(Principal principal, @PathVariable("id") Long id) {
         Comment comment = commentService.getComment(id);
 //        if (!commentResponseDto.getMember().getUsername().equals(principal.getName())) {
 //            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 //        }
-        commentService.delete(comment);
+        commentService.deleteComment(comment);
         return String.format("redirect:/article/detail/%s", comment.getArticle().getId());
     }
 }

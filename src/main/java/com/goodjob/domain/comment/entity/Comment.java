@@ -1,5 +1,6 @@
 package com.goodjob.domain.comment.entity;
 
+import com.goodjob.domain.BaseEntity;
 import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.member.entity.Member;
 import jakarta.persistence.*;
@@ -20,16 +21,10 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @SuperBuilder
 @Getter
 @EntityListeners(AuditingEntityListener.class)
-public class Comment {
+public class Comment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
-
-    @CreatedDate
-    private LocalDateTime createDate;
-
-    @LastModifiedDate
-    private LocalDateTime modifiedDate;
 
     @ManyToOne
     private Member member;

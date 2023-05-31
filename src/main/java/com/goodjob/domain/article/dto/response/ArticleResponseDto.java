@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 public class ArticleResponseDto {
     private Long id;
-    private LocalDateTime createDate;
+    private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
     private String title;
     private String content;

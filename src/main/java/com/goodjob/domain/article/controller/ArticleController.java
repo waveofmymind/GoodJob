@@ -11,14 +11,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -31,42 +29,43 @@ public class ArticleController {
 
     @GetMapping("/main")
     public String main(Model model) {
-        List<ArticleResponseDto> articleList = articleService.findAll();
+        Page<ArticleResponseDto> paging = articleService.findTopFive();
 
-        model.addAttribute("articleList", articleList);
+        model.addAttribute("paging", paging);
 
         return "/article/main";
     }
 
     @GetMapping("/list")
-    public String list(Model model) {
-        List<ArticleResponseDto> articleList = articleService.findAll();
-
-        model.addAttribute("articleList", articleList);
+    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page) {
+        Page<ArticleResponseDto> paging = articleService.findAll(page);
+        model.addAttribute("paging", paging);
 
         return "/article/list";
     }
 
     @GetMapping("/detail/{id}")
-    public String detail (Model model, @PathVariable("id") Long id, CommentController.CommentForm commentForm) {
-        ArticleResponseDto articleResponseDto = articleService.getArticleResponseDto(id);
+    public String detailArticle (Model model, @PathVariable("id") Long id, CommentController.CommentForm commentForm) {
+        Article article = articleService.getArticle(id);
+        ArticleResponseDto articleResponseDto = articleService.increaseViewCount(article);
         model.addAttribute("article", articleResponseDto);
         return "/article/detailArticle";
 
     }
 
     @GetMapping("/create")
-    public String articleCreate(ArticleForm articleForm) {
+    public String createArticle(ArticleForm articleForm) {
         return "/article/articleForm";
     }
 
     @PostMapping("/create")
-    public String articleCreate(@Valid ArticleForm articleForm, BindingResult bindingResult) {
+    public String createArticle(@Valid ArticleForm articleForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "/article/articleForm";
         }
-        articleService.create(articleForm.getTitle(), articleForm.getContent());
-        return "redirect:/article/list";
+        articleService.createArticle(articleForm.getTitle(), articleForm.getContent());
+        long id = articleService.getCreatedArticleId();
+        return "redirect:/article/detail/%s".formatted(id);
     }
 
     @Getter
@@ -81,8 +80,8 @@ public class ArticleController {
 
 
 //    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/modify/{id}")
-    public String articleModify(ArticleForm articleForm, @PathVariable("id") Long id, Principal principal) {
+    @GetMapping("/update/{id}")
+    public String updateArticle(ArticleForm articleForm, @PathVariable("id") Long id, Principal principal) {
         ArticleResponseDto articleResponseDto = articleService.getArticleResponseDto(id);
 //        if(!article.getMember().getUsername().equals(principal.getName())) {
 //            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
@@ -93,8 +92,8 @@ public class ArticleController {
     }
 
 //    @PreAuthorize("isAuthenticated()")
-    @PostMapping("/modify/{id}")
-    public String articleModify(@Valid ArticleForm articleForm, BindingResult bindingResult,
+    @PostMapping("/update/{id}")
+    public String updateArticle(@Valid ArticleForm articleForm, BindingResult bindingResult,
                                  Principal principal, @PathVariable("id") Long id) {
         if (bindingResult.hasErrors()) {
             return "/article/articleForm";
@@ -103,18 +102,18 @@ public class ArticleController {
 //        if (!articleResponseDto.getMember().getUsername().equals(principal.getName())) {
 //            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 //        }
-        articleService.modify(article, articleForm.getTitle(), articleForm.getContent());
+        articleService.updateArticle(article, articleForm.getTitle(), articleForm.getContent());
         return String.format("redirect:/article/detail/%s", id);
     }
 
 //    @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
-    public String articleDelete(Principal principal, @PathVariable("id") Long id) {
+    public String deleteArticle(Principal principal, @PathVariable("id") Long id) {
         Article article = articleService.getArticle(id);
 //        if (!article.getMember().getUsername().equals(principal.getName())) {
 //            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
 //        }
-        articleService.delete(article);
+        articleService.deleteArticle(article);
         return "redirect:/article/list";
     }
 }
