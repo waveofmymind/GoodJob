@@ -21,10 +21,10 @@ public class ResumeController {
 
     @GetMapping("/questions")
     public String showQuestionForm() {
-        return "/resume/question-request";
+        return "resume/question-request";
     }
 
-    @PostMapping("/questios")
+    @PostMapping("/questions")
     public String generateQuestion(@ModelAttribute CreatePromptRequest request, Model model) {
 
         WhatGeneratedQuestionResponse generated = resumeFacade.generateQuestion(request);
@@ -36,7 +36,7 @@ public class ResumeController {
 
     @GetMapping("/advices")
     public String showAdviceForm() {
-        return "/resume/advice-request";
+        return "resume/advice-request";
     }
 
     @PostMapping("/advices")
