@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout/layout}">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.6/dist/full.css" rel="stylesheet" type="text/css"/>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css"/>
+
+    <title>Resume Review Results</title>
+</head>
+<body>
+<div layout:fragment="content" class="flex justify-center items-center h-auto mt-16">
+    <div class="w-full max-w-2xl mx-auto">
+        <h1 class="text-center mb-6">예상 면접 질문</h1>
+        <div th:each="predictionResponse : ${predictionResponses}">
+            <div class="border-t-2 py-6">
+                <h2 class="text-2xl mb-2" th:text="${predictionResponse.question}">Question</h2>
+                <p th:text="${predictionResponse.bestAnswer}">Best answer</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,6 +1,7 @@
 package com.goodjob.domain.job.entity;
 
 import com.goodjob.domain.BaseEntity;
+import com.goodjob.domain.job.dto.JobResponseDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -38,4 +39,14 @@ public class Company {
 
     private int career; // 년차 신입은 default 0
 
+    public static Company create(JobResponseDto jobResponseDto) {
+        return builder()
+                .company(jobResponseDto.getCompany())
+                .subject(jobResponseDto.getSubject())
+                .url(jobResponseDto.getUrl())
+                .sector(jobResponseDto.getSector())
+                .startDate(jobResponseDto.getCreateDate())
+                .deadLine(jobResponseDto.getDeadLine())
+                .career(jobResponseDto.getCareer()).build();
+    }
 }

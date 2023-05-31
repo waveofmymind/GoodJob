@@ -1,10 +1,9 @@
 package com.goodjob.domain.resume.controller;
 
-import com.goodjob.domain.gpt.GptService;
 import com.goodjob.domain.resume.dto.request.CreatePromptRequest;
-import com.goodjob.domain.resume.dto.response.WhatGeneratedResponse;
+import com.goodjob.domain.resume.dto.response.WhatGeneratedImproveResponse;
+import com.goodjob.domain.resume.dto.response.WhatGeneratedQuestionResponse;
 import com.goodjob.domain.resume.facade.ResumeFacade;
-import com.goodjob.global.base.rq.Rq;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -20,19 +19,34 @@ public class ResumeController {
     private final ResumeFacade resumeFacade;
 
 
-    @GetMapping("/generate")
-    public String showGenerate() {
-        return "/resume/request";
+    @GetMapping("/questions")
+    public String showQuestionForm() {
+        return "resume/question-request";
     }
 
-    @PostMapping("/generate")
-    public String generate(@ModelAttribute CreatePromptRequest request, Model model) {
+    @PostMapping("/questions")
+    public String generateQuestion(@ModelAttribute CreatePromptRequest request, Model model) {
 
-        WhatGeneratedResponse generated = resumeFacade.generate(request);
+        WhatGeneratedQuestionResponse generated = resumeFacade.generateQuestion(request);
         log.info(generated.toString());
         model.addAttribute("predictionResponses", generated.predictionResponse());
 
-        return "/resume/result";
+        return "/resume/question-result";
+    }
+
+    @GetMapping("/advices")
+    public String showAdviceForm() {
+        return "resume/advice-request";
+    }
+
+    @PostMapping("/advices")
+    public String generateAdvice(@ModelAttribute CreatePromptRequest request, Model model) {
+
+        WhatGeneratedImproveResponse generated = resumeFacade.generateAdvice(request);
+        log.info(generated.toString());
+        model.addAttribute("improveResponses", generated.improvementResponse());
+
+        return "/resume/advice-result";
     }
 
 
