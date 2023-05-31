@@ -4,11 +4,11 @@ package com.goodjob.domain.resume.dto.response;
 import java.util.ArrayList;
 import java.util.List;
 
-public record WhatGeneratedResponse(
+public record WhatGeneratedQuestionResponse(
         List<PredictionResponse> predictionResponse
 
 ) {
-    public WhatGeneratedResponse() {
+    public WhatGeneratedQuestionResponse() {
         this(new ArrayList<>());
     }
 }
