@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
-//    private final JwtAuthorizationFilter jwtAuthorizationFilter;
+    private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -29,11 +29,11 @@ public class SecurityConfig {
                 authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/resumes/**", "/member/**","/article/**").permitAll()
                 ).
-                formLogin(AbstractHttpConfigurer::disable);
-//                .addFilterBefore(
-//                        jwtAuthorizationFilter, // 액세스 토큰으로부터 로그인 처리
-//                        UsernamePasswordAuthenticationFilter.class
-//                );
+                formLogin(AbstractHttpConfigurer::disable)
+                .addFilterBefore(
+                        jwtAuthorizationFilter, // 액세스 토큰으로부터 로그인 처리
+                        UsernamePasswordAuthenticationFilter.class
+                );
 
         return http.build();
     }
@@ -41,11 +41,5 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().requestMatchers("/static/**","/templates/**");
-    }
-
-
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }
