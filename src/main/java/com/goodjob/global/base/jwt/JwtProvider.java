@@ -41,6 +41,7 @@ public class JwtProvider {
         // 지금으로부터 1시간의 유효기간 가지는 accessToken 생성
         Date accessTokenExpiresIn = new Date(now + TOKEN_VALIDATION_SECOND);
 
+        // TODO: refreshToken
         return Jwts.builder()
                 .claim("body", Ut.json.toStr(claims))
                 .setExpiration(accessTokenExpiresIn)
@@ -48,6 +49,7 @@ public class JwtProvider {
                 .compact();
     }
 
+    // 토큰 검증
     public boolean verify(String token) {
         try {
             Jwts.parserBuilder()
@@ -61,6 +63,7 @@ public class JwtProvider {
         return true;
     }
 
+    // 토큰으로부터 클레임을 가져온다
     public Map<String, Object> getClaims(String token) {
         String body = Jwts.parserBuilder()
                 .setSigningKey(getSecretKey())

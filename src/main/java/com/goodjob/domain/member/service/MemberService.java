@@ -104,4 +104,8 @@ public class MemberService {
     public void delete(Long id) {
         memberRepository.deleteById(id);
     }
+
+    public Optional<Member> findById(Long id) {
+        return memberRepository.findById(id);
+    }
 }
