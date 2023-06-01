@@ -5,6 +5,7 @@ import com.goodjob.domain.article.dto.response.ArticleResponseDto;
 import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.article.service.ArticleService;
 import com.goodjob.domain.comment.controller.CommentController;
+import com.goodjob.domain.subComment.controller.SubCommentController;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -46,7 +47,7 @@ public class ArticleController {
     }
 
     @GetMapping("/detail/{id}")
-    public String detailArticle (Model model, @PathVariable("id") Long id, CommentController.CommentForm commentForm) {
+    public String detailArticle (Model model, @PathVariable("id") Long id, CommentController.CommentForm commentForm, SubCommentController.SubCommentForm subCommentForm) {
         Article article = articleService.getArticle(id);
         ArticleResponseDto articleResponseDto = articleService.increaseViewCount(article);
         model.addAttribute("article", articleResponseDto);
@@ -54,9 +55,10 @@ public class ArticleController {
 
     }
 
+//    @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
     public String createArticle(ArticleForm articleForm) {
-        return "/article/articleForm";
+        return "article/articleForm";
     }
 
     @PostMapping("/create")

@@ -1,8 +1,13 @@
 package com.goodjob.domain.comment.dto.response;
 
+import com.goodjob.domain.article.dto.response.ArticleResponseDto;
 import com.goodjob.domain.article.entity.Article;
+import com.goodjob.domain.likes.dto.request.LikesRequestDto;
+import com.goodjob.domain.likes.dto.response.LikesResponseDto;
 import com.goodjob.domain.likes.entity.Likes;
 import com.goodjob.domain.member.entity.Member;
+import com.goodjob.domain.subComment.dto.request.SubCommentRequestDto;
+import com.goodjob.domain.subComment.dto.response.SubCommentResponseDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,8 +22,8 @@ public class CommentResponseDto {
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
     private Member member;
-    private Article article;
     private String content;
-    private List<Likes> likesList;
+    private List<LikesResponseDto> likesList;
     private boolean isDeleted;
+    private List<SubCommentResponseDto> subCommentList;
 }

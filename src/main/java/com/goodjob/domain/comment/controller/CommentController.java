@@ -29,6 +29,13 @@ public class CommentController {
     private final CommentService commentService;
     private final ArticleService articleService;
 
+    @GetMapping("/get/{id}")
+    public String redirectToArticleWithComment(@PathVariable("id") Long id) {
+        Article article = commentService.getComment(id).getArticle();
+
+        return "redirect:/article/detail/%s".formatted(article.getId());
+    }
+
     @PostMapping("/create/{id}")
     public String createComment(Model model, @PathVariable("id") Long id, @Valid CommentForm commentForm, BindingResult bindingResult) {
         Article article = articleService.getArticle(id);
