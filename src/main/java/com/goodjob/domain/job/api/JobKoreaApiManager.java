@@ -2,13 +2,12 @@ package com.goodjob.domain.job.api;
 
 
 import com.goodjob.domain.job.Constants;
-import com.goodjob.domain.job.dto.JobResponseDto;
 import com.goodjob.domain.job.api.jaxb.DataListTag;
 import com.goodjob.domain.job.api.jaxb.Items;
+import com.goodjob.domain.job.dto.JobResponseDto;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.MalformedURLException;
@@ -40,6 +39,7 @@ public class JobKoreaApiManager {
     public static void jobKoreaStatistic()  {
         URL url = null;
         int career = 0;
+        int sectorCode = 0; // 채용원하는 분야
         try {
             url = new URL(Constants.JOBKOREA); // api 발급시 url + key 입력
         } catch (MalformedURLException e) {
@@ -57,7 +57,7 @@ public class JobKoreaApiManager {
 
                 JobResponseDto jobResponseDto = new JobResponseDto(
                         item.getCompany(), item.getSubject(), item.getUrl(),
-                        item.getSector(), createDate, deadLine, career);
+                        item.getSector(),sectorCode, createDate, deadLine, career);
 
                 setJobDtos(jobResponseDto);
             }
