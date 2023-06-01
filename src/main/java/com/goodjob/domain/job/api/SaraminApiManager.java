@@ -1,22 +1,14 @@
 package com.goodjob.domain.job.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goodjob.domain.job.Constants;
-import com.goodjob.domain.job.dto.JobResponseDto;
 import com.goodjob.domain.job.api.jsonproperty.Job;
 import com.goodjob.domain.job.api.jsonproperty.JobsWrapper;
-import lombok.*;
+import com.goodjob.domain.job.dto.JobResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -47,8 +39,8 @@ public class SaraminApiManager {
     }
 
     public static void saraminStatistic() {
-
-        String job_cd = "84";
+        int sectorCode = 84;
+        String job_cd = String.valueOf(sectorCode); // 백엔드 코드
         String connectURL = Constants.SARAMIN + key + "&job_cd=" + job_cd + "&count=110";
 
         RestTemplate restTemplate = new RestTemplate();
@@ -74,10 +66,10 @@ public class SaraminApiManager {
             Instant deadLineInstant = Instant.ofEpochSecond(deadLineTimeStamp);
             LocalDateTime createDate = LocalDateTime.ofInstant(postTimeInstant, ZoneId.systemDefault());
             LocalDateTime deadLine = LocalDateTime.ofInstant(deadLineInstant, ZoneId.systemDefault());
-            System.out.println(deadLine);
             int career = job.getPosition().getExperienceLevel().getCareer();
+
             log.debug(subject);
-            JobResponseDto jobResponseDto = new JobResponseDto(company, subject, url, sector, createDate, deadLine, career);
+            JobResponseDto jobResponseDto = new JobResponseDto(company, subject, url, sector, sectorCode, createDate, deadLine, career);
             setJobDtos(jobResponseDto);
         }
     }
