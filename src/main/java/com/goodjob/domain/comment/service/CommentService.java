@@ -21,17 +21,12 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
 
-    public void create(Article article, String content) {
-        CommentRequestDto commentRequestDto = new CommentRequestDto(content);
-
+    public void createComment(Article article, CommentRequestDto commentRequestDto) {
         Comment comment = Comment
                 .builder()
-                .createDate(LocalDateTime.now())
-                .modifiedDate(LocalDateTime.now())
                 .member(null)   //TODO : 추후 수정
                 .article(article)
                 .content(commentRequestDto.getContent())
-                .likeCount(0L)
                 .isDeleted(false)
                 .build();
 
@@ -43,7 +38,7 @@ public class CommentService {
 
     }
 
-    public void modify(Comment comment, String content) {
+    public void updateComment(Comment comment, String content) {
         comment.setContent(content);
         commentRepository.save(comment);
     }
@@ -53,7 +48,8 @@ public class CommentService {
     }
 
     @Transactional
-    public void delete(Comment comment) {
-        commentRepository.delete(comment);
+    public void deleteComment(Comment comment) {
+        comment.setDeleted(true);
+        commentRepository.save(comment);
     }
 }

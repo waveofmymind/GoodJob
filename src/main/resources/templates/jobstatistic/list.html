@@ -1,48 +1,50 @@
 <html layout:decorate="~{layout/layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
-<head><title>채용 목록</title></head>
+<head><title>통계 목록</title></head>
 
 
 <main layout:fragment="content" class="flex items-center justify-center flex-col">
 
-  <h5 th:text="${rule}?: 'Rule'"
-      class="text-lg font-semibold mb-4"></h5>
-  <div class="flex justify-end w-11/12">
-    <div></div>
-    <div class="mr-20">
-      <div th:replace="~{rule/fragment/ruleSearch :: search (${ruleSearch})}"></div>
-    </div>
-  </div>
+<!--  <h5 th:text="${}?: 'Rule'"-->
+<!--      class="text-lg font-semibold mb-4"></h5>-->
+<!--  검색 기능 -->
+<!--  <div class="flex justify-end w-11/12">-->
+<!--    <div></div>-->
+<!--    <div class="mr-20">-->
+<!--      <div th:replace="~{rule/fragment/ruleSearch :: search (${ruleSearch})}"></div>-->
+<!--    </div>-->
+<!--  </div>-->
   <div class="flex justify-around w-9/12 overflow-x-auto">
     <table class="table w-full">
       <thead class="text-slate-200 text-center">
       <tr>
         <th scope="col">번호</th>
         <th scope="col">제목</th>
-        <th scope="col">회사명</th>
-        <th scope="col">작성일</th>
-        <th scope="col">마감일</th>
+        <th scope="col"> 공고시작일 </th>
+        <th scope="col"> 공고 마감일 </th>
       </tr>
       </thead>
 
       <tbody class="text-center">
-<!--      채용공고 페이징 처리 후 수정 -->
-      <tr class="hover" th:each="rule, loop : ${paging}">
+      <tr class="hover" th:each="jobStatistic, loop : ${paging}">
 
         <td class="">
           <div class="text-sm text-gray-500"
                th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></div>
         </td>
         <td>
-          <a th:href="@{|/rule/detail/${rule.id}|}"
-             th:text="${rule.name}"
+          <a th:href="@{|${jobStatistic.url}|}"
+             th:text="${jobStatistic.subject}"
              class="text-white hover:text-gray-400"></a>
         </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-          <div th:text="${rule.provider}"></div>
-        </td>
+<!--        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">-->
+<!--          <div th:text="${jobStatistic. 아직 미정}"></div>-->
+<!--        </td>-->
         <!-- 작성일 -->
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-          <div th:text="${#temporals.format(rule.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+          <div th:text="${#temporals.format(jobStatistic.startDate, 'yyyy-MM-dd HH:mm')}"></div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          <div th:text="${#temporals.format(jobStatistic.deadLine, 'yyyy-MM-dd HH:mm')}"></div>
         </td>
       </tr>
       </tbody>
@@ -65,7 +67,7 @@
             th:classappend="${page == paging.number} ? 'active'"
             th:if="${page >= paging.number - 5 and page <= paging.number + 5}">
 
-            <a th:text="${page + 1}" th:href="@{/rule/list(page=${page},keyword=${param.keyword})}"></a>
+            <a th:text="${page + 1}" th:href="@{/jobstatistic/search/all(sector=${param.sector},career=${param.career},page=${page})}"></a>
         </span>
 
       <a th:href="@{|?page=${paging.number + 1}|}"
@@ -78,7 +80,7 @@
   <!-- 페이징 처리 종료 -->
 
 
-
 </main>
 </html>
+
 

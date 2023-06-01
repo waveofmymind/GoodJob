@@ -1,0 +1,147 @@
+<form th:fragment="jobRequestForm (jobRequestForm)"
+      th:action="@{/jobstatistic/search/all}" th:object="${jobRequestForm}" method="get"
+      class="flex flex-col gap-6"
+      onsubmit="JobRequest__submit(this); return false;">
+
+    <div class="mt-2">
+        <label class="label">
+            <span class="label-text">직무를 선택해주세요</span>
+        </label>
+        <select th:field="*{sector}" class="select select-bordered w-full max-w-xs">
+            <option value="" disabled selected>원하시는 직무를 선택해주세요</option>
+            <option value="84">백엔드</option>
+            <option value="92">프론트엔드</option>
+            <option value="2232">풀스택</option>
+            <option value="0">모두보기</option>
+        </select>
+    </div>
+
+    <div class="form-control">
+        <label class="label">
+            <span class="label-text">경력을 작성해주세요</span>
+        </label>
+        <input type="text" th:field="*{career}" placeholder="숫자로 입력해주세요" class="input input-bordered caret-pink-500"/>
+    </div>
+
+
+    <button type="submit" class="btn mb-6">제출</button>
+</form>
+
+
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+
+<!--<form th:fragment="ruleForm (ruleForm)"-->
+<!--      th:action th:object="${ruleForm}" method="post"-->
+<!--      class="flex flex-col gap-6"-->
+<!--      onsubmit="RuleForm__submit(this); return false;">-->
+
+<!--    &lt;!&ndash;    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />&ndash;&gt;-->
+<!--    <div class="form-control">-->
+<!--        <label class="label">-->
+<!--            <span class="label-text">규칙 명</span>-->
+<!--        </label>-->
+<!--        <input type="text" th:field="*{name}" placeholder="규칙 이름" class="input input-bordered"/>-->
+<!--    </div>-->
+
+<!--    <div class="form-control">-->
+<!--        <label class="label">-->
+<!--            <span class="label-text">Rule 소개</span>-->
+<!--        </label>-->
+<!--        <input type="text" th:field="*{about}" placeholder="간단 소개" class="input input-bordered"/>-->
+<!--    </div>-->
+
+<!--    <div class="form-control">-->
+<!--        <label class="label">-->
+<!--            <span class="label-text">경험치</span>-->
+<!--        </label>-->
+<!--        <input type="text" th:field="*{xp}" placeholder="경험치" class="input input-bordered"/>-->
+<!--    </div>-->
+
+<!--    <div class="form-control">-->
+<!--        <label class="label">-->
+<!--            <span class="label-text">문제 풀이 수</span>-->
+<!--        </label>-->
+<!--        <input type="text" th:field="*{count}" placeholder="문제풀이 수" class="input input-bordered"/>-->
+<!--    </div>-->
+
+<!--    <section class="flex flex-col">-->
+<!--        <label class="label">-->
+<!--            <span class="label-text">OJ사이트</span>-->
+<!--        </label>-->
+
+<!--        <div class="form-control flex-content">-->
+<!--            <label class="label cursor-pointer">-->
+<!--                <span class="peer-checked:text-[red] label-text">백준</span>-->
+<!--                <input type="radio" th:field="*{provider}" value="BaekJoon" class="peer radio focus:bg-red-100">-->
+<!--            </label>-->
+<!--        </div>-->
+<!--        <div class="form-control">-->
+<!--            <label class="label cursor-pointer">-->
+<!--                <span class="peer-checked:text-[red] label-text">프로그래머스</span>-->
+<!--                <input type="radio" th:field="*{provider}" value="Programmers" class="peer radio focus:bg-red-100">-->
+<!--            </label>-->
+<!--        </div>-->
+<!--    </section>-->
+
+<!--    &lt;!&ndash;  난이도  &ndash;&gt;-->
+<!--    <section class="flex">-->
+<!--        <label class="label">-->
+<!--            <span class="label-text">난이도</span>-->
+<!--            <div class="form-control">-->
+<!--                <label class="label cursor-pointer">-->
+<!--                    <span class="peer-checked:text-[red] label-text">ALL</span>-->
+<!--                    <input type="radio" th:field="*{difficulty}" value="ALL" class="peer radio focus:bg-red-100">-->
+<!--                </label>-->
+<!--            </div>-->
+<!--            <div class="form-control">-->
+<!--                <label class="label cursor-pointer">-->
+<!--                    <span class="peer-checked:text-[red] label-text">BRONZE</span>-->
+<!--                    <input type="radio" th:field="*{difficulty}" value="BRONZE" class="peer radio focus:bg-red-100">-->
+<!--                </label>-->
+<!--            </div>-->
+<!--            <div class="form-control">-->
+<!--                <label class="label cursor-pointer">-->
+<!--                    <span class="peer-checked:text-[red] label-text">SILVER</span>-->
+<!--                    <input type="radio" th:field="*{difficulty}" value="SILVER" class="peer radio focus:bg-red-100">-->
+<!--                </label>-->
+<!--            </div>-->
+<!--            <div class="form-control">-->
+<!--                <label class="label cursor-pointer">-->
+<!--                    <span class="peer-checked:text-[red] label-text">GOLD</span>-->
+<!--                    <input type="radio" th:field="*{difficulty}" value="GOLD" class="peer radio focus:bg-red-100">-->
+<!--                </label>-->
+<!--            </div>-->
+<!--            <div class="form-control">-->
+<!--                <label class="label cursor-pointer">-->
+<!--                    <span class="peer-checked:text-[red] label-text">PLATINUM</span>-->
+<!--                    <input type="radio" th:field="*{difficulty}" value="PLATINUM" class="peer radio focus:bg-red-100">-->
+<!--                </label>-->
+<!--            </div>-->
+<!--            <div class="form-control">-->
+<!--                <label class="label cursor-pointer">-->
+<!--                    <span class="peer-checked:text-[red] label-text">DIAMOND</span>-->
+<!--                    <input type="radio" th:field="*{difficulty}" value="DIAMOND" class="peer radio focus:bg-red-100">-->
+<!--                </label>-->
+<!--            </div>-->
+<!--            <div class="form-control">-->
+<!--                <label class="label cursor-pointer">-->
+<!--                    <span class="peer-checked:text-[red] label-text">RUBY</span>-->
+<!--                    <input type="radio" th:field="*{difficulty}" value="RUBY" class="peer radio focus:bg-red-100">-->
+<!--                </label>-->
+<!--            </div>-->
+<!--        </label>-->
+<!--    </section>-->
+
+<!--    &lt;!&ndash;  난이도 끝  &ndash;&gt;-->
+<!--    <button class="btn btn-block btn-primary gap-1">-->
+<!--        <i class="fa-solid fa-arrow-right-to-bracket"></i>-->
+<!--        <span>생성</span>-->
+<!--    </button>-->
+
+<!--</form>-->
+
+
