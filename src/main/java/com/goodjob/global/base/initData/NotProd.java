@@ -32,14 +32,11 @@ public class NotProd {
                 memberService.join(joinRequestDto);
 
 
-                for(int i = 1; i <= 20; i++) {
+                for(int i = 1; i <= 200; i++) {
                     Article article = Article
                             .builder()
-                            .createDate(LocalDateTime.now())
-                            .modifiedDate(LocalDateTime.now())
                             .title("테스트%s".formatted(i))
                             .content("내용테스트%s".formatted(i))
-                            .likeCount(0L)
                             .viewCount(0L)
                             .build();
                     articleRepository.save(article);
