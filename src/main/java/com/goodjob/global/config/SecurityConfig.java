@@ -1,5 +1,7 @@
 package com.goodjob.global.config;
 
+import com.goodjob.global.base.jwt.JwtAccessDeniedHandler;
+import com.goodjob.global.base.jwt.JwtAuthenticationEntryPoint;
 import com.goodjob.global.base.security.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +20,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -28,6 +32,10 @@ public class SecurityConfig {
                         .requestMatchers("/**","/resumes/**", "/member/**","/article/**", "/jobstatistic/**").permitAll()
                 ).
                 formLogin(AbstractHttpConfigurer::disable)
+                .exceptionHandling(exception ->
+                        exception
+                                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                                .accessDeniedHandler(jwtAccessDeniedHandler))
                 .addFilterBefore(
                         jwtAuthorizationFilter, // 액세스 토큰으로부터 로그인 처리
                         UsernamePasswordAuthenticationFilter.class
