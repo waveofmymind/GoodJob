@@ -1,5 +1,6 @@
 package com.goodjob.domain.member.controller;
 
+import com.goodjob.global.base.rq.Rq;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MemberControllerTests {
     @Autowired
     private MockMvc mvc;
+    @Autowired
+    private Rq rq;
 
     @Test
     @DisplayName("POST /member/login 은 로그인 처리 URL 이다.")

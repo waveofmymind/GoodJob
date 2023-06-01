@@ -37,8 +37,7 @@ public class Member extends BaseEntity {
     @Column(unique = true)
     private String email;
 
-
-    private String userRole; // user, admin
+    private String roleUser; // user, admin
 
     private boolean isDeleted;
 
@@ -63,4 +62,5 @@ public class Member extends BaseEntity {
                 "nickname", getNickname()
         );
     }
+
 }
