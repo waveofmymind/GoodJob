@@ -4,6 +4,7 @@ import com.goodjob.domain.article.dto.response.ArticleResponseDto;
 import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.comment.dto.response.CommentResponseDto;
 import com.goodjob.domain.comment.entity.Comment;
+import com.goodjob.domain.likes.entity.Likes;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-01T13:34:13+0900",
+    date = "2023-06-01T17:45:09+0900",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.6 (Amazon.com Inc.)"
 )
 @Component
@@ -26,11 +27,14 @@ public class ArticleMapperImpl implements ArticleMapper {
         ArticleResponseDto articleResponseDto = new ArticleResponseDto();
 
         articleResponseDto.setId( article.getId() );
-        articleResponseDto.setCreateDate( article.getCreateDate() );
+        articleResponseDto.setCreatedDate( article.getCreatedDate() );
         articleResponseDto.setModifiedDate( article.getModifiedDate() );
         articleResponseDto.setTitle( article.getTitle() );
         articleResponseDto.setContent( article.getContent() );
-        articleResponseDto.setLikeCount( article.getLikeCount() );
+        List<Likes> list = article.getLikesList();
+        if ( list != null ) {
+            articleResponseDto.setLikesList( new ArrayList<Likes>( list ) );
+        }
         articleResponseDto.setViewCount( article.getViewCount() );
         articleResponseDto.setCommentList( toCommentDtoList( article.getCommentList() ) );
 
@@ -59,12 +63,15 @@ public class ArticleMapperImpl implements ArticleMapper {
         CommentResponseDto commentResponseDto = new CommentResponseDto();
 
         commentResponseDto.setId( comment.getId() );
-        commentResponseDto.setCreateDate( comment.getCreateDate() );
+        commentResponseDto.setCreatedDate( comment.getCreatedDate() );
         commentResponseDto.setModifiedDate( comment.getModifiedDate() );
         commentResponseDto.setMember( comment.getMember() );
         commentResponseDto.setArticle( comment.getArticle() );
         commentResponseDto.setContent( comment.getContent() );
-        commentResponseDto.setLikeCount( comment.getLikeCount() );
+        List<Likes> list = comment.getLikesList();
+        if ( list != null ) {
+            commentResponseDto.setLikesList( new ArrayList<Likes>( list ) );
+        }
         commentResponseDto.setDeleted( comment.isDeleted() );
 
         return commentResponseDto;

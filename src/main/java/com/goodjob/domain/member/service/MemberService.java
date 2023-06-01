@@ -62,7 +62,6 @@ public class MemberService {
                 .nickname(joinRequestDto.getNickname())
                 .email(joinRequestDto.getEmail())
                 .isDeleted(false)
-                .roleUser("USER")
                 .build();
 
         memberRepository.save(member);
