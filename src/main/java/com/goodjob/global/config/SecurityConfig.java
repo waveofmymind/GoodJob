@@ -1,5 +1,7 @@
 package com.goodjob.global.config;
 
+import com.goodjob.global.base.jwt.JwtAccessDeniedHandler;
+import com.goodjob.global.base.jwt.JwtAuthenticationEntryPoint;
 import com.goodjob.global.base.security.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -9,8 +11,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -20,6 +20,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -27,9 +29,13 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable).
                 sessionManagement(AbstractHttpConfigurer::disable).
                 authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/resumes/**", "/member/**","/article/**").permitAll()
+                        .requestMatchers("/**","/resumes/**", "/member/**","/article/**", "/jobstatistic/**").permitAll()
                 ).
                 formLogin(AbstractHttpConfigurer::disable)
+                .exceptionHandling(exception ->
+                        exception
+                                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                                .accessDeniedHandler(jwtAccessDeniedHandler))
                 .addFilterBefore(
                         jwtAuthorizationFilter, // 액세스 토큰으로부터 로그인 처리
                         UsernamePasswordAuthenticationFilter.class

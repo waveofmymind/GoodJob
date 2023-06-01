@@ -3,6 +3,7 @@ package com.goodjob.global.base.rq;
 import com.goodjob.domain.member.entity.Member;
 import com.goodjob.global.base.rsData.RsData;
 import com.goodjob.global.util.Ut;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -90,7 +91,7 @@ public class Rq {
         req.setAttribute("historyBackErrorMsg", msg);
         // 200 이 아니라 400 으로 응답코드가 지정되도록
         resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        return "common.js";
+        return "common/js";
     }
 
     // 뒤로가기 + 메세지
@@ -149,5 +150,9 @@ public class Rq {
         Map<String, String[]> parameterMap = req.getParameterMap();
 
         return Ut.json.toStr(parameterMap);
+    }
+
+    public void setCookie(Cookie cookie) {
+        resp.addCookie(cookie);
     }
 }

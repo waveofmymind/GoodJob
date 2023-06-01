@@ -18,6 +18,8 @@ public class JobResponseDto {
 
     private String sector; // 분야 백엔드, 프론트엔드
 
+    private int sectorCode;
+
     private LocalDateTime createDate; // 생성일
 
     private LocalDateTime deadLine; // 마감일
