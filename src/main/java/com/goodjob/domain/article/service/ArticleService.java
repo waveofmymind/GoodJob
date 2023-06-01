@@ -71,8 +71,7 @@ public class ArticleService {
         return articleRepository.findById(id).orElseThrow();
     }
 
-    public void createArticle(String title, String content) {
-        ArticleRequestDto articleRequestDto = new ArticleRequestDto(title, content);
+    public void createArticle(ArticleRequestDto articleRequestDto) {
 
         Article article = Article
                 .builder()
@@ -80,9 +79,9 @@ public class ArticleService {
                 .commentList(null)
                 .title(articleRequestDto.getTitle())
                 .content(articleRequestDto.getContent())
-                .likeCount(0L)
                 .viewCount(0L)
                 .isDeleted(false)
+                .likesList(null)
                 .build();
 
         articleRepository.save(article);

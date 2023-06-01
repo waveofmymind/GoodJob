@@ -4,9 +4,7 @@ import com.goodjob.domain.BaseEntity;
 import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.member.entity.Member;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -18,7 +16,8 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @NoArgsConstructor
-@SuperBuilder
+@AllArgsConstructor
+@Builder
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 public class Comment extends BaseEntity {

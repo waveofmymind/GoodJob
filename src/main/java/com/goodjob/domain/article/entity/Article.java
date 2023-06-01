@@ -2,24 +2,25 @@ package com.goodjob.domain.article.entity;
 
 import com.goodjob.domain.BaseEntity;
 import com.goodjob.domain.comment.entity.Comment;
+import com.goodjob.domain.likes.entity.Likes;
 import com.goodjob.domain.member.entity.Member;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @NoArgsConstructor
-@SuperBuilder
+@AllArgsConstructor
+@Builder
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 public class Article extends BaseEntity {
@@ -40,13 +41,13 @@ public class Article extends BaseEntity {
     @Setter
     private String content;
 
-    private Long likeCount;
-
     @Setter
     private Long viewCount;
 
     @Setter
     private boolean isDeleted;
 
+    @OneToMany(mappedBy = "article", cascade = {CascadeType.ALL}, fetch=FetchType.EAGER)
+    private List<Likes> likesList = new ArrayList<>();
     // TODO: 의존관계
 }

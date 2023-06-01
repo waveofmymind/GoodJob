@@ -21,9 +21,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
 
-    public void createComment(Article article, String content) {
-        CommentRequestDto commentRequestDto = new CommentRequestDto(content);
-
+    public void createComment(Article article, CommentRequestDto commentRequestDto) {
         Comment comment = Comment
                 .builder()
                 .member(null)   //TODO : 추후 수정
@@ -52,6 +50,7 @@ public class CommentService {
 
     @Transactional
     public void deleteComment(Comment comment) {
-        commentRepository.delete(comment);
+        comment.setDeleted(true);
+        commentRepository.save(comment);
     }
 }

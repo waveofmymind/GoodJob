@@ -1,5 +1,6 @@
 package com.goodjob.domain.article.controller;
 
+import com.goodjob.domain.article.dto.request.ArticleRequestDto;
 import com.goodjob.domain.article.dto.response.ArticleResponseDto;
 import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.article.service.ArticleService;
@@ -63,7 +64,8 @@ public class ArticleController {
         if (bindingResult.hasErrors()) {
             return "/article/articleForm";
         }
-        articleService.createArticle(articleForm.getTitle(), articleForm.getContent());
+        ArticleRequestDto articleRequestDto = new ArticleRequestDto(articleForm.getTitle(), articleForm.getContent());
+        articleService.createArticle(articleRequestDto);
         long id = articleService.getCreatedArticleId();
         return "redirect:/article/detail/%s".formatted(id);
     }

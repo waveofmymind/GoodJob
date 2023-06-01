@@ -36,7 +36,9 @@ public class CommentController {
             model.addAttribute("article", article);
             return "/article/detailArticle";
         }
-        commentService.createComment(article, commentForm.getContent());
+        CommentRequestDto commentRequestDto = new CommentRequestDto(commentForm.getContent());
+        commentService.createComment(article, commentRequestDto);
+
         return String.format("redirect:/article/detail/%s", id);
     }
 

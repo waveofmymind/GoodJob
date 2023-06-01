@@ -16,8 +16,8 @@
             <li th:each="article, loop : ${paging}" class="bg-white p-3 flex justify-between border-b h-11">
                 <a th:href="@{|/article/detail/${article.id}|}" th:text="${article.title}" class="text-sm flex-grow"></a>
                 <p class="text-xs  w-16 text-center">글쓴이1</p>
-                <div th:text="${article.likeCount}" class="text-xs  w-16 text-center"></div>
-                <p th:text="${#lists.size(article.commentList)}" class="text-xs  w-16 text-center"></p>
+                <div th:text="${#lists.size(article.likesList)}" class="text-xs  w-16 text-center"></div>
+                <p th:text="${#lists.size(article.commentList.?[deleted == false])}" class="text-xs  w-16 text-center"></p>
                 <p th:text="${article.viewCount}" class="text-xs  w-16 text-center"></p>
             </li>
 
