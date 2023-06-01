@@ -25,7 +25,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable).
                 sessionManagement(AbstractHttpConfigurer::disable).
                 authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/resumes/**", "/member/**","/article/**", "/jobstatistic/**").permitAll()
+                        .requestMatchers("/**","/resumes/**", "/member/**","/article/**", "/jobstatistic/**").permitAll()
                 ).
                 formLogin(AbstractHttpConfigurer::disable)
                 .addFilterBefore(
