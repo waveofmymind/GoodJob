@@ -1,9 +1,10 @@
 package com.goodjob.domain.job.entity;
 
-import com.goodjob.domain.BaseEntity;
 import com.goodjob.domain.job.dto.JobResponseDto;
-import jakarta.persistence.*;
-import lombok.AccessLevel;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,13 +20,12 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
-public class Company {
+public class JobStatistic {
     @Id @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     private String company;
 
-    @Column(unique = true)
     private String subject;
 
     @Column(unique = true)
@@ -39,10 +39,13 @@ public class Company {
 
     private int career; // 년차 신입은 default 0
 
-    public static Company create(JobResponseDto jobResponseDto) {
+    private int sectorCode;
+
+    public static JobStatistic create(JobResponseDto jobResponseDto) {
         return builder()
                 .company(jobResponseDto.getCompany())
                 .subject(jobResponseDto.getSubject())
+                .sectorCode(jobResponseDto.getSectorCode())
                 .url(jobResponseDto.getUrl())
                 .sector(jobResponseDto.getSector())
                 .startDate(jobResponseDto.getCreateDate())
