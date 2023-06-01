@@ -47,7 +47,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
         log.info("유저에게 받아온 accessToken ={}", accessToken);
 
-        if (accessToken != null && !redisUt.hasKeyBlackList(username)) {
+        boolean hasKeyBlackList = redisUt.hasKeyBlackList(username);
+        log.info("hasKeyBlackList ={}", hasKeyBlackList);
+
+        if (accessToken != null && !hasKeyBlackList) {
             try {
                 if (jwtProvider.verify(accessToken)) {
                     Map<String, Object> claims = jwtProvider.getClaims(accessToken);

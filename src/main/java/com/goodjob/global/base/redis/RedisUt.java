@@ -44,8 +44,14 @@ public class RedisUt {
         stringRedisTemplate.delete(key);
     }
 
+    public void deleteTokenFromBlackList(String key) {
+        String logoutKey = REDIS_KEY_PREFIX + key;
+        stringRedisTemplate.delete(logoutKey);
+    }
+
     public void setBlackList(String key) {
-        stringRedisTemplate.opsForValue().set(REDIS_KEY_PREFIX + key, "logout user", Duration.ofMillis(1000L * 60 * 30));
+        String logoutKey = REDIS_KEY_PREFIX + key;
+        stringRedisTemplate.opsForValue().set(logoutKey, "logout user", Duration.ofMillis(1000L * 60 * 30));
     }
 
     public boolean hasKeyBlackList(String key) {

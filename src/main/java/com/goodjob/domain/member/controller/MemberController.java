@@ -66,7 +66,8 @@ public class MemberController {
         // TODO: 리팩토링
         String username = loginRequestDto.getUsername();
         if (redisUt.hasKeyBlackList(username)) {
-            redisUt.deleteToken(username);
+            // 블랙리스트에서 삭제
+            redisUt.deleteTokenFromBlackList(username);
         }
 
         String data = (String) loginRsData.getData();
@@ -94,7 +95,7 @@ public class MemberController {
     public String logout() {
         String username = rq.getMember().getUsername();
         // TODO: 리팩토링
-        // 레디스에서 리프레시토큰삭제.
+        // 레디스에서 리프레시토큰삭제
         redisUt.deleteToken(username);
         // 레디스에 블랙리스트 추가
         redisUt.setBlackList(username);
@@ -104,6 +105,7 @@ public class MemberController {
 
         cookieUt.expireCookie(accessTokenCookie);
         cookieUt.expireCookie(usernameCookie);
+        log.info("만료된쿠키= username= {}, accessToken= {}", usernameCookie.getValue(), accessTokenCookie.getValue());
 
         return rq.redirectWithMsg("/", "로그아웃");
     }
