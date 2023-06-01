@@ -1,6 +1,7 @@
 package com.goodjob.global.base.rq;
 
 import com.goodjob.domain.member.entity.Member;
+import com.goodjob.domain.member.service.MemberService;
 import com.goodjob.global.base.rsData.RsData;
 import com.goodjob.global.util.Ut;
 import jakarta.servlet.http.Cookie;
@@ -15,8 +16,8 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.servlet.LocaleResolver;
-import com.goodjob.domain.member.service.MemberService;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -154,5 +155,13 @@ public class Rq {
 
     public void setCookie(Cookie cookie) {
         resp.addCookie(cookie);
+    }
+
+    public Cookie getCookie(String cookieName) {
+        Cookie[] cookies = req.getCookies();
+        return Arrays.stream(cookies)
+                .filter(e -> e.getName().equals(cookieName))
+                .findFirst()
+                .orElse(null);
     }
 }
