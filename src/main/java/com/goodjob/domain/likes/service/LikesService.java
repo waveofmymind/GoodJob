@@ -6,6 +6,8 @@ import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.article.mapper.ArticleMapper;
 import com.goodjob.domain.article.repository.ArticleRepository;
 import com.goodjob.domain.article.service.ArticleService;
+import com.goodjob.domain.comment.entity.Comment;
+import com.goodjob.domain.comment.service.CommentService;
 import com.goodjob.domain.likes.dto.request.LikesRequestDto;
 import com.goodjob.domain.likes.entity.Likes;
 import com.goodjob.domain.likes.repository.LikesRepository;
@@ -26,14 +28,25 @@ import java.util.stream.Collectors;
 public class LikesService {
     private final LikesRepository likesRepository;
     private final ArticleService articleService;
+    private final CommentService commentService;
+
     public void likeArticle(LikesRequestDto likesRequestDto) {
         Article article = articleService.getArticle(likesRequestDto.getArticleId());
 
         Likes likes = Likes
                 .builder()
-                .member(null)
                 .article(article)
-                .comment(null)
+                .build();
+
+        likesRepository.save(likes);
+    }
+
+    public void likeComment(LikesRequestDto likesRequestDto) {
+        Comment comment = commentService.getComment(likesRequestDto.getCommentId());
+
+        Likes likes = Likes
+                .builder()
+                .comment(comment)
                 .build();
 
         likesRepository.save(likes);

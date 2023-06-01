@@ -37,4 +37,14 @@ public class LikesController {
 
         return "redirect:/article/detail/%s".formatted(id);
     }
+
+    @PostMapping("/like/comment/{id}")
+    public String likeComment(@PathVariable("id") Long id) {
+        LikesRequestDto likesRequestDto = new LikesRequestDto(null, id);
+
+        likesService.likeComment(likesRequestDto);
+
+
+        return "redirect:/article/detail/%s".formatted(id);
+    }
 }

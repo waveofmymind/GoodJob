@@ -27,7 +27,6 @@ public class CommentService {
                 .member(null)   //TODO : 추후 수정
                 .article(article)
                 .content(commentRequestDto.getContent())
-                .likeCount(0L)
                 .isDeleted(false)
                 .build();
 

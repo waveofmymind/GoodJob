@@ -34,7 +34,7 @@ public class CommentController {
         Article article = articleService.getArticle(id);
         if (bindingResult.hasErrors()) {
             model.addAttribute("article", article);
-            return "/article/detailArticle";
+            return "article/detailArticle";
         }
         CommentRequestDto commentRequestDto = new CommentRequestDto(commentForm.getContent());
         commentService.createComment(article, commentRequestDto);

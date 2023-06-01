@@ -34,7 +34,7 @@ public class ArticleController {
 
         model.addAttribute("paging", paging);
 
-        return "/article/main";
+        return "article/main";
     }
 
     @GetMapping("/list")
@@ -42,7 +42,7 @@ public class ArticleController {
         Page<ArticleResponseDto> paging = articleService.findAll(page);
         model.addAttribute("paging", paging);
 
-        return "/article/list";
+        return "article/list";
     }
 
     @GetMapping("/detail/{id}")
@@ -50,7 +50,7 @@ public class ArticleController {
         Article article = articleService.getArticle(id);
         ArticleResponseDto articleResponseDto = articleService.increaseViewCount(article);
         model.addAttribute("article", articleResponseDto);
-        return "/article/detailArticle";
+        return "article/detailArticle";
 
     }
 
@@ -62,7 +62,7 @@ public class ArticleController {
     @PostMapping("/create")
     public String createArticle(@Valid ArticleForm articleForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "/article/articleForm";
+            return "article/articleForm";
         }
         ArticleRequestDto articleRequestDto = new ArticleRequestDto(articleForm.getTitle(), articleForm.getContent());
         articleService.createArticle(articleRequestDto);
@@ -90,7 +90,7 @@ public class ArticleController {
 //        }
         articleForm.setTitle(articleResponseDto.getTitle());
         articleForm.setContent(articleResponseDto.getContent());
-        return "/article/articleForm";
+        return "article/articleForm";
     }
 
 //    @PreAuthorize("isAuthenticated()")
@@ -98,7 +98,7 @@ public class ArticleController {
     public String updateArticle(@Valid ArticleForm articleForm, BindingResult bindingResult,
                                  Principal principal, @PathVariable("id") Long id) {
         if (bindingResult.hasErrors()) {
-            return "/article/articleForm";
+            return "article/articleForm";
         }
         Article article = articleService.getArticle(id);
 //        if (!articleResponseDto.getMember().getUsername().equals(principal.getName())) {
