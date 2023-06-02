@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/member")
 @Slf4j
 public class MemberController {
+
     private final Rq rq;
     private final MemberService memberService;
     private final CookieUt cookieUt;
@@ -29,7 +30,7 @@ public class MemberController {
     @GetMapping("/join")
     @PreAuthorize("isAnonymous()")
     public String showJoin() {
-        return "/member/join";
+        return "member/join";
     }
 
     @PostMapping("/join")
@@ -47,7 +48,7 @@ public class MemberController {
     @GetMapping("/login")
     @PreAuthorize("isAnonymous()")
     public String showLogin() {
-        return "/member/login";
+        return "member/login";
     }
     @PostMapping("/login")
     @PreAuthorize("isAnonymous()")
@@ -87,7 +88,7 @@ public class MemberController {
         log.info("id ={}", id);
         memberService.delete(id);
 
-        return "/member/join";
+        return "member/join";
     }
 
     @PostMapping("/logout")
