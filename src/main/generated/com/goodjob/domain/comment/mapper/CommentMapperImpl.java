@@ -2,7 +2,10 @@ package com.goodjob.domain.comment.mapper;
 
 import com.goodjob.domain.comment.dto.response.CommentResponseDto;
 import com.goodjob.domain.comment.entity.Comment;
+import com.goodjob.domain.likes.dto.response.LikesResponseDto;
 import com.goodjob.domain.likes.entity.Likes;
+import com.goodjob.domain.subComment.dto.response.SubCommentResponseDto;
+import com.goodjob.domain.subComment.entity.SubComment;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
@@ -10,8 +13,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-01T17:45:09+0900",
-    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.6 (Amazon.com Inc.)"
+    date = "2023-06-02T10:24:30+0900",
+    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.6 (Oracle Corporation)"
 )
 @Component
 public class CommentMapperImpl implements CommentMapper {
@@ -28,14 +31,68 @@ public class CommentMapperImpl implements CommentMapper {
         commentResponseDto.setCreatedDate( comment.getCreatedDate() );
         commentResponseDto.setModifiedDate( comment.getModifiedDate() );
         commentResponseDto.setMember( comment.getMember() );
-        commentResponseDto.setArticle( comment.getArticle() );
         commentResponseDto.setContent( comment.getContent() );
-        List<Likes> list = comment.getLikesList();
-        if ( list != null ) {
-            commentResponseDto.setLikesList( new ArrayList<Likes>( list ) );
-        }
+        commentResponseDto.setLikesList( likesListToLikesResponseDtoList( comment.getLikesList() ) );
         commentResponseDto.setDeleted( comment.isDeleted() );
+        commentResponseDto.setSubCommentList( subCommentListToSubCommentResponseDtoList( comment.getSubCommentList() ) );
 
         return commentResponseDto;
+    }
+
+    protected LikesResponseDto likesToLikesResponseDto(Likes likes) {
+        if ( likes == null ) {
+            return null;
+        }
+
+        LikesResponseDto likesResponseDto = new LikesResponseDto();
+
+        likesResponseDto.setId( likes.getId() );
+        likesResponseDto.setMember( likes.getMember() );
+
+        return likesResponseDto;
+    }
+
+    protected List<LikesResponseDto> likesListToLikesResponseDtoList(List<Likes> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<LikesResponseDto> list1 = new ArrayList<LikesResponseDto>( list.size() );
+        for ( Likes likes : list ) {
+            list1.add( likesToLikesResponseDto( likes ) );
+        }
+
+        return list1;
+    }
+
+    protected SubCommentResponseDto subCommentToSubCommentResponseDto(SubComment subComment) {
+        if ( subComment == null ) {
+            return null;
+        }
+
+        SubCommentResponseDto subCommentResponseDto = new SubCommentResponseDto();
+
+        subCommentResponseDto.setId( subComment.getId() );
+        subCommentResponseDto.setCreatedDate( subComment.getCreatedDate() );
+        subCommentResponseDto.setModifiedDate( subComment.getModifiedDate() );
+        subCommentResponseDto.setMember( subComment.getMember() );
+        subCommentResponseDto.setContent( subComment.getContent() );
+        subCommentResponseDto.setDeleted( subComment.isDeleted() );
+        subCommentResponseDto.setLikesList( likesListToLikesResponseDtoList( subComment.getLikesList() ) );
+
+        return subCommentResponseDto;
+    }
+
+    protected List<SubCommentResponseDto> subCommentListToSubCommentResponseDtoList(List<SubComment> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<SubCommentResponseDto> list1 = new ArrayList<SubCommentResponseDto>( list.size() );
+        for ( SubComment subComment : list ) {
+            list1.add( subCommentToSubCommentResponseDto( subComment ) );
+        }
+
+        return list1;
     }
 }
