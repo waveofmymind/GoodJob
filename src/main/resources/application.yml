@@ -19,10 +19,6 @@ spring:
     basename: message/messages
     encoding: UTF-8
 
-  data:
-    redis:
-      host: localhost
-      port: 6379
 
 jasypt:
   encryptor:
