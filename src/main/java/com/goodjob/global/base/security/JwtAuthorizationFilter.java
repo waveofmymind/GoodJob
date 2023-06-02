@@ -45,12 +45,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             accessToken = accessTokenCookie.getValue();
             username = usernameCookie.getValue();
         }
-//        // 헤더에서 Authorization 값을 가져옴.
-//        String bearerToken = request.getHeader("Authorization");
+        log.info("유저에게 받아온 accessToken ={}", accessToken);
 
-        if (accessToken != null) {
-            log.info("유저에게 받아온 accessToken ={}", accessToken);
+        boolean hasKeyBlackList = redisUt.hasKeyBlackList(username);
+        log.info("hasKeyBlackList ={}", hasKeyBlackList);
 
+        if (accessToken != null && !hasKeyBlackList) {
             try {
                 if (jwtProvider.verify(accessToken)) {
                     Map<String, Object> claims = jwtProvider.getClaims(accessToken);

@@ -20,7 +20,7 @@ public class JwtProvider {
     @Autowired
     private RedisUt redisUt;
     private SecretKey cachedSecretKey;
-    private final static long TOKEN_VALIDATION_SECOND = 1000L * 60 * 60 * 2; // 2시간
+    public final static long TOKEN_VALIDATION_SECOND = 1000L * 60 * 60 * 2; // 2시간
     private final static long REFRESH_TOKEN_VALIDATION_SECOND = 1000L * 60 * 60 * 24 * 14; // 14일
 
     @Value("${custom.jwt.secretKey}")
@@ -51,6 +51,7 @@ public class JwtProvider {
         String refreshToken = redisUt.genRefreshToken();
         // 유저 계정을 키값으로 리프레시 토큰을 redis 에 저장. 유효기간은 15일
         redisUt.setRefreshToken(username, refreshToken, now + REFRESH_TOKEN_VALIDATION_SECOND);
+        log.info("refreshToken 저장완료 ={}", refreshToken);
 
         return Jwts.builder()
                 .claim("body", Ut.json.toStr(claims))
@@ -69,6 +70,10 @@ public class JwtProvider {
 
             Claims claims = claimsJws.getBody();
             log.info("claims= {}", claims);
+
+            if (redisUt.hasKeyBlackList((String) claims.get("username"))) {
+                return false;
+            };
         } catch (ExpiredJwtException e) { // 액세스토큰 만료된 경우
             throw e;
         } catch (Exception e) {
