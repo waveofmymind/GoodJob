@@ -1,18 +1,110 @@
 <html layout:decorate="~{layout/layout}">
+<head>
+    <script th:inline="javascript">
+        // 타임리프 문법(파라미터, ? 뒤에 입력된 매개변수들)
+        const params = JSON.parse('[( ${@rq.paramsJsonStr} )]');
+    </script>
+</head>
+
+<body>
+
 <div layout:fragment="content" class="container my-3">
+    <script>
+        const loginFormInputUsernameValueMinLength = 4;
+        const loginFormInputPasswordValueMinLength = 4;
+
+        function LoginForm__submit(form) {
+            // username 이(가) 올바른지 체크
+
+            form.username.value = form.username.value.trim(); // 입력란의 입력값에 있을지 모르는 좌우공백제거
+
+            if (form.username.value.length === 0) {
+                toastWarning($("#msg-loginFormNeedInputUsername").text());
+                form.username.focus();
+                return;
+            }
+
+            if (form.usernam`e.value.length < loginFormInputUsernameValueMinLength) {
+                toastWarning($("#msg-loginFormNeedInputUsernameMoreThan").text());
+                form.username.focus();
+                return;
+            }
+
+            // password 이(가) 올바른지 체크
+
+            form.password.value = form.password.value.trim(); // 입력란의 입력값에 있을지 모르는 좌우공백제거
+            ```````````````````````````````````````````````````````````````````````
+            if (form.password.value.length === 0) {
+                toastWarning('비밀번호를 입력해주세요.');
+                form.password.focus();
+                return;
+            }
+
+            if (form.password.value.length < loginFormInputPasswordValueMinLength) {
+                toastWarning('비밀번호를 ${loginFormInputPasswordValueMinLength}자 이상 입력해주세요.');
+                form.password.focus();
+                return;
+            }
+
+            form.submit(); // 폼 발송
+        }
+    </script>
+
     <div class="flex justify-center items-center min-h-screen">
         <div class="w-96 bg-white p-8 rounded-lg mb-64">
             <h2 class="text-xl font-semibold mb-4">로그인</h2>
             <div>
                 <label for="username" class="block mb-2">아이디</label>
-                <input type="text" id="username" class="border-b border-info px-2 py-2 w-full focus:outline-none" placeholder="아이디를 입력하세요">
+                <input type="text" id="username" class="border-b border-info px-2 py-2 w-full focus:outline-none"
+                       placeholder="아이디를 입력하세요">
             </div>
             <div>
                 <label for="password" class="block mb-2 mt-4">비밀번호</label>
-                <input type="password" id="password" class="border-b border-info px-2 py-2 w-full focus:outline-none" placeholder="비밀번호를 입력하세요">
+                <input type="password" id="password" class="border-b border-info px-2 py-2 w-full focus:outline-none"
+                       placeholder="비밀번호를 입력하세요">
             </div>
             <button class="mt-8 bg-info text-white px-4 py-2 rounded-lg">로그인</button>
         </div>
     </div>
 </div>
+
+<script th:inline="javascript">
+    if (params.msg) {
+        toastNotice(params.msg[0]);
+    }
+
+    if (params.errorMsg) {
+        toastWarning(params.errorMsg[0]);
+    }
+
+    // history.back 에 의해서 돌아온 경우에 실행됨
+    // 평소에도 실행됨
+    $(window).bind("pageshow", function (event) {
+        const localStorageKeyAboutHistoryBackErrorMsg = "historyBackErrorMsg___" + location.href;
+
+        if (localStorage.getItem(localStorageKeyAboutHistoryBackErrorMsg)) {
+            toastWarning(localStorage.getItem(localStorageKeyAboutHistoryBackErrorMsg));
+            localStorage.removeItem(localStorageKeyAboutHistoryBackErrorMsg);
+        } else {
+            const localStorageKeyAboutHistoryBackErrorMsg = "historyBackErrorMsg___null";
+
+            if (localStorage.getItem(localStorageKeyAboutHistoryBackErrorMsg)) {
+                toastWarning(localStorage.getItem(localStorageKeyAboutHistoryBackErrorMsg));
+                localStorage.removeItem(localStorageKeyAboutHistoryBackErrorMsg);
+            }
+        }
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" async
+        integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M"
+        crossorigin="anonymous">
+</script>
+</body>
+
 </html>
+
+
+
+
+

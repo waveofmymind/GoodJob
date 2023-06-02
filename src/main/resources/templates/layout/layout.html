@@ -41,8 +41,8 @@
   </div>
   <div class="flex-none">
     <ul class="menu menu-horizontal px-1">
-      <li><a href="/member/login">로그인</a></li>
-
+      <li><a href="/member/login" th:if="${@rq.logout}">로그인</a></li>
+      <li><a href="/member/logout" th:if="${@rq.login}">로그아웃</a></li>
       <li><a href="/member/join">회원가입</a></li>
     </ul>
   </div>
