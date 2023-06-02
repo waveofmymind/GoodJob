@@ -1,5 +1,9 @@
-<html layout:decorate="~{layout/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<div layout:fragment="content" class="container mx-auto">
+<html layout:decorate="~{layout/layout.html}">
+<head>
+    <title>게시글 작성</title>
+</head>
+<body>
+<main layout:fragment="main" class="container mx-auto">
     <div class="container mx-auto py-8 w-1/2">
         <h1 class="text-2xl font-bold">게시글 작성</h1>
 
@@ -15,7 +19,7 @@
             <button type="submit" class="register bg-info hover:bg-blue-500 text-white font-bold px-4 py-2 rounded border-info">저장하기</button>
         </form>
     </div>
-</div>
+</main>
 
 <script layout:fragment="script" type='text/javascript'>
     const btn = document.querySelector('.register');
@@ -31,4 +35,5 @@
         }
     });
 </script>
+</body>
 </html>

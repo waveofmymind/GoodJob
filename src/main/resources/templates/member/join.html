@@ -1,5 +1,9 @@
-<html layout:decorate="~{layout/layout}">
-<div layout:fragment="content" class="container my-3 mx-auto">
+<html layout:decorate="~{layout/layout.html}">
+<head>
+    <title>회원가입</title>
+</head>
+<body>
+<main layout:fragment="main" class="container my-3 mx-auto">
     <div class="flex justify-center items-center min-h-screen">
         <div class="w-96 bg-white p-8 rounded-lg">
             <h2 class="text-2xl font-semibold mb-4">회원가입</h2>
@@ -35,5 +39,6 @@
             <button class="mt-8 bg-info text-white px-4 py-2 rounded-lg text-sm">가입하기</button>
         </div>
     </div>
-</div>
+</main>
+</body>
 </html>

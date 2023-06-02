@@ -1,5 +1,9 @@
-<html layout:decorate="~{layout/layout}">
-<div layout:fragment="content" class="container my-3 mx-auto">
+<html layout:decorate="~{layout/layout.html}">
+<head>
+    <title>커뮤니티 메인</title>
+</head>
+<body>
+<main layout:fragment="main" class="container my-3 mx-auto">
     <div class="container mx-auto p-8 w-2/3">
         <div class="flex items-center justify-between border-b">
             <h1 class="text-2xl font-bold">🔥주간 인기글</h1>
@@ -69,5 +73,6 @@
             </li>
         </ul>
     </div>
-</div>
+</main>
+</body>
 </html>

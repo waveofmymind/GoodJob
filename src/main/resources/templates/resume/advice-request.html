@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout/layout}">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout/layout.html}">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -13,7 +13,7 @@
 <body>
 
 
-<div layout:fragment="content" class="flex justify-center items-center h-auto mt-16">
+<main layout:fragment="main" class="flex justify-center items-center h-auto mt-16">
     <form action="/resumes/advices" method="post" style="width:600px; margin:auto;">
 
         <label for="job" class="mb-4">원하는 직업을 선택해주세요</label>
@@ -52,7 +52,7 @@
         </div>
         <button type="submit" class="btn mb-6">제출</button>
     </form>
-</div>
+</main>
 
 </body>
 </html>

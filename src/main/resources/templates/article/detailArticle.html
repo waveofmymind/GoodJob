@@ -1,5 +1,9 @@
-<html layout:decorate="~{layout/layout}">
-<div layout:fragment="content" class="container my-3 mx-auto">
+<html layout:decorate="~{layout/layout.html}">
+<head>
+    <title>게시글 상세 페이지</title>
+</head>
+<body>
+<main layout:fragment="main" class="container my-3 mx-auto">
 
     <div class="container mx-auto py-8 w-1/2">
         <a href="/article/list" class="bg-white text-info px-1 py-1 mb-3 rounded-md flex-start hover:bg-gray-200">&lt; 전체 게시글</a>
@@ -120,7 +124,7 @@
             </div>
         </ul>
     </div>
-</div>
+</main>
 <script layout:fragment="script" type='text/javascript'>
     const delete_elements = document.getElementsByClassName("delete");
     Array.from(delete_elements).forEach(function(element) {
@@ -216,4 +220,5 @@
         }
     }
 </script>
+</body>
 </html>
