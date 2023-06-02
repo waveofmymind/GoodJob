@@ -21,4 +21,6 @@ public class ArticleResponseDto {
     private List<LikesResponseDto> likesList;
     private Long viewCount;
     private List<CommentResponseDto> commentList;
+
+    private Long commentsCount;
 }

@@ -7,11 +7,13 @@ import com.goodjob.domain.comment.dto.response.CommentResponseDto;
 import com.goodjob.domain.comment.entity.Comment;
 import com.goodjob.domain.comment.mapper.CommentMapper;
 import com.goodjob.domain.comment.repository.CommentRepository;
+import com.goodjob.domain.subComment.entity.SubComment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -49,6 +51,10 @@ public class CommentService {
 
     @Transactional
     public void deleteComment(Comment comment) {
+        List<SubComment> subCommentList = comment.getSubCommentList();
+        for(SubComment subComment : subCommentList) {
+            subComment.setDeleted(true);
+        }
         comment.setDeleted(true);
         commentRepository.save(comment);
     }

@@ -1,5 +1,5 @@
 <html layout:decorate="~{layout/layout}">
-<div layout:fragment="content" class="container my-3">
+<div layout:fragment="content" class="container my-3 mx-auto">
 
     <div class="container mx-auto py-8 w-1/2">
         <a href="/article/list" class="bg-white text-info px-1 py-1 mb-3 rounded-md flex-start hover:bg-gray-200">&lt; 전체 게시글</a>
@@ -10,7 +10,7 @@
             <a href="javascript:void(0);" th:data-uri="@{|/article/delete/${article.id}|}" class="delete text-xs text-black mt-2 mx-2 underline">삭제</a>
             <p class="text-xs mt-2 mr-2" th:text="|조회:${article.viewCount}|"></p>
             <p class="text-xs mt-2 mr-2" th:text="|추천:${#lists.size(article.likesList)}|"></p>
-            <p class="text-xs mt-2" th:text="|댓글:${#lists.size(article.commentList.?[deleted == false])}|"></p>
+            <p class="text-xs mt-2" th:text="|댓글:${article.commentsCount}|"></p>
         </div>
         <hr class="border-info mb-4">
         <p class="text-sm min-h-[200px] pl-3" style="word-break: break-word;" th:text="${article.content}"></p>
@@ -53,7 +53,6 @@
                     <p th:id="|text-${comment.id}|" style="word-break: break-word;" class="text-sm min-h-[30px] modify-comment pl-3"th:text="${comment.content}"></p>
 
                     <form th:action="@{|/comment/update/${comment.id}|}" th:object="${commentForm}" method="post" class="mb-4 justify-between items-start">
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                         <textarea th:id="|textarea-${comment.id}|" th:field="*{content}" class="hidden modify-textarea form-textarea w-full p-3 resize-none overflow-y-auto border border-info rounded-md mb-2 text-sm" placeholder="댓글 내용"></textarea>
                         <div class="flex">
                             <input th:id="|button-${comment.id}|" type="submit" value="수정완료" class="hidden modify-save-button bg-info text-white px-4 py-2 rounded-md ml-2 flex-start text-xs hover:bg-blue-500 ml-auto" onclick="saveComment()" th:attr="data-id=${comment.id}">
@@ -91,7 +90,6 @@
                                 <p th:id="|text-subComment-${subComment.id}|" style="word-break: break-word;" class="text-sm min-h-[25px] modify-comment"th:text="${subComment.content}"></p>
                                 <div th:id="|update-subComment-${subComment.id}|" class="hidden">
                                     <form th:action="@{|/subComment/update/${subComment.id}|}" th:object="${subCommentForm}" method="post" class="mb-4 justify-between items-start">
-                                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                                         <textarea th:id="|textarea-subComment-${subComment.id}|" th:field="*{content}" class="modify-textarea form-textarea w-full p-3 resize-none overflow-y-auto border border-info rounded-md mb-2 text-sm" placeholder="답글 내용"></textarea>
                                         <div class="flex">
                                             <input type="submit" value="수정완료" class="modify-save-button bg-info text-white px-4 py-2 rounded-md ml-2 flex-start text-xs hover:bg-blue-500 ml-auto" onclick="saveSubComment()" th:attr="data-id=${subComment.id}">

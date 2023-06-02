@@ -1,10 +1,9 @@
 <html layout:decorate="~{layout/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<div layout:fragment="content" class="container">
+<div layout:fragment="content" class="container mx-auto">
     <div class="container mx-auto py-8 w-1/2">
         <h1 class="text-2xl font-bold">게시글 작성</h1>
 
         <form class="mt-4" th:object="${articleForm}" method="post">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
             <div class="mb-4">
                 <input type="text" th:field="*{title}" class="form-input w-full border border-info rounded-md h-10 p-3" placeholder="제목을 입력하세요">
             </div>

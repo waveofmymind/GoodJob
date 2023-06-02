@@ -5,6 +5,8 @@ import com.goodjob.domain.article.dto.response.ArticleResponseDto;
 import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.article.mapper.ArticleMapper;
 import com.goodjob.domain.article.repository.ArticleRepository;
+import com.goodjob.domain.comment.dto.response.CommentResponseDto;
+import com.goodjob.domain.subComment.dto.response.SubCommentResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -31,6 +33,10 @@ public class ArticleService {
                 .map(articleMapper::toDto)
                 .collect(Collectors.toList());
 
+        for(ArticleResponseDto articleResponseDto : articles) {
+            countCommentsAndSubComments(articleResponseDto);
+        }
+
         return convertToPage(articles, pageable);
     }
 
@@ -43,6 +49,10 @@ public class ArticleService {
                 .map(articleMapper::toDto)
                 .collect(Collectors.toList());
 
+        for(ArticleResponseDto articleResponseDto : articles) {
+            countCommentsAndSubComments(articleResponseDto);
+        }
+
         return convertToPage(articles, pageable);
     }
 
@@ -52,6 +62,25 @@ public class ArticleService {
 
         List<ArticleResponseDto> content = articles.subList(start, end);
         return new PageImpl<>(content, pageable, articles.size());
+    }
+
+    private void countCommentsAndSubComments(ArticleResponseDto articleResponseDto) {
+        List<CommentResponseDto> commentResponseDtos = articleResponseDto.getCommentList();
+        Long sum = 0L;
+
+        for(CommentResponseDto commentResponseDto : commentResponseDtos) {
+            if (!commentResponseDto.isDeleted()) {
+                sum++;
+                List<SubCommentResponseDto> subCommentResponseDtos = commentResponseDto.getSubCommentList();
+                for(SubCommentResponseDto subCommentResponseDto : subCommentResponseDtos) {
+                    if(!subCommentResponseDto.isDeleted()) {
+                        sum++;
+                    }
+                }
+            }
+        }
+
+        articleResponseDto.setCommentsCount(sum);
     }
 
     public ArticleResponseDto getArticleResponseDto(Long id) {
@@ -64,7 +93,9 @@ public class ArticleService {
         Long viewCount = article.getViewCount();
         article.setViewCount(viewCount + 1);
         articleRepository.save(article);
-        return articleMapper.toDto(article);
+        ArticleResponseDto articleResponseDto = articleMapper.toDto(article);
+        countCommentsAndSubComments(articleResponseDto);
+        return articleResponseDto;
     }
 
     public Article getArticle(Long id) {

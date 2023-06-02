@@ -1,5 +1,5 @@
 <html layout:decorate="~{layout/layout}">
-<div layout:fragment="content" class="container my-3">
+<div layout:fragment="content" class="container my-3 mx-auto">
     <div class="container mx-auto p-8 w-2/3">
         <div class="flex items-center justify-between">
             <h1 class="text-2xl font-bold">전체 게시글</h1>
@@ -17,7 +17,7 @@
                 <a th:href="@{|/article/detail/${article.id}|}" th:text="${article.title}" class="text-sm flex-grow"></a>
                 <p class="text-xs  w-16 text-center">글쓴이1</p>
                 <div th:text="${#lists.size(article.likesList)}" class="text-xs  w-16 text-center"></div>
-                <p th:text="${#lists.size(article.commentList.?[deleted == false])}" class="text-xs  w-16 text-center"></p>
+                <p th:text="${article.commentsCount}" class="text-xs  w-16 text-center"></p>
                 <p th:text="${article.viewCount}" class="text-xs  w-16 text-center"></p>
             </li>
 
