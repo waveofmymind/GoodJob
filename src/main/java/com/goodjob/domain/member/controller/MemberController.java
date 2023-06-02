@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/member")
 @Slf4j
 public class MemberController {
+
     private final Rq rq;
     private final MemberService memberService;
     private final CookieUt cookieUt;
