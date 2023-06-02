@@ -4,6 +4,7 @@ import com.goodjob.domain.BaseEntity;
 import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.comment.entity.Comment;
 import com.goodjob.domain.member.entity.Member;
+import com.goodjob.domain.subComment.entity.SubComment;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,4 +33,7 @@ public class Likes extends BaseEntity {
 
     @ManyToOne
     private Comment comment;    //한 댓글에 여러 개의 좋아요가 생길 수 있다.
+
+    @ManyToOne
+    private SubComment subComment;
 }

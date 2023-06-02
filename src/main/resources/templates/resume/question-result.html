@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout/layout}">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout/layout.html}">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -11,7 +11,7 @@
     <title>Resume Review Results</title>
 </head>
 <body>
-<div layout:fragment="content" class="flex justify-center items-center h-auto mt-16">
+<main layout:fragment="main" class="flex justify-center items-center h-auto mt-16">
     <div class="w-full max-w-2xl mx-auto">
         <h1 class="text-center mb-6">예상 면접 질문</h1>
         <div th:each="predictionResponse : ${predictionResponses}">
@@ -21,6 +21,6 @@
             </div>
         </div>
     </div>
-</div>
+</main>
 </body>
 </html>
