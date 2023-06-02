@@ -1,8 +1,7 @@
 package com.goodjob.domain.subComment.service;
 
-import com.goodjob.domain.article.entity.Article;
-import com.goodjob.domain.comment.dto.request.CommentRequestDto;
 import com.goodjob.domain.comment.entity.Comment;
+import com.goodjob.domain.member.entity.Member;
 import com.goodjob.domain.subComment.dto.request.SubCommentRequestDto;
 import com.goodjob.domain.subComment.entity.SubComment;
 import com.goodjob.domain.subComment.repository.SubCommentRepository;
@@ -14,10 +13,10 @@ import org.springframework.stereotype.Service;
 public class SubCommentService {
     private final SubCommentRepository subCommentRepository;
 
-    public void createSubComment(Comment comment, SubCommentRequestDto subCommentRequestDto) {
+    public void createSubComment(Member member, Comment comment, SubCommentRequestDto subCommentRequestDto) {
         SubComment subComment = SubComment
                 .builder()
-                .member(null)
+                .member(member)
                 .comment(comment)
                 .content(subCommentRequestDto.getContent())
                 .isDeleted(false)

@@ -1,20 +1,18 @@
 package com.goodjob.domain.comment.service;
 
-import com.goodjob.domain.article.dto.response.ArticleResponseDto;
 import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.comment.dto.request.CommentRequestDto;
 import com.goodjob.domain.comment.dto.response.CommentResponseDto;
 import com.goodjob.domain.comment.entity.Comment;
 import com.goodjob.domain.comment.mapper.CommentMapper;
 import com.goodjob.domain.comment.repository.CommentRepository;
+import com.goodjob.domain.member.entity.Member;
 import com.goodjob.domain.subComment.entity.SubComment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,10 +21,10 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
 
-    public void createComment(Article article, CommentRequestDto commentRequestDto) {
+    public void createComment(Member member, Article article, CommentRequestDto commentRequestDto) {
         Comment comment = Comment
                 .builder()
-                .member(null)   //TODO : 추후 수정
+                .member(member)
                 .article(article)
                 .content(commentRequestDto.getContent())
                 .isDeleted(false)

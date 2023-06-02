@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.time.Duration;
 import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 
@@ -15,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class RedisUt {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+    private final String REDIS_KEY_PREFIX = "LOGOUT_";
 
     // 리프레시 토큰 생성
     public String genRefreshToken() {
@@ -38,8 +40,27 @@ public class RedisUt {
         valueOperations.set(key, value, timeout, TimeUnit.MILLISECONDS);
     }
 
-    public void deleteRefreshToken(String key) {
-        // TODO: 로그아웃 시 액세스 토큰 만료시키기
+    public void deleteToken(String key) {
         stringRedisTemplate.delete(key);
+    }
+
+    public void deleteTokenFromBlackList(String key) {
+        String logoutKey = REDIS_KEY_PREFIX + key;
+        stringRedisTemplate.delete(logoutKey);
+    }
+
+    public void setBlackList(String key) {
+        String logoutKey = REDIS_KEY_PREFIX + key;
+        stringRedisTemplate.opsForValue().set(logoutKey, "logout user", Duration.ofMillis(1000L * 60 * 30));
+    }
+
+    public boolean hasKeyBlackList(String key) {
+        boolean hasKey = stringRedisTemplate.hasKey(REDIS_KEY_PREFIX + key);
+
+        if (hasKey) {
+            return true;
+        }
+
+        return false;
     }
 }

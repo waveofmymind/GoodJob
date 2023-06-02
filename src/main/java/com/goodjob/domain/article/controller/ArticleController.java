@@ -5,7 +5,11 @@ import com.goodjob.domain.article.dto.response.ArticleResponseDto;
 import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.article.service.ArticleService;
 import com.goodjob.domain.comment.controller.CommentController;
+import com.goodjob.domain.comment.dto.request.CommentRequestDto;
 import com.goodjob.domain.subComment.controller.SubCommentController;
+import com.goodjob.domain.subComment.dto.request.SubCommentRequestDto;
+import com.goodjob.global.base.rq.Rq;
+import com.goodjob.global.base.rsData.RsData;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -27,6 +31,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/article")
 public class ArticleController {
+    private final Rq rq;
     private final ArticleService articleService;
 
     @GetMapping("/main")
@@ -47,77 +52,70 @@ public class ArticleController {
     }
 
     @GetMapping("/detail/{id}")
-    public String detailArticle (Model model, @PathVariable("id") Long id, CommentController.CommentForm commentForm, SubCommentController.SubCommentForm subCommentForm) {
-        Article article = articleService.getArticle(id);
-        ArticleResponseDto articleResponseDto = articleService.increaseViewCount(article);
+    public String detailArticle (Model model, @PathVariable("id") Long id, CommentRequestDto commentRequestDto, SubCommentRequestDto subCommentRequestDto) {
+        RsData<Article> articleRsData = articleService.getArticle(id);
+        if(articleRsData.isFail()) {
+            return rq.historyBack(articleRsData);
+        }
+        ArticleResponseDto articleResponseDto = articleService.increaseViewCount(articleRsData.getData());
         model.addAttribute("article", articleResponseDto);
         return "article/detailArticle";
 
     }
 
-//    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
-    public String createArticle(ArticleForm articleForm) {
+    public String createArticle(ArticleRequestDto articleRequestDto ) {
         return "article/articleForm";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
-    public String createArticle(@Valid ArticleForm articleForm, BindingResult bindingResult) {
+    public String createArticle(@Valid ArticleRequestDto articleRequestDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "article/articleForm";
         }
-        ArticleRequestDto articleRequestDto = new ArticleRequestDto(articleForm.getTitle(), articleForm.getContent());
-        articleService.createArticle(articleRequestDto);
+        articleService.createArticle(rq.getMember(), articleRequestDto);
         long id = articleService.getCreatedArticleId();
         return "redirect:/article/detail/%s".formatted(id);
     }
 
-    @Getter
-    @Setter
-    public static class ArticleForm {
-        @NotBlank(message="제목을 작성해주셔야 합니다.")
-        @Size(max=200)
-        private String title;
-        @NotBlank(message="내용을 작성해주셔야 합니다.")
-        private String content;
-    }
 
-
-//    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/update/{id}")
-    public String updateArticle(ArticleForm articleForm, @PathVariable("id") Long id, Principal principal) {
-        ArticleResponseDto articleResponseDto = articleService.getArticleResponseDto(id);
+    public String updateArticle(ArticleRequestDto articleRequestDto, @PathVariable("id") Long id, Principal principal) {
+        RsData<ArticleResponseDto> articleResponseDtoRsData = articleService.getArticleResponseDto(id);
 //        if(!article.getMember().getUsername().equals(principal.getName())) {
 //            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 //        }
-        articleForm.setTitle(articleResponseDto.getTitle());
-        articleForm.setContent(articleResponseDto.getContent());
+        articleRequestDto.setTitle(articleResponseDtoRsData.getData().getTitle());
+        articleRequestDto.setContent(articleResponseDtoRsData.getData().getContent());
         return "article/articleForm";
     }
 
-//    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/update/{id}")
-    public String updateArticle(@Valid ArticleForm articleForm, BindingResult bindingResult,
+    public String updateArticle(@Valid ArticleRequestDto articleRequestDto, BindingResult bindingResult,
                                  Principal principal, @PathVariable("id") Long id) {
         if (bindingResult.hasErrors()) {
             return "article/articleForm";
         }
-        Article article = articleService.getArticle(id);
+        RsData<Article> articleRsData = articleService.getArticle(id);
 //        if (!articleResponseDto.getMember().getUsername().equals(principal.getName())) {
 //            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 //        }
-        articleService.updateArticle(article, articleForm.getTitle(), articleForm.getContent());
+        articleService.updateArticle(articleRsData.getData(), articleRequestDto);
         return String.format("redirect:/article/detail/%s", id);
     }
 
-//    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
     public String deleteArticle(Principal principal, @PathVariable("id") Long id) {
-        Article article = articleService.getArticle(id);
+        RsData<Article> articleRsData = articleService.getArticle(id);
 //        if (!article.getMember().getUsername().equals(principal.getName())) {
 //            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
 //        }
-        articleService.deleteArticle(article);
+        articleService.deleteArticle(articleRsData.getData());
         return "redirect:/article/list";
     }
 }

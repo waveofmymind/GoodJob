@@ -73,19 +73,18 @@ public class MemberService {
         Member member = findByUsername(username).orElse(null);
         log.info("member ={}", member.toString());
 
+        // TODO: 널포인트 못잡는듯
         if (member == null) {
             return RsData.of("F-1", "아이디 혹은 비밀번호가 틀립니다.");
         }
 
         boolean matches = passwordEncoder.matches(password, member.getPassword());
-        log.info("matches ={}", matches);
 
         if (!matches) {
             return RsData.of("F-1", "아이디 혹은 비밀번호가 틀립니다.");
         }
 
         String accessToken = jwtProvider.genToken(member.toClaims());
-        log.info("accessToken ={}", accessToken);
 
         return RsData.of("S-1", "로그인 가능합니다.", accessToken);
     }

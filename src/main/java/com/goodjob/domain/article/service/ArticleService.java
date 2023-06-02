@@ -6,7 +6,9 @@ import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.article.mapper.ArticleMapper;
 import com.goodjob.domain.article.repository.ArticleRepository;
 import com.goodjob.domain.comment.dto.response.CommentResponseDto;
+import com.goodjob.domain.member.entity.Member;
 import com.goodjob.domain.subComment.dto.response.SubCommentResponseDto;
+import com.goodjob.global.base.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -83,9 +86,12 @@ public class ArticleService {
         articleResponseDto.setCommentsCount(sum);
     }
 
-    public ArticleResponseDto getArticleResponseDto(Long id) {
-        Article article = articleRepository.findById(id).orElseThrow();
-        return articleMapper.toDto(article);
+    public RsData<ArticleResponseDto> getArticleResponseDto(Long id) {
+        Optional<Article> article = articleRepository.findById(id);
+        if(article.isEmpty()) {
+            return RsData.of("F-1", "해당 게시글이 존재하지 않습니다.");
+        }
+        return RsData.of("S-1", "게시글에 대한 정보를 나타냅니다.", articleMapper.toDto(article.get()));
     }
 
     @Transactional
@@ -98,15 +104,19 @@ public class ArticleService {
         return articleResponseDto;
     }
 
-    public Article getArticle(Long id) {
-        return articleRepository.findById(id).orElseThrow();
+    public RsData<Article> getArticle(Long id) {
+        Optional<Article> article = articleRepository.findById(id);
+        if(article.isEmpty()) {
+            return RsData.of("F-1", "해당 게시글이 존재하지 않습니다.");
+        }
+        return RsData.of("S-1", "게시글에 대한 정보를 가져옵니다.", article.get());
     }
 
-    public void createArticle(ArticleRequestDto articleRequestDto) {
+    public void createArticle(Member author, ArticleRequestDto articleRequestDto) {
 
         Article article = Article
                 .builder()
-                .member(null)
+                .member(author)
                 .commentList(null)
                 .title(articleRequestDto.getTitle())
                 .content(articleRequestDto.getContent())
@@ -119,9 +129,9 @@ public class ArticleService {
     }
 
     @Transactional
-    public void updateArticle(Article article, String title, String content) {
-        article.setTitle(title);
-        article.setContent(content);
+    public void updateArticle(Article article, ArticleRequestDto articleRequestDto) {
+        article.setTitle(articleRequestDto.getTitle());
+        article.setContent(articleRequestDto.getContent());
 
         articleRepository.save(article);
     }
