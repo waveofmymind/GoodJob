@@ -103,11 +103,12 @@ public class MemberController {
         Cookie accessTokenCookie = rq.getCookie("accessToken");
         Cookie usernameCookie = rq.getCookie("username");
 
-        // TODO: 쿠키 만료시간 제대로 되는지 확인
-        cookieUt.expireCookie(accessTokenCookie);
-        cookieUt.expireCookie(usernameCookie);
-        log.info("만료된쿠키= username= {}, accessToken= {}", usernameCookie.getValue(), accessTokenCookie.getValue());
+        accessTokenCookie = cookieUt.expireCookie(accessTokenCookie);
+        usernameCookie = cookieUt.expireCookie(usernameCookie);
+        log.info("만료된쿠키= username= {}, accessToken= {}", usernameCookie.getMaxAge(), accessTokenCookie.getMaxAge());
 
+        rq.setCookie(accessTokenCookie);
+        rq.setCookie(usernameCookie);
         return rq.redirectWithMsg("/", "로그아웃");
     }
 }
