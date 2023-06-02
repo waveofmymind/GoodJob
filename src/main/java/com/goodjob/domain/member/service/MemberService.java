@@ -29,6 +29,7 @@ public class MemberService {
         Optional<Member> opNickname = findByNickname(joinRequestDto.getNickname());
         Optional<Member> opEmail = findByEmail(joinRequestDto.getEmail());
 
+        // TODO: 타임리프 써서 회원가입폼에서 예외처리
         if (opUsername.isPresent()) { // 로그인 계정이 중복인 경우
             return RsData.of("F-1", "이미 존재하는 계정입니다.");
         }
@@ -72,19 +73,18 @@ public class MemberService {
         Member member = findByUsername(username).orElse(null);
         log.info("member ={}", member.toString());
 
+        // TODO: 널포인트 못잡는듯
         if (member == null) {
             return RsData.of("F-1", "아이디 혹은 비밀번호가 틀립니다.");
         }
 
         boolean matches = passwordEncoder.matches(password, member.getPassword());
-        log.info("mathces ={}", matches);
 
         if (!matches) {
             return RsData.of("F-1", "아이디 혹은 비밀번호가 틀립니다.");
         }
 
         String accessToken = jwtProvider.genToken(member.toClaims());
-        log.info("accessToken ={}", accessToken);
 
         return RsData.of("S-1", "로그인 가능합니다.", accessToken);
     }
