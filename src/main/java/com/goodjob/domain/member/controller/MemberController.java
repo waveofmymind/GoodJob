@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -29,7 +30,7 @@ public class MemberController {
     @GetMapping("/join")
     @PreAuthorize("isAnonymous()")
     public String showJoin() {
-        return "/member/join";
+        return "member/join";
     }
 
     @PostMapping("/join")
@@ -41,17 +42,21 @@ public class MemberController {
             return rq.historyBack(joinRsData);
         }
 
-        return rq.redirectWithMsg("/member/login", joinRsData);
+        return rq.redirectWithMsg("member/login", joinRsData);
     }
 
     @GetMapping("/login")
     @PreAuthorize("isAnonymous()")
     public String showLogin() {
-        return "/member/login";
+        return "member/login";
     }
     @PostMapping("/login")
     @PreAuthorize("isAnonymous()")
-    public String login(@Valid LoginRequestDto loginRequestDto) {
+    public String login(@Valid LoginRequestDto loginRequestDto,
+                        BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "member/login";
+        }
         log.info("loginRequestDto= {}", loginRequestDto.toString());
 
         RsData loginRsData = memberService.genAccessToken(loginRequestDto.getUsername(), loginRequestDto.getPassword());
@@ -77,7 +82,7 @@ public class MemberController {
         rq.setCookie(accessTokenCookie);
         rq.setCookie(usernameCookie);
 
-        return rq.redirectWithMsg("/", loginRsData);
+        return "redirect:/";
     }
 
     // TODO: 삭제안됨.. 추후 수정
@@ -87,7 +92,7 @@ public class MemberController {
         log.info("id ={}", id);
         memberService.delete(id);
 
-        return "/member/join";
+        return "member/join";
     }
 
     @PostMapping("/logout")
@@ -109,6 +114,6 @@ public class MemberController {
 
         rq.setCookie(accessTokenCookie);
         rq.setCookie(usernameCookie);
-        return rq.redirectWithMsg("/", "로그아웃");
+        return rq.redirectWithMsg("/", "로그아웃 되었습니다.");
     }
 }
