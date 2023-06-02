@@ -1,5 +1,7 @@
-<html layout:decorate="~{layout/layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
-<main layout:fragment="content" class="flex-grow flex items-center justify-center min-h-screen flex flex-col">
+<html layout:decorate="~{layout/layout.html}">
+<body>
+<main layout:fragment="main">
+<div layout:fragment="content" class="flex-grow flex items-center justify-center min-h-screen flex flex-col">
 <!--    valid 숫자만 입력되도록 체크 -->
     <script th:replace="~{jobstatistic/fragment/valid :: jobRequest}"></script>
 
@@ -11,5 +13,7 @@
 
     <form th:replace="~{jobstatistic/fragment/jobRequestFrom :: jobRequestForm (jobRequestForm)}"></form>
     </div>
+</div>
 </main>
+</body>
 </html>

@@ -16,5 +16,4 @@ import java.util.List;
 public interface ArticleMapper {
     ArticleResponseDto toDto(Article article);
 
-    List<CommentResponseDto> toCommentDtoList(List<Comment> commentList);
 }

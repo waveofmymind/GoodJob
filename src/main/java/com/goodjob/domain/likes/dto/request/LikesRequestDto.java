@@ -10,4 +10,5 @@ import lombok.Getter;
 public class LikesRequestDto {
     private Long articleId;
     private Long commentId;
+    private Long subCommentId;
 }

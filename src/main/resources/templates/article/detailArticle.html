@@ -1,27 +1,37 @@
-<html layout:decorate="~{layout/layout}">
-<div layout:fragment="content" class="container my-3">
+<html layout:decorate="~{layout/layout.html}">
+<head>
+    <title>게시글 상세 페이지</title>
+</head>
+<body>
+<main layout:fragment="main" class="container my-3 mx-auto">
 
     <div class="container mx-auto py-8 w-1/2">
-        <div class="flex justify-between">
-            <h1 class="text-2xl font-bold flex-grow" th:text="${article.title}"></h1>
+        <a href="/article/list" class="bg-white text-info px-1 py-1 mb-3 rounded-md flex-start hover:bg-gray-200">&lt; 전체 게시글</a>
+        <div class="flex justify-between mt-2">
+            <h1 class="text-2xl font-bold flex-grow pl-3" th:text="${article.title}"></h1>
             <p class="flex-grow text-xs mt-2" th:text="${#temporals.format(article.createdDate, 'yyyy-MM-dd HH:mm')}"></p>
             <a th:href="@{|/article/update/${article.id}|}" class="text-xs text-black mt-2 underline">수정</a>
             <a href="javascript:void(0);" th:data-uri="@{|/article/delete/${article.id}|}" class="delete text-xs text-black mt-2 mx-2 underline">삭제</a>
             <p class="text-xs mt-2 mr-2" th:text="|조회:${article.viewCount}|"></p>
             <p class="text-xs mt-2 mr-2" th:text="|추천:${#lists.size(article.likesList)}|"></p>
-            <p class="text-xs mt-2" th:text="|댓글:${#lists.size(article.commentList.?[deleted == false])}|"></p>
+            <p class="text-xs mt-2" th:text="|댓글:${article.commentsCount}|"></p>
         </div>
         <hr class="border-info mb-4">
-        <p class="text-sm min-h-[200px]" th:text="${article.content}"></p>
+        <p class="text-sm min-h-[200px] pl-3" style="word-break: break-word;" th:text="${article.content}"></p>
         <div class="flex justify-center">
             <form th:action="@{|/likes/like/article/${article.id}|}" method="post">
+                <!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
                 <button type="submit" class="bg-info border-gray-300 text-white px-4 py-1 rounded-md mr-2 hover:bg-blue-500">
-                    <i class="fa-sharp fa-regular fa-thumbs-up text-xl"><p class="text-xs mt-1">추천</p></i>
+                    <i class="fa-regular fa-heart text-xl"></i><p class="text-xs mt-1">좋아요</p></i>
                 </button>
             </form>
         </div>
         <hr class="border-info mt-4 mb-4">
-            <form th:action="@{|/comment/create/${article.id}|}" th:object="${commentForm}" method="post" class="flex mb-4 justify-between items-start">
+            <form th:action="@{|/comment/create/${article.id}|}" th:object="${commentRequestDto}" method="post" class="flex mb-4 justify-between items-start">
+                <!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+                <div class="flex">
+                    <div class="text-xs w-24 text-center" >유저네임</div>
+                </div>
                 <textarea th:field="*{content}" class="form-textarea border border-info rounded-md px-4 py-2 flex-grow focus:outline-none min-h-[100px]" placeholder="댓글을 작성하세요"></textarea>
                 <button type="submit" class="register bg-info text-white px-4 py-2 rounded-md ml-2 flex-start text-xs hover:bg-blue-500">등록</button>
             </form>
@@ -29,91 +39,195 @@
         <hr class="border-info mt-4">
         <ul class="container" th:each="comment : ${article.commentList}">
             <div th:if="${!comment.deleted}">
-                <li class="text-black p-1 justify-between border-b border-info">
+                <li class="text-black p-1 justify-between">
                     <div class="flex justify-between items-center">
                         <div class="flex items-end mb-3">
-                            <div class="text-sm mr-2">글쓴이</div>
+                            <div class="text-sm pl-3 mr-2">글쓴이</div>
                             <div class="text-xs" th:text="${#temporals.format(comment.createdDate, '(yyyy-MM-dd HH:mm)')}"></div>
                         </div>
                         <div class="flex items-center justify-center">
-                            <button class="text-xs text-black underline modify-button pb-3" onclick="editPost()" th:attr="data-id=${comment.id}">수정</button>
+                            <button class="text-xs text-black underline modify-button pb-3" onclick="editComment()" th:attr="data-id=${comment.id}">수정</button>
                             <a href="javascript:void(0);" th:data-uri="@{|/comment/delete/${comment.id}|}" class="delete text-xs text-black mx-2 underline pb-3">삭제</a>
                             <form th:action="@{|/likes/like/comment/${comment.id}|}" method="post">
-                                <button type="submit" class="flex bg-info border-gray-300 text-white px-3 py-1 rounded-md mr-2 hover:bg-blue-500">
-                                    <i class="fa-sharp fa-regular fa-thumbs-up text-xs"></i>
+                                <!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+                                <button type="submit" class="flex bg-white border-gray-300 text-info px-3 py-1 rounded-md mr-2 hover:bg-gray-200">
+                                    <i class="fa-regular fa-heart text-xs"></i>
                                     <p th:text="${#lists.size(comment.likesList)}" class="ml-1 text-xs"></p>
                                 </button>
                             </form>
                         </div>
                     </div>
-                    <p th:id="|text-${comment.id}|" class="text-sm min-h-[40px] modify-comment"th:text="${comment.content}"></p>
+                    <p th:id="|text-${comment.id}|" style="word-break: break-word;" class="text-sm min-h-[30px] modify-comment pl-3"th:text="${comment.content}"></p>
 
-                    <form th:action="@{|/comment/update/${comment.id}|}" th:object="${commentForm}" method="post" class="mb-4 justify-between items-start">
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                        <textarea th:id="|textarea-${comment.id}|" th:field="*{content}" class="hidden modify-textarea form-textarea w-full p-3 resize-none overflow-y-auto border border-info rounded-md mb-2 text-sm" placeholder="게시글 내용"></textarea>
+                    <form th:action="@{|/comment/update/${comment.id}|}" th:object="${commentRequestDto}" method="post" class="mb-4 justify-between items-start">
+                        <!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+                        <textarea th:id="|textarea-${comment.id}|" th:field="*{content}" class="hidden modify-textarea form-textarea w-full p-3 resize-none overflow-y-auto border border-info rounded-md mb-2 text-sm" placeholder="댓글 내용"></textarea>
                         <div class="flex">
-                            <input th:id="|button-${comment.id}|" type="submit" value="수정완료" class="hidden modify-save-button bg-info text-white px-4 py-2 rounded-md ml-2 flex-start text-xs hover:bg-blue-500 ml-auto" onclick="savePost()" th:attr="data-id=${comment.id}">
+                            <input th:id="|button-${comment.id}|" type="submit" value="수정완료" class="hidden modify-save-button bg-info text-white px-4 py-2 rounded-md ml-2 flex-start text-xs hover:bg-blue-500 ml-auto" onclick="saveComment()" th:attr="data-id=${comment.id}">
                         </div>
                     </form>
+                    <div class="flex justify-end">
+                        <button class="text-xs text-black underline create-subComment-button pb-3" onclick="createSubCommentForm()" th:attr="data-id=${comment.id}">답글</button>
+                    </div>
+
+
+
+                    <ul class="container" th:each="subComment : ${comment.subCommentList}">
+
+                        <div th:if="${!subComment.deleted}" class="flex pl-3">
+                            <div class="mx-2 flex flex-col">
+                                <div class="mt-3 fa-solid fa-arrow-turn-up fa-rotate-90 text-xl text-info"></div>
+                            </div>
+                            <li class="text-black p-1 justify-between flex-grow border-t border-gray-300 bg-gray-100">
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-end mb-3 mt-3">
+                                        <div class="text-sm mr-2">글쓴이</div>
+                                        <div class="text-xs" th:text="${#temporals.format(subComment.createdDate, '(yyyy-MM-dd HH:mm)')}"></div>
+                                    </div>
+                                    <div class="flex items-center justify-center">
+                                        <button class="text-xs text-black underline modify-button pb-3" onclick="editSubComment()" th:attr="data-id=${subComment.id}">수정</button>
+                                        <a href="javascript:void(0);" th:data-uri="@{|/subComment/delete/${subComment.id}|}" class="delete text-xs text-black mx-2 underline pb-3">삭제</a>
+                                        <form th:action="@{|/likes/like/subComment/${subComment.id}|}" method="post">
+                                            <!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+                                            <button type="submit" class="flex bg-white border-gray-300 text-info px-3 py-1 rounded-md mr-2 hover:bg-gray-200">
+                                                <i class="fa-regular fa-heart text-xs"></i>
+                                                <p th:text="${#lists.size(subComment.likesList)}" class="ml-1 text-xs"></p>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <p th:id="|text-subComment-${subComment.id}|" style="word-break: break-word;" class="text-sm min-h-[25px] modify-comment"th:text="${subComment.content}"></p>
+                                <div th:id="|update-subComment-${subComment.id}|" class="hidden">
+                                    <form th:action="@{|/subComment/update/${subComment.id}|}" th:object="${subCommentRequestDto}" method="post" class="mb-4 justify-between items-start">
+                                        <!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+                                        <textarea th:id="|textarea-subComment-${subComment.id}|" th:field="*{content}" class="modify-textarea form-textarea w-full p-3 resize-none overflow-y-auto border border-info rounded-md mb-2 text-sm" placeholder="답글 내용"></textarea>
+                                        <div class="flex">
+                                            <input type="submit" value="수정완료" class="modify-save-button bg-info text-white px-4 py-2 rounded-md ml-2 flex-start text-xs hover:bg-blue-500 ml-auto" onclick="saveSubComment()" th:attr="data-id=${subComment.id}">
+                                        </div>
+                                    </form>
+                                </div>
+                            </li>
+                        </div>
+                    </ul>
+
+
+                    <div th:id="|hidden-subComment-${comment.id}|" class="hidden">
+                        <hr class=" border-gray-300 mt-4 mb-4">
+                        <div class="flex justify-start">
+                            <div class="mx-2">
+                                <div class="fa-solid fa-arrow-turn-up fa-rotate-90 text-xl text-info"></div>
+                            </div>
+                            <form th:action="@{|/subComment/create/${comment.id}|}" th:object="${subCommentRequestDto}" method="post" class="mt-1 mb-4 justify-between items-start flex-grow">
+                                <!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+                                <textarea th:field="*{content}" class="form-textarea w-full p-3 resize-none overflow-y-auto border border-info rounded-md mb-2 text-sm" placeholder="답변에 댓글을 작성하세요"></textarea>
+                                <div class="flex">
+                                    <input type="submit" value="등록" class="bg-info text-white px-4 py-2 rounded-md ml-2 flex-start text-xs hover:bg-blue-500 ml-auto" onclick="createSubComment()" th:attr="data-id=${comment.id}">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <hr class=" border-gray-300 mb-4">
                 </li>
             </div>
         </ul>
     </div>
-</div>
-<script layout:fragment="script" type='text/javascript'>
-    const delete_elements = document.getElementsByClassName("delete");
-    Array.from(delete_elements).forEach(function(element) {
-        element.addEventListener('click', function() {
-            if(confirm("정말로 삭제하시겠습니까?")) {
-                location.href = this.dataset.uri;
-            };
+
+    <script layout:fragment="script" type='text/javascript'>
+        const delete_elements = document.getElementsByClassName("delete");
+        Array.from(delete_elements).forEach(function(element) {
+            element.addEventListener('click', function() {
+                if(confirm("정말로 삭제하시겠습니까?")) {
+                    location.href = this.dataset.uri;
+                };
+            });
         });
-    });
 
 
-    const btn = document.querySelector('.register');
-    const textarea = document.querySelector('.form-textarea');
+        const btn = document.querySelector('.register');
+        const textarea = document.querySelector('.form-textarea');
 
-    btn.addEventListener('click', function() {
-        if (textarea.value === '') {
-            confirm('내용을 입력해야 합니다.');
+        btn.addEventListener('click', function() {
+            if (textarea.value === '') {
+                confirm('내용을 입력해야 합니다.');
+            }
+        });
+
+        function editComment() {
+            const id = event.target.getAttribute('data-id');
+
+            const contentElement = document.querySelector('#textarea-' + id);
+            const contentElement2 = document.querySelector('#button-' + id);
+            const textElement = document.querySelector('#text-' + id);
+
+            if (contentElement.classList.contains('hidden')) {
+                contentElement.classList.remove('hidden');
+                contentElement2.classList.remove('hidden');
+                contentElement.value = textElement.textContent.trim();
+                textElement.classList.add('hidden');
+            }
         }
-    });
 
-    function editPost() {
-        var id = event.target.getAttribute('data-id');
+        function saveComment() {
+            const id = event.target.getAttribute('data-id');
+            const contentElement3 = document.querySelector('#textarea-' + id);
+            const contentElement4 = document.querySelector('#button-' + id);
+            const textElement = document.querySelector('#text-' + id);
 
-        const contentElement = document.querySelector('#textarea-' + id);
-        const contentElement2 = document.querySelector('#button-' + id);
-        const textElement = document.querySelector('#text-' + id);
-
-        if (contentElement.classList.contains('hidden')) {
-            contentElement.classList.remove('hidden');
-            contentElement2.classList.remove('hidden');
-            contentElement.value = textElement.textContent.trim();
-            textElement.classList.add('hidden');
+            if (!contentElement3.classList.contains('hidden')) {
+                contentElement3.classList.add('hidden');
+                contentElement4.classList.add('hidden');
+                textElement.textContent = contentElement3.value;
+                textElement.classList.remove('hidden');
+            }
         }
-    }
 
-    function savePost() {
-        var id = event.target.getAttribute('data-id');
-        const contentElement = document.querySelector('#textarea-' + id);
-        const contentElement2 = document.querySelector('#button-' + id);
-        const textElement = document.querySelector('#text-' + id);
+        function createSubCommentForm() {
+            const id = event.target.getAttribute('data-id');
 
-        if (!contentElement.classList.contains('hidden')) {
-            contentElement.classList.add('hidden');
-            contentElement2.classList.add('hidden');
-            textElement.textContent = contentElement.value;
-            textElement.classList.remove('hidden');
+            const contentElement5 = document.querySelector('#hidden-subComment-' + id);
+
+            if (contentElement5.classList.contains('hidden')) {
+                contentElement5.classList.remove('hidden');
+            }
         }
-    }
 
-    function increment() {
-        var iElement = document.getElementById("count");
-        var count = parseInt(iElement.innerText);
-        count++;
-        iElement.innerText = count;
-    }
-</script>
+        function createSubComment() {
+            const id = event.target.getAttribute('data-id');
+            const contentElement6 = document.querySelector('#hidden-subComment-' + id);
+
+            if (!contentElement6.classList.contains('hidden')) {
+                contentElement6.classList.add('hidden');
+            }
+        }
+
+        function editSubComment() {
+            const id = event.target.getAttribute('data-id');
+
+            const contentElement = document.querySelector('#update-subComment-' + id);
+            const textElement = document.querySelector('#text-subComment-' + id);
+            const contentElement2 = document.querySelector('#textarea-subComment-' + id);
+
+            if (contentElement.classList.contains('hidden')) {
+                contentElement.classList.remove('hidden');
+                contentElement2.value = textElement.textContent.trim();
+                textElement.classList.add('hidden');
+            }
+        }
+
+        function saveSubComment() {
+            const id = event.target.getAttribute('data-id');
+            const contentElement = document.querySelector('#update-subComment-' + id);
+            const textElement = document.querySelector('#text-subComment-' + id);
+
+
+            if (!contentElement.classList.contains('hidden')) {
+                contentElement.classList.add('hidden');
+                textElement.textContent = contentElement.value;
+                textElement.classList.remove('hidden');
+            }
+        }
+    </script>
+</main>
+
+</body>
 </html>

@@ -4,6 +4,7 @@ import com.goodjob.domain.BaseEntity;
 import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.likes.entity.Likes;
 import com.goodjob.domain.member.entity.Member;
+import com.goodjob.domain.subComment.entity.SubComment;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -38,10 +39,15 @@ public class Comment extends BaseEntity {
     private String content;
 
     @OneToMany(mappedBy = "comment", cascade = {CascadeType.ALL}, fetch=FetchType.EAGER)
+    @Builder.Default
     private List<Likes> likesList = new ArrayList<>();
 
     @Setter
     private boolean isDeleted;
+
+    @OneToMany(mappedBy = "comment", cascade = {CascadeType.ALL}, fetch=FetchType.EAGER)
+    @Builder.Default
+    private List<SubComment> subCommentList = new ArrayList<>();
 
     // TODO: 의존관계
 }
