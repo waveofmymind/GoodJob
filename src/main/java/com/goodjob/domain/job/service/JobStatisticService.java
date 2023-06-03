@@ -45,8 +45,6 @@ public class JobStatisticService {
     public List<JobResponseDto> getFilterDto(List<JobResponseDto> mainDto, List<JobResponseDto> filterDto) {
         return mainDto.stream().filter(md -> filterDto.stream().noneMatch(
                 fd -> md.getSubject().equals(fd.getSubject()) &&
-                        md.getCreateDate().equals(fd.getCreateDate()) &&
-                        md.getDeadLine().equals(fd.getDeadLine()) &&
                         md.getCompany().equals(fd.getCompany()) &&
                         md.getCareer() == fd.getCareer())).toList();
     }
