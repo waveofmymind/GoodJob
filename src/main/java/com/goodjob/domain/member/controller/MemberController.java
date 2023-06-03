@@ -36,7 +36,12 @@ public class MemberController {
 
     @PostMapping("/join")
     @PreAuthorize("isAnonymous()")
-    public String join(@Valid JoinRequestDto joinRequestDto) {
+    public String join(@Valid JoinRequestDto joinRequestDto,
+                       BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "member/join";
+        }
+
         RsData<Member> joinRsData = memberService.join(joinRequestDto);
 
         if (joinRsData.isFail()) {
