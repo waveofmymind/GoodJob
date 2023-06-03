@@ -41,17 +41,3 @@ public class JobStatisticController {
 }
 
 
-//    @GetMapping("/list")
-//    public String list(Model model, @RequestParam(value = "page", defaultValue = "0")
-//    int page, String keyword) {
-//
-//        Page<Rule> paging;
-//        if (keyword != null) {
-//            paging = ruleService.getList(keyword, page);
-//        } else {
-//            paging = ruleService.getList(page);
-//        }
-//
-//        model.addAttribute("paging", paging);
-//        return "rule/ruleList";
-//    }

@@ -10,8 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
-
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -33,9 +31,9 @@ public class JobStatistic {
 
     private String sector;
 
-    private LocalDateTime startDate;
+    private String startDate;
 
-    private LocalDateTime deadLine;
+    private String deadLine;
 
     private int career; // 년차 신입은 default 0
 
