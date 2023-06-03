@@ -39,9 +39,11 @@ public class SaraminApiManager {
         jobResponseDtos.add(jobDtos);
     }
 
-    public static void saraminStatistic() {
-        int sectorCode = 84; // 백엔드 84  프론트 92 풀스택 2232
-        String job_cd = String.valueOf(sectorCode); // 백엔드 코드
+    /**
+     * @param sectorCode 백엔드 84, 프론트 92, 풀스택 2232
+     */
+    public static void saraminStatistic(int sectorCode) {
+        String job_cd = String.valueOf(sectorCode);
         String connectURL = Constants.SARAMIN + key + "&job_cd=" + job_cd + "&count=110";
 
         RestTemplate restTemplate = new RestTemplate();

@@ -15,13 +15,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-<<<<<<< Updated upstream
-    date = "2023-06-02T10:24:31+0900",
-    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.6 (Oracle Corporation)"
-=======
-    date = "2023-06-02T13:48:21+0900",
+    date = "2023-06-03T21:19:09+0900",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.6 (Amazon.com Inc.)"
->>>>>>> Stashed changes
 )
 @Component
 public class ArticleMapperImpl implements ArticleMapper {
