@@ -9,6 +9,9 @@
             const username = usernameInput.value.trim();
             const usernameMessage = document.getElementById("usernameMessage");
 
+            const formData = new FormData();
+            formData.append("username", username);
+
             fetch('/member/join', {
                 method: 'post',
                 body: formData // 요청 데이터를 FormData 객체로 전달
@@ -30,6 +33,8 @@
                         usernameMessage.classList.add("text-green-500");
                         usernameMessage.classList.remove("text-red-500"); // 중복인 경우를 위해 기존 클래스 제거
                     }
+
+                    usernameMessage.style.display = "block";
                 });
         }
     </script>
@@ -44,42 +49,66 @@
                 <div>
                     <label class="block mb-2 text-sm">아이디</label>
                     <div class="flex items-center">
-                        <input type="text" name="username" id="username"
-                               th:field="*{username}"
+                        <input type="text" name="username" th:field="*{username}"
                                class="border-b border-info px-2 py-2 w-full focus:outline-none form-control"
                                placeholder="아이디를 입력하세요">
                         <button class="ml-2 bg-info text-white px-4 py-2 rounded-lg text-sm">중복확인</button>
                     </div>
                     <div class="mt-2">
-                        <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" id="usernameMessage" class="text-red-500"></span>
+                        <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-red-500"></span>
+                        <span id="usernameMessage" style="display: none;">흠</span>
                     </div>
                 </div>
                 <div>
-                    <label for="password" class="block mb-2 mt-4 text-sm">비밀번호</label>
-                    <input type="password" id="password"
-                           class="border-b border-info px-2 py-2 w-full focus:outline-none form-control" placeholder="비밀번호를 입력하세요">
-                </div>
-                <div>
-                    <label for="confirmPassword" class="block mb-2 mt-4 text-sm">비밀번호 확인</label>
-                    <input type="password" id="confirmPassword"
-                           class="border-b border-info px-2 py-2 w-full focus:outline-none form-control"
-                           placeholder="비밀번호를 다시 한 번 입력하세요">
-                </div>
-                <div>
-                    <label for="nickname" class="block mb-2 mt-4 text-sm">닉네임</label>
-                    <div class="flex items-center">
-                        <input type="text" id="nickname"
+                    <div>
+                        <label class="block mb-2 mt-4 text-sm">비밀번호</label>
+                        <input type="password" name="password"
                                class="border-b border-info px-2 py-2 w-full focus:outline-none form-control"
-                               placeholder="닉네임을 입력하세요">
-                        <button class="ml-2 bg-info text-white px-4 py-2 rounded-lg text-sm">중복확인</button>
+                               placeholder="비밀번호를 입력하세요">
+                    </div>
+                    <div class="mt-2">
+                        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-red-500"></span>
                     </div>
                 </div>
                 <div>
-                    <label for="email" class="block mb-2 mt-4 text-sm">이메일</label>
-                    <div class="flex items-center">
-                        <input type="email" id="email" class="border-b border-info px-2 py-2 w-full focus:outline-none form-control"
-                               placeholder="이메일을 입력하세요">
-                        <button class="ml-2 bg-info text-white px-4 py-2 rounded-lg text-sm">중복확인</button>
+                    <div>
+                        <label class="block mb-2 mt-4 text-sm">비밀번호 확인</label>
+                        <input type="password" name="confirmPassword"
+                               class="border-b border-info px-2 py-2 w-full focus:outline-none form-control"
+                               placeholder="비밀번호를 다시 한 번 입력하세요">
+                    </div>
+                    <div class="mt-2">
+                        <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="text-red-500"></span>
+                    </div>
+
+                </div>
+                <div>
+                    <div>
+                        <label class="block mb-2 mt-4 text-sm">닉네임</label>
+                        <div class="flex items-center">
+                            <input type="text" name="nickname" th:field="*{nickname}"
+                                   class="border-b border-info px-2 py-2 w-full focus:outline-none form-control"
+                                   placeholder="닉네임을 입력하세요">
+                            <button class="ml-2 bg-info text-white px-4 py-2 rounded-lg text-sm">중복확인</button>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <span th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}" class="text-red-500"></span>
+                    </div>
+
+                </div>
+                <div>
+                    <div>
+                        <label class="block mb-2 mt-4 text-sm">이메일</label>
+                        <div class="flex items-center">
+                            <input type="email" name="email" th:field="*{email}"
+                                   class="border-b border-info px-2 py-2 w-full focus:outline-none form-control"
+                                   placeholder="이메일을 입력하세요">
+                            <button class="ml-2 bg-info text-white px-4 py-2 rounded-lg text-sm">중복확인</button>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-red-500"></span>
                     </div>
                 </div>
                 <button type="submit" class="mt-8 bg-info text-white px-4 py-2 rounded-lg text-sm">가입하기</button>

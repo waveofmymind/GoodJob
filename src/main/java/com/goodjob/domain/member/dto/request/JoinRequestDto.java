@@ -1,8 +1,6 @@
 package com.goodjob.domain.member.dto.request;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,11 +10,11 @@ import lombok.ToString;
 @ToString
 public class JoinRequestDto {
     @NotBlank(message = "아이디는 필수항목입니다.")
-    @Size(min = 4, max = 30, message = "4자 이상으로 입력해주세요.")
+    @Size(min = 4, max = 30, message = "4자 이상 30자 이하로 입력해주세요.")
     private String username;
 
     @NotBlank(message = "비밀번호는 필수항목입니다.")
-    @Size(min = 4, max = 15, message = "비밀번호는 4자 이상 15자 이하로 입력해주세요.")
+    @Size(min = 4, max = 15, message = "4자 이상 15자 이하로 입력해주세요.")
     private String password;
 
     @NotBlank(message = "비밀번호를 확인을 진행해주세요.")
@@ -24,7 +22,7 @@ public class JoinRequestDto {
     private String confirmPassword;
 
     @NotBlank(message = "닉네임은 필수항목입니다.")
-    @Size(min = 2, max = 20)
+    @Size(min = 4, max = 20, message = "4자 이상 20자 이하로 입력해주세요.")
     private String nickname;
 
     @NotBlank(message = "이메일은 필수항목입니다.")

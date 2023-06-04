@@ -39,16 +39,20 @@ public class MemberController {
     public String join(@Valid JoinRequestDto joinRequestDto,
                        BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
+            log.info("bindingResult ={}", bindingResult);
             return "member/join";
         }
-//        if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {
-//            bindingResult.rejectValue("password2", "passwordInCorrect",
+
+//        if (!joinRequestDto.getPassword().equals(joinRequestDto.getConfirmPassword())) {
+//            bindingResult.rejectValue("passwordInCorrect",
 //                    "2개의 패스워드가 일치하지 않습니다.");
-//            return "signup_form";
+//            return "member/join";
 //        }
 
-        RsData<Member> joinRsData = memberService.join(joinRequestDto);
+        // TODO: 중복확인 셋다 안되면 안넘어가게?
 
+        RsData<Member> joinRsData = memberService.join(joinRequestDto);
+        log.info("joinRsData ={}", joinRsData.toString());
         if (joinRsData.isFail()) {
             return rq.historyBack(joinRsData);
         }
