@@ -31,6 +31,10 @@ public class SaraminApiManager {
         key = value;
     }
 
+    public static void resetList() {
+        jobResponseDtos.clear();
+    }
+
 
     public static List<JobResponseDto> getJobResponseDtos() {
         return jobResponseDtos;

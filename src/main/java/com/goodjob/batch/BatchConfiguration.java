@@ -41,6 +41,7 @@ public class BatchConfiguration {
                 .next(step3(jobRepository)) // 원티드 프론트
                 .next(step4(jobRepository)) // 원티드 풀스택
                 .next(step5(jobRepository)) // 중복된 값 필터하고 db저장
+                .next(step6(jobRepository)) // 기존 값들 초기화
                 .build();
     }
 
@@ -160,15 +161,17 @@ public class BatchConfiguration {
         return (contribution, chunkContext) -> {
             List<JobResponseDto> pureSaram = SaraminApiManager.getJobResponseDtos();
             List<JobResponseDto> filterSaram = jobStatisticService.sameDtoFilter(pureSaram, pureSaram);
-            System.out.println("필터 전 : " + pureSaram.size() + "필터 후 : " + filterSaram.size());
+
             List<JobResponseDto> pureWonted = WontedStatistic.getJobResponseDtos();
             List<JobResponseDto> filterWonted = jobStatisticService.sameDtoFilter(pureWonted, pureWonted);
-            System.out.println("필터전 : " + pureWonted.size() + "필터 후 : " + filterWonted.size());
+
             // 사람인 에서 받은것 잡코리아 동일내용 필터
             List<JobResponseDto> saram = jobStatisticService.getFilterDto(filterSaram, filterWonted);
             // 잡코리아 에서 받은것 사람인 동일내용 필터
             List<JobResponseDto> wonted = jobStatisticService.getFilterDto(filterWonted, filterSaram);
 
+            System.out.println("사람인 원본 : " + SaraminApiManager.getJobResponseDtos().size());
+            System.out.println("원티드 원본 : " + WontedStatistic.getJobResponseDtos().size());
             for (JobResponseDto dto : saram) {
                 try {
                     jobStatisticService.create(dto);
@@ -187,6 +190,23 @@ public class BatchConfiguration {
         };
     }
 
+    @JobScope
+    @Bean
+    public Step step6(JobRepository repository) {
+        return new StepBuilder("List 초기화", repository)
+                .tasklet(taskletListClear(), transactionManager)
+                .build();
+    }
+
+    @StepScope
+    @Bean
+    public Tasklet taskletListClear() {
+        return (contribution, chunkContext) -> {
+            SaraminApiManager.resetList();
+            WontedStatistic.resetList();
+            return RepeatStatus.FINISHED;
+        };
+    }
 }
 
 
