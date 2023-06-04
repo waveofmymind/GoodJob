@@ -33,6 +33,10 @@ public class WontedStatistic {
         jobResponseDtos.add(jobDtos);
     }
 
+    public static void resetList() {
+        jobResponseDtos.clear();
+    }
+
 
     /**
      * @param jobCode 프론트 669, 백엔드 872, 풀스택(웹개발) 873
@@ -188,11 +192,15 @@ public class WontedStatistic {
                         sector = "풀스택";
                     }
                     System.out.println("back 까지 진행");
-                    driver.get(wontedURL);
-                    Thread.sleep(1000);
+                    try {
+                        driver.get(wontedURL);
+                        Thread.sleep(1000);
+                        JobResponseDto jobResponseDto = new JobResponseDto(company, subject, url, sector, sectorCode, createDate, deadLine, career);
+                        WontedStatistic.setJobDtos(jobResponseDto);
+                    } catch (InterruptedException e) {
+                        log.error(e.getMessage());
+                    }
                     System.out.println("back 이후 진행");
-                    JobResponseDto jobResponseDto = new JobResponseDto(company, subject, url, sector, sectorCode, createDate, deadLine, career);
-                    WontedStatistic.setJobDtos(jobResponseDto);
                     break;
                 }
             }
