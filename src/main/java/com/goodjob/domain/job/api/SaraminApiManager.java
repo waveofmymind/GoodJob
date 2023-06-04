@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,10 @@ public class SaraminApiManager {
         key = value;
     }
 
+    public static void resetList() {
+        jobResponseDtos.clear();
+    }
+
 
     public static List<JobResponseDto> getJobResponseDtos() {
         return jobResponseDtos;
@@ -38,9 +43,11 @@ public class SaraminApiManager {
         jobResponseDtos.add(jobDtos);
     }
 
-    public static void saraminStatistic() {
-        int sectorCode = 84;
-        String job_cd = String.valueOf(sectorCode); // 백엔드 코드
+    /**
+     * @param sectorCode 백엔드 84, 프론트 92, 풀스택 2232
+     */
+    public static void saraminStatistic(int sectorCode) {
+        String job_cd = String.valueOf(sectorCode);
         String connectURL = Constants.SARAMIN + key + "&job_cd=" + job_cd + "&count=110";
 
         RestTemplate restTemplate = new RestTemplate();
@@ -64,8 +71,16 @@ public class SaraminApiManager {
 
             Instant postTimeInstant = Instant.ofEpochSecond(postTimeStamp);
             Instant deadLineInstant = Instant.ofEpochSecond(deadLineTimeStamp);
-            LocalDateTime createDate = LocalDateTime.ofInstant(postTimeInstant, ZoneId.systemDefault());
-            LocalDateTime deadLine = LocalDateTime.ofInstant(deadLineInstant, ZoneId.systemDefault());
+            LocalDateTime cd = LocalDateTime.ofInstant(postTimeInstant, ZoneId.systemDefault());
+            LocalDateTime dl = LocalDateTime.ofInstant(deadLineInstant, ZoneId.systemDefault());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String createDate = cd.format(formatter);
+            String deadLine = null;
+            if (deadLineTimeStamp == 0L) {
+                deadLine = "채용시 마감";
+            } else {
+                deadLine = dl.format(formatter);
+            }
             int career = job.getPosition().getExperienceLevel().getCareer();
 
             log.debug(subject);
