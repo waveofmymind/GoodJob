@@ -19,7 +19,6 @@ spring:
     basename: message/messages
     encoding: UTF-8
 
-
 jasypt:
   encryptor:
     password: ${JASYPT_PASSWORD}

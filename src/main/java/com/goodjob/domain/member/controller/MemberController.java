@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -29,20 +30,34 @@ public class MemberController {
 
     @GetMapping("/join")
     @PreAuthorize("isAnonymous()")
-    public String showJoin() {
+    public String showJoin(JoinRequestDto joinRequestDto) {
         return "member/join";
     }
 
     @PostMapping("/join")
     @PreAuthorize("isAnonymous()")
-    public String join(@Valid JoinRequestDto joinRequestDto) {
-        RsData<Member> joinRsData = memberService.join(joinRequestDto);
+    public String join(@Valid JoinRequestDto joinRequestDto,
+                       BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            log.info("bindingResult ={}", bindingResult);
+            return "member/join";
+        }
 
+//        if (!joinRequestDto.getPassword().equals(joinRequestDto.getConfirmPassword())) {
+//            bindingResult.rejectValue("passwordInCorrect",
+//                    "2개의 패스워드가 일치하지 않습니다.");
+//            return "member/join";
+//        }
+
+        // TODO: 중복확인 셋다 안되면 안넘어가게?
+
+        RsData<Member> joinRsData = memberService.join(joinRequestDto);
+        log.info("joinRsData ={}", joinRsData.toString());
         if (joinRsData.isFail()) {
             return rq.historyBack(joinRsData);
         }
 
-        return rq.redirectWithMsg("/member/login", joinRsData);
+        return rq.redirectWithMsg("member/login", joinRsData);
     }
 
     @GetMapping("/login")
@@ -52,7 +67,11 @@ public class MemberController {
     }
     @PostMapping("/login")
     @PreAuthorize("isAnonymous()")
-    public String login(@Valid LoginRequestDto loginRequestDto) {
+    public String login(@Valid LoginRequestDto loginRequestDto,
+                        BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "member/login";
+        }
         log.info("loginRequestDto= {}", loginRequestDto.toString());
 
         RsData loginRsData = memberService.genAccessToken(loginRequestDto.getUsername(), loginRequestDto.getPassword());
@@ -60,7 +79,6 @@ public class MemberController {
         log.info("loginRsData.Data ={}", loginRsData.getData());
 
         if (loginRsData.isFail()) {
-            // TODO: 실패처리
             return rq.historyBack(loginRsData);
         }
 
@@ -78,7 +96,7 @@ public class MemberController {
         rq.setCookie(accessTokenCookie);
         rq.setCookie(usernameCookie);
 
-        return rq.redirectWithMsg("/", loginRsData);
+        return "redirect:/";
     }
 
     // TODO: 삭제안됨.. 추후 수정
@@ -104,11 +122,12 @@ public class MemberController {
         Cookie accessTokenCookie = rq.getCookie("accessToken");
         Cookie usernameCookie = rq.getCookie("username");
 
-        // TODO: 쿠키 만료시간 제대로 되는지 확인
-        cookieUt.expireCookie(accessTokenCookie);
-        cookieUt.expireCookie(usernameCookie);
-        log.info("만료된쿠키= username= {}, accessToken= {}", usernameCookie.getValue(), accessTokenCookie.getValue());
+        accessTokenCookie = cookieUt.expireCookie(accessTokenCookie);
+        usernameCookie = cookieUt.expireCookie(usernameCookie);
+        log.info("만료된쿠키= username= {}, accessToken= {}", usernameCookie.getMaxAge(), accessTokenCookie.getMaxAge());
 
-        return rq.redirectWithMsg("/", "로그아웃");
+        rq.setCookie(accessTokenCookie);
+        rq.setCookie(usernameCookie);
+        return rq.redirectWithMsg("/", "로그아웃 되었습니다.");
     }
 }
