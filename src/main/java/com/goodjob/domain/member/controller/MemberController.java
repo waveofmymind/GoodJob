@@ -30,7 +30,7 @@ public class MemberController {
 
     @GetMapping("/join")
     @PreAuthorize("isAnonymous()")
-    public String showJoin() {
+    public String showJoin(JoinRequestDto joinRequestDto) {
         return "member/join";
     }
 
@@ -41,6 +41,11 @@ public class MemberController {
         if (bindingResult.hasErrors()) {
             return "member/join";
         }
+//        if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {
+//            bindingResult.rejectValue("password2", "passwordInCorrect",
+//                    "2개의 패스워드가 일치하지 않습니다.");
+//            return "signup_form";
+//        }
 
         RsData<Member> joinRsData = memberService.join(joinRequestDto);
 
@@ -70,7 +75,6 @@ public class MemberController {
         log.info("loginRsData.Data ={}", loginRsData.getData());
 
         if (loginRsData.isFail()) {
-            // TODO: 실패처리
             return rq.historyBack(loginRsData);
         }
 
