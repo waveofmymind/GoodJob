@@ -15,27 +15,17 @@
     </div>
     <div class="flex-none">
       <ul class="menu menu-horizontal px-1">
-        <li><a href="/member/login">로그인</a></li>
-
-        <li><a href="/member/join">회원가입</a></li>
+        <li><a href="/member/login" th:if="${@rq.logout}" class="btn btn-ghost normal-case text-xl">로그인</a></li>
+        <li><a href="/member/join" th:if="${@rq.logout}" class="btn btn-ghost normal-case text-xl">회원가입</a></li>
+        <li>
+          <span class="btn btn-ghost normal-case text-xl" th:if="${@rq.login}" th:text="|${@rq.member.username}님 환영합니다.|"></span>
+          <a href="javascript:;" th:if="${@rq.login}" onclick="$(this).next().submit();" class="btn btn-ghost normal-case text-xl">로그아웃</a>
+          <form th:if="${@rq.login}" hidden th:action="|/member/logout|" method="POST"></form>
+        </li>
       </ul>
     </div>
   </div>
 </header>
-  <div class="flex-none">
-    <ul class="menu menu-horizontal px-1">
-      <li><a href="/member/login" th:if="${@rq.logout}">로그인</a></li>
-      <li><a href="/member/logout" th:if="${@rq.login}">로그아웃</a></li>
-      <li><a href="/member/join">회원가입</a></li>
-    </ul>
-  </div>
 </div>
-<!-- 기본 템플릿 안에 삽입될 내용 Start -->
-<th:block layout:fragment="content"></th:block>
-<!-- 기본 템플릿 안에 삽입될 내용 End -->
-
-<!-- 자바스크립트 Start -->
-<th:block layout:fragment="script"></th:block>
-<!-- 자바스크립트 End -->
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.goodjob.global.base.redis;
 
+import com.goodjob.global.base.jwt.JwtProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -51,7 +52,7 @@ public class RedisUt {
 
     public void setBlackList(String key) {
         String logoutKey = REDIS_KEY_PREFIX + key;
-        stringRedisTemplate.opsForValue().set(logoutKey, "logout user", Duration.ofMillis(1000L * 60 * 30));
+        stringRedisTemplate.opsForValue().set(logoutKey, "logout user", Duration.ofMillis(JwtProvider.TOKEN_VALIDATION_SECOND));
     }
 
     public boolean hasKeyBlackList(String key) {

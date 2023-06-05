@@ -6,8 +6,10 @@ import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.article.mapper.ArticleMapper;
 import com.goodjob.domain.article.repository.ArticleRepository;
 import com.goodjob.domain.comment.dto.response.CommentResponseDto;
+import com.goodjob.domain.comment.entity.Comment;
 import com.goodjob.domain.member.entity.Member;
 import com.goodjob.domain.subComment.dto.response.SubCommentResponseDto;
+import com.goodjob.domain.subComment.entity.SubComment;
 import com.goodjob.global.base.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -28,35 +31,44 @@ public class ArticleService {
     private final ArticleMapper articleMapper;
 
 
-    public Page<ArticleResponseDto> findAll(int page) {
+    public Page<ArticleResponseDto> findAll(int page, int sortCode) {
         Pageable pageable = PageRequest.of(page, 10);
 
-        List<ArticleResponseDto> articles = articleRepository.findByIsDeletedFalse()
+        List<Article> articles = articleRepository.findQslBySortCode(sortCode);
+
+        for(Article article : articles) {
+            countCommentsAndSubComments(article);
+            countLikes(article);
+        }
+
+        List<ArticleResponseDto> articleResponseDtos = articles
                 .stream()
                 .map(articleMapper::toDto)
                 .collect(Collectors.toList());
 
-        for(ArticleResponseDto articleResponseDto : articles) {
-            countCommentsAndSubComments(articleResponseDto);
-        }
-
-        return convertToPage(articles, pageable);
+        return convertToPage(articleResponseDtos, pageable);
     }
 
-    //TODO:페이징으로 안해도 되지 않나? 최신글 5개 가져오게 변경
     public Page<ArticleResponseDto> findTopFive() {
         Pageable pageable = PageRequest.of(0, 5);
 
-        List<ArticleResponseDto> articles = articleRepository.findByIsDeletedFalse()
+        List<Article> articles = articleRepository.findQslBySortCode(1);
+
+        for(Article article : articles) {
+            countCommentsAndSubComments(article);
+            countLikes(article);
+        }
+
+        List<ArticleResponseDto> articleResponseDtos = articles
                 .stream()
                 .map(articleMapper::toDto)
                 .collect(Collectors.toList());
 
-        for(ArticleResponseDto articleResponseDto : articles) {
-            countCommentsAndSubComments(articleResponseDto);
-        }
+        return convertToPage(articleResponseDtos, pageable);
+    }
 
-        return convertToPage(articles, pageable);
+    private void countLikes(Article article) {
+        article.setLikesCount(article.getLikesList().stream().count());
     }
 
     private Page<ArticleResponseDto> convertToPage(List<ArticleResponseDto> articles, Pageable pageable) {
@@ -67,49 +79,61 @@ public class ArticleService {
         return new PageImpl<>(content, pageable, articles.size());
     }
 
-    private void countCommentsAndSubComments(ArticleResponseDto articleResponseDto) {
-        List<CommentResponseDto> commentResponseDtos = articleResponseDto.getCommentList();
+    private void countCommentsAndSubComments(Article article) {
+        List<Comment> commentList = article.getCommentList();
         Long sum = 0L;
 
-        for(CommentResponseDto commentResponseDto : commentResponseDtos) {
-            if (!commentResponseDto.isDeleted()) {
+        for(Comment comment : commentList) {
+            if (!comment.isDeleted()) {
                 sum++;
-                List<SubCommentResponseDto> subCommentResponseDtos = commentResponseDto.getSubCommentList();
-                for(SubCommentResponseDto subCommentResponseDto : subCommentResponseDtos) {
-                    if(!subCommentResponseDto.isDeleted()) {
+                List<SubComment> subCommentList = comment.getSubCommentList();
+                for(SubComment subComment : subCommentList) {
+                    if(!subComment.isDeleted()) {
                         sum++;
                     }
                 }
             }
         }
 
-        articleResponseDto.setCommentsCount(sum);
+        article.setCommentsCount(sum);
     }
 
-    public RsData<ArticleResponseDto> getArticleResponseDto(Long id) {
-        Optional<Article> article = articleRepository.findById(id);
-        if(article.isEmpty()) {
-            return RsData.of("F-1", "해당 게시글이 존재하지 않습니다.");
+    public RsData getArticleResponseDto(Long id) {
+        RsData<Article> articleRsData = getArticle(id);
+
+        if(articleRsData.isFail()) {
+            return articleRsData;
         }
-        return RsData.of("S-1", "게시글에 대한 정보를 나타냅니다.", articleMapper.toDto(article.get()));
+
+        Article article = articleRsData.getData();
+
+        return RsData.of("S-1", "게시글에 대한 정보를 가져옵니다.", articleMapper.toDto(article));
     }
 
     @Transactional
     public ArticleResponseDto increaseViewCount(Article article) {
         Long viewCount = article.getViewCount();
         article.setViewCount(viewCount + 1);
+        countCommentsAndSubComments(article);
         articleRepository.save(article);
         ArticleResponseDto articleResponseDto = articleMapper.toDto(article);
-        countCommentsAndSubComments(articleResponseDto);
         return articleResponseDto;
     }
 
-    public RsData<Article> getArticle(Long id) {
-        Optional<Article> article = articleRepository.findById(id);
-        if(article.isEmpty()) {
+    public RsData getArticle(Long id) {
+        Optional<Article> articleOp = articleRepository.findById(id);
+
+        if(articleOp.isEmpty()) {
             return RsData.of("F-1", "해당 게시글이 존재하지 않습니다.");
         }
-        return RsData.of("S-1", "게시글에 대한 정보를 가져옵니다.", article.get());
+
+        Article article = articleOp.get();
+
+        if(article.isDeleted()) {
+            return RsData.of("F-2", "해당 게시글은 이미 삭제되었습니다.");
+        }
+
+        return RsData.of("S-1", "게시글에 대한 정보를 가져옵니다.", article);
     }
 
     public void createArticle(Member author, ArticleRequestDto articleRequestDto) {
@@ -129,21 +153,58 @@ public class ArticleService {
     }
 
     @Transactional
-    public void updateArticle(Article article, ArticleRequestDto articleRequestDto) {
+    public RsData updateArticle(Member author, Long id, ArticleRequestDto articleRequestDto) {
+        RsData<Article> articleRsData = getArticle(id);
+
+        if(articleRsData.isFail()) {
+            return articleRsData;
+        }
+
+        Article article = articleRsData.getData();
+
+        if(article.getMember().getId() != author.getId()) {
+            return RsData.of("F-3", "수정 권한이 없습니다.");
+        }
+
         article.setTitle(articleRequestDto.getTitle());
         article.setContent(articleRequestDto.getContent());
 
         articleRepository.save(article);
+
+        return RsData.of("S-1", "게시글이 수정되었습니다.", article);
     }
 
     @Transactional
-    public void deleteArticle(Article article) {
+    public RsData deleteArticle(Member author, Long id) {
+        RsData<Article> articleRsData = getArticle(id);
+
+        if(articleRsData.isFail()) {
+            return articleRsData;
+        }
+
+        Article article = articleRsData.getData();
+
+        if(article.getMember().getId() != author.getId()) {
+            return RsData.of("F-3", "삭제 권한이 없습니다.");
+        }
+
         article.setDeleted(true);
+
         articleRepository.save(article);
+
+        return RsData.of("S-1", "게시글이 삭제되었습니다.", article);
     }
 
     public Long getCreatedArticleId() {
         Long id = (long) articleRepository.findAll().size();
         return id;
+    }
+
+    public RsData isLoggedIn(Member member) {
+        if(member == null) {
+            return RsData.of("F-1", "게시글을 작성하려면 로그인을 해야 합니다.");
+        }
+
+        return RsData.of("S-1", "게시글 작성 페이지로 이동합니다.");
     }
 }

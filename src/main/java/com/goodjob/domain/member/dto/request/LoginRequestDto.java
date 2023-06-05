@@ -1,6 +1,7 @@
 package com.goodjob.domain.member.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -9,8 +10,11 @@ import lombok.ToString;
 @Setter
 @ToString
 public class LoginRequestDto {
-    @NotBlank
+    @Size(min = 4, max = 30)
+    @NotBlank(message = "아이디는 필수항목입니다.")
     private String username;
-    @NotBlank
+
+    @Size(min = 4, max = 15)
+    @NotBlank(message = "비밀번호는 필수항목입니다.")
     private String password;
 }

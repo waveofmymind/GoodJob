@@ -24,12 +24,18 @@ public class JobStatisticService {
      * create
      */
     @Transactional
-    public void create(JobResponseDto jobResponseDto) {
-        validateDuplicateCompany(jobResponseDto);
+    public void create(JobResponseDto jobResponseDto) throws IllegalStateException{
 
-        JobStatistic company = JobStatistic.create(jobResponseDto);
+        try {
+            validateDuplicateCompany(jobResponseDto);
+            JobStatistic company = JobStatistic.create(jobResponseDto);
 
-        jobStatisticRepository.save(company);
+            jobStatisticRepository.save(company);
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private void validateDuplicateCompany(JobResponseDto jobResponseDto) {
@@ -45,10 +51,26 @@ public class JobStatisticService {
     public List<JobResponseDto> getFilterDto(List<JobResponseDto> mainDto, List<JobResponseDto> filterDto) {
         return mainDto.stream().filter(md -> filterDto.stream().noneMatch(
                 fd -> md.getSubject().equals(fd.getSubject()) &&
-                        md.getCreateDate().equals(fd.getCreateDate()) &&
-                        md.getDeadLine().equals(fd.getDeadLine()) &&
                         md.getCompany().equals(fd.getCompany()) &&
                         md.getCareer() == fd.getCareer())).toList();
+    }
+
+    public List<JobResponseDto> sameDtoFilter(List<JobResponseDto> firstDto, List<JobResponseDto> secondDto) {
+        List<JobResponseDto> returnDto = new ArrayList<>();
+        for (int i = 0; i < firstDto.size(); i++) {
+            int error = 0;
+            for (int j = i + 1; j < firstDto.size(); j++) {
+                JobResponseDto first = firstDto.get(i);
+                JobResponseDto second = secondDto.get(j);
+                if (first.getSubject().equals(second.getSubject()) && first.getCareer() == second.getCareer() && first.getCompany().equals(second.getCompany())) {
+                    error++;
+                }
+            }
+            if (error == 0) {
+                returnDto.add(firstDto.get(i));
+            }
+        }
+        return returnDto;
     }
 
 

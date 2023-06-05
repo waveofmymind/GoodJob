@@ -1,15 +1,10 @@
 package com.goodjob.domain.job;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-
-
 public class Constants {
     public final static String SARAMIN = "https://oapi.saramin.co.kr/job-search?access-key="; // key 추가
 
-    public final static String JOBKOREA = "";
+    public final static String WONTED_BASE1 = "https://www.wanted.co.kr/wdlist/518/";
+    public final static String WONTED_BASE2 = "?country=kr&job_sort=company.response_rate_order&years=";
+    public final static String WONTED_END = "&locations=all";
 
 }

@@ -33,49 +33,57 @@ public class CommentController {
     private final ArticleService articleService;
     private final Rq rq;
 
-    @GetMapping("/get/{id}")
-    public String redirectToArticleWithComment(@PathVariable("id") Long id) {
-        Article article = commentService.getComment(id).getArticle();
+    //TODO: 필요없는 메서드인지 확인 후 삭제
+//    @GetMapping("/get/{id}")
+//    public String redirectToArticleWithComment(@PathVariable("id") Long id) {
+//        Article article = commentService.getComment(id).getArticle();
+//
+//        return "redirect:/article/detail/%s".formatted(article.getId());
+//    }
 
-        return "redirect:/article/detail/%s".formatted(article.getId());
-    }
-    @PreAuthorize("isAuthenticated()")
     @PostMapping("/create/{id}")
-    public String createComment(Model model, @PathVariable("id") Long id, @Valid CommentRequestDto commentRequestDto, BindingResult bindingResult) {
-        RsData<Article> articleRsData = articleService.getArticle(id);
+    public String createComment(@PathVariable("id") Long id, @Valid CommentRequestDto commentRequestDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("article", articleRsData.getData());
             return "article/detailArticle";
         }
-        commentService.createComment(rq.getMember(), articleRsData.getData(), commentRequestDto);
+        RsData<Comment> commentRsData = commentService.createComment(rq.getMember(), id, commentRequestDto);
 
-        return String.format("redirect:/article/detail/%s", id);
+        if(commentRsData.isFail()) {
+            return rq.historyBack(commentRsData);
+        }
+
+        return rq.redirectWithMsg("/article/detail/%s".formatted(id), commentRsData);
     }
 
 
-    @PreAuthorize("isAuthenticated()")
     @PostMapping("/update/{id}")
     public String updateComment(@Valid CommentRequestDto commentRequestDto, BindingResult bindingResult,
-                               @PathVariable("id") Long id, Principal principal) {
-//        if (bindingResult.hasErrors()) {
-//            return "answer_form";
-//        }
-        Comment comment = commentService.getComment(id);
-//        if (!commentResponseDto.getMember().getUsername().equals(principal.getName())) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
-//        }
-        commentService.updateComment(comment, commentRequestDto.getContent());
-        return String.format("redirect:/article/detail/%s", comment.getArticle().getId());
+                               @PathVariable("id") Long id) {
+        if (bindingResult.hasErrors()) {
+            return "/article/detailArticle";
+        }
+
+        RsData<Comment> updateRsData = commentService.updateComment(rq.getMember(), id, commentRequestDto);
+
+        if(updateRsData.isFail()) {
+            return rq.historyBack(updateRsData);
+        }
+
+        Comment comment = updateRsData.getData();
+
+        return rq.redirectWithMsg("/article/detail/%s".formatted(comment.getArticle().getId()), updateRsData);
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
-    public String deleteComment(Principal principal, @PathVariable("id") Long id) {
-        Comment comment = commentService.getComment(id);
-//        if (!commentResponseDto.getMember().getUsername().equals(principal.getName())) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
-//        }
-        commentService.deleteComment(comment);
-        return String.format("redirect:/article/detail/%s", comment.getArticle().getId());
+    public String deleteComment(@PathVariable("id") Long id) {
+        RsData<Comment> commentRsData = commentService.deleteComment(rq.getMember(), id);
+
+        if(commentRsData.isFail()) {
+            return rq.historyBack(commentRsData);
+        }
+
+        Comment comment = commentRsData.getData();
+
+        return rq.redirectWithMsg("/article/detail/%s".formatted(comment.getArticle().getId()), commentRsData);
     }
 }
