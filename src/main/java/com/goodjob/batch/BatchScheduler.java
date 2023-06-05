@@ -11,7 +11,6 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.UnexpectedRollbackException;
 
 import java.util.Date;
@@ -23,7 +22,6 @@ public class BatchScheduler {
     private final JobLauncher jobLauncher;
     private final BatchConfiguration batchConfiguration;
     private final JobRepository jobRepository;
-    private final PlatformTransactionManager transactionManager;
 
 
     @Scheduled(cron = "${scheduler.cron.job}")

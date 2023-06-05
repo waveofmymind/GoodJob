@@ -7,10 +7,12 @@ import com.goodjob.domain.comment.controller.CommentController;
 import com.goodjob.domain.comment.entity.Comment;
 import com.goodjob.domain.comment.service.CommentService;
 import com.goodjob.domain.likes.dto.request.LikesRequestDto;
+import com.goodjob.domain.likes.entity.Likes;
 import com.goodjob.domain.likes.service.LikesService;
 import com.goodjob.domain.subComment.entity.SubComment;
 import com.goodjob.domain.subComment.service.SubCommentService;
 import com.goodjob.global.base.rq.Rq;
+import com.goodjob.global.base.rsData.RsData;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -35,36 +37,45 @@ public class LikesController {
     private final LikesService likesService;
     private final Rq rq;
 
-    @PreAuthorize("isAuthenticated()")
+//    @PreAuthorize("isAuthenticated()")
     @PostMapping("/like/article/{id}")
     public String likeArticle(@PathVariable("id") Long id) {
         LikesRequestDto likesRequestDto = new LikesRequestDto(id, null, null);
 
-        likesService.likeArticle(rq.getMember(), likesRequestDto);
+        RsData<Likes> likesRsData = likesService.likeArticle(rq.getMember(), likesRequestDto);
 
+        if(likesRsData.isFail()) {
+            return rq.historyBack(likesRsData);
+        }
 
-        return "redirect:/article/detail/%s".formatted(id);
+        return rq.redirectWithMsg("/article/detail/%s".formatted(id), likesRsData);
     }
 
-    @PreAuthorize("isAuthenticated()")
+//    @PreAuthorize("isAuthenticated()")
     @PostMapping("/like/comment/{id}")
     public String likeComment(@PathVariable("id") Long id) {
         LikesRequestDto likesRequestDto = new LikesRequestDto(null, id, null);
 
-        Long articleId = likesService.likeComment(rq.getMember(), likesRequestDto);
+        RsData<Likes> likesRsData = likesService.likeComment(rq.getMember(), likesRequestDto);
 
+        if(likesRsData.isFail()) {
+            return rq.historyBack(likesRsData);
+        }
 
-        return "redirect:/article/detail/%s".formatted(articleId);
+        return rq.redirectWithMsg("/article/detail/%s".formatted(likesRsData.getData().getComment().getArticle().getId()), likesRsData);
     }
 
-    @PreAuthorize("isAuthenticated()")
+//    @PreAuthorize("isAuthenticated()")
     @PostMapping("/like/subComment/{id}")
     public String likeSubComment(@PathVariable("id") Long id) {
         LikesRequestDto likesRequestDto = new LikesRequestDto(null, null, id);
 
-        Long articleId = likesService.likeSubComment(rq.getMember(), likesRequestDto);
+        RsData<Likes> likesRsData = likesService.likeSubComment(rq.getMember(), likesRequestDto);
 
+        if(likesRsData.isFail()) {
+            return rq.historyBack(likesRsData);
+        }
 
-        return "redirect:/article/detail/%s".formatted(articleId);
+        return rq.redirectWithMsg("/article/detail/%s".formatted(likesRsData.getData().getSubComment().getComment().getArticle().getId()), likesRsData);
     }
 }

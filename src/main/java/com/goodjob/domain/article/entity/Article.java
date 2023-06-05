@@ -50,5 +50,13 @@ public class Article extends BaseEntity {
     @OneToMany(mappedBy = "article", cascade = {CascadeType.ALL}, fetch=FetchType.EAGER)
     @Builder.Default
     private List<Likes> likesList = new ArrayList<>();
+
+    @Setter
+    private Long commentsCount;
+
+    @Setter
+    private Long likesCount;
+
+
     // TODO: 의존관계
 }
