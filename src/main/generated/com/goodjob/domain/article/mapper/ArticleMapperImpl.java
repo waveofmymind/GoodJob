@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-02T10:24:31+0900",
-    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.6 (Oracle Corporation)"
+    date = "2023-06-05T16:16:54+0900",
+    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.6 (Amazon.com Inc.)"
 )
 @Component
 public class ArticleMapperImpl implements ArticleMapper {
@@ -37,6 +37,9 @@ public class ArticleMapperImpl implements ArticleMapper {
         articleResponseDto.setLikesList( likesListToLikesResponseDtoList( article.getLikesList() ) );
         articleResponseDto.setViewCount( article.getViewCount() );
         articleResponseDto.setCommentList( commentListToCommentResponseDtoList( article.getCommentList() ) );
+        articleResponseDto.setCommentsCount( article.getCommentsCount() );
+        articleResponseDto.setLikesCount( article.getLikesCount() );
+        articleResponseDto.setMember( article.getMember() );
 
         return articleResponseDto;
     }
