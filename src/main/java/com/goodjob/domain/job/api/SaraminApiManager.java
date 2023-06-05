@@ -91,6 +91,7 @@ public class SaraminApiManager {
             }
         } catch (NullPointerException e) {
             log.error("키 만료 or 주소 바뀜");
+
         }
     }
 

@@ -134,6 +134,7 @@ public class WontedStatistic {
             } catch (StaleElementReferenceException e) {
                 log.debug(e.getMessage());
             }
+
         }
 
     }

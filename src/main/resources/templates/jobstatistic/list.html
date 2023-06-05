@@ -27,9 +27,9 @@
              th:text="${jobStatistic.subject}"
              class="text-white hover:text-gray-400"></a>
         </td>
-<!--        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">-->
-<!--          <div th:text="${jobStatistic. 아직 미정}"></div>-->
-<!--        </td>-->
+        <!--        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">-->
+        <!--          <div th:text="${jobStatistic. 아직 미정}"></div>-->
+        <!--        </td>-->
         <!-- 작성일 -->
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
           <div th:text="${#temporals.format(jobStatistic.startDate, 'yyyy-MM-dd HH:mm')}"></div>
@@ -74,5 +74,4 @@
 </main>
 </body>
 </html>
-
 

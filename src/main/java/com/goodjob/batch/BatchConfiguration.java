@@ -4,6 +4,7 @@ import com.goodjob.domain.job.api.SaraminApiManager;
 import com.goodjob.domain.job.crawling.WontedStatistic;
 import com.goodjob.domain.job.dto.JobResponseDto;
 import com.goodjob.domain.job.entity.JobStatistic;
+
 import com.goodjob.domain.job.service.JobStatisticService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,7 @@ import java.time.temporal.ChronoField;
 import java.util.List;
 
 
+
 @Configuration
 @Slf4j
 @RequiredArgsConstructor
@@ -37,14 +39,13 @@ public class BatchConfiguration {
     private final PlatformTransactionManager transactionManager;
     private final WontedStatistic wontedStatistic;
 
-    // 삭제 로직 추가 해야함
     @Bean
     public Job job1(JobRepository jobRepository) {
         return new JobBuilder("job1", jobRepository)
                 .start(step1(jobRepository)) // 사람인
-//                .next(step2(jobRepository)) // 원티드 백엔드
-//                .next(step3(jobRepository)) // 원티드 프론트
-//                .next(step4(jobRepository)) // 원티드 풀스택
+                .next(step2(jobRepository)) // 원티드 백엔드
+                .next(step3(jobRepository)) // 원티드 프론트
+                .next(step4(jobRepository)) // 원티드 풀스택
                 .next(step5(jobRepository)) // 중복된 값 필터하고 db저장
                 .next(step6(jobRepository)) // 기존 값들 초기화
                 .next(step7(jobRepository)) // 데이터 삭제
@@ -88,7 +89,7 @@ public class BatchConfiguration {
     @StepScope
     public Tasklet taskletWontedBack() {
         return (contribution, chunkContext) -> {
-            System.out.println("Wonted 테스크렛");
+
             int back = 872;
             for (int i = 0; i < 10; i++) {
                 try {
@@ -167,15 +168,15 @@ public class BatchConfiguration {
     public Tasklet taskletStatistic() {
         return (contribution, chunkContext) -> {
             List<JobResponseDto> pureSaram = SaraminApiManager.getJobResponseDtos();
-//            List<JobResponseDto> filterSaram = jobStatisticService.sameDtoFilter(pureSaram, pureSaram);
+            List<JobResponseDto> filterSaram = jobStatisticService.sameDtoFilter(pureSaram, pureSaram);
 
-//            List<JobResponseDto> pureWonted = WontedStatistic.getJobResponseDtos();
-//            List<JobResponseDto> filterWonted = jobStatisticService.sameDtoFilter(pureWonted, pureWonted);
+            List<JobResponseDto> pureWonted = WontedStatistic.getJobResponseDtos();
+            List<JobResponseDto> filterWonted = jobStatisticService.sameDtoFilter(pureWonted, pureWonted);
 
             // 사람인 에서 받은것 잡코리아 동일내용 필터
-//            List<JobResponseDto> saram = jobStatisticService.getFilterDto(filterSaram, filterWonted);
+            List<JobResponseDto> saram = jobStatisticService.getFilterDto(filterSaram, filterWonted);
             // 잡코리아 에서 받은것 사람인 동일내용 필터
-//            List<JobResponseDto> wonted = jobStatisticService.getFilterDto(filterWonted, filterSaram);
+            List<JobResponseDto> wonted = jobStatisticService.getFilterDto(filterWonted, filterSaram);
 
             for (JobResponseDto dto : pureSaram) {
                 try {
@@ -184,16 +185,17 @@ public class BatchConfiguration {
                     log.error(e.getMessage());
                 }
             }
-//            for (JobResponseDto dto : wonted) {
-//                try {
-//                    jobStatisticService.create(dto);
-//                } catch (IllegalStateException e) {
-//                    log.error(e.getMessage());
-//                }
-//            }
+            for (JobResponseDto dto : wonted) {
+                try {
+                    jobStatisticService.create(dto);
+                } catch (IllegalStateException e) {
+                    log.error(e.getMessage());
+                }
+            }
             return RepeatStatus.FINISHED;
         };
     }
+
 
     @JobScope
     @Bean
@@ -209,8 +211,7 @@ public class BatchConfiguration {
         return (contribution, chunkContext) -> {
             SaraminApiManager.resetList();
             WontedStatistic.resetList();
-            System.out.println("사람인 원본 : " + SaraminApiManager.getJobResponseDtos().size());
-            System.out.println("원티드 원본 : " + WontedStatistic.getJobResponseDtos().size());
+
             return RepeatStatus.FINISHED;
         };
     }
@@ -230,9 +231,9 @@ public class BatchConfiguration {
         return (contribution, chunkContext) -> {
             List<JobStatistic> all = jobStatisticService.getAll();
             LocalDateTime now = LocalDateTime.now();
-            DateTimeFormatter DATEFORMATTER1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-            DateTimeFormatter DATEFORMATTER = new DateTimeFormatterBuilder().append(DATEFORMATTER1)
+            DateTimeFormatter dateTimeFormatter1 = new DateTimeFormatterBuilder().append(dateTimeFormatter)
                     .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
                     .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
                     .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
@@ -241,7 +242,7 @@ public class BatchConfiguration {
             for (JobStatistic jobStatistic : all) {
                 if (jobStatistic.getDeadLine().equals("상시채용")) {
                     String startDate = jobStatistic.getStartDate();
-                    LocalDateTime createDateTime = LocalDateTime.parse(startDate, DATEFORMATTER).plusMonths(1);
+                    LocalDateTime createDateTime = LocalDateTime.parse(startDate, dateTimeFormatter1).plusMonths(1);
                     if (now.isAfter(createDateTime)) {
                         jobStatisticService.delete(jobStatistic);
                     }
