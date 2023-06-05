@@ -44,8 +44,8 @@ public class ArticleController {
     }
 
     @GetMapping("/list")
-    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page) {
-        Page<ArticleResponseDto> paging = articleService.findAll(page);
+    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page, ToListForm toListForm) {
+        Page<ArticleResponseDto> paging = articleService.findAll(page, toListForm.sortCode);
         model.addAttribute("paging", paging);
 
         return "article/list";
@@ -63,13 +63,17 @@ public class ArticleController {
 
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
     public String createArticle(ArticleRequestDto articleRequestDto ) {
+        //TODO: 찬규님꺼 pull 받고 다시 고민
+//        RsData isLoggedInRsData = articleService.isLoggedIn(rq.getMember());
+//        if(isLoggedInRsData.isFail()) {
+//            return rq.redirectWithMsg("/member/login", isLoggedInRsData);
+//        }
         return "article/articleForm";
+
     }
 
-    @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
     public String createArticle(@Valid ArticleRequestDto articleRequestDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -81,41 +85,48 @@ public class ArticleController {
     }
 
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/update/{id}")
     public String updateArticle(ArticleRequestDto articleRequestDto, @PathVariable("id") Long id, Principal principal) {
         RsData<ArticleResponseDto> articleResponseDtoRsData = articleService.getArticleResponseDto(id);
-//        if(!article.getMember().getUsername().equals(principal.getName())) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
-//        }
+
+        if(articleResponseDtoRsData.isFail()) {
+            return rq.historyBack(articleResponseDtoRsData);
+        }
+        
         articleRequestDto.setTitle(articleResponseDtoRsData.getData().getTitle());
         articleRequestDto.setContent(articleResponseDtoRsData.getData().getContent());
         return "article/articleForm";
     }
 
-    @PreAuthorize("isAuthenticated()")
     @PostMapping("/update/{id}")
     public String updateArticle(@Valid ArticleRequestDto articleRequestDto, BindingResult bindingResult,
                                  Principal principal, @PathVariable("id") Long id) {
         if (bindingResult.hasErrors()) {
             return "article/articleForm";
         }
-        RsData<Article> articleRsData = articleService.getArticle(id);
-//        if (!articleResponseDto.getMember().getUsername().equals(principal.getName())) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
-//        }
-        articleService.updateArticle(articleRsData.getData(), articleRequestDto);
-        return String.format("redirect:/article/detail/%s", id);
+
+        RsData<Article> articleRsData = articleService.updateArticle(rq.getMember(), id, articleRequestDto);
+
+        if(articleRsData.isFail()) {
+            return rq.historyBack(articleRsData);
+        }
+
+        return rq.redirectWithMsg("/article/detail/%s".formatted(id), articleRsData);
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
     public String deleteArticle(Principal principal, @PathVariable("id") Long id) {
-        RsData<Article> articleRsData = articleService.getArticle(id);
-//        if (!article.getMember().getUsername().equals(principal.getName())) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
-//        }
-        articleService.deleteArticle(articleRsData.getData());
-        return "redirect:/article/list";
+        RsData<Article> articleRsData = articleService.deleteArticle(rq.getMember(), id);
+
+        if(articleRsData.isFail()) {
+            return rq.historyBack(articleRsData);
+        }
+
+        return rq.redirectWithMsg("/article/list", articleRsData);
+    }
+
+    @Setter
+    public static class ToListForm {
+        private int sortCode = 1;
     }
 }

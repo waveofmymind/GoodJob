@@ -22,8 +22,12 @@ public class LikesService {
     private final CommentService commentService;
     private final SubCommentService subCommentService;
 
-    public Long likeArticle(Member member, LikesRequestDto likesRequestDto) {
+    public RsData likeArticle(Member member, LikesRequestDto likesRequestDto) {
         RsData<Article> articleRsData = articleService.getArticle(likesRequestDto.getArticleId());
+
+        if(articleRsData.isFail()) {
+            return articleRsData;
+        }
 
         Likes likes = Likes
                 .builder()
@@ -33,11 +37,17 @@ public class LikesService {
 
         likesRepository.save(likes);
 
-        return articleRsData.getData().getId();
+        return RsData.of("S-1", "해당 게시글을 좋아합니다.", likes);
     }
 
-    public Long likeComment(Member member, LikesRequestDto likesRequestDto) {
-        Comment comment = commentService.getComment(likesRequestDto.getCommentId());
+    public RsData likeComment(Member member, LikesRequestDto likesRequestDto) {
+        RsData<Comment> commentRsData = commentService.getComment(likesRequestDto.getCommentId());
+
+        if(commentRsData.isFail()) {
+            return commentRsData;
+        }
+
+        Comment comment = commentRsData.getData();
 
         Likes likes = Likes
                 .builder()
@@ -47,20 +57,24 @@ public class LikesService {
 
         likesRepository.save(likes);
 
-        return comment.getArticle().getId();
+        return RsData.of("S-1", "해당 댓글을 좋아합니다.", likes);
     }
 
-    public Long likeSubComment(Member member, LikesRequestDto likesRequestDto) {
-        SubComment subComment = subCommentService.getSubComment(likesRequestDto.getSubCommentId());
+    public RsData likeSubComment(Member member, LikesRequestDto likesRequestDto) {
+        RsData<SubComment> subCommentRsData = subCommentService.getSubComment(likesRequestDto.getSubCommentId());
+
+        if(subCommentRsData.isFail()) {
+            return subCommentRsData;
+        }
 
         Likes likes = Likes
                 .builder()
                 .member(member)
-                .subComment(subComment)
+                .subComment(subCommentRsData.getData())
                 .build();
 
         likesRepository.save(likes);
 
-        return subComment.getComment().getArticle().getId();
+        return RsData.of("S-1", "해당 답글을 좋아합니다.", likes);
     }
 }
