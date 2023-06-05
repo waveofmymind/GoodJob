@@ -77,7 +77,7 @@ public class SubCommentService {
 
         SubComment subComment = subCommentRsData.getData();
 
-        if(!Objects.equals(subComment.getMember(), author)) {
+        if(subComment.getMember().getId() != author.getId()) {
             return RsData.of("F-5", "수정 권한이 없습니다.");
         }
 
@@ -97,7 +97,7 @@ public class SubCommentService {
 
         SubComment subComment = subCommentRsData.getData();
 
-        if(!Objects.equals(subComment.getMember(), author)) {
+        if(subComment.getMember().getId() != author.getId()) {
             return RsData.of("F-5", "삭제 권한이 없습니다.");
         }
 

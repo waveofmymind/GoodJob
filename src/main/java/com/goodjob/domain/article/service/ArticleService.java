@@ -34,10 +34,7 @@ public class ArticleService {
     public Page<ArticleResponseDto> findAll(int page, int sortCode) {
         Pageable pageable = PageRequest.of(page, 10);
 
-        List<Article> articles = articleRepository.findByIsDeletedFalse();
-
-
-        articles = articleRepository.findQslBySortCode(sortCode);
+        List<Article> articles = articleRepository.findQslBySortCode(sortCode);
 
         for(Article article : articles) {
             countCommentsAndSubComments(article);
@@ -52,18 +49,15 @@ public class ArticleService {
         return convertToPage(articleResponseDtos, pageable);
     }
 
-    //TODO:페이징으로 안해도 되지 않나? 최신글 5개 가져오게 변경
     public Page<ArticleResponseDto> findTopFive() {
         Pageable pageable = PageRequest.of(0, 5);
 
-        List<Article> articles = articleRepository.findByIsDeletedFalse();
+        List<Article> articles = articleRepository.findQslBySortCode(1);
 
         for(Article article : articles) {
             countCommentsAndSubComments(article);
             countLikes(article);
         }
-
-        articleRepository.findQslBySortCode(1);
 
         List<ArticleResponseDto> articleResponseDtos = articles
                 .stream()
@@ -168,7 +162,7 @@ public class ArticleService {
 
         Article article = articleRsData.getData();
 
-        if(!Objects.equals(article.getMember(), author)) {
+        if(article.getMember().getId() != author.getId()) {
             return RsData.of("F-3", "수정 권한이 없습니다.");
         }
 
@@ -190,7 +184,7 @@ public class ArticleService {
 
         Article article = articleRsData.getData();
 
-        if(!Objects.equals(article.getMember(), author)) {
+        if(article.getMember().getId() != author.getId()) {
             return RsData.of("F-3", "삭제 권한이 없습니다.");
         }
 

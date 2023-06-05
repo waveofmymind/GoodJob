@@ -44,6 +44,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
 
         return jpaQueryFactory
                 .selectFrom(article)
+                .where(article.isDeleted.eq(false))
                 .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
                 .fetch();
     }

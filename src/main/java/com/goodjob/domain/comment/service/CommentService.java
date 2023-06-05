@@ -87,7 +87,7 @@ public class CommentService {
 
         Comment comment = commentRsData.getData();
 
-        if(!Objects.equals(comment.getMember(), author)) {
+        if(comment.getMember().getId() != author.getId()) {
             return RsData.of("F-4", "수정 권한이 없습니다.");
         }
 
@@ -108,7 +108,7 @@ public class CommentService {
 
         Comment comment = commentRsData.getData();
 
-        if(!Objects.equals(comment.getMember(), author)) {
+        if(comment.getMember().getId() != author.getId()) {
             return RsData.of("F-4", "삭제 권한이 없습니다.");
         }
 

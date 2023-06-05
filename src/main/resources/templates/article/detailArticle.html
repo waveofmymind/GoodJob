@@ -11,8 +11,8 @@
         <div class="flex justify-between mt-2 mb-1">
             <p class="text-xs mt-2 mr-2 w-80 ml-3" th:text="${article.member.username}"></p>
             <p class="flex-grow text-xs mt-2" th:text="${#temporals.format(article.createdDate, 'yyyy-MM-dd HH:mm')}"></p>
-            <a th:href="@{|/article/update/${article.id}|}" th:if="${@rq.member == article.member}" class="text-xs text-black mt-2 underline text-gray-400">수정</a>
-            <a href="javascript:void(0);" th:if="${@rq.member == article.member}" th:data-uri="@{|/article/delete/${article.id}|}" class="delete text-xs text-black mt-2 mx-2 underline text-gray-400">삭제</a>
+            <a th:href="@{|/article/update/${article.id}|}" th:if="${@rq.member.id == article.member.id}" class="text-xs text-black mt-2 underline text-gray-400">수정</a>
+            <a href="javascript:void(0);" th:if="${@rq.member.id == article.member.id}" th:data-uri="@{|/article/delete/${article.id}|}" class="delete text-xs text-black mt-2 mx-2 underline text-gray-400">삭제</a>
             <p class="text-xs mt-2 mr-2" th:text="|조회:${article.viewCount}|"></p>
             <p class="text-xs mt-2 mr-2" th:text="|추천:${#lists.size(article.likesList)}|"></p>
             <p class="text-xs mt-2" th:text="|댓글:${article.commentsCount}|"></p>
@@ -31,7 +31,7 @@
             <form th:action="@{|/comment/create/${article.id}|}" th:object="${commentRequestDto}" method="post" class="flex mb-4 justify-between items-start">
                 <!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
                 <div class="flex">
-                    <div class="text-xs w-24 text-center" >유저네임</div>
+                    <div th:text="${@rq.member.username}" class="text-xs w-24 text-center" ></div>
                 </div>
                 <textarea th:field="*{content}" class="form-textarea border border-info rounded-md px-4 py-2 flex-grow focus:outline-none min-h-[100px]" placeholder="댓글을 작성하세요"></textarea>
                 <button type="submit" class="register bg-info text-white px-4 py-2 rounded-md ml-2 flex-start text-xs hover:bg-blue-500">등록</button>
@@ -43,12 +43,12 @@
                 <li class="text-black p-1 justify-between">
                     <div class="flex justify-between items-center">
                         <div class="flex items-end mb-3">
-                            <div class="text-sm pl-3 mr-2">글쓴이</div>
+                            <div th:text="${comment.member.username}" class="text-sm pl-3 mr-2">글쓴이</div>
                             <div class="text-xs" th:text="${#temporals.format(comment.createdDate, '(yyyy-MM-dd HH:mm)')}"></div>
                         </div>
                         <div class="flex items-center justify-center">
-                            <button class="text-xs text-black underline modify-button pb-3  text-gray-400" th:if="${@rq.member == comment.member}" onclick="editComment()" th:attr="data-id=${comment.id}">수정</button>
-                            <a href="javascript:void(0);" th:if="${@rq.member == comment.member}" th:data-uri="@{|/comment/delete/${comment.id}|}" class="delete text-xs text-black mx-2 underline pb-3 text-gray-400">삭제</a>
+                            <button class="text-xs text-black underline modify-button pb-3  text-gray-400" th:if="${@rq.member.id == comment.member.id}" onclick="editComment()" th:attr="data-id=${comment.id}">수정</button>
+                            <a href="javascript:void(0);" th:if="${@rq.member.id == comment.member.id}" th:data-uri="@{|/comment/delete/${comment.id}|}" class="delete text-xs text-black mx-2 underline pb-3 text-gray-400">삭제</a>
                             <form th:action="@{|/likes/like/comment/${comment.id}|}" method="post">
                                 <!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
                                 <button type="submit" class="flex bg-white border-gray-300 text-info px-3 py-1 rounded-md mr-2 hover:bg-gray-200">
@@ -82,12 +82,12 @@
                             <li class="text-black p-1 justify-between flex-grow border-t border-gray-300 bg-gray-100">
                                 <div class="flex justify-between items-center">
                                     <div class="flex items-end mb-3 mt-3">
-                                        <div class="text-sm mr-2">글쓴이</div>
+                                        <div th:text="${subComment.member.username}" class="text-sm mr-2"></div>
                                         <div class="text-xs" th:text="${#temporals.format(subComment.createdDate, '(yyyy-MM-dd HH:mm)')}"></div>
                                     </div>
                                     <div class="flex items-center justify-center">
-                                        <button class="text-xs text-black underline modify-button pb-3 text-gray-400" th:if="${@rq.member == subComment.member}" onclick="editSubComment()" th:attr="data-id=${subComment.id}">수정</button>
-                                        <a href="javascript:void(0);" th:if="${@rq.member == subComment.member}" th:data-uri="@{|/subComment/delete/${subComment.id}|}" class="delete text-xs text-black mx-2 underline pb-3  text-gray-400">삭제</a>
+                                        <button class="text-xs text-black underline modify-button pb-3 text-gray-400" th:if="${@rq.member.id == subComment.member.id}" onclick="editSubComment()" th:attr="data-id=${subComment.id}">수정</button>
+                                        <a href="javascript:void(0);" th:if="${@rq.member.id == subComment.member.id}" th:data-uri="@{|/subComment/delete/${subComment.id}|}" class="delete text-xs text-black mx-2 underline pb-3  text-gray-400">삭제</a>
                                         <form th:action="@{|/likes/like/subComment/${subComment.id}|}" method="post">
                                             <!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
                                             <button type="submit" class="flex bg-white border-gray-300 text-info px-3 py-1 rounded-md mr-2 hover:bg-gray-200">
