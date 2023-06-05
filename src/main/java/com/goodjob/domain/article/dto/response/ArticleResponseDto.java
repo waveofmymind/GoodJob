@@ -24,5 +24,6 @@ public class ArticleResponseDto {
     private List<CommentResponseDto> commentList;
 
     private Long commentsCount;
+    private Long likesCount;
     private Member member;
 }

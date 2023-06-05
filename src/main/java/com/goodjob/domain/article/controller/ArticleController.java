@@ -44,8 +44,8 @@ public class ArticleController {
     }
 
     @GetMapping("/list")
-    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page) {
-        Page<ArticleResponseDto> paging = articleService.findAll(page);
+    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page, ToListForm toListForm) {
+        Page<ArticleResponseDto> paging = articleService.findAll(page, toListForm.sortCode);
         model.addAttribute("paging", paging);
 
         return "article/list";
@@ -123,5 +123,10 @@ public class ArticleController {
         }
 
         return rq.redirectWithMsg("/article/list", articleRsData);
+    }
+
+    @Setter
+    public static class ToListForm {
+        private int sortCode = 1;
     }
 }

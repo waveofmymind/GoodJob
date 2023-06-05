@@ -6,6 +6,7 @@ import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.article.mapper.ArticleMapper;
 import com.goodjob.domain.article.repository.ArticleRepository;
 import com.goodjob.domain.comment.dto.response.CommentResponseDto;
+import com.goodjob.domain.comment.entity.Comment;
 import com.goodjob.domain.member.entity.Member;
 import com.goodjob.domain.subComment.dto.response.SubCommentResponseDto;
 import com.goodjob.domain.subComment.entity.SubComment;
@@ -30,35 +31,50 @@ public class ArticleService {
     private final ArticleMapper articleMapper;
 
 
-    public Page<ArticleResponseDto> findAll(int page) {
+    public Page<ArticleResponseDto> findAll(int page, int sortCode) {
         Pageable pageable = PageRequest.of(page, 10);
 
-        List<ArticleResponseDto> articles = articleRepository.findByIsDeletedFalse()
+        List<Article> articles = articleRepository.findByIsDeletedFalse();
+
+
+        articles = articleRepository.findQslBySortCode(sortCode);
+
+        for(Article article : articles) {
+            countCommentsAndSubComments(article);
+            countLikes(article);
+        }
+
+        List<ArticleResponseDto> articleResponseDtos = articles
                 .stream()
                 .map(articleMapper::toDto)
                 .collect(Collectors.toList());
 
-        for(ArticleResponseDto articleResponseDto : articles) {
-            countCommentsAndSubComments(articleResponseDto);
-        }
-
-        return convertToPage(articles, pageable);
+        return convertToPage(articleResponseDtos, pageable);
     }
 
     //TODO:페이징으로 안해도 되지 않나? 최신글 5개 가져오게 변경
     public Page<ArticleResponseDto> findTopFive() {
         Pageable pageable = PageRequest.of(0, 5);
 
-        List<ArticleResponseDto> articles = articleRepository.findByIsDeletedFalse()
+        List<Article> articles = articleRepository.findByIsDeletedFalse();
+
+        for(Article article : articles) {
+            countCommentsAndSubComments(article);
+            countLikes(article);
+        }
+
+        articleRepository.findQslBySortCode(1);
+
+        List<ArticleResponseDto> articleResponseDtos = articles
                 .stream()
                 .map(articleMapper::toDto)
                 .collect(Collectors.toList());
 
-        for(ArticleResponseDto articleResponseDto : articles) {
-            countCommentsAndSubComments(articleResponseDto);
-        }
+        return convertToPage(articleResponseDtos, pageable);
+    }
 
-        return convertToPage(articles, pageable);
+    private void countLikes(Article article) {
+        article.setLikesCount(article.getLikesList().stream().count());
     }
 
     private Page<ArticleResponseDto> convertToPage(List<ArticleResponseDto> articles, Pageable pageable) {
@@ -69,23 +85,23 @@ public class ArticleService {
         return new PageImpl<>(content, pageable, articles.size());
     }
 
-    private void countCommentsAndSubComments(ArticleResponseDto articleResponseDto) {
-        List<CommentResponseDto> commentResponseDtos = articleResponseDto.getCommentList();
+    private void countCommentsAndSubComments(Article article) {
+        List<Comment> commentList = article.getCommentList();
         Long sum = 0L;
 
-        for(CommentResponseDto commentResponseDto : commentResponseDtos) {
-            if (!commentResponseDto.isDeleted()) {
+        for(Comment comment : commentList) {
+            if (!comment.isDeleted()) {
                 sum++;
-                List<SubCommentResponseDto> subCommentResponseDtos = commentResponseDto.getSubCommentList();
-                for(SubCommentResponseDto subCommentResponseDto : subCommentResponseDtos) {
-                    if(!subCommentResponseDto.isDeleted()) {
+                List<SubComment> subCommentList = comment.getSubCommentList();
+                for(SubComment subComment : subCommentList) {
+                    if(!subComment.isDeleted()) {
                         sum++;
                     }
                 }
             }
         }
 
-        articleResponseDto.setCommentsCount(sum);
+        article.setCommentsCount(sum);
     }
 
     public RsData getArticleResponseDto(Long id) {
@@ -104,9 +120,9 @@ public class ArticleService {
     public ArticleResponseDto increaseViewCount(Article article) {
         Long viewCount = article.getViewCount();
         article.setViewCount(viewCount + 1);
+        countCommentsAndSubComments(article);
         articleRepository.save(article);
         ArticleResponseDto articleResponseDto = articleMapper.toDto(article);
-        countCommentsAndSubComments(articleResponseDto);
         return articleResponseDto;
     }
 
