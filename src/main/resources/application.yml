@@ -2,6 +2,8 @@ server:
   port: 8080
 
 spring:
+  application:
+    name: goodjob
   batch:
     jdbc:
       initialize-schema: always
@@ -19,7 +21,6 @@ spring:
     basename: message/messages
     encoding: UTF-8
 
-
 jasypt:
   encryptor:
     password: ${JASYPT_PASSWORD}
@@ -29,6 +30,15 @@ openai:
 scheduler:
   cron:
     job: "0 0 4 * * *"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "prometheus"
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 accessKey:
   saramin: ENC(vAiGCHWxA7xlfVU04DkiksG8V05r4NKVzDoqYA8WbkmF7O6g6pZ/RxidyvQ4YppZd9suBjOz0lHSBVSFQ0NqkA==)
