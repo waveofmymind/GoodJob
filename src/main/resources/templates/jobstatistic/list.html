@@ -4,15 +4,6 @@
 <body>
 <main layout:fragment="main" class="flex items-center justify-center flex-col">
 
-<!--  <h5 th:text="${}?: 'Rule'"-->
-<!--      class="text-lg font-semibold mb-4"></h5>-->
-<!--  검색 기능 -->
-<!--  <div class="flex justify-end w-11/12">-->
-<!--    <div></div>-->
-<!--    <div class="mr-20">-->
-<!--      <div th:replace="~{rule/fragment/ruleSearch :: search (${ruleSearch})}"></div>-->
-<!--    </div>-->
-<!--  </div>-->
   <div class="flex justify-around w-9/12 overflow-x-auto">
     <table class="table w-full">
       <thead class="text-slate-200 text-center">
@@ -67,7 +58,7 @@
             th:classappend="${page == paging.number} ? 'active'"
             th:if="${page >= paging.number - 5 and page <= paging.number + 5}">
 
-            <a th:text="${page + 1}" th:href="@{/jobstatistic/search/all(sector=${param.sector},career=${param.career},page=${page})}"></a>
+            <a th:text="${page + 1}" th:href="@{/jobstatistic/search/all(page=${page},sector=${param.sector},career=${param.career})}"></a>
         </span>
 
       <a th:href="@{|?page=${paging.number + 1}|}"

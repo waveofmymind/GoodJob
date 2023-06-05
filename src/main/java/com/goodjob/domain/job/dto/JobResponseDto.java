@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,9 +18,9 @@ public class JobResponseDto {
 
     private int sectorCode;
 
-    private LocalDateTime createDate; // 생성일
+    private String createDate; // 생성일
 
-    private LocalDateTime deadLine; // 마감일
+    private String deadLine; // 마감일
 
     private int career; // 경력
 }
