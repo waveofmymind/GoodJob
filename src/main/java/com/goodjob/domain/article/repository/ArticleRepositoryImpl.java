@@ -30,10 +30,6 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
                 orderSpecifiers.add(article.id.desc());
                 break;
             case 3:
-                orderSpecifiers.add(article.commentsCount.desc());
-                orderSpecifiers.add(article.id.desc());
-                break;
-            case 4:
                 orderSpecifiers.add(article.likesCount.desc());
                 orderSpecifiers.add(article.id.desc());
                 break;
