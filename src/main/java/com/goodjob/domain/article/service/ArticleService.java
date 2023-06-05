@@ -8,6 +8,7 @@ import com.goodjob.domain.article.repository.ArticleRepository;
 import com.goodjob.domain.comment.dto.response.CommentResponseDto;
 import com.goodjob.domain.member.entity.Member;
 import com.goodjob.domain.subComment.dto.response.SubCommentResponseDto;
+import com.goodjob.domain.subComment.entity.SubComment;
 import com.goodjob.global.base.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -86,12 +88,16 @@ public class ArticleService {
         articleResponseDto.setCommentsCount(sum);
     }
 
-    public RsData<ArticleResponseDto> getArticleResponseDto(Long id) {
-        Optional<Article> article = articleRepository.findById(id);
-        if(article.isEmpty()) {
-            return RsData.of("F-1", "해당 게시글이 존재하지 않습니다.");
+    public RsData getArticleResponseDto(Long id) {
+        RsData<Article> articleRsData = getArticle(id);
+
+        if(articleRsData.isFail()) {
+            return articleRsData;
         }
-        return RsData.of("S-1", "게시글에 대한 정보를 나타냅니다.", articleMapper.toDto(article.get()));
+
+        Article article = articleRsData.getData();
+
+        return RsData.of("S-1", "게시글에 대한 정보를 가져옵니다.", articleMapper.toDto(article));
     }
 
     @Transactional
@@ -104,12 +110,20 @@ public class ArticleService {
         return articleResponseDto;
     }
 
-    public RsData<Article> getArticle(Long id) {
-        Optional<Article> article = articleRepository.findById(id);
-        if(article.isEmpty()) {
+    public RsData getArticle(Long id) {
+        Optional<Article> articleOp = articleRepository.findById(id);
+
+        if(articleOp.isEmpty()) {
             return RsData.of("F-1", "해당 게시글이 존재하지 않습니다.");
         }
-        return RsData.of("S-1", "게시글에 대한 정보를 가져옵니다.", article.get());
+
+        Article article = articleOp.get();
+
+        if(article.isDeleted()) {
+            return RsData.of("F-2", "해당 게시글은 이미 삭제되었습니다.");
+        }
+
+        return RsData.of("S-1", "게시글에 대한 정보를 가져옵니다.", article);
     }
 
     public void createArticle(Member author, ArticleRequestDto articleRequestDto) {
@@ -129,21 +143,58 @@ public class ArticleService {
     }
 
     @Transactional
-    public void updateArticle(Article article, ArticleRequestDto articleRequestDto) {
+    public RsData updateArticle(Member author, Long id, ArticleRequestDto articleRequestDto) {
+        RsData<Article> articleRsData = getArticle(id);
+
+        if(articleRsData.isFail()) {
+            return articleRsData;
+        }
+
+        Article article = articleRsData.getData();
+
+        if(!Objects.equals(article.getMember(), author)) {
+            return RsData.of("F-3", "수정 권한이 없습니다.");
+        }
+
         article.setTitle(articleRequestDto.getTitle());
         article.setContent(articleRequestDto.getContent());
 
         articleRepository.save(article);
+
+        return RsData.of("S-1", "게시글이 수정되었습니다.", article);
     }
 
     @Transactional
-    public void deleteArticle(Article article) {
+    public RsData deleteArticle(Member author, Long id) {
+        RsData<Article> articleRsData = getArticle(id);
+
+        if(articleRsData.isFail()) {
+            return articleRsData;
+        }
+
+        Article article = articleRsData.getData();
+
+        if(!Objects.equals(article.getMember(), author)) {
+            return RsData.of("F-3", "삭제 권한이 없습니다.");
+        }
+
         article.setDeleted(true);
+
         articleRepository.save(article);
+
+        return RsData.of("S-1", "게시글이 삭제되었습니다.", article);
     }
 
     public Long getCreatedArticleId() {
         Long id = (long) articleRepository.findAll().size();
         return id;
+    }
+
+    public RsData isLoggedIn(Member member) {
+        if(member == null) {
+            return RsData.of("F-1", "게시글을 작성하려면 로그인을 해야 합니다.");
+        }
+
+        return RsData.of("S-1", "게시글 작성 페이지로 이동합니다.");
     }
 }
