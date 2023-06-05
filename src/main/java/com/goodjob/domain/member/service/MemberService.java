@@ -29,7 +29,6 @@ public class MemberService {
         Optional<Member> opNickname = findByNickname(joinRequestDto.getNickname());
         Optional<Member> opEmail = findByEmail(joinRequestDto.getEmail());
 
-        // TODO: 타임리프 써서 회원가입폼에서 예외처리
         if (opUsername.isPresent()) { // 로그인 계정이 중복인 경우
             return RsData.of("F-1", "이미 존재하는 계정입니다.");
         }
@@ -70,13 +69,14 @@ public class MemberService {
     }
 
     public RsData genAccessToken(String username, String password) {
-        Member member = findByUsername(username).orElse(null);
-        log.info("member ={}", member.toString());
+        Optional<Member> opMember = findByUsername(username);
 
         // TODO: 널포인트 못잡는듯
-        if (member == null) {
+        if (opMember.isEmpty()) {
             return RsData.of("F-1", "아이디 혹은 비밀번호가 틀립니다.");
         }
+
+        Member member = opMember.get();
 
         boolean matches = passwordEncoder.matches(password, member.getPassword());
 
@@ -93,7 +93,7 @@ public class MemberService {
         return memberRepository.findByNickname(nickname);
     }
 
-    private Optional<Member> findByEmail(String email) {
+    public Optional<Member> findByEmail(String email) {
         return memberRepository.findByEmail(email);
     }
 
@@ -107,5 +107,9 @@ public class MemberService {
 
     public Optional<Member> findById(Long id) {
         return memberRepository.findById(id);
+    }
+
+    public Optional<Member> findByNickName(String nickname) {
+        return memberRepository.findByNickname(nickname);
     }
 }
