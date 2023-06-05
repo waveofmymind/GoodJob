@@ -36,11 +36,6 @@ public class ArticleService {
 
         List<Article> articles = articleRepository.findQslBySortCode(sortCode);
 
-        for(Article article : articles) {
-            countCommentsAndSubComments(article);
-            countLikes(article);
-        }
-
         List<ArticleResponseDto> articleResponseDtos = articles
                 .stream()
                 .map(articleMapper::toDto)
@@ -54,21 +49,12 @@ public class ArticleService {
 
         List<Article> articles = articleRepository.findQslBySortCode(1);
 
-        for(Article article : articles) {
-            countCommentsAndSubComments(article);
-            countLikes(article);
-        }
-
         List<ArticleResponseDto> articleResponseDtos = articles
                 .stream()
                 .map(articleMapper::toDto)
                 .collect(Collectors.toList());
 
         return convertToPage(articleResponseDtos, pageable);
-    }
-
-    private void countLikes(Article article) {
-        article.setLikesCount(article.getLikesList().stream().count());
     }
 
     private Page<ArticleResponseDto> convertToPage(List<ArticleResponseDto> articles, Pageable pageable) {
@@ -96,6 +82,8 @@ public class ArticleService {
         }
 
         article.setCommentsCount(sum);
+        articleRepository.save(article);
+
     }
 
     public RsData getArticleResponseDto(Long id) {
@@ -115,7 +103,6 @@ public class ArticleService {
         Long viewCount = article.getViewCount();
         article.setViewCount(viewCount + 1);
         countCommentsAndSubComments(article);
-        articleRepository.save(article);
         ArticleResponseDto articleResponseDto = articleMapper.toDto(article);
         return articleResponseDto;
     }
@@ -145,6 +132,7 @@ public class ArticleService {
                 .title(articleRequestDto.getTitle())
                 .content(articleRequestDto.getContent())
                 .viewCount(0L)
+                .commentsCount(0L)
                 .isDeleted(false)
                 .likesList(null)
                 .build();
