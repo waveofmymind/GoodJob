@@ -55,37 +55,42 @@ public class SaraminApiManager {
         jobsWrapper = restTemplate.getForObject(connectURL, JobsWrapper.class);
 
         assert jobsWrapper != null;
-        for (Job job : jobsWrapper.getJobs().getJob()) {
-            String company = job.getCompany().getDetail().getName();
-            String subject = job.getPosition().getTitle();
-            String url = job.getUrl();
-            String sector = job.getPosition().getIndustry().getName();
+        try {
+            for (Job job : jobsWrapper.getJobs().getJob()) {
+                String company = job.getCompany().getDetail().getName();
+                String subject = job.getPosition().getTitle();
+                String url = job.getUrl();
+                String sector = job.getPosition().getIndustry().getName();
 
-            long postTimeStamp = Long.parseLong(job.getPostingTimestamp());
-            long deadLineTimeStamp;
-            if (job.getExpirationDate() == null) {
-                deadLineTimeStamp = 0L;
-            } else {
-                deadLineTimeStamp = Long.parseLong(job.getExpirationDate());
+                long postTimeStamp = Long.parseLong(job.getPostingTimestamp());
+                long deadLineTimeStamp;
+                System.out.println("사람인 마감일" + job.getExpirationDate());
+                if (job.getExpirationDate() == null) {
+                    deadLineTimeStamp = 0L;
+                } else {
+                    deadLineTimeStamp = Long.parseLong(job.getExpirationDate());
+                }
+
+                Instant postTimeInstant = Instant.ofEpochSecond(postTimeStamp);
+                Instant deadLineInstant = Instant.ofEpochSecond(deadLineTimeStamp);
+                LocalDateTime cd = LocalDateTime.ofInstant(postTimeInstant, ZoneId.systemDefault());
+                LocalDateTime dl = LocalDateTime.ofInstant(deadLineInstant, ZoneId.systemDefault());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                String createDate = cd.format(formatter);
+                String deadLine = null;
+                if (deadLineTimeStamp == 0L) {
+                    deadLine = "상시채용";
+                } else {
+                    deadLine = dl.format(formatter);
+                }
+                int career = job.getPosition().getExperienceLevel().getCareer();
+
+                log.debug(subject);
+                JobResponseDto jobResponseDto = new JobResponseDto(company, subject, url, sector, sectorCode, createDate, deadLine, career);
+                setJobDtos(jobResponseDto);
             }
-
-            Instant postTimeInstant = Instant.ofEpochSecond(postTimeStamp);
-            Instant deadLineInstant = Instant.ofEpochSecond(deadLineTimeStamp);
-            LocalDateTime cd = LocalDateTime.ofInstant(postTimeInstant, ZoneId.systemDefault());
-            LocalDateTime dl = LocalDateTime.ofInstant(deadLineInstant, ZoneId.systemDefault());
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            String createDate = cd.format(formatter);
-            String deadLine = null;
-            if (deadLineTimeStamp == 0L) {
-                deadLine = "채용시 마감";
-            } else {
-                deadLine = dl.format(formatter);
-            }
-            int career = job.getPosition().getExperienceLevel().getCareer();
-
-            log.debug(subject);
-            JobResponseDto jobResponseDto = new JobResponseDto(company, subject, url, sector, sectorCode, createDate, deadLine, career);
-            setJobDtos(jobResponseDto);
+        } catch (NullPointerException e) {
+            log.error("키 만료 or 주소 바뀜");
         }
     }
 
