@@ -85,7 +85,6 @@ public class SaraminApiManager {
                 }
                 int career = job.getPosition().getExperienceLevel().getCareer();
 
-                log.debug(subject);
                 JobResponseDto jobResponseDto = new JobResponseDto(company, subject, url, sector, sectorCode, createDate, deadLine, career);
                 setJobDtos(jobResponseDto);
             }
