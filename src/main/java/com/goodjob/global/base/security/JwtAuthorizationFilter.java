@@ -45,12 +45,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             accessToken = accessTokenCookie.getValue();
             username = usernameCookie.getValue();
         }
-        log.info("유저에게 받아온 accessToken ={}", accessToken);
 
-        boolean hasKeyBlackList = redisUt.hasKeyBlackList(username);
-        log.info("hasKeyBlackList ={}", hasKeyBlackList);
-
-        if (accessToken != null && !hasKeyBlackList) {
+        if (accessToken != null) {
             try {
                 if (jwtProvider.verify(accessToken)) {
                     Map<String, Object> claims = jwtProvider.getClaims(accessToken);
@@ -64,17 +60,17 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 Long ttl = redisUt.getExpire(username);
 
                 if (ttl == -1) { // 키가 존재하지 않는 경우
-                    log.info("존재하지 않는 refreshToken key!");
+                    log.debug("존재하지 않는 refreshToken key!");
                 }
 
                 if (ttl == -2) { // 리프레시 토큰 만료된 경우
-                    log.info("만료된 refreshToken. 재로그인 필요!");
+                    log.debug("만료된 refreshToken. 재로그인 필요!");
                 }
 
                 // 새로운 액세스 토큰 발급
                 Member member = memberService.findByUsername(username).orElseThrow();
                 String newAccessToken = jwtProvider.genToken(member.toClaims());
-                log.info("새로 발급된 accessToken ={}", newAccessToken);
+                log.debug("새로 발급된 accessToken ={}", newAccessToken);
 
                 response.addCookie(cookieUt.createCookie("accessToken", newAccessToken));
                 response.addCookie(cookieUt.createCookie("id", username));

@@ -1,7 +1,6 @@
 package com.goodjob.global.base.redis;
 
 import com.goodjob.global.base.jwt.JwtProvider;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -13,11 +12,9 @@ import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 
 @Service
-@Slf4j
 public class RedisUt {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
-    private final String REDIS_KEY_PREFIX = "LOGOUT_"; // prefix ㄴㄴ
 
     // 리프레시 토큰 생성
     public String genRefreshToken() {
@@ -43,26 +40,5 @@ public class RedisUt {
 
     public void deleteToken(String key) {
         stringRedisTemplate.delete(key);
-    }
-
-    public void deleteTokenFromBlackList(String key) {
-        String logoutKey = REDIS_KEY_PREFIX + key;
-        stringRedisTemplate.delete(logoutKey);
-    }
-
-    // 용어. 로그아웃유저처리.
-    public void setBlackList(String key) {
-        String logoutKey = REDIS_KEY_PREFIX + key;
-        stringRedisTemplate.opsForValue().set(logoutKey, "logout user", Duration.ofMillis(JwtProvider.TOKEN_VALIDATION_SECOND));
-    }
-
-    public boolean hasKeyBlackList(String key) {
-        boolean hasKey = stringRedisTemplate.hasKey(REDIS_KEY_PREFIX + key);
-
-        if (hasKey) {
-            return true;
-        }
-
-        return false;
     }
 }

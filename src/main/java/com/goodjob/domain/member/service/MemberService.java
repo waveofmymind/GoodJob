@@ -6,7 +6,6 @@ import com.goodjob.domain.member.repository.MemberRepository;
 import com.goodjob.global.base.jwt.JwtProvider;
 import com.goodjob.global.base.rsData.RsData;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,15 +15,12 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-@Slf4j
 public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
     private final JwtProvider jwtProvider;
 
     private RsData canJoin(JoinRequestDto joinRequestDto) {
-        log.info("joinRequestDto= {}", joinRequestDto.toString());
-
         Optional<Member> opUsername = findByUsername(joinRequestDto.getUsername());
         Optional<Member> opNickname = findByNickname(joinRequestDto.getNickname());
         Optional<Member> opEmail = findByEmail(joinRequestDto.getEmail());
@@ -71,7 +67,6 @@ public class MemberService {
     public RsData genAccessToken(String username, String password) {
         Optional<Member> opMember = findByUsername(username);
 
-        // TODO: 널포인트 못잡는듯
         if (opMember.isEmpty()) {
             return RsData.of("F-1", "아이디 혹은 비밀번호가 틀립니다.");
         }
