@@ -39,6 +39,7 @@ public class BatchConfiguration {
     private final PlatformTransactionManager transactionManager;
     private final WontedStatistic wontedStatistic;
 
+    // 병렬처리 고민
     @Bean
     public Job job1(JobRepository jobRepository) {
         return new JobBuilder("job1", jobRepository)
@@ -178,7 +179,7 @@ public class BatchConfiguration {
             // 잡코리아 에서 받은것 사람인 동일내용 필터
             List<JobResponseDto> wonted = jobStatisticService.getFilterDto(filterWonted, filterSaram);
 
-            for (JobResponseDto dto : pureSaram) {
+            for (JobResponseDto dto : saram) {
                 try {
                     jobStatisticService.create(dto);
                 } catch (IllegalStateException e) {
