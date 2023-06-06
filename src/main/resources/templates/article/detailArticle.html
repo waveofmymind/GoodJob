@@ -23,7 +23,8 @@
             <form th:action="@{|/likes/like/article/${article.id}|}" method="post">
                 <!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
                 <button type="submit" class="bg-info border-gray-300 text-white px-4 py-1 rounded-md mr-2 hover:bg-blue-500">
-                    <i class="fa-regular fa-heart text-xl"></i><p class="text-xs mt-1">좋아요</p></i>
+                    <i class="fa-solid fa-heart text-xl" th:if="${article.isMemberLikesArticle(@rq.member)}"></i>
+                    <i class="fa-regular fa-heart text-xl" th:if="${!article.isMemberLikesArticle(@rq.member)}"></i><p class="text-xs mt-1">좋아요</p></i>
                 </button>
             </form>
         </div>
@@ -52,7 +53,8 @@
                             <form th:action="@{|/likes/like/comment/${comment.id}|}" method="post">
                                 <!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
                                 <button type="submit" class="flex bg-white border-gray-300 text-info px-3 py-1 rounded-md mr-2 hover:bg-gray-200">
-                                    <i class="fa-regular fa-heart text-xs"></i>
+                                    <i class="fa-regular fa-heart text-xs" th:if="${!comment.isMemberLikesComment(@rq.member)}"></i>
+                                    <i class="fa-solid fa-heart text-xs" th:if="${comment.isMemberLikesComment(@rq.member)}"></i>
                                     <p th:text="${#lists.size(comment.likesList)}" class="ml-1 text-xs"></p>
                                 </button>
                             </form>
@@ -91,7 +93,8 @@
                                         <form th:action="@{|/likes/like/subComment/${subComment.id}|}" method="post">
                                             <!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
                                             <button type="submit" class="flex bg-white border-gray-300 text-info px-3 py-1 rounded-md mr-2 hover:bg-gray-200">
-                                                <i class="fa-regular fa-heart text-xs"></i>
+                                                <i class="fa-regular fa-heart text-xs" th:if="${!subComment.isMemberLikesSubComment(@rq.member)}"></i>
+                                                <i class="fa-solid fa-heart text-xs" th:if="${subComment.isMemberLikesSubComment(@rq.member)}"></i>
                                                 <p th:text="${#lists.size(subComment.likesList)}" class="ml-1 text-xs"></p>
                                             </button>
                                         </form>

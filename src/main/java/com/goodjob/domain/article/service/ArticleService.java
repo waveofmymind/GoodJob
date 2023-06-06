@@ -173,6 +173,18 @@ public class ArticleService {
             return RsData.of("F-3", "삭제 권한이 없습니다.");
         }
 
+        List<Comment> commentList = article.getCommentList();
+
+        for(Comment comment : commentList) {
+            comment.setDeleted(true);
+
+            List<SubComment> subCommentList = comment.getSubCommentList();
+
+            for(SubComment subComment : subCommentList) {
+                subComment.setDeleted(true);
+            }
+        }
+
         article.setDeleted(true);
 
         articleRepository.save(article);
