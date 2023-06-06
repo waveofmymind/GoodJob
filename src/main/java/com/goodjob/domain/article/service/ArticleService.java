@@ -5,10 +5,8 @@ import com.goodjob.domain.article.dto.response.ArticleResponseDto;
 import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.article.mapper.ArticleMapper;
 import com.goodjob.domain.article.repository.ArticleRepository;
-import com.goodjob.domain.comment.dto.response.CommentResponseDto;
 import com.goodjob.domain.comment.entity.Comment;
 import com.goodjob.domain.member.entity.Member;
-import com.goodjob.domain.subComment.dto.response.SubCommentResponseDto;
 import com.goodjob.domain.subComment.entity.SubComment;
 import com.goodjob.global.base.rsData.RsData;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -31,10 +28,10 @@ public class ArticleService {
     private final ArticleMapper articleMapper;
 
 
-    public Page<ArticleResponseDto> findAll(int page, int sortCode) {
+    public Page<ArticleResponseDto> findAll(int page, int sortCode, String category, String query) {
         Pageable pageable = PageRequest.of(page, 10);
 
-        List<Article> articles = articleRepository.findQslBySortCode(sortCode);
+        List<Article> articles = articleRepository.findQslBySortCode(sortCode, category, query);
 
         List<ArticleResponseDto> articleResponseDtos = articles
                 .stream()
@@ -47,7 +44,7 @@ public class ArticleService {
     public Page<ArticleResponseDto> findTopFive() {
         Pageable pageable = PageRequest.of(0, 5);
 
-        List<Article> articles = articleRepository.findQslBySortCode(1);
+        List<Article> articles = articleRepository.findQslBySortCode(1, "제목", "");
 
         List<ArticleResponseDto> articleResponseDtos = articles
                 .stream()

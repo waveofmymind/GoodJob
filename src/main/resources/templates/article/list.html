@@ -4,11 +4,11 @@
 </head>
 <body>
     <main layout:fragment="main" class="container my-3 mx-auto">
-        <div class="container mx-auto p-8 w-2/3">
-            <div class="flex items-center justify-between h-16">
-                <h1 class="text-2xl font-bold">전체 게시글</h1>
-                <form class="flex flex-col gap-6 flex-grow">
-                    <div class="form-control pt-5">
+        <form th:action="@{/article/list}" method="get" id="toListForm">
+            <div class="container mx-auto p-8 w-2/3">
+                <div class="flex items-center justify-between h-16">
+                    <h1 class="text-2xl font-bold">전체 게시글</h1>
+                    <div class="form-control flex-grow">
                         <select name="sortCode" class="ml-2 select w-40 select-ghost select-sm"
                                 onchange="$(this).closest('form').submit();">
                             <option value="1">최신순</option>
@@ -21,52 +21,84 @@
                             }
                         </script>
                     </div>
-                </form>
-                <a th:href="@{/article/create}" class="ml-2 my-3 bg-info text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-500">게시글 작성</a>
+                    <a th:href="@{/article/create}" class="ml-2 my-3 bg-info text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-500">게시글 작성</a>
+                </div>
+                <ul class="container">
+                    <li class="bg-info text-white p-3 flex justify-between border-b h-11">
+                        <div class="text-sm flex-grow ">게시글 제목</div>
+                        <div class="text-sm w-16 text-center">글쓴이</div>
+                        <div class="text-sm  w-16 text-center">추천수</div>
+                        <div class="text-sm  w-16 text-center">댓글수</div>
+                        <div class="text-sm  w-16 text-center">조회수</div>
+                    </li>
+                    <li th:each="article, loop : ${paging}" class="bg-white p-3 flex justify-between border-b h-11">
+                        <a th:href="@{|/article/detail/${article.id}|}" th:text="${article.title}" class="text-sm flex-grow"></a>
+                        <p th:text="${article.member.username}" class="text-xs  w-16 text-center"></p>
+                        <div th:text="${#lists.size(article.likesList)}" class="text-xs  w-16 text-center"></div>
+                        <p th:text="${article.commentsCount}" class="text-xs  w-16 text-center"></p>
+                        <p th:text="${article.viewCount}" class="text-xs  w-16 text-center"></p>
+                    </li>
+
+                </ul>
+
             </div>
-            <ul class="container">
-                <li class="bg-info text-white p-3 flex justify-between border-b h-11">
-                    <div class="text-sm flex-grow ">게시글 제목</div>
-                    <div class="text-sm w-16 text-center">글쓴이</div>
-                    <div class="text-sm  w-16 text-center">추천수</div>
-                    <div class="text-sm  w-16 text-center">댓글수</div>
-                    <div class="text-sm  w-16 text-center">조회수</div>
-                </li>
-                <li th:each="article, loop : ${paging}" class="bg-white p-3 flex justify-between border-b h-11">
-                    <a th:href="@{|/article/detail/${article.id}|}" th:text="${article.title}" class="text-sm flex-grow"></a>
-                    <p th:text="${article.member.username}" class="text-xs  w-16 text-center"></p>
-                    <div th:text="${#lists.size(article.likesList)}" class="text-xs  w-16 text-center"></div>
-                    <p th:text="${article.commentsCount}" class="text-xs  w-16 text-center"></p>
-                    <p th:text="${article.viewCount}" class="text-xs  w-16 text-center"></p>
-                </li>
 
-            </ul>
-
-        </div>
-
-        <!-- 페이징처리 시작 -->
-        <div th:if="${!paging.isEmpty()}" class="flex justify-center mb-6">
-            <div class="flex w-1/2 justify-center">
-                <a class="page-link btn btn-sm btn-ghost grid-0 m-1" th:href="@{|?page=${paging.number-1}|}" th:classappend="${!paging.hasPrevious} ? 'invisible'">
-                    <span>&lt; 이전</span>
-                </a>
-                <a th:text="${page} + 1" class="page-link btn btn-sm btn-ghost m-1" th:href="@{|?page=${page}|}"
-                   th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
-                   th:if="${page >= paging.number / 10 * 10 and page <= paging.number/10*10 + 9}"
-                   th:classappend="${page == paging.number} ? 'btn-outline pointer-events-none'"></a>
-                <a class="page-link btn btn-sm btn-ghost m-1" th:href="@{|?page=${paging.number+1}|}" th:classappend="${!paging.hasNext()} ? 'invisible'">
-                    <span>다음 &gt;</span>
-                </a>
+            <!-- 페이징처리 시작 -->
+            <div th:if="${!paging.isEmpty()}" class="flex justify-center mb-6">
+                <div class="flex w-1/2 justify-center">
+                    <a class="page-link btn btn-sm btn-ghost grid-0 m-1" th:href="@{|?page=${paging.number-1}|}" th:classappend="${!paging.hasPrevious} ? 'invisible'">
+                        <span>&lt; 이전</span>
+                    </a>
+                    <a th:text="${page} + 1" class="page-link btn btn-sm btn-ghost m-1"
+                       th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+                       th:if="${page >= paging.number / 10 * 10 and page <= paging.number/10*10 + 9}"
+                       th:classappend="${page == paging.number} ? 'btn-outline pointer-events-none'"
+                       onclick="updatePageNumber()" th:attr="page=${page}"></a>
+                    <a class="page-link btn btn-sm btn-ghost m-1" th:href="@{|?page=${paging.number+1}|}" th:classappend="${!paging.hasNext()} ? 'invisible'">
+                        <span>다음 &gt;</span>
+                    </a>
+                </div>
             </div>
-        </div>
-        <!-- 페이징처리 끝 -->
 
-        <div class="flex justify-center">
-            <div class="flex items-center border border-gray-300 rounded-md px-4 py-2 w-96">
-                <input type="text" class="focus:outline-none flex-grow" placeholder="검색어를 입력하세요">
-                <a href="#" class="text-blue-500">🔍</a>
+
+            <!-- 페이징처리 끝 -->
+
+
+
+            <div class="flex justify-center">
+                <div class="border border-gray-300 rounded-md flex items-center">
+
+                    <select name="category" class="border-none py-2 px-3 rounded-l-md">
+                        <option value="제목">제목</option>
+                        <option value="내용">내용</option>
+                        <option value="제목+내용">제목+내용</option>
+                        <option value="글쓴이">글쓴이</option>
+                    </select>
+                    <script>
+                        if (params.category) {
+                            $(`select[name="category"]:last`).val(params.category[0]);
+                        }
+                    </script>
+                    <input name="query" placeholder="검색어를 입력하세요" class="ml-1 border-none px-3 flex-grow">
+                    <script>
+                        if(params.query) {
+                            $('input[name="query"]:last').val(params.query[0]);
+                        }
+                    </script>
+                    <button type="submit" class="text-blue-500 px-2 py-2">🔍</button>
+                </div>
             </div>
-        </div>
+        </form>
+        <script>
+            function updatePageNumber() {
+                const page = event.target.getAttribute('page');
+                const currentUrl = new URL(window.location.href);
+                currentUrl.searchParams.delete('page');
+                currentUrl.searchParams.set('page', page);
+                window.location.href = currentUrl.href;
+            }
+        </script>
+
     </main>
 </body>
 </html>

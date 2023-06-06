@@ -45,7 +45,7 @@ public class ArticleController {
 
     @GetMapping("/list")
     public String list(Model model, @RequestParam(value="page", defaultValue="0") int page, ToListForm toListForm) {
-        Page<ArticleResponseDto> paging = articleService.findAll(page, toListForm.sortCode);
+        Page<ArticleResponseDto> paging = articleService.findAll(page, toListForm.sortCode, toListForm.category, toListForm.query);
         model.addAttribute("paging", paging);
 
         return "article/list";
@@ -128,5 +128,8 @@ public class ArticleController {
     @Setter
     public static class ToListForm {
         private int sortCode = 1;
+        private String category = "제목";
+        private String query = "";
+
     }
 }
