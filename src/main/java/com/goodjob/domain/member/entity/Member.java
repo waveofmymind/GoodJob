@@ -20,7 +20,6 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor
-@ToString
 public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -44,9 +43,11 @@ public class Member extends BaseEntity {
     private String providerType; // 일반회원인지, 카카오로 가입한 회원인지, 구글로 가입한 회원인지
 
     @OneToMany(mappedBy = "member", cascade = {CascadeType.ALL})
+    @Builder.Default
     private List<Article> articles = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = {CascadeType.ALL})
+    @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 
     // 현재 회원이 가지고 있는 권한들을 List<GrantedAuthority> 형태로 리턴

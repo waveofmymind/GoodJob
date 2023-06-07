@@ -10,15 +10,11 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
 
 scheduler:
   cron:
-    job: "0 0 4 * * *"
-
-custom:
-  site:
-    baseUrl: https://waveofmymind.shop/
+    job: "0 0 10 * * *"
