@@ -65,15 +65,18 @@ public class MemberController {
     public String showLogin() {
         return "member/login";
     }
+
+    @GetMapping("/oauth2Login")
+    @PreAuthorize("isAnonymous()")
+    public String showOauth2Login() {
+
+        return "member/oauth2Login";
+    }
+
     @PostMapping("/login")
     @PreAuthorize("isAnonymous()")
-    public String login(@Valid LoginRequestDto loginRequestDto,
-                        BindingResult bindingResult) {
+    public String login(@Valid LoginRequestDto loginRequestDto) {
         log.debug("loginRequestDto= {}", loginRequestDto.toString());
-
-        if (bindingResult.hasErrors()) {
-            return "member/login";
-        }
 
         RsData loginRsData = memberService.genAccessToken(loginRequestDto.getUsername(), loginRequestDto.getPassword());
         log.debug("loginRsData ={}", loginRsData);
@@ -93,7 +96,7 @@ public class MemberController {
         return "redirect:/";
     }
 
-    // TODO: 삭제안됨.. 추후 수정
+    // TODO: 추후 수정
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("isAuthenticated()")
     public String delete(@PathVariable Long id) {
@@ -116,7 +119,6 @@ public class MemberController {
 
         accessTokenCookie = cookieUt.expireCookie(accessTokenCookie);
         usernameCookie = cookieUt.expireCookie(usernameCookie);
-        // 로그레벨조정 debug.
 
         rq.setCookie(accessTokenCookie);
         rq.setCookie(usernameCookie);

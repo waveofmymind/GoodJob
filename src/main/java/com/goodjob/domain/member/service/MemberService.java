@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
@@ -57,11 +58,40 @@ public class MemberService {
                 .nickname(joinRequestDto.getNickname())
                 .email(joinRequestDto.getEmail())
                 .isDeleted(false)
+                .providerType("GOODJOB")
                 .build();
 
         memberRepository.save(member);
 
         return RsData.of("S-1", "%s님의 회원가입이 완료되었습니다.".formatted(joinRequestDto.getNickname()), member);
+    }
+
+    // 일반회원가입, 소셜로그인 회원가입 나눠 처리
+    @Transactional
+    public RsData<Member> socialJoin(String providerType, String username, String password) {
+        if (findByUsername(username).isPresent()) {
+            return RsData.of("F-1", "해당 아이디(%s)는 이미 사용중입니다.".formatted(username));
+        }
+
+        if (StringUtils.hasText(password)) {
+            password = passwordEncoder.encode(password);
+        }
+
+        // TODO: oauth2 로그인 이후 추가정보입력
+
+//        Member member = Member
+//                .builder()
+//                .username(username)
+//                .password(password)
+//                .nickname()
+//                .email(joinRequestDto.getEmail())
+//                .isDeleted(false)
+//                .providerType(providerType)
+//                .build();
+
+//        memberRepository.save(member);
+
+        return null;
     }
 
     public RsData genAccessToken(String username, String password) {
@@ -96,10 +126,6 @@ public class MemberService {
         return memberRepository.findByUsername(username);
     }
 
-    public void delete(Long id) {
-        memberRepository.deleteById(id);
-    }
-
     public Optional<Member> findById(Long id) {
         return memberRepository.findById(id);
     }
@@ -107,4 +133,22 @@ public class MemberService {
     public Optional<Member> findByNickName(String nickname) {
         return memberRepository.findByNickname(nickname);
     }
+
+    @Transactional
+    public void delete(Long id) {
+        memberRepository.deleteById(id);
+    }
+
+    // 소셜 로그인할때마다 동작
+    public RsData<Member> whenSocialLogin(String providerType, String username) {
+        Optional<Member> opMember = findByUsername(username);
+
+        if (opMember.isPresent()) {
+            return RsData.of("S-1", "로그인 되었습니다.", opMember.get());
+        }
+
+        // TODO: 닉네임을 추가 폼을 통해 받아옴.
+        return socialJoin(providerType, username, ""); // 최초 1회 실행
+    }
 }
+

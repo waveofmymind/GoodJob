@@ -41,6 +41,8 @@ public class Member extends BaseEntity {
 
     private boolean isDeleted;
 
+    private String providerType; // 일반회원인지, 카카오로 가입한 회원인지, 구글로 가입한 회원인지
+
     @OneToMany(mappedBy = "member", cascade = {CascadeType.ALL})
     private List<Article> articles = new ArrayList<>();
 

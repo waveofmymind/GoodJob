@@ -21,6 +21,26 @@ spring:
     basename: message/messages
     encoding: UTF-8
 
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            clientId: ENC(ul/6POjcQljJQlL38MpYWmXCJDMgudx31KPb2M/kVJ4UxV+IfFD5+VddkvtbaptM)
+            scope:
+            client-name: Kakao
+            authorization-grant-type: authorization_code
+            redirect-uri: '${custom.site.baseUrl}/member/login'
+#            redirect-uri: '${custom.site.baseUrl}/login/oauth2/code/kakao'
+            client-authentication-method: POST
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+
+
 jasypt:
   encryptor:
     password: ${JASYPT_PASSWORD}
@@ -42,8 +62,9 @@ management:
 
 accessKey:
   saramin: ENC(vAiGCHWxA7xlfVU04DkiksG8V05r4NKVzDoqYA8WbkmF7O6g6pZ/RxidyvQ4YppZd9suBjOz0lHSBVSFQ0NqkA==)
+
 custom:
   jwt:
     secretKey: ENC(td8jcP/eOBMP9/6Nph0R0lmIzC5mhwk5ln46rp4GVt1mfwzI+J9YkA/bnu9dGxkzxRZk9k2dTWGmNUL2BLxVwQ==)
-
-
+  site:
+    baseUrl: http://localhost
