@@ -17,6 +17,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/member")
@@ -43,13 +45,10 @@ public class MemberController {
             return "member/join";
         }
 
-//        if (!joinRequestDto.getPassword().equals(joinRequestDto.getConfirmPassword())) {
-//            bindingResult.rejectValue("passwordInCorrect",
-//                    "2개의 패스워드가 일치하지 않습니다.");
-//            return "member/join";
-//        }
-
-        // TODO: 중복확인 셋다 안되면 안넘어가게?
+        if (!joinRequestDto.getPassword().equals(joinRequestDto.getConfirmPassword())) {
+            bindingResult.rejectValue("confirmPassword", "", "패스워드가 일치하지 않습니다.");
+            return "member/join";
+        }
 
         RsData<Member> joinRsData = memberService.join(joinRequestDto);
         log.info("joinRsData ={}", joinRsData.toString());
@@ -57,7 +56,7 @@ public class MemberController {
             return rq.historyBack(joinRsData);
         }
 
-        return rq.redirectWithMsg("member/login", joinRsData);
+        return rq.redirectWithMsg("/member/login", joinRsData);
     }
 
     @GetMapping("/login")
@@ -124,10 +123,44 @@ public class MemberController {
 
         accessTokenCookie = cookieUt.expireCookie(accessTokenCookie);
         usernameCookie = cookieUt.expireCookie(usernameCookie);
+        // 로그레벨조정 debug.
         log.info("만료된쿠키= username= {}, accessToken= {}", usernameCookie.getMaxAge(), accessTokenCookie.getMaxAge());
 
         rq.setCookie(accessTokenCookie);
         rq.setCookie(usernameCookie);
         return rq.redirectWithMsg("/", "로그아웃 되었습니다.");
+    }
+
+    @PostMapping("/join/valid/username")
+    @ResponseBody
+    public RsData<String> checkDuplicateUsername(String username) {
+        Optional<Member> opMember = memberService.findByUsername(username);
+        if (opMember.isPresent()) {
+            return RsData.of("F-1", "이미 사용중인 아이디입니다.");
+        }
+
+        return RsData.of("S-1", "사용 가능한 아이디입니다.");
+    }
+
+    @PostMapping("/join/valid/nickname")
+    @ResponseBody
+    public RsData checkDuplicateNickname(String nickname) {
+        Optional<Member> opMember = memberService.findByNickName(nickname);
+        if (opMember.isPresent()) {
+            return RsData.of("F-1", "이미 사용중인 닉네임입니다.");
+        }
+
+        return RsData.of("S-1", "사용 가능한 닉네임입니다.");
+    }
+
+    @PostMapping("/join/valid/email")
+    @ResponseBody
+    public RsData checkDuplicateEmail(String email) {
+        Optional<Member> opMember = memberService.findByEmail(email);
+        if (opMember.isPresent()) {
+            return RsData.of("F-1", "이미 사용중인 이메일입니다.");
+        }
+
+        return RsData.of("S-1", "사용 가능한 이메일입니다.");
     }
 }

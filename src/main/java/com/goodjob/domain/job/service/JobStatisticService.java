@@ -4,6 +4,7 @@ import com.goodjob.domain.job.dto.JobResponseDto;
 import com.goodjob.domain.job.entity.JobStatistic;
 import com.goodjob.domain.job.repository.JobStatisticRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class JobStatisticService {
@@ -32,12 +34,12 @@ public class JobStatisticService {
 
             jobStatisticRepository.save(company);
         } catch (IllegalStateException e) {
-            e.printStackTrace();
+            log.debug("중복데이터");
         }
 
 
     }
-
+// insert into on duplicate key update
     private void validateDuplicateCompany(JobResponseDto jobResponseDto) {
         List<JobStatistic> companyList = jobStatisticRepository.findBySubjectAndUrl
                 (jobResponseDto.getSubject(), jobResponseDto.getUrl());
@@ -48,6 +50,7 @@ public class JobStatisticService {
     }
 
 
+    // update
     public List<JobResponseDto> getFilterDto(List<JobResponseDto> mainDto, List<JobResponseDto> filterDto) {
         return mainDto.stream().filter(md -> filterDto.stream().noneMatch(
                 fd -> md.getSubject().equals(fd.getSubject()) &&
@@ -82,6 +85,17 @@ public class JobStatisticService {
         sorts.add(Sort.Order.desc("startDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
         return jobStatisticRepository.findByCareerAndSectorCode(careerCode, sectorNum, pageable);
+    }
+
+
+    public void delete(JobStatistic jobStatistic) {
+        jobStatisticRepository.delete(jobStatistic);
+    }
+
+
+
+    public List<JobStatistic> getAll() {
+        return jobStatisticRepository.findAll();
     }
 
 //    public RsData<List<JobStatistic>> getList(JobRequestForm requestForm) {

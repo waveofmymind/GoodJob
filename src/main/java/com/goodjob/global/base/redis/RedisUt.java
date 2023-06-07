@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class RedisUt {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
-    private final String REDIS_KEY_PREFIX = "LOGOUT_";
+    private final String REDIS_KEY_PREFIX = "LOGOUT_"; // prefix ㄴㄴ
 
     // 리프레시 토큰 생성
     public String genRefreshToken() {
@@ -50,6 +50,7 @@ public class RedisUt {
         stringRedisTemplate.delete(logoutKey);
     }
 
+    // 용어. 로그아웃유저처리.
     public void setBlackList(String key) {
         String logoutKey = REDIS_KEY_PREFIX + key;
         stringRedisTemplate.opsForValue().set(logoutKey, "logout user", Duration.ofMillis(JwtProvider.TOKEN_VALIDATION_SECOND));

@@ -22,6 +22,6 @@ public class Job {
     @JsonProperty("posting-timestamp")
     private String postingTimestamp;
 
-    @JsonProperty("expiration-date")
+    @JsonProperty("expiration-timestamp")
     private String expirationDate;
 }

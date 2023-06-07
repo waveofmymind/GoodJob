@@ -29,7 +29,7 @@ openai:
 
 scheduler:
   cron:
-    job: "0 */5 * * * *"
+    job: "0 0 4 * * *"
 
 management:
   endpoints:
