@@ -54,9 +54,5 @@ public class Article extends BaseEntity {
     @Setter
     private Long commentsCount;
 
-    @Setter
-    private Long likesCount;
-
-
     // TODO: 의존관계
 }

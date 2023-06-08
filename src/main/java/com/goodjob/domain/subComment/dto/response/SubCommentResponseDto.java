@@ -24,4 +24,14 @@ public class SubCommentResponseDto {
 
    private boolean isDeleted;
    private List<LikesResponseDto> likesList;
+
+   public boolean isMemberLikesSubComment(Member member) {
+      for(LikesResponseDto likesResponseDto : likesList) {
+         if(likesResponseDto.getMember().getId() == member.getId()) {
+            return true;
+         }
+      }
+
+      return false;
+   }
 }

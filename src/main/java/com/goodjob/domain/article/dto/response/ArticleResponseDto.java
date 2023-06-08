@@ -4,6 +4,7 @@ import com.goodjob.domain.comment.dto.response.CommentResponseDto;
 import com.goodjob.domain.comment.entity.Comment;
 import com.goodjob.domain.likes.dto.response.LikesResponseDto;
 import com.goodjob.domain.likes.entity.Likes;
+import com.goodjob.domain.likes.repository.LikesRepository;
 import com.goodjob.domain.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,15 @@ public class ArticleResponseDto {
     private List<CommentResponseDto> commentList;
 
     private Long commentsCount;
-    private Long likesCount;
     private Member member;
+
+    public boolean isMemberLikesArticle(Member member) {
+        for(LikesResponseDto likesResponseDto : likesList) {
+            if(likesResponseDto.getMember().getId() == member.getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

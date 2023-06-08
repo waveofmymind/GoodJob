@@ -1,5 +1,9 @@
 package com.goodjob.domain.subComment.controller;
 
+import com.goodjob.domain.article.dto.response.ArticleResponseDto;
+import com.goodjob.domain.article.service.ArticleService;
+import com.goodjob.domain.comment.dto.request.CommentRequestDto;
+import com.goodjob.domain.comment.dto.response.CommentResponseDto;
 import com.goodjob.domain.comment.entity.Comment;
 import com.goodjob.domain.comment.service.CommentService;
 import com.goodjob.domain.subComment.dto.request.SubCommentRequestDto;
@@ -26,10 +30,11 @@ import java.security.Principal;
 public class SubCommentController {
     private final Rq rq;
     private final SubCommentService subCommentService;
-    private final CommentService commentService;
+
 
     @PostMapping("/create/{id}")
-    public String createSubComment(Model model, @PathVariable("id") Long id, @Valid SubCommentRequestDto subCommentRequestDto, BindingResult bindingResult) {
+    public String createSubComment(Model model, @PathVariable("id") Long id, @Valid SubCommentRequestDto subCommentRequestDto) {
+
         RsData<SubComment> subCommentRsData = subCommentService.createSubComment(rq.getMember(), id, subCommentRequestDto);
 
         if(subCommentRsData.isFail()) {
@@ -40,11 +45,8 @@ public class SubCommentController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateSubComment(@Valid SubCommentRequestDto subCommentRequestDto, BindingResult bindingResult,
-                                   @PathVariable("id") Long id, Principal principal) {
-        if (bindingResult.hasErrors()) {
-            return "article/detailArticle";
-        }
+    public String updateSubComment(@Valid SubCommentRequestDto subCommentRequestDto, @PathVariable("id") Long id) {
+
 
         RsData<SubComment> subCommentRsData = subCommentService.updateComment(rq.getMember(), id, subCommentRequestDto);
 
@@ -56,7 +58,7 @@ public class SubCommentController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteSubComment(Principal principal, @PathVariable("id") Long id) {
+    public String deleteSubComment(@PathVariable("id") Long id) {
         RsData<SubComment> subCommentRsData = subCommentService.deleteSubComment(rq.getMember(), id);
 
         return rq.redirectWithMsg("/article/detail/%s".formatted(subCommentRsData.getData().getComment().getArticle().getId()), subCommentRsData);
