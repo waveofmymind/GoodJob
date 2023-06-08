@@ -10,6 +10,7 @@ import java.util.List;
 public interface JobStatisticRepository extends JpaRepository<JobStatistic, Long> {
     List<JobStatistic> findBySubjectAndUrl(String subject, String url);
     Page<JobStatistic> findByCareerAndSectorCode(int career, int sectorCode, Pageable pageable);
+    Page<JobStatistic> findBySectorCode(int sectorCoed, Pageable pageable);
     List<JobStatistic> findBySectorCode(int sectorCode);
     Page<JobStatistic> findBySubjectContaining(String keyword,Pageable pageable);
 }

@@ -8,10 +8,10 @@
     <table class="table w-full">
       <thead class="text-slate-200 text-center">
       <tr>
-        <th scope="col">번호</th>
-        <th scope="col">제목</th>
-        <th scope="col"> 공고시작일 </th>
-        <th scope="col"> 공고 마감일 </th>
+        <th scope="col" class="text-cyan-500">번호</th>
+        <th scope="col" class="text-cyan-500">제목</th>
+        <th scope="col" class="text-cyan-500"> 공고시작일 </th>
+        <th scope="col" class="text-cyan-500"> 공고 마감일 </th>
       </tr>
       </thead>
 
@@ -25,17 +25,17 @@
         <td>
           <a th:href="@{|${jobStatistic.url}|}"
              th:text="${jobStatistic.subject}"
-             class="text-white hover:text-gray-400"></a>
+             class="text-cyan-500"></a>
         </td>
         <!--        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">-->
         <!--          <div th:text="${jobStatistic. 아직 미정}"></div>-->
         <!--        </td>-->
         <!-- 작성일 -->
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-          <div th:text="${#temporals.format(jobStatistic.startDate, 'yyyy-MM-dd HH:mm')}"></div>
+          <div th:text="${jobStatistic.startDate}"></div>
         </td>
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-          <div th:text="${#temporals.format(jobStatistic.deadLine, 'yyyy-MM-dd HH:mm')}"></div>
+          <div th:text="${jobStatistic.deadLine}"></div>
         </td>
       </tr>
       </tbody>
