@@ -14,6 +14,8 @@ import com.goodjob.global.base.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class LikesService {
@@ -29,10 +31,22 @@ public class LikesService {
             return articleRsData;
         }
 
+        Article article = articleRsData.getData();
+
+        Optional<Likes> likesOp = likesRepository.findByArticleAndMember(article, member);
+
+        if(!likesOp.isEmpty()) {
+            return RsData.of("F-1", "이미 좋아요 표시를 한 게시글입니다.");
+        }
+
+        if(article.getMember().getId() == member.getId()) {
+            return RsData.of("F-2", "본인의 게시글에는 좋아요 표시를 할 수 없습니다.");
+        }
+
         Likes likes = Likes
                 .builder()
                 .member(member)
-                .article(articleRsData.getData())
+                .article(article)
                 .build();
 
         likesRepository.save(likes);
@@ -48,6 +62,16 @@ public class LikesService {
         }
 
         Comment comment = commentRsData.getData();
+
+        Optional<Likes> likesOp = likesRepository.findByCommentAndMember(comment, member);
+
+        if(!likesOp.isEmpty()) {
+            return RsData.of("F-1", "이미 좋아요 표시를 한 댓글입니다.");
+        }
+
+        if(comment.getMember().getId() == member.getId()) {
+            return RsData.of("F-2", "본인의 댓글에는 좋아요 표시를 할 수 없습니다.");
+        }
 
         Likes likes = Likes
                 .builder()
@@ -67,10 +91,22 @@ public class LikesService {
             return subCommentRsData;
         }
 
+        SubComment subComment = subCommentRsData.getData();
+
+        Optional<Likes> likesOp = likesRepository.findBySubCommentAndMember(subComment, member);
+
+        if(!likesOp.isEmpty()) {
+            return RsData.of("F-1", "이미 좋아요 표시를 한 답글입니다.");
+        }
+
+        if(subComment.getMember().getId() == member.getId()) {
+            return RsData.of("F-2", "본인의 답글에는 좋아요 표시를 할 수 없습니다.");
+        }
+
         Likes likes = Likes
                 .builder()
                 .member(member)
-                .subComment(subCommentRsData.getData())
+                .subComment(subComment)
                 .build();
 
         likesRepository.save(likes);

@@ -5,10 +5,8 @@ import com.goodjob.domain.article.dto.response.ArticleResponseDto;
 import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.article.mapper.ArticleMapper;
 import com.goodjob.domain.article.repository.ArticleRepository;
-import com.goodjob.domain.comment.dto.response.CommentResponseDto;
 import com.goodjob.domain.comment.entity.Comment;
 import com.goodjob.domain.member.entity.Member;
-import com.goodjob.domain.subComment.dto.response.SubCommentResponseDto;
 import com.goodjob.domain.subComment.entity.SubComment;
 import com.goodjob.global.base.rsData.RsData;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -31,15 +28,10 @@ public class ArticleService {
     private final ArticleMapper articleMapper;
 
 
-    public Page<ArticleResponseDto> findAll(int page, int sortCode) {
+    public Page<ArticleResponseDto> findAll(int page, int sortCode, String category, String query) {
         Pageable pageable = PageRequest.of(page, 10);
 
-        List<Article> articles = articleRepository.findQslBySortCode(sortCode);
-
-        for(Article article : articles) {
-            countCommentsAndSubComments(article);
-            countLikes(article);
-        }
+        List<Article> articles = articleRepository.findQslBySortCode(sortCode, category, query);
 
         List<ArticleResponseDto> articleResponseDtos = articles
                 .stream()
@@ -52,12 +44,7 @@ public class ArticleService {
     public Page<ArticleResponseDto> findTopFive() {
         Pageable pageable = PageRequest.of(0, 5);
 
-        List<Article> articles = articleRepository.findQslBySortCode(1);
-
-        for(Article article : articles) {
-            countCommentsAndSubComments(article);
-            countLikes(article);
-        }
+        List<Article> articles = articleRepository.findQslBySortCode(1, "제목", "");
 
         List<ArticleResponseDto> articleResponseDtos = articles
                 .stream()
@@ -65,10 +52,6 @@ public class ArticleService {
                 .collect(Collectors.toList());
 
         return convertToPage(articleResponseDtos, pageable);
-    }
-
-    private void countLikes(Article article) {
-        article.setLikesCount(article.getLikesList().stream().count());
     }
 
     private Page<ArticleResponseDto> convertToPage(List<ArticleResponseDto> articles, Pageable pageable) {
@@ -96,6 +79,8 @@ public class ArticleService {
         }
 
         article.setCommentsCount(sum);
+        articleRepository.save(article);
+
     }
 
     public RsData getArticleResponseDto(Long id) {
@@ -115,7 +100,6 @@ public class ArticleService {
         Long viewCount = article.getViewCount();
         article.setViewCount(viewCount + 1);
         countCommentsAndSubComments(article);
-        articleRepository.save(article);
         ArticleResponseDto articleResponseDto = articleMapper.toDto(article);
         return articleResponseDto;
     }
@@ -138,6 +122,7 @@ public class ArticleService {
 
     public void createArticle(Member author, ArticleRequestDto articleRequestDto) {
 
+        System.out.println(articleRequestDto.getHashTagStr());
         Article article = Article
                 .builder()
                 .member(author)
@@ -145,6 +130,7 @@ public class ArticleService {
                 .title(articleRequestDto.getTitle())
                 .content(articleRequestDto.getContent())
                 .viewCount(0L)
+                .commentsCount(0L)
                 .isDeleted(false)
                 .likesList(null)
                 .build();
@@ -186,6 +172,18 @@ public class ArticleService {
 
         if(article.getMember().getId() != author.getId()) {
             return RsData.of("F-3", "삭제 권한이 없습니다.");
+        }
+
+        List<Comment> commentList = article.getCommentList();
+
+        for(Comment comment : commentList) {
+            comment.setDeleted(true);
+
+            List<SubComment> subCommentList = comment.getSubCommentList();
+
+            for(SubComment subComment : subCommentList) {
+                subComment.setDeleted(true);
+            }
         }
 
         article.setDeleted(true);

@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Getter
 @Setter
 public class ArticleRequestDto {
@@ -14,4 +17,6 @@ public class ArticleRequestDto {
     private String title;
     @NotBlank(message="내용을 작성해주셔야 합니다.")
     private String content;
+
+    private String hashTagStr;
 }

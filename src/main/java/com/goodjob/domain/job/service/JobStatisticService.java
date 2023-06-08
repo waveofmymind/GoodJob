@@ -39,7 +39,7 @@ public class JobStatisticService {
 
 
     }
-// insert into on duplicate key update
+
     private void validateDuplicateCompany(JobResponseDto jobResponseDto) {
         List<JobStatistic> companyList = jobStatisticRepository.findBySubjectAndUrl
                 (jobResponseDto.getSubject(), jobResponseDto.getUrl());
@@ -84,6 +84,9 @@ public class JobStatisticService {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("startDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        if (careerCode == -1) {
+            return jobStatisticRepository.findBySectorCode(sectorNum, pageable);
+        }
         return jobStatisticRepository.findByCareerAndSectorCode(careerCode, sectorNum, pageable);
     }
 
