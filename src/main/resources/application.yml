@@ -32,10 +32,16 @@ scheduler:
     job: "0 0 4 * * *"
 
 management:
+  endpoint:
+    health:
+      enabled: true
+    info:
+      enabled: true
   endpoints:
     web:
       exposure:
-        include: "prometheus"
+        include: prometheus,info,health
+    enabled-by-default: false
   metrics:
     tags:
       application: ${spring.application.name}
