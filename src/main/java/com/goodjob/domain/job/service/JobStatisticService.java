@@ -39,7 +39,7 @@ public class JobStatisticService {
 
 
     }
-
+// insert into on duplicate key update
     private void validateDuplicateCompany(JobResponseDto jobResponseDto) {
         List<JobStatistic> companyList = jobStatisticRepository.findBySubjectAndUrl
                 (jobResponseDto.getSubject(), jobResponseDto.getUrl());
@@ -50,6 +50,7 @@ public class JobStatisticService {
     }
 
 
+    // update
     public List<JobResponseDto> getFilterDto(List<JobResponseDto> mainDto, List<JobResponseDto> filterDto) {
         return mainDto.stream().filter(md -> filterDto.stream().noneMatch(
                 fd -> md.getSubject().equals(fd.getSubject()) &&
