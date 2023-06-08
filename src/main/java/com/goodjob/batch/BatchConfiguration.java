@@ -4,7 +4,6 @@ import com.goodjob.domain.job.api.SaraminApiManager;
 import com.goodjob.domain.job.crawling.WontedStatistic;
 import com.goodjob.domain.job.dto.JobResponseDto;
 import com.goodjob.domain.job.entity.JobStatistic;
-
 import com.goodjob.domain.job.service.JobStatisticService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +47,7 @@ public class BatchConfiguration {
                 .next(step3(jobRepository)) // 원티드 프론트
                 .next(step4(jobRepository)) // 원티드 풀스택
                 .next(step5(jobRepository)) // 중복된 값 필터하고 db저장
+//                .start(chunkSaram(jobRepository)) // 청크
                 .next(step6(jobRepository)) // 기존 값들 초기화
                 .next(step7(jobRepository)) // 데이터 삭제
                 .build();
@@ -252,30 +252,53 @@ public class BatchConfiguration {
             return RepeatStatus.FINISHED;
         };
     }
-}
 
 
 
 
-/**
- * Chunk Processing
- * @return
- */
-
+    /**
+     * Chunk Processing
+     * @return
+     *
+     * 백엔드 84, 프론트 92, 풀스택 2232
+     */
+//    @Bean
+//    @JobScope
+//    public Step chunkSaram(JobRepository repository) {
+//        return new StepBuilder("chunk", repository)
+//                .<JobResponseDto,JobResponseDto>chunk(1000, transactionManager)
+//                .reader(saraminReader())
+//                .processor(process())
+//                .writer(saraminWriter()).build();
+//    }
+//
 //    @Bean
 //    @StepScope
 //    public ItemReader<JobResponseDto> saraminReader() {
 //        // 검색일 최소, 최대 값 설정으로 이후 값만 받아오기
-//        saramin.saraminStatistic();
-//        List<JobResponseDto> jobResponseDtos = saramin.getJobResponseDtos();
+//        SaraminApiManager.saraminStatistic(84);
+//        SaraminApiManager.saraminStatistic(92);
+//        SaraminApiManager.saraminStatistic(2232);
+//        List<JobResponseDto> jobResponseDtos = SaraminApiManager.getJobResponseDtos();
 //        return new ListItemReader<>(jobResponseDtos);
 //    }
 //
 //    @Bean
 //    @StepScope
-//    public ItemProcessor<JobResponseDto, JobResponseDto> saraminProcessor() {
-//
-//        return
+//    public JobProcess process() {
+//        return new JobProcess();
 //    }
+//
+//    @Bean
+//    @StepScope
+//    public ItemWriter<JobResponseDto> saraminWriter() {
+//        return dto -> dto.getItems().forEach(jobStatisticService::create);
+//    }
+}
+
+
+
+
+
 
 
