@@ -122,6 +122,7 @@ public class ArticleService {
 
     public void createArticle(Member author, ArticleRequestDto articleRequestDto) {
 
+        System.out.println(articleRequestDto.getHashTagStr());
         Article article = Article
                 .builder()
                 .member(author)

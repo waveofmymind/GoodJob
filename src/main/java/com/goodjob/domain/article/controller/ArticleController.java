@@ -86,7 +86,7 @@ public class ArticleController {
 
 
     @GetMapping("/update/{id}")
-    public String updateArticle(ArticleRequestDto articleRequestDto, @PathVariable("id") Long id, Principal principal) {
+    public String updateArticle(ArticleRequestDto articleRequestDto, @PathVariable("id") Long id) {
         RsData<ArticleResponseDto> articleResponseDtoRsData = articleService.getArticleResponseDto(id);
 
         if(articleResponseDtoRsData.isFail()) {
@@ -100,7 +100,7 @@ public class ArticleController {
 
     @PostMapping("/update/{id}")
     public String updateArticle(@Valid ArticleRequestDto articleRequestDto, BindingResult bindingResult,
-                                 Principal principal, @PathVariable("id") Long id) {
+                                 @PathVariable("id") Long id) {
         if (bindingResult.hasErrors()) {
             return "article/articleForm";
         }
@@ -115,7 +115,7 @@ public class ArticleController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteArticle(Principal principal, @PathVariable("id") Long id) {
+    public String deleteArticle(@PathVariable("id") Long id) {
         RsData<Article> articleRsData = articleService.deleteArticle(rq.getMember(), id);
 
         if(articleRsData.isFail()) {
