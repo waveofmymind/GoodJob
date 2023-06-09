@@ -1,12 +1,13 @@
 package com.goodjob.domain.article.dto.request;
 
+import com.goodjob.domain.hashTag.dto.response.HashTagResponseDto;
+import com.goodjob.domain.hashTag.entity.HashTag;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -19,4 +20,11 @@ public class ArticleRequestDto {
     private String content;
 
     private String hashTagStr;
+    private List<HashTagResponseDto> hashTags = new ArrayList<>();
+
+    public void setHashTags(List<HashTagResponseDto> hashTags) {
+        for(HashTagResponseDto hashTag : hashTags) {
+            this.hashTags.add(hashTag);
+        }
+    }
 }

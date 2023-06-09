@@ -10,7 +10,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface LikesMapper {
-    ArticleResponseDto toDto(Article article);
 
     List<CommentResponseDto> toCommentDtoList(List<Comment> commentList);
 }

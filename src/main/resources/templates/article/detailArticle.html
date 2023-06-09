@@ -19,16 +19,23 @@
         </div>
         <hr class="border-info mb-4">
         <p class="text-sm min-h-[200px] pl-3" style="word-break: break-word;" th:text="${article.content}"></p>
+        <div class="flex flex-wrap">
+            <th:block th:each="hashTag : ${article.hashTagList}">
+                <a th:href="@{${hashTag.keyword.listUrl}}" class="bg-blue-200 px-2 py-1 rounded-full m-2">
+                    #[[${hashTag.keyword.content}]]
+                </a>
+            </th:block>
+        </div>
         <div class="flex justify-center">
             <form th:action="@{|/likes/like/article/${article.id}|}" method="post">
                 <!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
-                <button type="submit" class="bg-info border-gray-300 text-white px-4 py-1 rounded-md mr-2 hover:bg-blue-500">
+                <button type="submit" class="bg-info border-gray-300 text-white px-4 py-1 mt-4 rounded-md mr-2 hover:bg-blue-500">
                     <i class="fa-solid fa-heart text-xl" th:if="${article.isMemberLikesArticle(@rq.member)}"></i>
                     <i class="fa-regular fa-heart text-xl" th:if="${!article.isMemberLikesArticle(@rq.member)}"></i><p class="text-xs mt-1">좋아요</p></i>
                 </button>
             </form>
         </div>
-        <hr class="border-info mt-4 mb-4">
+        <hr class="border-info mt-1 mb-4">
         <!--댓글 등록-->
         <form th:action="@{|/comment/create/${article.id}|}" th:object="${commentRequestDto}" method="post" class="flex mb-4 justify-between items-start" onsubmit="CommentRequestForm__submit(this); return false;">
             <!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
