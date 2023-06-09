@@ -7,7 +7,6 @@ import com.goodjob.domain.member.service.MemberService;
 import com.goodjob.global.base.redis.RedisUt;
 import com.goodjob.global.base.rq.Rq;
 import com.goodjob.global.base.rsData.RsData;
-import jakarta.servlet.http.Cookie;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +38,6 @@ public class MemberController {
     public String join(@Valid JoinRequestDto joinRequestDto,
                        BindingResult bindingResult) {
         // TODO: 중복확인로직 보완
-        log.debug("joinRequestDto ={}", joinRequestDto);
 
         if (bindingResult.hasErrors()) {
             return "member/join";
@@ -51,7 +49,6 @@ public class MemberController {
         }
 
         RsData<Member> joinRsData = memberService.join(joinRequestDto);
-        log.debug("joinRsData ={}", joinRsData.toString());
         if (joinRsData.isFail()) {
             return rq.historyBack(joinRsData);
         }
@@ -75,17 +72,17 @@ public class MemberController {
     @PostMapping("/login")
     @PreAuthorize("isAnonymous()")
     public String login(@Valid LoginRequestDto loginRequestDto) {
-        log.info("loginRequestDto= {}", loginRequestDto.toString());
+//        log.info("loginRequestDto= {}", loginRequestDto.toString());
 
         RsData loginRsData = memberService.genAccessToken(loginRequestDto.getUsername(), loginRequestDto.getPassword());
-        log.info("resultCode ={}", loginRsData.getResultCode());
+//        log.info("resultCode ={}", loginRsData.getResultCode());
 
         if (loginRsData.isFail()) {
             return rq.historyBack(loginRsData);
         }
 
         // TODO: 리팩토링
-        rq.setCookie("accessToken", (String) loginRsData.getData());
+//        rq.setCookie("accessToken", (String) loginRsData.getData());
 
         return rq.redirectWithMsg("/", loginRsData);
     }
@@ -109,8 +106,6 @@ public class MemberController {
         redisUt.deleteToken(username);
         // 쿠키삭제
         rq.expireCookie("accessToken");
-
-        log.info("로그아웃 들어옴");
 
         return rq.redirectWithMsg("/", "로그아웃 되었습니다.");
     }

@@ -10,7 +10,6 @@ import com.goodjob.global.util.Ut;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
@@ -20,7 +19,6 @@ import java.util.Map;
 
 @Component
 @RequestScope
-@Slf4j
 public class Rq {
     private final JwtProvider jwtProvider;
     private final CookieUt cookieUt;
@@ -39,16 +37,7 @@ public class Rq {
         this.req = req;
         this.resp = resp;
 
-        // 현재 로그인한 회원의 인증정보를 가져옴
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        log.info("authentication= {}", authentication);
-//        if (authentication.getPrincipal() instanceof User) {
-//            this.user = (User) authentication.getPrincipal();
-//        } else {
-//            this.user = null;
-//        }
-
-        // jwt 토큰에서 사용자 정보 가져오기
+        // jwt 토큰에서 회원의 인증정보를 가져옴
         Cookie accessToken = cookieUt.getCookie(req, "accessToken");
         if (accessToken != null) {
             String token = accessToken.getValue();
@@ -58,7 +47,6 @@ public class Rq {
         } else {
             this.user = null;
         }
-        log.info("user= {}", user);
     }
 
     // 로그인 되어 있는지 체크

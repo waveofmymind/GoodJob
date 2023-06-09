@@ -67,7 +67,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 // 새로운 액세스 토큰 발급
                 Member member = memberService.findByUsername(username).orElseThrow();
                 String newAccessToken = jwtProvider.genToken(member.toClaims());
-                log.debug("새로 발급된 accessToken ={}", newAccessToken);
+                log.info("새로 발급된 accessToken ={}", newAccessToken);
 
                 response.addCookie(cookieUt.createCookie("accessToken", newAccessToken));
                 response.addCookie(cookieUt.createCookie("id", username));
@@ -80,7 +80,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     // 강제로 로그인 처리하는 메서드 (로그인한 사용자의 정보를 가져옴)
     private void forceAuthentication(Member member) {
         User user = new User(member.getUsername(), member.getPassword(), member.getAuthorities());
-        log.info("user= {}", user);
+//        log.info("user= {}", user);
         // 스프링 시큐리티 객체에 저장할 authentication 객체를 생성
         UsernamePasswordAuthenticationToken authentication = UsernamePasswordAuthenticationToken.authenticated(
                 user,

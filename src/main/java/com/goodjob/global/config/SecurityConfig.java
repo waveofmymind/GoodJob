@@ -2,8 +2,6 @@ package com.goodjob.global.config;
 
 import com.goodjob.global.base.jwt.JwtAccessDeniedHandler;
 import com.goodjob.global.base.jwt.JwtAuthenticationEntryPoint;
-import com.goodjob.global.base.security.CustomAuthenticationFailureHandler;
-import com.goodjob.global.base.security.CustomAuthenticationSuccessHandler;
 import com.goodjob.global.base.security.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -23,8 +21,6 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
-    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
-    private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
@@ -41,12 +37,6 @@ public class SecurityConfig {
                         .requestMatchers("/**","/resumes/**", "/member/**","/article/**", "/jobstatistic/**").permitAll()
                 )
                 .httpBasic(httpBasicConfigurer -> httpBasicConfigurer.disable())
-//                .formLogin(login -> login
-//                        .loginPage("/member/login")
-//                        .loginProcessingUrl("/member/login")
-//                        .successHandler(customAuthenticationSuccessHandler)
-//                        .failureHandler(customAuthenticationFailureHandler)
-//                )
                 // TODO: 받아오는거까진 됨 -> 필터 거치면서 쿠키저장하도록
                 .oauth2Login(oauth2Login -> oauth2Login
                         .loginPage("/member/login")
