@@ -12,6 +12,7 @@ import java.util.List;
 
 import static com.goodjob.domain.article.entity.QArticle.article;
 import static com.goodjob.domain.member.entity.QMember.member;
+import static com.goodjob.domain.hashTag.entity.QHashTag.hashTag;
 
 @RequiredArgsConstructor
 public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
@@ -34,6 +35,8 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
             case "글쓴이":
                 builder.or(member.username.contains(kw));
                 break;
+            case "해시태그":
+                builder.or(hashTag.keyword.content.contains(kw));
             default:
                 builder.or(article.title.contains(kw));
                 break;
@@ -58,6 +61,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
         return jpaQueryFactory
                 .selectFrom(article)
                 .innerJoin(article.member, member)
+                .leftJoin(article.hashTagList, hashTag)
                 .where(builder)
                 .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
                 .fetch();

@@ -6,6 +6,8 @@ import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.article.mapper.ArticleMapper;
 import com.goodjob.domain.article.repository.ArticleRepository;
 import com.goodjob.domain.comment.entity.Comment;
+import com.goodjob.domain.hashTag.entity.HashTag;
+import com.goodjob.domain.hashTag.service.HashTagService;
 import com.goodjob.domain.member.entity.Member;
 import com.goodjob.domain.subComment.entity.SubComment;
 import com.goodjob.global.base.rsData.RsData;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 public class ArticleService {
     private final ArticleRepository articleRepository;
     private final ArticleMapper articleMapper;
+    private final HashTagService hashTagService;
 
 
     public Page<ArticleResponseDto> findAll(int page, int sortCode, String category, String query) {
@@ -113,6 +116,7 @@ public class ArticleService {
 
         Article article = articleOp.get();
 
+
         if(article.isDeleted()) {
             return RsData.of("F-2", "해당 게시글은 이미 삭제되었습니다.");
         }
@@ -122,7 +126,6 @@ public class ArticleService {
 
     public void createArticle(Member author, ArticleRequestDto articleRequestDto) {
 
-        System.out.println(articleRequestDto.getHashTagStr());
         Article article = Article
                 .builder()
                 .member(author)
@@ -136,6 +139,8 @@ public class ArticleService {
                 .build();
 
         articleRepository.save(article);
+
+        hashTagService.applyHashTags(article, articleRequestDto.getHashTagStr());
     }
 
     @Transactional
@@ -154,8 +159,10 @@ public class ArticleService {
 
         article.setTitle(articleRequestDto.getTitle());
         article.setContent(articleRequestDto.getContent());
+        hashTagService.applyHashTags(article, articleRequestDto.getHashTagStr());
 
         articleRepository.save(article);
+
 
         return RsData.of("S-1", "게시글이 수정되었습니다.", article);
     }

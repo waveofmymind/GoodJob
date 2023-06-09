@@ -2,6 +2,7 @@ package com.goodjob.domain.article.entity;
 
 import com.goodjob.domain.BaseEntity;
 import com.goodjob.domain.comment.entity.Comment;
+import com.goodjob.domain.hashTag.entity.HashTag;
 import com.goodjob.domain.likes.entity.Likes;
 import com.goodjob.domain.member.entity.Member;
 import jakarta.persistence.*;
@@ -13,7 +14,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -53,6 +56,14 @@ public class Article extends BaseEntity {
 
     @Setter
     private Long commentsCount;
+
+    @OneToMany(mappedBy = "article", cascade = {CascadeType.ALL}, fetch=FetchType.EAGER)
+    @Builder.Default
+    private List<HashTag> hashTagList = new ArrayList<>();
+
+    @Transient
+    @Builder.Default
+    private Map<String, Object> extra = new LinkedHashMap<>();
 
     // TODO: 의존관계
 }
