@@ -33,12 +33,13 @@ public class Member extends BaseEntity {
     @Column(unique = true)
     private String nickname; // 닉네임
 
-    @Column(unique = true)
     private String email;
 
     private String userRole; // user, admin
 
     private boolean isDeleted;
+
+    private String providerType; // 일반회원인지, 카카오로 가입한 회원인지, 구글로 가입한 회원인지
 
     @OneToMany(mappedBy = "member", cascade = {CascadeType.ALL})
     @Builder.Default
@@ -63,5 +64,4 @@ public class Member extends BaseEntity {
                 "nickname", getNickname()
         );
     }
-
 }

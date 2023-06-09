@@ -14,6 +14,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -27,14 +29,19 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         //TODO: 추후 게시글 작성 경로 권한 추가 필요
         http.csrf(AbstractHttpConfigurer::disable).
-                sessionManagement(AbstractHttpConfigurer::disable).
-                authorizeHttpRequests(authorize -> authorize
+                sessionManagement(sessionManagement -> sessionManagement
+                        .sessionCreationPolicy(STATELESS)
+                )
+                .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers( "/article/create", "/article/update/**", "article/delete/**", "/comment/create/**", "/comment/update/**", "comment/delete/**", "/subComment/create/**", "/subComment/update/**", "/subComment/delete/**", "/likes/like/article/**",  "/likes/like/comment/**", "/likes/like/subComment/**").hasAuthority("USER")
                         .requestMatchers("/**","/resumes/**", "/member/**","/article/**", "/jobstatistic/**").permitAll()
-                ).
-                formLogin(AbstractHttpConfigurer::disable)
-                .exceptionHandling(exception ->
-                        exception
+                )
+                .httpBasic(httpBasicConfigurer -> httpBasicConfigurer.disable())
+                // TODO: 받아오는거까진 됨 -> 필터 거치면서 쿠키저장하도록
+                .oauth2Login(oauth2Login -> oauth2Login
+                        .loginPage("/member/login")
+                )
+                .exceptionHandling(exception -> exception
                                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                                 .accessDeniedHandler(jwtAccessDeniedHandler))
                 .addFilterBefore(
