@@ -82,7 +82,7 @@ public class MemberController {
         }
 
         // TODO: 리팩토링
-//        rq.setCookie("accessToken", (String) loginRsData.getData());
+        rq.setCookie("accessToken", (String) loginRsData.getData());
 
         return rq.redirectWithMsg("/", loginRsData);
     }
