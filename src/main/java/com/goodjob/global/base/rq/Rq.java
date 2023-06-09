@@ -2,64 +2,63 @@ package com.goodjob.global.base.rq;
 
 import com.goodjob.domain.member.entity.Member;
 import com.goodjob.domain.member.service.MemberService;
+import com.goodjob.global.base.cookie.CookieUt;
+import com.goodjob.global.base.jwt.JwtProvider;
 import com.goodjob.global.base.rsData.RsData;
+import com.goodjob.global.base.security.CustomDetailsService;
 import com.goodjob.global.util.Ut;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import org.springframework.context.MessageSource;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
-import org.springframework.web.servlet.LocaleResolver;
 
-import java.util.Arrays;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Map;
+
 @Component
 @RequestScope
+@Slf4j
 public class Rq {
+    private final JwtProvider jwtProvider;
+    private final CookieUt cookieUt;
+    private final CustomDetailsService customDetailsService;
     private final MemberService memberService;
-    private final MessageSource messageSource;
-    private final LocaleResolver localeResolver;
-    private Locale locale;
     private final HttpServletRequest req;
     private final HttpServletResponse resp;
-    private final HttpSession session;
     private final User user;
-    private Member member = null; // 레이지 로딩, 처음부터 넣지 않고, 요청이 들어올 때 넣는다.
+    private Member member = null;
 
-    public Rq(MemberService memberService, MessageSource messageSource, LocaleResolver localeResolver, HttpServletRequest req, HttpServletResponse resp, HttpSession session) {
+    public Rq(JwtProvider jwtProvider, CookieUt cookieUt, CustomDetailsService customDetailsService, MemberService memberService, HttpServletRequest req, HttpServletResponse resp) {
+        this.cookieUt = cookieUt;
+        this.jwtProvider = jwtProvider;
+        this.customDetailsService = customDetailsService;
         this.memberService = memberService;
-        this.messageSource = messageSource;
-        this.localeResolver = localeResolver;
         this.req = req;
         this.resp = resp;
-        this.session = session;
 
         // 현재 로그인한 회원의 인증정보를 가져옴
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        log.info("authentication= {}", authentication);
+//        if (authentication.getPrincipal() instanceof User) {
+//            this.user = (User) authentication.getPrincipal();
+//        } else {
+//            this.user = null;
+//        }
 
-        if (authentication.getPrincipal() instanceof User) {
-            this.user = (User) authentication.getPrincipal();
+        // jwt 토큰에서 사용자 정보 가져오기
+        Cookie accessToken = cookieUt.getCookie(req, "accessToken");
+        if (accessToken != null) {
+            String token = accessToken.getValue();
+            Map<String, Object> claims = jwtProvider.getClaims(token);
+            String username = (String) claims.get("username");
+            this.user = (User) customDetailsService.loadUserByUsername(username);
         } else {
             this.user = null;
         }
-    }
-
-
-    public boolean isRefererAdminPage() {
-        SavedRequest savedRequest = (SavedRequest) session.getAttribute("SPRING_SECURITY_SAVED_REQUEST");
-
-        if (savedRequest == null) return false;
-
-        String referer = savedRequest.getRedirectUrl();
-        return referer != null && referer.contains("/adm");
+        log.info("user= {}", user);
     }
 
     // 로그인 되어 있는지 체크
@@ -120,48 +119,23 @@ public class Rq {
         return Ut.url.encode(msg) + ";ttl=" + new Date().getTime();
     }
 
-    public void setSessionAttr(String name, String value) {
-        session.setAttribute(name, value);
-    }
-
-    public <T> T getSessionAttr(String name, T defaultValue) {
-        try {
-            return (T) session.getAttribute(name);
-        } catch (Exception ignored) {
-        }
-
-        return defaultValue;
-    }
-
-    public void removeSessionAttr(String name) {
-        session.removeAttribute(name);
-    }
-
-    public String getCText(String code, String... args) {
-        return messageSource.getMessage(code, args, getLocale());
-    }
-
-    private Locale getLocale() {
-        if (locale == null) locale = localeResolver.resolveLocale(req);
-
-        return locale;
-    }
-
     public String getParamsJsonStr() {
         Map<String, String[]> parameterMap = req.getParameterMap();
 
         return Ut.json.toStr(parameterMap);
     }
 
-    public void setCookie(Cookie cookie) {
-        resp.addCookie(cookie);
+    public Cookie getCookie(String cookieName) {
+        return cookieUt.getCookie(req, cookieName);
     }
 
-    public Cookie getCookie(String cookieName) {
-        Cookie[] cookies = req.getCookies();
-        return Arrays.stream(cookies)
-                .filter(e -> e.getName().equals(cookieName))
-                .findFirst()
-                .orElse(null);
+    public void setCookie(String cookieName, String value) {
+        Cookie cookie = cookieUt.createCookie(cookieName, value);
+        resp.addCookie(cookie);
+    }
+    public void expireCookie(String cookieName) {
+        Cookie cookie = getCookie(cookieName);
+        cookie = cookieUt.expireCookie(cookie);
+        resp.addCookie(cookie);
     }
 }

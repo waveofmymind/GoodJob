@@ -29,9 +29,9 @@ public class CookieUt {
 
         return null;
     }
-
     public Cookie expireCookie(Cookie cookie) {
         cookie.setMaxAge(0);
+        cookie.setPath("/");
         return cookie;
     }
 }

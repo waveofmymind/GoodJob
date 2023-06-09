@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -68,7 +69,7 @@ public class MemberService {
 
     // 일반회원가입, 소셜로그인 회원가입 나눠 처리
     @Transactional
-    public RsData<Member> socialJoin(String providerType, String username, String password) {
+    public RsData<Member> socialJoin(String providerType, String username, String password, String email) {
         if (findByUsername(username).isPresent()) {
             return RsData.of("F-1", "해당 아이디(%s)는 이미 사용중입니다.".formatted(username));
         }
@@ -77,21 +78,24 @@ public class MemberService {
             password = passwordEncoder.encode(password);
         }
 
-        // TODO: oauth2 로그인 이후 추가정보입력
+        // 닉네임을 랜덤으로 생성
+        String randomUUID = UUID.randomUUID().toString().replaceAll("-", "");
+        String nickname = providerType + "__" + randomUUID.substring(0, 6); // 6자리까지만 사용
 
-//        Member member = Member
-//                .builder()
-//                .username(username)
-//                .password(password)
-//                .nickname()
-//                .email(joinRequestDto.getEmail())
-//                .isDeleted(false)
-//                .providerType(providerType)
-//                .build();
+        // oauth2 로그인 이후 추가정보입력
+        Member member = Member
+                .builder()
+                .username(username)
+                .password(password)
+                .nickname(nickname)
+                .email(email)
+                .isDeleted(false)
+                .providerType(providerType)
+                .build();
 
-//        memberRepository.save(member);
+        memberRepository.save(member);
 
-        return null;
+       return RsData.of("S-1", "%s님의 회원가입이 완료되었습니다.".formatted(nickname), member);
     }
 
     public RsData genAccessToken(String username, String password) {
@@ -111,7 +115,7 @@ public class MemberService {
 
         String accessToken = jwtProvider.genToken(member.toClaims());
 
-        return RsData.of("S-1", "로그인 가능합니다.", accessToken);
+        return RsData.of("S-1", "%s님 환영합니다!".formatted(member.getNickname()), accessToken);
     }
 
     private Optional<Member> findByNickname(String nickname) {
@@ -140,15 +144,14 @@ public class MemberService {
     }
 
     // 소셜 로그인할때마다 동작
-    public RsData<Member> whenSocialLogin(String providerType, String username) {
+    public RsData<Member> whenSocialLogin(String providerType, String username, String email) {
         Optional<Member> opMember = findByUsername(username);
 
         if (opMember.isPresent()) {
             return RsData.of("S-1", "로그인 되었습니다.", opMember.get());
         }
 
-        // TODO: 닉네임을 추가 폼을 통해 받아옴.
-        return socialJoin(providerType, username, ""); // 최초 1회 실행
+        return socialJoin(providerType, username, "", email); // 최초 1회 실행
     }
 }
 

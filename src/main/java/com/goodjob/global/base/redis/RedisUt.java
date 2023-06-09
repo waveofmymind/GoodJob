@@ -1,13 +1,11 @@
 package com.goodjob.global.base.redis;
 
-import com.goodjob.global.base.jwt.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
-import java.time.Duration;
 import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 

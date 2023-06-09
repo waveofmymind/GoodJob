@@ -7,7 +7,6 @@ import com.goodjob.domain.member.service.MemberService;
 import com.goodjob.global.base.redis.RedisUt;
 import com.goodjob.global.base.rq.Rq;
 import com.goodjob.global.base.rsData.RsData;
-import com.goodjob.global.base.cookie.CookieUt;
 import jakarta.servlet.http.Cookie;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,6 @@ public class MemberController {
 
     private final Rq rq;
     private final MemberService memberService;
-    private final CookieUt cookieUt;
     private final RedisUt redisUt;
 
     @GetMapping("/join")
@@ -40,6 +38,7 @@ public class MemberController {
     @PreAuthorize("isAnonymous()")
     public String join(@Valid JoinRequestDto joinRequestDto,
                        BindingResult bindingResult) {
+        // TODO: 중복확인로직 보완
         log.debug("joinRequestDto ={}", joinRequestDto);
 
         if (bindingResult.hasErrors()) {
@@ -76,31 +75,26 @@ public class MemberController {
     @PostMapping("/login")
     @PreAuthorize("isAnonymous()")
     public String login(@Valid LoginRequestDto loginRequestDto) {
-        log.debug("loginRequestDto= {}", loginRequestDto.toString());
+        log.info("loginRequestDto= {}", loginRequestDto.toString());
 
         RsData loginRsData = memberService.genAccessToken(loginRequestDto.getUsername(), loginRequestDto.getPassword());
-        log.debug("loginRsData ={}", loginRsData);
+        log.info("resultCode ={}", loginRsData.getResultCode());
 
         if (loginRsData.isFail()) {
             return rq.historyBack(loginRsData);
         }
 
         // TODO: 리팩토링
-        String data = (String) loginRsData.getData();
-        Cookie accessTokenCookie = cookieUt.createCookie("accessToken", data);
-        Cookie usernameCookie = cookieUt.createCookie("username", loginRequestDto.getUsername());
+        rq.setCookie("accessToken", (String) loginRsData.getData());
 
-        rq.setCookie(accessTokenCookie);
-        rq.setCookie(usernameCookie);
-
-        return "redirect:/";
+        return rq.redirectWithMsg("/", loginRsData);
     }
 
     // TODO: 추후 수정
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("isAuthenticated()")
     public String delete(@PathVariable Long id) {
-        log.debug("id ={}", id);
+        log.info("id ={}", id);
         memberService.delete(id);
 
         return "member/join";
@@ -113,15 +107,11 @@ public class MemberController {
         // TODO: 리팩토링
         // 레디스에서 리프레시토큰삭제
         redisUt.deleteToken(username);
-        // 쿠키에서 jwt토큰, username 제거.
-        Cookie accessTokenCookie = rq.getCookie("accessToken");
-        Cookie usernameCookie = rq.getCookie("username");
+        // 쿠키삭제
+        rq.expireCookie("accessToken");
 
-        accessTokenCookie = cookieUt.expireCookie(accessTokenCookie);
-        usernameCookie = cookieUt.expireCookie(usernameCookie);
+        log.info("로그아웃 들어옴");
 
-        rq.setCookie(accessTokenCookie);
-        rq.setCookie(usernameCookie);
         return rq.redirectWithMsg("/", "로그아웃 되었습니다.");
     }
 

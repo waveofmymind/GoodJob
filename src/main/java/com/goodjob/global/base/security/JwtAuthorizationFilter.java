@@ -34,22 +34,16 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // 쿠키 가져오기
-        Cookie accessTokenCookie = cookieUt.getCookie(request, "accessToken");
-        Cookie usernameCookie = cookieUt.getCookie(request, "username");
-
-        String accessToken = null;
-        String username = null;
-
-        if (accessTokenCookie != null || usernameCookie != null) {
-            accessToken = accessTokenCookie.getValue();
-            username = usernameCookie.getValue();
-        }
+        // 쿠키에서 accessToken 값을 가져온다.
+        Cookie accessToken = cookieUt.getCookie(request, "accessToken");
 
         if (accessToken != null) {
+            String token = accessToken.getValue();
+            log.info("token = {}", token);
+
             try {
-                if (jwtProvider.verify(accessToken)) {
-                    Map<String, Object> claims = jwtProvider.getClaims(accessToken);
+                if (jwtProvider.verify(token)) {
+                    Map<String, Object> claims = jwtProvider.getClaims(token);
                     long id = (int) claims.get("id");
 
                     Member member = memberService.findById(id).orElseThrow();
@@ -57,14 +51,17 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     forceAuthentication(member);
                 }
             } catch (ExpiredJwtException e) {
+                Map<String, Object> claims = jwtProvider.getClaims(token);
+                // TODO: 리팩토링시 id를 키값에 넣는걸로
+                String username = (String) claims.get("username");
                 Long ttl = redisUt.getExpire(username);
 
                 if (ttl == -1) { // 키가 존재하지 않는 경우
-                    log.debug("존재하지 않는 refreshToken key!");
+                    log.info("존재하지 않는 refreshToken key!");
                 }
 
                 if (ttl == -2) { // 리프레시 토큰 만료된 경우
-                    log.debug("만료된 refreshToken. 재로그인 필요!");
+                    log.info("만료된 refreshToken. 재로그인 필요!");
                 }
 
                 // 새로운 액세스 토큰 발급
@@ -83,7 +80,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     // 강제로 로그인 처리하는 메서드 (로그인한 사용자의 정보를 가져옴)
     private void forceAuthentication(Member member) {
         User user = new User(member.getUsername(), member.getPassword(), member.getAuthorities());
-
+        log.info("user= {}", user);
         // 스프링 시큐리티 객체에 저장할 authentication 객체를 생성
         UsernamePasswordAuthenticationToken authentication = UsernamePasswordAuthenticationToken.authenticated(
                 user,

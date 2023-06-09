@@ -33,7 +33,6 @@ public class Member extends BaseEntity {
     @Column(unique = true)
     private String nickname; // 닉네임
 
-    @Column(unique = true)
     private String email;
 
     private String userRole; // user, admin
@@ -65,5 +64,4 @@ public class Member extends BaseEntity {
                 "nickname", getNickname()
         );
     }
-
 }

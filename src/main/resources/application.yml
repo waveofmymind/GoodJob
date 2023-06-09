@@ -30,8 +30,7 @@ spring:
             scope:
             client-name: Kakao
             authorization-grant-type: authorization_code
-            redirect-uri: '${custom.site.baseUrl}/member/login'
-#            redirect-uri: '${custom.site.baseUrl}/login/oauth2/code/kakao'
+            redirect-uri: '${custom.site.baseUrl}/{action}/oauth2/code/{registrationId}'
             client-authentication-method: POST
         provider:
           kakao:
@@ -39,7 +38,6 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
-
 
 jasypt:
   encryptor:
@@ -67,4 +65,4 @@ custom:
   jwt:
     secretKey: ENC(td8jcP/eOBMP9/6Nph0R0lmIzC5mhwk5ln46rp4GVt1mfwzI+J9YkA/bnu9dGxkzxRZk9k2dTWGmNUL2BLxVwQ==)
   site:
-    baseUrl: http://localhost
+    baseUrl: http://localhost:8080
