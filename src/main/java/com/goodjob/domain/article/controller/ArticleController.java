@@ -6,6 +6,8 @@ import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.article.service.ArticleService;
 import com.goodjob.domain.comment.controller.CommentController;
 import com.goodjob.domain.comment.dto.request.CommentRequestDto;
+import com.goodjob.domain.hashTag.dto.response.HashTagResponseDto;
+import com.goodjob.domain.hashTag.entity.HashTag;
 import com.goodjob.domain.subComment.controller.SubCommentController;
 import com.goodjob.domain.subComment.dto.request.SubCommentRequestDto;
 import com.goodjob.global.base.rq.Rq;
@@ -92,9 +94,15 @@ public class ArticleController {
         if(articleResponseDtoRsData.isFail()) {
             return rq.historyBack(articleResponseDtoRsData);
         }
-        
+
         articleRequestDto.setTitle(articleResponseDtoRsData.getData().getTitle());
         articleRequestDto.setContent(articleResponseDtoRsData.getData().getContent());
+
+        String hashTagsStr = "";
+        List<HashTagResponseDto> hashTags = articleResponseDtoRsData.getData().getHashTagList();
+
+        articleRequestDto.setHashTags(hashTags);
+
         return "article/articleForm";
     }
 

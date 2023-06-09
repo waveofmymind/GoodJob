@@ -20,7 +20,7 @@ public class JwtProvider {
     @Autowired
     private RedisUt redisUt;
     private SecretKey cachedSecretKey;
-    public final static long TOKEN_VALIDATION_SECOND = 1000L * 60 * 60 * 2; // 2시간
+    public final static long TOKEN_VALIDATION_SECOND = 1000L * 60 * 30; // 30분
     private final static long REFRESH_TOKEN_VALIDATION_SECOND = 1000L * 60 * 60 * 24 * 14; // 14일
 
     @Value("${custom.jwt.secretKey}")
@@ -63,17 +63,10 @@ public class JwtProvider {
     // 토큰 검증
     public boolean verify(String token) {
         try {
-            Jws<Claims> claimsJws = Jwts.parserBuilder()
+            Jwts.parserBuilder()
                     .setSigningKey(getSecretKey())
                     .build()
                     .parseClaimsJws(token);
-
-            Claims claims = claimsJws.getBody();
-            log.info("claims= {}", claims);
-
-            if (redisUt.hasKeyBlackList((String) claims.get("username"))) {
-                return false;
-            };
         } catch (ExpiredJwtException e) { // 액세스토큰 만료된 경우
             throw e;
         } catch (Exception e) {
