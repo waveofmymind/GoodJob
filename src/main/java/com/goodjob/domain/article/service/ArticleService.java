@@ -108,7 +108,7 @@ public class ArticleService {
     }
 
     public RsData getArticle(Long id) {
-        Optional<Article> articleOp = articleRepository.findById(id);
+        Optional<Article> articleOp = articleRepository.findQslById(id);
 
         if(articleOp.isEmpty()) {
             return RsData.of("F-1", "해당 게시글이 존재하지 않습니다.");

@@ -57,7 +57,7 @@ public class Article extends BaseEntity {
     @Setter
     private Long commentsCount;
 
-    @OneToMany(mappedBy = "article", cascade = {CascadeType.ALL}, fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "article", cascade = {CascadeType.ALL})
     @Builder.Default
     private List<HashTag> hashTagList = new ArrayList<>();
 
