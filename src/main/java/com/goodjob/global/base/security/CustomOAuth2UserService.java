@@ -40,7 +40,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             }
         }
 
-        log.info("oAuth2User ={}", oAuth2User);
         log.info("email ={}", email);
         Member member = memberService.whenSocialLogin(providerType, username, email).getData();
 

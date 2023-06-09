@@ -98,7 +98,7 @@ public class MemberService {
        return RsData.of("S-1", "%s님의 회원가입이 완료되었습니다.".formatted(nickname), member);
     }
 
-    public RsData genAccessToken(String username, String password) {
+    public RsData login(String username, String password) {
         Optional<Member> opMember = findByUsername(username);
 
         if (opMember.isEmpty()) {
