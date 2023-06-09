@@ -45,7 +45,7 @@ public class ArticleController {
 
     @GetMapping("/list")
     public String list(Model model, @RequestParam(value="page", defaultValue="0") int page, ToListForm toListForm) {
-        Page<ArticleResponseDto> paging = articleService.findAll(page, toListForm.sortCode);
+        Page<ArticleResponseDto> paging = articleService.findAll(page, toListForm.sortCode, toListForm.category, toListForm.query);
         model.addAttribute("paging", paging);
 
         return "article/list";
@@ -86,7 +86,7 @@ public class ArticleController {
 
 
     @GetMapping("/update/{id}")
-    public String updateArticle(ArticleRequestDto articleRequestDto, @PathVariable("id") Long id, Principal principal) {
+    public String updateArticle(ArticleRequestDto articleRequestDto, @PathVariable("id") Long id) {
         RsData<ArticleResponseDto> articleResponseDtoRsData = articleService.getArticleResponseDto(id);
 
         if(articleResponseDtoRsData.isFail()) {
@@ -100,7 +100,7 @@ public class ArticleController {
 
     @PostMapping("/update/{id}")
     public String updateArticle(@Valid ArticleRequestDto articleRequestDto, BindingResult bindingResult,
-                                 Principal principal, @PathVariable("id") Long id) {
+                                 @PathVariable("id") Long id) {
         if (bindingResult.hasErrors()) {
             return "article/articleForm";
         }
@@ -115,7 +115,7 @@ public class ArticleController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteArticle(Principal principal, @PathVariable("id") Long id) {
+    public String deleteArticle(@PathVariable("id") Long id) {
         RsData<Article> articleRsData = articleService.deleteArticle(rq.getMember(), id);
 
         if(articleRsData.isFail()) {
@@ -128,5 +128,8 @@ public class ArticleController {
     @Setter
     public static class ToListForm {
         private int sortCode = 1;
+        private String category = "제목";
+        private String query = "";
+
     }
 }

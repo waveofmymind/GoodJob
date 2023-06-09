@@ -30,7 +30,6 @@ import java.security.Principal;
 @RequestMapping("/comment")
 public class CommentController {
     private final CommentService commentService;
-    private final ArticleService articleService;
     private final Rq rq;
 
     //TODO: 필요없는 메서드인지 확인 후 삭제
@@ -42,27 +41,22 @@ public class CommentController {
 //    }
 
     @PostMapping("/create/{id}")
-    public String createComment(@PathVariable("id") Long id, @Valid CommentRequestDto commentRequestDto, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "article/detailArticle";
-        }
+    public String createComment(@PathVariable("id") Long id, @Valid CommentRequestDto commentRequestDto) {
+
         RsData<Comment> commentRsData = commentService.createComment(rq.getMember(), id, commentRequestDto);
 
         if(commentRsData.isFail()) {
             return rq.historyBack(commentRsData);
         }
 
+
+
         return rq.redirectWithMsg("/article/detail/%s".formatted(id), commentRsData);
     }
 
 
     @PostMapping("/update/{id}")
-    public String updateComment(@Valid CommentRequestDto commentRequestDto, BindingResult bindingResult,
-                               @PathVariable("id") Long id) {
-        if (bindingResult.hasErrors()) {
-            return "/article/detailArticle";
-        }
-
+    public String updateComment(@Valid CommentRequestDto commentRequestDto, @PathVariable("id") Long id) {
         RsData<Comment> updateRsData = commentService.updateComment(rq.getMember(), id, commentRequestDto);
 
         if(updateRsData.isFail()) {

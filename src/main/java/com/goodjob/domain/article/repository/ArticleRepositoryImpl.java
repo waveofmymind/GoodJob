@@ -1,28 +1,45 @@
 package com.goodjob.domain.article.repository;
 
-import com.goodjob.domain.article.dto.response.ArticleResponseDto;
+import com.beust.jcommander.internal.Nullable;
 import com.goodjob.domain.article.entity.Article;
-import com.querydsl.core.types.Expression;
-import com.querydsl.core.types.Order;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.goodjob.domain.article.entity.QArticle.article;
+import static com.goodjob.domain.member.entity.QMember.member;
 
 @RequiredArgsConstructor
 public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Article> findQslBySortCode(int sortCode) {
+    public List<Article> findQslBySortCode(int sortCode, String category, String kw) {
         List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        switch(category) {
+            case "내용":
+                builder.or(article.content.contains(kw));
+                break;
+            case "제목+내용":
+                builder.or(article.title.contains(kw));
+                builder.or(article.content.contains(kw));
+                break;
+            case "글쓴이":
+                builder.or(member.username.contains(kw));
+                break;
+            default:
+                builder.or(article.title.contains(kw));
+                break;
+        }
+
+        builder.and(article.isDeleted.eq(false));
 
         switch(sortCode) {
             case 2:
@@ -30,11 +47,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
                 orderSpecifiers.add(article.id.desc());
                 break;
             case 3:
-                orderSpecifiers.add(article.commentsCount.desc());
-                orderSpecifiers.add(article.id.desc());
-                break;
-            case 4:
-                orderSpecifiers.add(article.likesCount.desc());
+                orderSpecifiers.add(article.likesList.size().desc());
                 orderSpecifiers.add(article.id.desc());
                 break;
             default:
@@ -44,9 +57,9 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
 
         return jpaQueryFactory
                 .selectFrom(article)
-                .where(article.isDeleted.eq(false))
+                .innerJoin(article.member, member)
+                .where(builder)
                 .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
                 .fetch();
     }
-
 }
