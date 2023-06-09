@@ -68,7 +68,7 @@ public class WontedStatistic {
         chromeOptions.addArguments("--no-sandbox");
         chromeOptions.addArguments("--disable-dev-shm-usage");
         chromeOptions.addArguments("--disable-gpu");
-        chromeOptions.setCapability("ignoreProtectedModeSettings", true);
+//        chromeOptions.setCapability("ignoreProtectedModeSettings", true); //deprecated
 
         WebDriver driver = new ChromeDriver(chromeOptions);
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
