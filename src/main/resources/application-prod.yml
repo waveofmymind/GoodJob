@@ -18,3 +18,7 @@ spring:
 scheduler:
   cron:
     job: "0 0 4/12 * * *"
+
+custom:
+  site:
+    baseUrl: https://waveofmymind.shop
