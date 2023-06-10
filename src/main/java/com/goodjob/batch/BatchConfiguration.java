@@ -19,6 +19,7 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.io.IOException;
@@ -182,14 +183,14 @@ public class BatchConfiguration {
             for (JobResponseDto dto : saram) {
                 try {
                     jobStatisticService.create(dto);
-                } catch (IllegalStateException e) {
+                } catch (IllegalStateException | DataIntegrityViolationException e) {
                     log.error(e.getMessage());
                 }
             }
             for (JobResponseDto dto : wonted) {
                 try {
                     jobStatisticService.create(dto);
-                } catch (IllegalStateException e) {
+                } catch (IllegalStateException | DataIntegrityViolationException e) {
                     log.error(e.getMessage());
                 }
             }

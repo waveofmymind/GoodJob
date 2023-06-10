@@ -5,6 +5,7 @@ import com.goodjob.domain.job.entity.JobStatistic;
 import com.goodjob.domain.job.repository.JobStatisticRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,14 +27,14 @@ public class JobStatisticService {
      * create
      */
     @Transactional
-    public void create(JobResponseDto jobResponseDto) throws IllegalStateException{
+    public void create(JobResponseDto jobResponseDto) {
 
         try {
             validateDuplicateCompany(jobResponseDto);
             JobStatistic company = JobStatistic.create(jobResponseDto);
 
             jobStatisticRepository.save(company);
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException | DataIntegrityViolationException e) {
             log.debug("중복데이터");
         }
 
