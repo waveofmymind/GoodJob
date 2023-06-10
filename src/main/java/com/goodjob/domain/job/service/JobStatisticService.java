@@ -42,8 +42,7 @@ public class JobStatisticService {
     }
 
     private void validateDuplicateCompany(JobResponseDto jobResponseDto) {
-        List<JobStatistic> companyList = jobStatisticRepository.findBySubjectAndUrl
-                (jobResponseDto.getSubject(), jobResponseDto.getUrl());
+        List<JobStatistic> companyList = jobStatisticRepository.findByUrl(jobResponseDto.getUrl());
 
         if (!companyList.isEmpty()) {
             throw new IllegalStateException("중복 입력");

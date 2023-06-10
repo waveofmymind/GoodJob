@@ -44,9 +44,9 @@ public class BatchConfiguration {
     public Job job1(JobRepository jobRepository) {
         return new JobBuilder("job1", jobRepository)
                 .start(step1(jobRepository)) // 사람인
-                .next(step2(jobRepository)) // 원티드 백엔드
-                .next(step3(jobRepository)) // 원티드 프론트
-                .next(step4(jobRepository)) // 원티드 풀스택
+//                .next(step2(jobRepository)) // 원티드 백엔드
+//                .next(step3(jobRepository)) // 원티드 프론트
+//                .next(step4(jobRepository)) // 원티드 풀스택
                 .next(step5(jobRepository)) // 중복된 값 필터하고 db저장
 //                .start(chunkSaram(jobRepository)) // 청크
                 .next(step6(jobRepository)) // 기존 값들 초기화
@@ -172,28 +172,28 @@ public class BatchConfiguration {
             List<JobResponseDto> pureSaram = SaraminApiManager.getJobResponseDtos();
             List<JobResponseDto> filterSaram = jobStatisticService.sameDtoFilter(pureSaram, pureSaram);
 
-            List<JobResponseDto> pureWonted = WontedStatistic.getJobResponseDtos();
-            List<JobResponseDto> filterWonted = jobStatisticService.sameDtoFilter(pureWonted, pureWonted);
+//            List<JobResponseDto> pureWonted = WontedStatistic.getJobResponseDtos();
+//            List<JobResponseDto> filterWonted = jobStatisticService.sameDtoFilter(pureWonted, pureWonted);
 
             // 사람인 에서 받은것 잡코리아 동일내용 필터
-            List<JobResponseDto> saram = jobStatisticService.getFilterDto(filterSaram, filterWonted);
+//            List<JobResponseDto> saram = jobStatisticService.getFilterDto(filterSaram, filterWonted);
             // 잡코리아 에서 받은것 사람인 동일내용 필터
-            List<JobResponseDto> wonted = jobStatisticService.getFilterDto(filterWonted, filterSaram);
+//            List<JobResponseDto> wonted = jobStatisticService.getFilterDto(filterWonted, filterSaram);
 
-            for (JobResponseDto dto : saram) {
+            for (JobResponseDto dto : filterSaram) {
                 try {
                     jobStatisticService.create(dto);
                 } catch (IllegalStateException | DataIntegrityViolationException e) {
                     log.error(e.getMessage());
                 }
             }
-            for (JobResponseDto dto : wonted) {
-                try {
-                    jobStatisticService.create(dto);
-                } catch (IllegalStateException | DataIntegrityViolationException e) {
-                    log.error(e.getMessage());
-                }
-            }
+//            for (JobResponseDto dto : wonted) {
+//                try {
+//                    jobStatisticService.create(dto);
+//                } catch (IllegalStateException | DataIntegrityViolationException e) {
+//                    log.error(e.getMessage());
+//                }
+//            }
             return RepeatStatus.FINISHED;
         };
     }
