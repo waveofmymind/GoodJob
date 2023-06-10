@@ -8,7 +8,7 @@ spring:
     jdbc:
       initialize-schema: always
   profiles:
-    active: prod
+    active: local
 
   jpa:
     show-sql: true
