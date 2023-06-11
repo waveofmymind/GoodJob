@@ -50,16 +50,20 @@ scheduler:
     job: "0 0 4 * * *"
 
 management:
+  info:
+    java:
+      enabled: true
+    os:
+      enabled: true
+    env:
+      enabled: true
   endpoint:
     health:
-      enabled: true
-    info:
-      enabled: true
+      show-components: always
   endpoints:
     web:
       exposure:
-        include: prometheus,info,health
-    enabled-by-default: false
+        include: "*"
   metrics:
     tags:
       application: ${spring.application.name}
