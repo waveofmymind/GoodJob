@@ -19,6 +19,11 @@
         </div>
         <hr class="border-info mb-4">
         <p class="text-sm min-h-[200px] pl-3" style="word-break: break-word;" th:text="${article.content}"></p>
+        <tr th:each="i : ${#numbers.sequence(1, 5)}" th:with="file=${article.extra.fileMap.get('file\_\_' + i)}" class="flex">
+            <th:block th:if="${file != null}">
+                <img id="img" th:src="@{${file.s3Url}}" alt="">
+            </th:block>
+        </tr>
         <div class="flex flex-wrap">
             <th:block th:each="hashTag : ${article.hashTagList}">
                 <a th:href="@{${hashTag.keyword.listUrl}}" class="bg-blue-200 px-2 py-1 rounded-full m-2">

@@ -7,14 +7,14 @@
     <div class="container mx-auto py-8 w-1/2">
         <h1 class="text-2xl font-bold">게시글 작성</h1>
 
-        <form class="mt-4" th:object="${articleRequestDto}" method="post" onsubmit="ArticleRequestForm__submit(this); return false;">
+        <form class="mt-4" method="post" onsubmit="ArticleRequestForm__submit(this); return false;" enctype="multipart/form-data">
             <!-- <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> -->
             <div class="mb-4">
-                <input type="text" name="title" th:field="*{title}" class="form-input w-full border border-info rounded-md h-10 p-3" placeholder="제목을 입력하세요">
+                <input type="text" name="title" th:value="${article.title}" class="form-input w-full border border-info rounded-md h-10 p-3" placeholder="제목을 입력하세요">
             </div>
 
             <div class="mb-4">
-                <textarea name="content" th:field="*{content}" class="form-textarea w-full h-64 resize-none border border-info rounded-md p-3" placeholder="본문을 입력하세요"></textarea>
+                <textarea name="content" th:text="${article.content}" class="form-textarea w-full h-64 resize-none border border-info rounded-md p-3" placeholder="본문을 입력하세요"></textarea>
             </div>
 
             <div class="mb-4 border border-info flex items-center">
@@ -23,7 +23,7 @@
             </div>
 
             <div id="hashTagList" class="flex flex-wrap mb-4">
-                <div th:if="${!articleRequestDto.hashTags.isEmpty()}" th:each="hashTag : ${articleRequestDto.hashTags}">
+                <div th:if="${!article.hashTagList.isEmpty()}" th:each="hashTag : ${article.hashTagList}">
                     <div class="bg-blue-200 px-2 py-1 rounded-full m-1">
                         <span th:text="|#${hashTag.keyword.content}|" class="keyword"></span>
                         <span onclick="this.parentNode.remove();" class="ml-1 cursor-pointer">&times;</span>
@@ -31,7 +31,42 @@
                 </div>
                 <!-- 해시태그 목록이 여기에 추가될 것입니다. -->
             </div>
-            <input type="hidden" id="hashTagStr" name="hashTagStr" th:field="*{hashTagStr}" />
+            <input type="hidden" id="hashTagStr" name="hashTagStr"/>
+
+            <th:block th:each="i : ${#numbers.sequence(1, 5)}" th:with="file=${article.extra.fileMap.get('file\_\_' + i)}">
+                <div>
+                    <span th:text="|${i}번 이미지|"></span>
+
+                    <th:block th:if="${file != null}">
+                        <hr>
+                        <a th:href="@{${file.s3Url}}" target="_blank">
+                            <img class="w-10 h-10 object-cover rounded" title="새창에서 크게 보기" th:src="@{${file.s3Url}}" alt="">
+                            <br>
+                            <label>
+                                <input type="checkbox" value="" th:name="|delete___file\_\_${i}|">
+                                <span>이미지 삭제</span>
+                            </label>
+                        </a>
+                    </th:block>
+
+                    <hr>
+                    <input type="file" th:name="|file\_\_${i}|"
+                           accept="image/png, image/gif, image/jpeg">
+                </div>
+            </th:block>
+
+
+
+
+
+<!--            <div class="mb-6">-->
+<!--                <input type="file" name="file1" class="w-full" onchange="previewImage(event)" accept="image/png, image/gif, image/jpeg">-->
+<!--&lt;!&ndash;                <div id="imagePreview" class="mt-2"></div>&ndash;&gt;-->
+<!--            </div>-->
+<!--            <div class="mb-6">-->
+<!--                <input type="file" name="file2" class="w-full" onchange="previewImage(event)" accept="image/png, image/gif, image/jpeg">-->
+<!--&lt;!&ndash;                <div id="imagePreview" class="mt-2"></div>&ndash;&gt;-->
+<!--            </div>-->
 
             <button type="submit" class="register bg-info hover:bg-blue-500 text-white font-bold px-4 py-2 rounded border-info" onclick="submitForm()">저장하기</button>
         </form>
@@ -95,6 +130,19 @@
             }
             document.getElementById('hashTagStr').value = hashTagValues.join(',');
             document.forms[0].submit();
+        }
+
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var imagePreview = document.getElementById('imagePreview');
+                var image = document.createElement('img');
+                image.src = reader.result;
+                image.classList.add('w-36', 'h-36', 'object-cover');
+                imagePreview.innerHTML = '';
+                imagePreview.appendChild(image);
+            }
+            reader.readAsDataURL(event.target.files[0]);
         }
     </script>
 </main>

@@ -9,6 +9,10 @@ spring:
       initialize-schema: always
   profiles:
     active: local
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
   jpa:
     show-sql: true
@@ -72,3 +76,15 @@ custom:
     secretKey: ENC(td8jcP/eOBMP9/6Nph0R0lmIzC5mhwk5ln46rp4GVt1mfwzI+J9YkA/bnu9dGxkzxRZk9k2dTWGmNUL2BLxVwQ==)
   site:
     baseUrl: http://localhost:8080
+
+cloud:
+  aws:
+    credentials:
+      access-key: ENC(rbOdm2vVqOglwtVhJwUR/8hPxVW54h11M8Q9A0tcLu4=)
+      secret-key: ENC(oHci78cJS/opaH8RW1TP7g8EXBZToC/ry/Ply4uXPbxNSOxWHrd5bY3lZJZIN9rpHelJTuqOOoE=)
+    s3:
+      bucket: ENC(QNconszyoVHld+7Bnq3yZDpZg5vDGfCT)
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
