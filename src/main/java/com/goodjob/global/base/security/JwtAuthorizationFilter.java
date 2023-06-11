@@ -22,6 +22,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -46,9 +47,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     Map<String, Object> claims = jwtProvider.getClaims(token);
                     long id = (int) claims.get("id");
 
-                    Member member = memberService.findById(id).orElseThrow();
+                    Optional<Member> opMember = memberService.findById(id);
 
-                    forceAuthentication(member);
+                    if (opMember.isPresent()) {
+                        forceAuthentication(opMember.get());
+                    }
                 }
             } catch (ExpiredJwtException e) {
                 Map<String, Object> claims = jwtProvider.getClaims(token);
@@ -61,6 +64,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 }
 
                 if (ttl == -2) { // 리프레시 토큰 만료된 경우
+                    // TODO: redirect
                     log.info("만료된 refreshToken. 재로그인 필요!");
                 }
 
