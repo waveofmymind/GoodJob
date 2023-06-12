@@ -60,18 +60,21 @@
                            placeholder="비밀번호를 입력하세요">
                 </div>
                 <div>
-                    <button type="submit" class="mt-8 bg-info text-white px-4 py-2 rounded-lg">로그인</button>
+                    <button type="submit" class="mt-4 bg-info text-white px-4 py-2 rounded-lg">로그인</button>
                 </div>
             </form>
-            <div>
-                <a class="btn btn-link" href="/oauth2/authorization/kakao">
-                    카카오로 로그인하기
+            <div class="space-y-4">
+                <a class="btn btn-block btn-outline gap-1 border-[color:#ffe812]" style="border-color: #ffe812;" href="/oauth2/authorization/kakao">
+                    <i class="fa-solid fa-comment text-[color:#ffe812]"></i>
+                    <span class="normal-case"> 카카오 로그인</span>
                 </a>
-                <a class="btn btn-link" href="/oauth2/authorization/github">
-                    깃허브 로그인하기(아직 안됨)
+                <a class="btn btn-block btn-outline gap-1" href="/oauth2/authorization/github">
+                    <i class="fa-solid fab fa-github"></i>
+                    <span class="normal-case"> 깃허브 로그인</span>
                 </a>
-                <a class="btn btn-link" href="/oauth2/authorization/google">
-                    구글 로그인하기
+                <a class="btn btn-block btn-outline gap-1 border-[color:#ffe812]" style="border-color: #ff0000;" href="/oauth2/authorization/google">
+                    <i class="fa-brands fa-google text-[color:#ff4000]"></i>
+                    <span class="normal-case"> 구글 로그인</span>
                 </a>
             </div>
         </div>
