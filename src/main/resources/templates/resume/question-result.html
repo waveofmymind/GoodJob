@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.6/dist/full.css" rel="stylesheet" type="text/css"/>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css"/>
 
-    <title>Resume Review Results</title>
+    <title>면접 예상 질문</title>
 </head>
 <body>
 <main layout:fragment="main" class="flex justify-center items-center h-auto mt-16">
@@ -35,14 +35,19 @@
 
 
     <div class="w-full max-w-2xl mx-auto">
-        <h1 class="text-center mb-6">예상 면접 질문</h1>
-        <div th:each="predictionResponse : ${predictionResponses}">
+        <h1 class="text-2xl mb-6">🧐 이런 점이 궁금해요</h1>
+        <div th:each="predictionResponse, stat : ${predictionResponses}">
+            <th:block th:if="${stat.index % 3 == 0}">
+                <div class="border-t-2 pt-6">
+                    <h2 class="text-xl mb-2">요청 <span th:text="${(stat.index / 3) + 1}"></span></h2>
+                </div>
+            </th:block>
             <div class="border-t-2 py-6">
                 <h2 class="text-2xl mb-2" th:text="${predictionResponse.question}">Question</h2>
                 <p th:text="${predictionResponse.bestAnswer}">Best answer</p>
             </div>
         </div>
-        <button onClick="downloadText()" className="mt-8">텍스트 파일로 저장하기</button>
+        <button type="button" onClick="downloadText()" className="mt-8">텍스트 파일로 저장하기</button>
     </div>
 </main>
 </body>
