@@ -10,12 +10,14 @@ import com.goodjob.global.util.Ut;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 @RequestScope
@@ -121,9 +123,23 @@ public class Rq {
         Cookie cookie = cookieUt.createCookie(cookieName, value);
         resp.addCookie(cookie);
     }
+
     public void expireCookie(String cookieName) {
         Cookie cookie = getCookie(cookieName);
         cookie = cookieUt.expireCookie(cookie);
         resp.addCookie(cookie);
+    }
+
+    public void setJwtTokenToOAuth2User(Authentication authentication) {
+        // 유저에게 jwt 토큰 발급
+        User user = (User) authentication.getPrincipal();
+        Optional<Member> opMember = memberService.findByUsername(user.getUsername());
+
+        if (opMember.isPresent()) {
+            String token = jwtProvider.genToken(opMember.get().toClaims());
+
+            // jwt 토큰을 쿠키에 설정
+            setCookie("accessToken", token);
+        }
     }
 }
