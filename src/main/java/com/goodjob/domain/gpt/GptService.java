@@ -144,8 +144,7 @@ public class GptService {
 
             futures.add(future);
         }
-        log.info(futures.toString());
-        // 모든 CompletableFuture가 완료될 때까지 대기
+
         CompletableFuture<Void> allFutures = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
         try {
             allFutures.get();
@@ -154,7 +153,6 @@ public class GptService {
             throw new BusinessException(ErrorCode.THREAD_MALFUNCTION);
         }
 
-        // CompletableFuture에서 결과를 추출해서 WhatGeneratedResponse 객체에 저장
         WhatGeneratedImproveResponse result = new WhatGeneratedImproveResponse();
         futures.stream()
                 .map(CompletableFuture::join)
