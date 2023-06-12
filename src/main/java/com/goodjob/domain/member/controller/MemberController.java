@@ -74,7 +74,7 @@ public class MemberController {
     public String login(@Valid LoginRequestDto loginRequestDto) {
 //        log.info("loginRequestDto= {}", loginRequestDto.toString());
 
-        RsData loginRsData = memberService.genAccessToken(loginRequestDto.getUsername(), loginRequestDto.getPassword());
+        RsData loginRsData = memberService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
 //        log.info("resultCode ={}", loginRsData.getResultCode());
 
         if (loginRsData.isFail()) {

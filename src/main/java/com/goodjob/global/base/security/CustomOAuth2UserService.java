@@ -24,6 +24,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @Transactional
     public OAuth2User loadUser(OAuth2UserRequest userRequest) {
         OAuth2User oAuth2User = super.loadUser(userRequest);
+        log.info("oAuth2User ={}", oAuth2User);
         String oauthId = oAuth2User.getName();
         String providerType = userRequest.getClientRegistration().getRegistrationId().toUpperCase();
         String username = providerType + "%s".formatted(oauthId);
@@ -32,15 +33,17 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         Map<String, Object> userAttributes = oAuth2User.getAttributes();
 
-        if (userAttributes.containsKey("kakao_account")) {
+        if (userAttributes.containsKey("kakao_account")) { // 카카오
             Map<String, Object> kakaoAccount = (Map<String, Object>) userAttributes.get("kakao_account");
 
             if (kakaoAccount.containsKey("email")) {
                 email = (String) kakaoAccount.get("email");
             }
         }
+        else if (userAttributes.containsKey("email")) { // 구글
+            email = (String) userAttributes.get("email");
+        }
 
-        log.info("oAuth2User ={}", oAuth2User);
         log.info("email ={}", email);
         Member member = memberService.whenSocialLogin(providerType, username, email).getData();
 
