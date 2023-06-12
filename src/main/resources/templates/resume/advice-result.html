@@ -19,7 +19,15 @@
             var elements = document.querySelectorAll(".improvementPoint, .advice");
             var txtData = '';
             for (var i = 0; i < elements.length; i++) {
+                if (elements[i].classList.contains("improvementPoint")) {
+                    txtData += '개선할만한 점: ';
+                } else if (elements[i].classList.contains("advice")) {
+                    txtData += '조언: ';
+                }
                 txtData += elements[i].textContent + '\n';
+                if (elements[i].classList.contains("advice")) {
+                    txtData += '\n'; // 조언 뒤에 추가적인 여백 줄을 추가합니다.
+                }
             }
 
             var blob = new Blob([txtData], {type: 'text/plain'});
@@ -43,7 +51,7 @@
             </div>
 
             <div class="border-t-2 py-6">
-                <h3 class="text-2xl mb-2 improvementPoint" th:text="${improveResponse.improvementPoint()}">Question</h3>
+                <h3 class="text-2xl mb-2 improvementPoint" th:text="${improveResponse.improvementPoint()}">improvement</h3>
                 <p class="advice" th:text="${improveResponse.advice()}">Best answer</p>
             </div>
         </div>
