@@ -18,13 +18,18 @@
             <p class="text-xs mt-2" th:text="|댓글:${article.commentsCount}|"></p>
         </div>
         <hr class="border-info mb-4">
-        <p class="text-sm min-h-[200px] pl-3" style="word-break: break-word;" th:text="${article.content}"></p>
-        <div class="flex flex-wrap">
-            <tr th:each="i : ${#numbers.sequence(1, 5)}" th:with="file=${article.extra.fileMap.get('file\_\_' + i)}" class="flex">
-                <th:block th:if="${file != null}">
-                    <img id="img" class="object-contain w-1/3 h-auto mr-4" th:src="@{${file.s3Url}}" alt="">
-                </th:block>
-            </tr>
+
+        <div class="min-h-[200px]">
+            <pre class="text-sm pl-3 min-h-[60px]" style="word-break: break-word; font-family: GmarketSansMedium;"  th:text="${article.content}"></pre>
+            <div class="flex flex-wrap ml-3">
+                <tr th:each="i : ${#numbers.sequence(1, 5)}" th:with="file=${article.extra.fileMap.get('file\_\_' + i)}" class="flex">
+                    <th:block th:if="${file != null}">
+                        <a th:href="@{${file.s3Url}}" target="_blank">
+                            <img id="img" class="object-cover w-auto h-[120px] mr-4" title="새창에서 크게 보기" th:src="@{${file.s3Url}}" alt="">
+                        </a>
+                    </th:block>
+                </tr>
+            </div>
         </div>
         <div class="flex flex-wrap">
             <th:block th:each="hashTag : ${article.hashTagList}">

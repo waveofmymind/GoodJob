@@ -42,6 +42,7 @@ public class Article extends BaseEntity {
     private String title;
 
     @Setter
+    @Column(columnDefinition = "text")
     private String content;
 
     @Setter

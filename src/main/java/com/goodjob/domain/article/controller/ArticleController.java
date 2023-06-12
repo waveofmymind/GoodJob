@@ -82,11 +82,7 @@ public class ArticleController {
     }
 
     @PostMapping("/create")
-    public String createArticle(@Valid ArticleRequestDto articleRequestDto, BindingResult bindingResult, MultipartRequest multipartRequest, FileRequest fileRequest) throws IOException {
-//        if (bindingResult.hasErrors()) {
-//            return "article/createForm";
-//        }
-
+    public String createArticle(@Valid ArticleRequestDto articleRequestDto, MultipartRequest multipartRequest, FileRequest fileRequest) throws IOException {
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 
         RsData<Article> articleRsData = articleService.createArticle(rq.getMember(), articleRequestDto);
@@ -132,7 +128,10 @@ public class ArticleController {
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 
         Article article = articleRsData.getData();
-        s3Service.deleteFiles(article);
+        for(String value : params.keySet()) {
+            log.info(value);
+        }
+        s3Service.deleteFiles(article, params);
         s3Service.uploadFile(article, fileMap);
 
         return rq.redirectWithMsg("/article/detail/%s".formatted(id), articleRsData);

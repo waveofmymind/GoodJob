@@ -14,10 +14,41 @@
             </div>
 
             <div class="mb-4">
-                <textarea name="content" th:text="${article.content}" class="form-textarea w-full h-64 resize-none border border-info rounded-md p-3" placeholder="본문을 입력하세요"></textarea>
+                <textarea name="content" oninput="handleTextareaInput(event)" th:text="${article.content}" class="form-textarea w-full h-64 resize-none border border-info rounded-md p-3" placeholder="본문을 입력하세요"></textarea>
             </div>
 
-            <div class="mb-4 border border-info flex items-center">
+            <div class="flex justify-between mb-4">
+                <th:block th:each="i : ${#numbers.sequence(1, 5)}" th:with="file=${article.extra.fileMap.get('file\_\_' + i)}">
+                    <div class="image-upload">
+                        <span th:text="|${i}번 이미지|"></span>
+                        <label th:for="|file-input-${i}|">
+                            <th:block th:if="${file != null}">
+                                <div class="upload-icon w-[100px] h-[97px] border border-2 border-solid border-info border-dotted rounded-md relative">
+                                    <img class="w-[100px] h-[93px] rounded-md cursor-pointer preview-image" th:id="|preview-image-${i}|" th:src="${file.s3Url}">
+                                    <button type="button" class="!bg-red-500 absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full w-6 h-6 flex items-center justify-center text-white" style="display: block;" th:id="|cancel-button-${i}|" th:onclick="|cancelFileSelect(${i})|">
+                                        X
+                                    </button>
+                                    <label>
+                                        <input type="checkbox" value="" th:name="|delete___file\_\_${i}|" th:id="|delete-input-${i}|" hidden />
+                                    </label>
+                                </div>
+                            </th:block>
+                            <th:block th:if="${file == null}">
+                                <div class="upload-icon w-[100px] h-[97px] border border-2 border-solid border-info border-dotted rounded-md relative">
+                                    <img class="w-[100px] h-[93px] rounded-md cursor-pointer preview-image" th:id="|preview-image-${i}|" src="https://i.ibb.co/d7wH0dJ/image4.png">
+                                    <button type="button" class="!bg-red-500 absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full w-6 h-6 flex items-center justify-center text-white" style="display: none;" th:id="|cancel-button-${i}|" th:onclick="|cancelFileSelect(${i})|">
+                                        X
+                                    </button>
+
+                                </div>
+                            </th:block>
+                        </label>
+                        <input th:id="|file-input-${i}|" type="file" th:name="|file\_\_${i}|" accept="image/png, image/gif, image/jpeg" style="display: none;" th:onchange="|handleFileSelect(event, ${i})|"/>
+                    </div>
+                </th:block>
+            </div>
+
+            <div class="mb-4 border border-info flex items-center rounded-md">
                 <p class="pl-3">#</p>
                 <input type="text" id="hashTagInput" class="form-input w-full border-0 border-info rounded-md h-10" placeholder="태그를 입력하세요" onkeydown="if(event.keyCode===13) addHashTag(event)">
             </div>
@@ -35,32 +66,7 @@
 
 
 
-            <div class="flex justify-between mb-4">
-                <th:block th:each="i : ${#numbers.sequence(1, 5)}" th:with="file=${article.extra.fileMap.get('file\_\_' + i)}">
-                    <div class="image-upload">
-                        <span th:text="|${i}번 이미지|"></span>
-                        <label th:for="|file-input-${i}|">
-                            <th:block th:if="${file != null}">
-                                <div class="upload-icon w-[100px] h-[97px] border border-2 border-solid border-info border-dotted rounded-md relative">
-                                    <img class="w-[100px] h-[93px] rounded-md cursor-pointer preview-image" th:id="|preview-image-${i}|" th:src="${file.s3Url}">
-                                    <input type="button" class="!bg-red-500 absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full w-6 h-6 flex items-center justify-center text-white" style="display: block;" th:id="|cancel-button-${i}|" th:onclick="|cancelFileSelect(${i})|">
-                                        X
-                                    </input>
-                                </div>
-                            </th:block>
-                            <th:block th:if="${file == null}">
-                                <div class="upload-icon w-[100px] h-[97px] border border-2 border-solid border-info border-dotted rounded-md relative">
-                                    <img class="w-[100px] h-[93px] rounded-md cursor-pointer preview-image" th:id="|preview-image-${i}|" src="https://i.ibb.co/d7wH0dJ/image4.png">
-                                    <button type="button" class="!bg-red-500 absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full w-6 h-6 flex items-center justify-center text-white" style="display: none;" th:id="|cancel-button-${i}|" th:onclick="|cancelFileSelect(${i})|">
-                                        X
-                                    </button>
-                                </div>
-                            </th:block>
-                        </label>
-                        <input th:id="|file-input-${i}|" type="file" th:name="|file\_\_${i}|" accept="image/png, image/gif, image/jpeg" style="display: none;" th:onchange="|handleFileSelect(event, ${i})|"/>
-                    </div>
-                </th:block>
-            </div>
+
 
 <!--            <th:block th:each="i : ${#numbers.sequence(1, 5)}" th:with="file=${article.extra.fileMap.get('file\_\_' + i)}">-->
 <!--                <div>-->
@@ -72,7 +78,7 @@
 <!--                            <img class="w-10 h-10 object-cover rounded" title="새창에서 크게 보기" th:src="@{${file.s3Url}}" alt="">-->
 <!--                            <br>-->
 <!--                            <label>-->
-<!--                                <input type="button" value="" th:name="|delete___file\_\_${i}|">-->
+<!--                                <input type="checkbox" value="" th:name="|delete___file\_\_${i}|">-->
 <!--                                <span>이미지 삭제</span>-->
 <!--                            </label>-->
 <!--                        </a>-->
@@ -168,6 +174,15 @@
             const previewImage = document.getElementById(`preview-image-${index}`);
             previewImage.src = "https://i.ibb.co/d7wH0dJ/image4.png"; // 기본 이미지로 되돌리기
             cancelButton.style.display = "none";
+
+            const checkbox = document.getElementById(`delete-input-${index}`);
+            if (checkbox) {
+                checkbox.checked = true;
+            }
+        }
+
+        function handleTextareaInput(event) {
+            event.target.value = event.target.value.replace(/\n/g, '\r\n');
         }
     </script>
 </main>

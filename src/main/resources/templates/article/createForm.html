@@ -21,7 +21,7 @@
             </div>
 
             <div class="mb-4">
-                <textarea name="content" th:field="*{content}" class="form-textarea w-full h-64 resize-none border border-info rounded-md p-3" placeholder="본문을 입력하세요"></textarea>
+                <textarea name="content" oninput="handleTextareaInput(event)" th:field="*{content}" class="form-textarea w-full h-64 resize-none border border-info rounded-md p-3" placeholder="본문을 입력하세요"></textarea>
             </div>
 
             <div class="flex justify-between mb-4">
@@ -41,7 +41,7 @@
                 </th:block>
             </div>
 
-            <div class="mb-4 border border-info flex items-center">
+            <div class="mb-4 border border-info flex items-center rounded-md">
                 <p class="pl-3">#</p>
                 <input type="text" id="hashTagInput" class="form-input w-full border-0 border-info rounded-md h-10" placeholder="태그를 입력하세요" onkeydown="if(event.keyCode===13) addHashTag(event)">
             </div>
@@ -139,6 +139,10 @@
             const previewImage = document.getElementById(`preview-image-${index}`);
             previewImage.src = "https://i.ibb.co/d7wH0dJ/image4.png"; // 기본 이미지로 되돌리기
             cancelButton.style.display = "none";
+        }
+
+        function handleTextareaInput(event) {
+            event.target.value = event.target.value.replace(/\n/g, '\r\n');
         }
     </script>
 </main>
