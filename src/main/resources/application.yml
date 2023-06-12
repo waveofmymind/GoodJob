@@ -11,8 +11,8 @@ spring:
     active: local
 
   jpa:
-#    show-sql: true
-#    open-in-view: false
+    show-sql: true
+    open-in-view: false
     properties:
       hibernate:
         format_sql: true
@@ -45,8 +45,6 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
-          github:
-            user-name-attribute: user
 
 jasypt:
   encryptor:
