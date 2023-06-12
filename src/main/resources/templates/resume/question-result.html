@@ -12,6 +12,28 @@
 </head>
 <body>
 <main layout:fragment="main" class="flex justify-center items-center h-auto mt-16">
+
+
+    <script>
+        function downloadText() {
+            var elements = document.querySelectorAll(".improvementPoint, .advice");
+            var txtData = '';
+            for (var i = 0; i < elements.length; i++) {
+                txtData += elements[i].textContent + '\n';
+            }
+
+            var blob = new Blob([txtData], { type: 'text/plain' });
+            var url = URL.createObjectURL(blob);
+
+            var link = document.createElement('a');
+            link.download = 'question.txt';
+            link.href = url;
+
+            link.click();
+        }
+    </script>
+
+
     <div class="w-full max-w-2xl mx-auto">
         <h1 class="text-center mb-6">예상 면접 질문</h1>
         <div th:each="predictionResponse : ${predictionResponses}">
@@ -20,6 +42,7 @@
                 <p th:text="${predictionResponse.bestAnswer}">Best answer</p>
             </div>
         </div>
+        <button onClick="downloadText()" className="mt-8">텍스트 파일로 저장하기</button>
     </div>
 </main>
 </body>
