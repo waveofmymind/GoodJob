@@ -48,9 +48,18 @@
             contentTextarea.classList.add("textarea", "textarea-bordered", "h-64", "mb-2");
             contentTextarea.placeholder = "선택한 분야에 맞는 이력서 내용을 작성해주세요.";
 
+            var deleteButton = document.createElement("button");
+            deleteButton.type = "button";
+            deleteButton.textContent = "삭제";
+            deleteButton.classList.add("text-sm", "mb-2");
+            deleteButton.onclick = function () {
+                resumeSectionsDiv.removeChild(sectionDiv);
+            };
+
             sectionDiv.appendChild(resumeTypeSelect);
             sectionDiv.appendChild(document.createElement("br"));
             sectionDiv.appendChild(contentTextarea);
+            sectionDiv.appendChild(deleteButton);
 
             resumeSectionsDiv.appendChild(sectionDiv);
         }
