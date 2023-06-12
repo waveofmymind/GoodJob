@@ -41,9 +41,7 @@ public class ResumeController {
 
     @PostMapping("/advices")
     public String generateAdvice(@ModelAttribute CreatePromptRequest request, Model model) {
-
         WhatGeneratedImproveResponse generated = resumeFacade.generateAdvice(request);
-        log.info(generated.toString());
         model.addAttribute("improveResponses", generated.improvementResponse());
 
         return "resume/advice-result";
