@@ -27,11 +27,19 @@ spring:
         registration:
           kakao:
             clientId: ENC(ul/6POjcQljJQlL38MpYWmXCJDMgudx31KPb2M/kVJ4UxV+IfFD5+VddkvtbaptM)
-            scope:
             client-name: Kakao
             authorization-grant-type: authorization_code
             redirect-uri: '${custom.site.baseUrl}/{action}/oauth2/code/{registrationId}'
             client-authentication-method: POST
+          github:
+            clientId: ${custom.github.client-id}
+            client-secret: ${custom.github.client-secret}
+            scope: read:user, user:email
+          google:
+            clientId: ENC(hSIi04R6g7gCu8jmuvbKIkVDQLgIj3RfcIov1f6iwwjYtwMqKhgQ4DzV7QYoJ92ZU83mjxgSRDsagDlxNcqyoUT8i2OnhuEbGQaA7kvt/Pc=)
+            client-secret: ENC(Sy6gQZ0OSIHABvUqpBZKJOBMQFdW6zIHkBnGrHY8WKAhU+ZhOja0RyFww2CU1GNC)
+            scope: profile, email
+            redirect-uri: '${custom.site.baseUrl}/{action}/oauth2/code/{registrationId}'
         provider:
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
@@ -74,5 +82,8 @@ accessKey:
 custom:
   jwt:
     secretKey: ENC(td8jcP/eOBMP9/6Nph0R0lmIzC5mhwk5ln46rp4GVt1mfwzI+J9YkA/bnu9dGxkzxRZk9k2dTWGmNUL2BLxVwQ==)
+  github:
+    client-id: ENC(Iem24CVhksoo9X1oT5QZzQa9xbAIuW9V2+Ym5HHpOCI=)
+    client-secret: ENC(hX0VNKg0dVX4qsjqVsA/KmedU8mY9Bc659TBeiFXkxXCwRuTmJ87y6/AVuC0DPp9POJkzcEthRU=)
   site:
     baseUrl: http://localhost:8080

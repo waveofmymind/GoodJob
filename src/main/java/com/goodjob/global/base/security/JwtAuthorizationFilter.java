@@ -2,8 +2,8 @@ package com.goodjob.global.base.security;
 
 import com.goodjob.domain.member.entity.Member;
 import com.goodjob.domain.member.service.MemberService;
-import com.goodjob.global.base.jwt.JwtProvider;
 import com.goodjob.global.base.cookie.CookieUt;
+import com.goodjob.global.base.jwt.JwtProvider;
 import com.goodjob.global.base.redis.RedisUt;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
@@ -12,7 +12,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,15 +21,17 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
     private final MemberService memberService;
     private final CookieUt cookieUt;
     private final RedisUt redisUt;
+    private Optional<Member> opMember;
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -39,38 +40,31 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         if (accessToken != null) {
             String token = accessToken.getValue();
-            log.info("token = {}", token);
 
             try {
                 if (jwtProvider.verify(token)) {
                     Map<String, Object> claims = jwtProvider.getClaims(token);
                     long id = (int) claims.get("id");
 
-                    Member member = memberService.findById(id).orElseThrow();
+                    opMember = memberService.findById(id);
 
-                    forceAuthentication(member);
+                    if (opMember.isPresent()) {
+                        forceAuthentication(opMember.get());
+                    }
                 }
             } catch (ExpiredJwtException e) {
-                Map<String, Object> claims = jwtProvider.getClaims(token);
-                // TODO: 리팩토링시 id를 키값에 넣는걸로
-                String username = (String) claims.get("username");
-                Long ttl = redisUt.getExpire(username);
+                String userId = String.valueOf(opMember.get().getId());
+                Long ttl = redisUt.getExpire(userId);
 
-                if (ttl == -1) { // 키가 존재하지 않는 경우
-                    log.info("존재하지 않는 refreshToken key!");
-                }
-
-                if (ttl == -2) { // 리프레시 토큰 만료된 경우
-                    log.info("만료된 refreshToken. 재로그인 필요!");
+                if (ttl < 0) { // 리프레시 토큰까지 만료되었거나 키가 존재하지 않는 경우
+                    // 재로그인
+                    response.sendRedirect("/member/login");
                 }
 
                 // 새로운 액세스 토큰 발급
-                Member member = memberService.findByUsername(username).orElseThrow();
-                String newAccessToken = jwtProvider.genToken(member.toClaims());
-                log.info("새로 발급된 accessToken ={}", newAccessToken);
+                String newAccessToken = jwtProvider.genToken(opMember.get().toClaims());
 
                 response.addCookie(cookieUt.createCookie("accessToken", newAccessToken));
-                response.addCookie(cookieUt.createCookie("id", username));
             }
         }
 
@@ -80,7 +74,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     // 강제로 로그인 처리하는 메서드 (로그인한 사용자의 정보를 가져옴)
     private void forceAuthentication(Member member) {
         User user = new User(member.getUsername(), member.getPassword(), member.getAuthorities());
-//        log.info("user= {}", user);
         // 스프링 시큐리티 객체에 저장할 authentication 객체를 생성
         UsernamePasswordAuthenticationToken authentication = UsernamePasswordAuthenticationToken.authenticated(
                 user,

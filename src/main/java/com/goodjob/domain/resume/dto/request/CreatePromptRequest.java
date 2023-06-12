@@ -1,5 +1,7 @@
 package com.goodjob.domain.resume.dto.request;
 
-public record CreatePromptRequest(String job, String career, String resumeType, String content){
+import java.util.List;
+
+public record CreatePromptRequest(String job, String career, List<String> resumeType, List<String> content){
 
 }

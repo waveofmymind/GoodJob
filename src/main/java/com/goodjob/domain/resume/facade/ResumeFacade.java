@@ -26,12 +26,9 @@ public class ResumeFacade {
         log.debug("이력서 생성 update request : {}", request.toString());
 
 
-        ResumeRequest resumeData = generateExpectedMapper.toResumeData(request.resumeType(), request.content());
+        List<ResumeRequest> resumeData = generateExpectedMapper.toResumeData(request.resumeType(), request.content());
 
-        WhatGeneratedQuestionResponse response = gptService.createdExpectedQuestionsAndAnswer(request.job(), request.career(), List.of(resumeData));
-
-        log.info(response.toString());
-        return response;
+        return gptService.createdExpectedQuestionsAndAnswer(request.job(), request.career(), resumeData);
     }
 
     public WhatGeneratedImproveResponse generateAdvice(final CreatePromptRequest request) {
@@ -39,11 +36,8 @@ public class ResumeFacade {
         log.debug("이력서 생성 update request : {}", request.toString());
 
 
-        ResumeRequest resumeData = generateExpectedMapper.toResumeData(request.resumeType(), request.content());
+        List<ResumeRequest> resumeData = generateExpectedMapper.toResumeData(request.resumeType(), request.content());
 
-        WhatGeneratedImproveResponse response = gptService.createdImprovementPointsAndAdvice(request.job(), request.career(), List.of(resumeData));
-
-        log.info(response.toString());
-        return response;
+        return gptService.createdImprovementPointsAndAdvice(request.job(), request.career(), resumeData);
     }
 }

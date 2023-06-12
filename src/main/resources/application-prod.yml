@@ -18,3 +18,10 @@ spring:
 scheduler:
   cron:
     job: "0 0 20/12 * * *"
+
+custom:
+  github:
+    client-id: ENC(KP2uJoq4/fKHp20/Ko41G8roZAGa30C75XkuWdpKeKI=)
+    client-secret: ENC(n52W++3MJQHP25CWfyQ0gk/id7irOQwXVWCR4Ld7W7Bb8C2tYl0=)
+  site:
+    baseUrl: https://waveofmymind.shop

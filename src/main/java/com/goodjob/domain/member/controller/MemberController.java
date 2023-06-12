@@ -7,9 +7,9 @@ import com.goodjob.domain.member.service.MemberService;
 import com.goodjob.global.base.redis.RedisUt;
 import com.goodjob.global.base.rq.Rq;
 import com.goodjob.global.base.rsData.RsData;
+import jakarta.servlet.http.Cookie;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -20,7 +20,6 @@ import java.util.Optional;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/member")
-@Slf4j
 public class MemberController {
 
     private final Rq rq;
@@ -37,8 +36,7 @@ public class MemberController {
     @PreAuthorize("isAnonymous()")
     public String join(@Valid JoinRequestDto joinRequestDto,
                        BindingResult bindingResult) {
-        // TODO: 중복확인로직 보완
-
+        // TODO: 중복확인로직 보완 - 중복확인 후 값을 바꾸면 그대로 넘어가는 문제.. 중복 확인 값을 같이 넘겨줄까?
         if (bindingResult.hasErrors()) {
             return "member/join";
         }
@@ -59,39 +57,37 @@ public class MemberController {
     @GetMapping("/login")
     @PreAuthorize("isAnonymous()")
     public String showLogin() {
+        String referer = rq.getReferer();
+        rq.setCookie("previousUrl", referer);
+
         return "member/login";
-    }
-
-    @GetMapping("/oauth2Login")
-    @PreAuthorize("isAnonymous()")
-    public String showOauth2Login() {
-
-        return "member/oauth2Login";
     }
 
     @PostMapping("/login")
     @PreAuthorize("isAnonymous()")
     public String login(@Valid LoginRequestDto loginRequestDto) {
-//        log.info("loginRequestDto= {}", loginRequestDto.toString());
-
-        RsData loginRsData = memberService.genAccessToken(loginRequestDto.getUsername(), loginRequestDto.getPassword());
-//        log.info("resultCode ={}", loginRsData.getResultCode());
+        RsData loginRsData = memberService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
 
         if (loginRsData.isFail()) {
             return rq.historyBack(loginRsData);
         }
 
-        // TODO: 리팩토링
         rq.setCookie("accessToken", (String) loginRsData.getData());
+
+        Cookie previousUrlCookie = rq.getCookie("previousUrl");
+
+        if (previousUrlCookie != null) {
+            String previousUrl = rq.getPreviousUrl(previousUrlCookie);
+
+            return rq.redirectWithMsg(previousUrl, loginRsData);
+        }
 
         return rq.redirectWithMsg("/", loginRsData);
     }
 
-    // TODO: 추후 수정
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("isAuthenticated()")
     public String delete(@PathVariable Long id) {
-        log.info("id ={}", id);
         memberService.delete(id);
 
         return "member/join";
@@ -101,7 +97,6 @@ public class MemberController {
     @PreAuthorize("isAuthenticated()")
     public String logout() {
         String username = rq.getMember().getUsername();
-        // TODO: 리팩토링
         // 레디스에서 리프레시토큰삭제
         redisUt.deleteToken(username);
         // 쿠키삭제
