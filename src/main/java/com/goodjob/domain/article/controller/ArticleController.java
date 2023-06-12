@@ -83,13 +83,16 @@ public class ArticleController {
 
     @PostMapping("/create")
     public String createArticle(@Valid ArticleRequestDto articleRequestDto, BindingResult bindingResult, MultipartRequest multipartRequest, FileRequest fileRequest) throws IOException {
-        if (bindingResult.hasErrors()) {
-            return "article/createForm";
-        }
+//        if (bindingResult.hasErrors()) {
+//            return "article/createForm";
+//        }
 
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 
         RsData<Article> articleRsData = articleService.createArticle(rq.getMember(), articleRequestDto);
+        if(articleRsData.isFail()) {
+            return rq.historyBack(articleRsData);
+        }
         Article article = articleRsData.getData();
         s3Service.uploadFile(article, fileMap);
 
@@ -119,9 +122,6 @@ public class ArticleController {
     public String updateArticle(@Valid ArticleRequestDto articleRequestDto, BindingResult bindingResult,
                                  @PathVariable("id") Long id, MultipartRequest multipartRequest,
                                 FileRequest fileRequest, @RequestParam Map<String, String> params) throws IOException {
-        if (bindingResult.hasErrors()) {
-            return "article/modifyForm";
-        }
 
         RsData<Article> articleRsData = articleService.updateArticle(rq.getMember(), id, articleRequestDto);
 
@@ -132,7 +132,7 @@ public class ArticleController {
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 
         Article article = articleRsData.getData();
-        s3Service.deleteFiles(article, params);
+        s3Service.deleteFiles(article);
         s3Service.uploadFile(article, fileMap);
 
         return rq.redirectWithMsg("/article/detail/%s".formatted(id), articleRsData);

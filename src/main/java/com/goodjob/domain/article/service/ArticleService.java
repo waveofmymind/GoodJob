@@ -129,6 +129,13 @@ public class ArticleService {
     }
 
     public RsData createArticle(Member author, ArticleRequestDto articleRequestDto) {
+        if(articleRequestDto.getTitle().trim().equals("")) {
+            return RsData.of("F-1", "제목을 입력해야 합니다.");
+        }
+
+        if(articleRequestDto.getContent().trim().equals("")) {
+            return RsData.of("F-2", "내용을 입력해야 합니다.");
+        }
 
         Article article = Article
                 .builder()
@@ -157,10 +164,20 @@ public class ArticleService {
             return articleRsData;
         }
 
+
+
         Article article = articleRsData.getData();
 
         if(article.getMember().getId() != author.getId()) {
             return RsData.of("F-3", "수정 권한이 없습니다.");
+        }
+
+        if(articleRequestDto.getTitle().trim().equals("")) {
+            return RsData.of("F-4", "제목을 입력해야 합니다.");
+        }
+
+        if(articleRequestDto.getContent().trim().equals("")) {
+            return RsData.of("F-5", "내용을 입력해야 합니다.");
         }
 
         article.setTitle(articleRequestDto.getTitle());

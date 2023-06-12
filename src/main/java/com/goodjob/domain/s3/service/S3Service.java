@@ -27,7 +27,7 @@ public class S3Service {
     public void uploadFile(Article article, Map<String, MultipartFile> fileMap) throws IOException {
         List<String> imgUrlList = new ArrayList<>();
 
-        for(String inputName : fileMap.keySet()) {
+        for (String inputName : fileMap.keySet()) {
             MultipartFile multipartFile = fileMap.get(inputName);
 
             // 파일이 선택되지 않은 경우 처리
@@ -73,7 +73,7 @@ public class S3Service {
             ListObjectsV2Result listObjectsV2Result = amazonS3.listObjectsV2(bucket);
             List<S3ObjectSummary> objectSummaries = listObjectsV2Result.getObjectSummaries();
 
-            for (S3ObjectSummary object: objectSummaries) {
+            for (S3ObjectSummary object : objectSummaries) {
                 System.out.println("object = " + object.toString());
             }
 
@@ -109,35 +109,18 @@ public class S3Service {
         return fileName.substring(fileName.lastIndexOf("."));
     }
 
-    public void deleteFiles(Article article, Map<String, String> params) {
-        List<String> deleteFilesArgs = params.keySet()
-                .stream()
-                .filter(key -> key.startsWith("delete___"))
-                .map(key -> key.replace("delete___", ""))
-                .collect(Collectors.toList());
 
-        deleteFiles(article, deleteFilesArgs);
-    }
+    public void deleteFiles(Article article) {
+        List<File> files = fileService.findAllByArticle(article);
+        for (File file : files) {
+            fileService.delete(file);
+            deleteS3(file.getFileName());
+        }
 
-    public void deleteFiles(Article article, List<String> params) {
-        params
-                .stream()
-                .forEach(key -> {
-                    String[] keyBits = key.split("__");
-
-                    int fileNo = Integer.parseInt(keyBits[1]);
-
-                    Optional<File> fileOp = fileService.findByArticleAndFileNo(article, fileNo);
-
-                    if (fileOp.isPresent()) {
-                        fileService.delete(fileOp.get());
-                        deleteS3(fileOp.get().getFileName());
-                    }
-                });
     }
 
     // DeleteObject를 통해 S3 파일 삭제
-    public void deleteS3(String fileName){
+    public void deleteS3(String fileName) {
         DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucket, fileName);
         amazonS3.deleteObject(deleteObjectRequest);
     }
