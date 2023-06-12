@@ -1,6 +1,7 @@
 package com.goodjob.global.base.security;
 
 import com.goodjob.global.base.rq.Rq;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException {
         rq.setJwtTokenToOAuth2User(authentication);
+        Cookie previousUrlCookie = rq.getCookie("previousUrl");
 
-        response.sendRedirect("/");
+        if (previousUrlCookie != null) {
+            String previousUrl = rq.getPreviousUrl(previousUrlCookie);
+
+            response.sendRedirect(previousUrl);
+        } else {
+            response.sendRedirect("/");
+        }
     }
 }
