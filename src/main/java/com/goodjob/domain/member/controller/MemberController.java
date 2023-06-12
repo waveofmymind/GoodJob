@@ -37,7 +37,7 @@ public class MemberController {
     @PreAuthorize("isAnonymous()")
     public String join(@Valid JoinRequestDto joinRequestDto,
                        BindingResult bindingResult) {
-        // TODO: 중복확인로직 보완
+        // TODO: 중복확인로직 보완 - 중복확인 후 값을 바꾸면 그대로 넘어가는 문제.. 중복 확인 값을 같이 넘겨줄까?
 
         if (bindingResult.hasErrors()) {
             return "member/join";
@@ -72,16 +72,12 @@ public class MemberController {
     @PostMapping("/login")
     @PreAuthorize("isAnonymous()")
     public String login(@Valid LoginRequestDto loginRequestDto) {
-//        log.info("loginRequestDto= {}", loginRequestDto.toString());
-
         RsData loginRsData = memberService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
-//        log.info("resultCode ={}", loginRsData.getResultCode());
 
         if (loginRsData.isFail()) {
             return rq.historyBack(loginRsData);
         }
 
-        // TODO: 리팩토링
         rq.setCookie("accessToken", (String) loginRsData.getData());
 
         return rq.redirectWithMsg("/", loginRsData);
@@ -101,7 +97,6 @@ public class MemberController {
     @PreAuthorize("isAuthenticated()")
     public String logout() {
         String username = rq.getMember().getUsername();
-        // TODO: 리팩토링
         // 레디스에서 리프레시토큰삭제
         redisUt.deleteToken(username);
         // 쿠키삭제
