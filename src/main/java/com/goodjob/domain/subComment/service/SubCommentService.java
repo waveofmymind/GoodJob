@@ -1,8 +1,6 @@
 package com.goodjob.domain.subComment.service;
 
-import com.goodjob.domain.comment.dto.request.CommentRequestDto;
 import com.goodjob.domain.comment.entity.Comment;
-import com.goodjob.domain.comment.repository.CommentRepository;
 import com.goodjob.domain.comment.service.CommentService;
 import com.goodjob.domain.member.entity.Member;
 import com.goodjob.domain.subComment.dto.request.SubCommentRequestDto;
@@ -12,8 +10,6 @@ import com.goodjob.global.base.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service

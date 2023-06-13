@@ -1,29 +1,17 @@
 package com.goodjob.domain.comment.controller;
 
-import com.goodjob.domain.article.dto.request.ArticleRequestDto;
-import com.goodjob.domain.article.dto.response.ArticleResponseDto;
-import com.goodjob.domain.article.entity.Article;
-import com.goodjob.domain.article.service.ArticleService;
 import com.goodjob.domain.comment.dto.request.CommentRequestDto;
-import com.goodjob.domain.comment.dto.response.CommentResponseDto;
 import com.goodjob.domain.comment.entity.Comment;
 import com.goodjob.domain.comment.service.CommentService;
 import com.goodjob.global.base.rq.Rq;
 import com.goodjob.global.base.rsData.RsData;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
@@ -31,14 +19,6 @@ import java.security.Principal;
 public class CommentController {
     private final CommentService commentService;
     private final Rq rq;
-
-    //TODO: 필요없는 메서드인지 확인 후 삭제
-//    @GetMapping("/get/{id}")
-//    public String redirectToArticleWithComment(@PathVariable("id") Long id) {
-//        Article article = commentService.getComment(id).getArticle();
-//
-//        return "redirect:/article/detail/%s".formatted(article.getId());
-//    }
 
     @PostMapping("/create/{id}")
     public String createComment(@PathVariable("id") Long id, @Valid CommentRequestDto commentRequestDto) {
@@ -48,8 +28,6 @@ public class CommentController {
         if(commentRsData.isFail()) {
             return rq.historyBack(commentRsData);
         }
-
-
 
         return rq.redirectWithMsg("/article/detail/%s".formatted(id), commentRsData);
     }

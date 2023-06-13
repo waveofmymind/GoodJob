@@ -30,13 +30,4 @@ public class File {
 
     private Long fileNo;
     private String fileName;
-
-//    @Override
-//    public String toString() {
-//        return "FileEntity{" +
-//                "id=" + id +
-//                ", title='" + title + '\'' +
-//                ", s3Url='" + s3Url + '\'' +
-//                '}';
-//    }
 }

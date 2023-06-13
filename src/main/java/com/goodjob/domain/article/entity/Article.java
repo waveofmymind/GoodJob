@@ -55,8 +55,4 @@ public class Article extends BaseEntity {
     @OneToMany(mappedBy = "article", cascade = {CascadeType.ALL})
     @Builder.Default
     private List<HashTag> hashTagList = new ArrayList<>();
-
-
-
-    // TODO: 의존관계
 }

@@ -1,7 +1,6 @@
 package com.goodjob.domain.article.dto.response;
 
 import com.goodjob.domain.comment.dto.response.CommentResponseDto;
-import com.goodjob.domain.file.entity.File;
 import com.goodjob.domain.hashTag.dto.response.HashTagResponseDto;
 import com.goodjob.domain.likes.dto.response.LikesResponseDto;
 import com.goodjob.domain.member.entity.Member;
@@ -9,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;

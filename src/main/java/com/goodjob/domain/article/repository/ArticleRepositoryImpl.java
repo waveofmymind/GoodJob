@@ -1,11 +1,8 @@
 package com.goodjob.domain.article.repository;
 
-import com.beust.jcommander.internal.Nullable;
-import com.goodjob.domain.article.dto.response.ArticleResponseDto;
 import com.goodjob.domain.article.entity.Article;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -14,9 +11,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.goodjob.domain.article.entity.QArticle.article;
-import static com.goodjob.domain.likes.entity.QLikes.likes;
-import static com.goodjob.domain.member.entity.QMember.member;
 import static com.goodjob.domain.hashTag.entity.QHashTag.hashTag;
+import static com.goodjob.domain.member.entity.QMember.member;
 
 @RequiredArgsConstructor
 public class ArticleRepositoryImpl implements ArticleRepositoryCustom{

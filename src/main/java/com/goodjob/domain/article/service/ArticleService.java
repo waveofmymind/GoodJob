@@ -6,9 +6,7 @@ import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.article.mapper.ArticleMapper;
 import com.goodjob.domain.article.repository.ArticleRepository;
 import com.goodjob.domain.comment.entity.Comment;
-import com.goodjob.domain.file.entity.File;
 import com.goodjob.domain.file.service.FileService;
-import com.goodjob.domain.hashTag.entity.HashTag;
 import com.goodjob.domain.hashTag.service.HashTagService;
 import com.goodjob.domain.member.entity.Member;
 import com.goodjob.domain.subComment.entity.SubComment;
@@ -22,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
