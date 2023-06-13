@@ -1,10 +1,48 @@
 <html layout:decorate="~{layout/layout}">
 <head>
     <title>메인 페이지</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+        }
+        .image-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .image-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<main layout:fragment="main" class="container my-3">
-    <h1>메인화면입니다.</h1>
+<main layout:fragment="main" class="flex-grow flex items-center justify-center">
+    <img class="image-container" src="https://i.ibb.co/XWcR7dc/image6.png" style="filter: brightness(30%);" alt="">
+    <div class="image-text">
+        <p style="font-size:48px">
+            GoodJob!<br>
+            취업의 길잡이</p>
+    </div>
 </main>
 </body>
 </html>
