@@ -22,6 +22,6 @@ scheduler:
 custom:
   github:
     client-id: ENC(KP2uJoq4/fKHp20/Ko41G8roZAGa30C75XkuWdpKeKI=)
-    client-secret: ENC(n52W++3MJQHP25CWfyQ0gk/id7irOQwXVWCR4Ld7W7Bb8C2tYl0=)
+    client-secret: ENC(JdURofDmvQR3TiWNh+VdqlazykNYaNutWoQ9p1hk332miNDiAHR7wyhKXSivCebe1kTZ+TIC8Ic=)
   site:
     baseUrl: https://waveofmymind.shop
