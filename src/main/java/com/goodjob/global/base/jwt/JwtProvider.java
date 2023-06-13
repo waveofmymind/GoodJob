@@ -2,9 +2,10 @@ package com.goodjob.global.base.jwt;
 
 import com.goodjob.global.base.redis.RedisUt;
 import com.goodjob.global.util.Ut;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,6 @@ import java.util.Date;
 import java.util.Map;
 
 @Component
-@Slf4j
 public class JwtProvider {
     @Autowired
     private RedisUt redisUt;
@@ -43,15 +43,15 @@ public class JwtProvider {
     // 액세스토큰 생성
     public String genToken(Map<String, Object> claims) {
         long now = new Date().getTime();
-        // 지금으로부터 accessToken만큼 유효기간 가지는 accessToken 생성
+        // 지금으로부터 30분의 유효기간 가지는 accessToken 생성
         Date accessTokenExpiresIn = new Date(now + TOKEN_VALIDATION_SECOND);
 
-        String username = (String) claims.get("username");
+        long id = (long) claims.get("id");
+        String userId = String.valueOf(id);
         // 리프레시 토큰 생성
         String refreshToken = redisUt.genRefreshToken();
-        // 유저 계정을 키값으로 리프레시 토큰을 redis 에 저장. 유효기간은 15일
-        redisUt.setRefreshToken(username, refreshToken, now + REFRESH_TOKEN_VALIDATION_SECOND);
-        log.info("refreshToken 저장완료 ={}", refreshToken);
+        // 유저 계정을 키값으로 리프레시 토큰을 redis 에 저장. 유효기간은 14일
+        redisUt.setRefreshToken(userId, refreshToken, now + REFRESH_TOKEN_VALIDATION_SECOND);
 
         return Jwts.builder()
                 .claim("body", Ut.json.toStr(claims))
@@ -70,7 +70,6 @@ public class JwtProvider {
         } catch (ExpiredJwtException e) { // 액세스토큰 만료된 경우
             throw e;
         } catch (Exception e) {
-            log.error("tokenVerifyError ={}", e);
             return false;
         }
 

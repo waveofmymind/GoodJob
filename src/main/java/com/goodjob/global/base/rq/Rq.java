@@ -32,8 +32,8 @@ public class Rq {
     private Member member = null;
 
     public Rq(JwtProvider jwtProvider, CookieUt cookieUt, CustomDetailsService customDetailsService, MemberService memberService, HttpServletRequest req, HttpServletResponse resp) {
-        this.cookieUt = cookieUt;
         this.jwtProvider = jwtProvider;
+        this.cookieUt = cookieUt;
         this.customDetailsService = customDetailsService;
         this.memberService = memberService;
         this.req = req;
@@ -120,8 +120,10 @@ public class Rq {
     }
 
     public void setCookie(String cookieName, String value) {
-        Cookie cookie = cookieUt.createCookie(cookieName, value);
-        resp.addCookie(cookie);
+        if (!value.contains("/member/join")) {
+            Cookie cookie = cookieUt.createCookie(cookieName, value);
+            resp.addCookie(cookie);
+        }
     }
 
     public void expireCookie(String cookieName) {
@@ -141,5 +143,26 @@ public class Rq {
             // jwt 토큰을 쿠키에 설정
             setCookie("accessToken", token);
         }
+    }
+
+    public String getReferer() {
+        String referer = req.getHeader("referer");
+
+        if (referer != null) {
+            int queryIndex = referer.indexOf("?");
+
+            if (queryIndex != -1) {
+                referer = referer.substring(0, queryIndex);
+            }
+        }
+
+        return referer;
+    }
+
+    public String getPreviousUrl(Cookie cookie) {
+        String preUrl = cookie.getValue();
+        expireCookie(cookie.getName());
+
+        return preUrl;
     }
 }

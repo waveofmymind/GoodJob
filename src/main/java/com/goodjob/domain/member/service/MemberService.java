@@ -141,6 +141,7 @@ public class MemberService {
     @Transactional
     public void delete(Long id) {
         memberRepository.deleteById(id);
+
     }
 
     // 소셜 로그인할때마다 동작

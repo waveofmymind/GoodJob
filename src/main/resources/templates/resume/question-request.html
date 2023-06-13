@@ -8,13 +8,66 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.6/dist/full.css" rel="stylesheet" type="text/css"/>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css"/>
 
-    <title>Resume Review</title>
+    <title>면접 예상 질문</title>
 </head>
 <body>
 
 
 <main layout:fragment="main" class="flex justify-center items-center h-auto mt-16">
+
+    <script>
+        function addResumeSection() {
+
+            var resumeSectionsDiv = document.getElementById("resume-sections");
+
+            // Create a container div for the section
+            var sectionDiv = document.createElement("div");
+            sectionDiv.classList.add("mb-4"); // Add margin-bottom to each section
+
+
+            // Create a select for resumeType
+            var resumeTypeSelect = document.createElement("select");
+            resumeTypeSelect.name = "resumeType"; // 변경
+            resumeTypeSelect.classList.add("select", "select-bordered", "w-full", "max-w-xs", "mb-2");
+
+            var options = [
+                {value: "introduction", text: "자기 소개"},
+                {value: "technology stack", text: "기술 스택"},
+                {value: "career history", text: "경력 사항"},
+                {value: "project experience", text: "프로젝트 경험"}
+            ];
+            options.forEach(function(option) {
+                var opt = document.createElement("option");
+                opt.value = option.value;
+                opt.innerText = option.text;
+                resumeTypeSelect.appendChild(opt);
+            });
+
+            var contentTextarea = document.createElement("textarea");
+            contentTextarea.name = "content"; // 변경
+            contentTextarea.classList.add("textarea", "textarea-bordered", "h-64", "mb-2");
+            contentTextarea.placeholder = "선택한 분야에 맞는 이력서 내용을 작성해주세요.";
+
+            var deleteButton = document.createElement("button");
+            deleteButton.type = "button";
+            deleteButton.textContent = "삭제";
+            deleteButton.classList.add("text-sm", "mb-2");
+            deleteButton.onclick = function () {
+                resumeSectionsDiv.removeChild(sectionDiv);
+            };
+
+            sectionDiv.appendChild(resumeTypeSelect);
+            sectionDiv.appendChild(document.createElement("br"));
+            sectionDiv.appendChild(contentTextarea);
+            sectionDiv.appendChild(deleteButton);
+
+            resumeSectionsDiv.appendChild(sectionDiv);
+        }
+    </script>
+
+
     <form action="/resumes/questions" method="post" style="width:600px; margin:auto;">
+        <h1 class="text-2xl mb-6">📝 면접 예상 질문을 받아보세요</h1>
 
         <label for="job" class="mb-4">원하는 직업을 선택해주세요</label>
         <div class="mt-2">
@@ -26,6 +79,8 @@
             </select>
         </div>
 
+        <div class="mb-6"></div>
+
         <label for="career" class="mb-6">경력</label>
         <div class="mt-2">
             <select class="select select-bordered w-full max-w-xs" id="career" name="career">
@@ -34,23 +89,18 @@
             </select>
         </div>
 
-        <label for="resumeType" class="mb-2">검토를 받고싶은 분야를 선택해주세요</label>
-        <div class="mt-2">
-            <select class="select select-bordered w-full max-w-xs" id="resumeType" name="resumeType">
-                <option value="introduction">자기소개</option>
-                <option value="technology stack">기술 스택</option>
-                <option value="career history">업무 경험</option>
-                <option value="project experience">프로젝트</option>
-            </select>
+        <div class="mb-6"></div>
+
+
+        <div id="resume-sections" class="mb-6">
+
         </div>
 
-        <div class="form-control mb-2">
-            <label class="label">
-                <span class="label-text">이력서는 100자 이상 작성해주세요.</span>
-            </label>
-            <textarea class="textarea textarea-bordered h-64" id="content" name="content" placeholder="선택한 분야에 맞는 이력서 내용을 작성해주세요."></textarea>
-        </div>
+        <button type="button" onclick="addResumeSection()" class="btn mb-6">분야 추가</button>
+
         <button type="submit" class="btn mb-6">제출</button>
+
+        <h1 class="mb-4">답변을 생성하는데에는 1분 정도가 걸려요. 잠시만 기다려주세요!</h1>
     </form>
 </main>
 

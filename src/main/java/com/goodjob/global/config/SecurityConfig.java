@@ -39,7 +39,6 @@ public class SecurityConfig {
                         .requestMatchers("/**", "/resumes/**", "/member/**", "/article/**", "/jobstatistic/**").permitAll()
                 )
                 .httpBasic(httpBasicConfigurer -> httpBasicConfigurer.disable())
-                // TODO: 받아오는거까진 됨 -> 필터 거치면서 쿠키저장하도록
                 .oauth2Login(oauth2Login -> oauth2Login
                         .loginPage("/member/login")
                         .successHandler(oAuth2AuthenticationSuccessHandler)
