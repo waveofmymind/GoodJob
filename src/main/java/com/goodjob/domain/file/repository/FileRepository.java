@@ -1,7 +1,6 @@
 package com.goodjob.domain.file.repository;
 
 import com.goodjob.domain.article.entity.Article;
-import com.goodjob.domain.comment.entity.Comment;
 import com.goodjob.domain.file.entity.File;
 import org.springframework.data.jpa.repository.JpaRepository;
 

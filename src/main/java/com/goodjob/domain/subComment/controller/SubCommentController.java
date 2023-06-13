@@ -1,11 +1,5 @@
 package com.goodjob.domain.subComment.controller;
 
-import com.goodjob.domain.article.dto.response.ArticleResponseDto;
-import com.goodjob.domain.article.service.ArticleService;
-import com.goodjob.domain.comment.dto.request.CommentRequestDto;
-import com.goodjob.domain.comment.dto.response.CommentResponseDto;
-import com.goodjob.domain.comment.entity.Comment;
-import com.goodjob.domain.comment.service.CommentService;
 import com.goodjob.domain.subComment.dto.request.SubCommentRequestDto;
 import com.goodjob.domain.subComment.entity.SubComment;
 import com.goodjob.domain.subComment.service.SubCommentService;
@@ -13,16 +7,12 @@ import com.goodjob.global.base.rq.Rq;
 import com.goodjob.global.base.rsData.RsData;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor

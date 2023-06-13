@@ -15,7 +15,6 @@
         <h1 class="text-2xl font-bold">게시글 작성</h1>
 
         <form class="mt-4" th:object="${articleRequestDto}" method="post" enctype="multipart/form-data">
-            <!-- <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> -->
             <div class="mb-4">
                 <input type="text" name="title" th:field="*{title}" class="form-input w-full border border-neutral rounded-md h-10 p-3" placeholder="제목을 입력하세요">
             </div>
@@ -43,7 +42,7 @@
 
             <div class="mb-4 border border-neutral flex items-center rounded-md">
                 <p class="pl-3">#</p>
-                <input type="text" id="hashTagInput" class="form-input w-full border-0 border-neutral rounded-md h-10" placeholder="태그를 입력하세요" onkeydown="if(event.keyCode===13) addHashTag(event)">
+                <input type="text" id="hashTagInput" class="form-input w-full border-0 border-neutral rounded-md h-10" placeholder="태그를 입력하세요" onkeydown="if(event.keyCode===13) addHashTag(event); else if(even.keyCode===8) return true; return false;">
             </div>
 
             <div id="hashTagList" class="flex flex-wrap mb-4">
@@ -68,6 +67,12 @@
             event.preventDefault();
             var hashTagInput = document.getElementById('hashTagInput');
             var hashTagText = hashTagInput.value.trim().replace(/\s+/g, '').toLowerCase(); // 띄어쓰기 제거 및 소문자로 변환
+
+            if(hashTagText.length > 10) {
+                toastWarning('해시태그는 최대 10자까지 작성할 수 있습니다.');
+                hashTagInput.focus();
+                return;
+            }
 
             if (hashTagText !== '') {
                 var hashTagList = document.getElementById('hashTagList');

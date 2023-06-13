@@ -33,14 +33,6 @@ public class FileService {
         return all;
     }
 
-    public List<File> findAllByArticle(Article article) {
-        return fileRepository.findAllByArticle(article);
-    }
-
-    public List<File> findAllByArticleId(Long id) {
-        return fileRepository.findAllByArticleId(id);
-    }
-
     public Map<String, File> getFileMap(Long id) {
         List<File> files = fileRepository.findAllByArticleId(id);
 

@@ -1,7 +1,6 @@
 package com.goodjob.domain.subComment.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
