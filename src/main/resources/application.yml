@@ -1,5 +1,7 @@
 server:
   port: 8080
+  tomcat:
+    use-relative-redirects: true
 
 spring:
   application:
@@ -20,6 +22,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        default_batch_fetch_size: 500
 
   messages:
     basename: message/messages
