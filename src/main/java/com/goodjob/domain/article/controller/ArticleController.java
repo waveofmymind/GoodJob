@@ -25,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -63,11 +62,6 @@ public class ArticleController {
 
     @GetMapping("/create")
     public String createArticle(ArticleRequestDto articleRequestDto ) {
-        //TODO: 찬규님꺼 pull 받고 다시 고민
-//        RsData isLoggedInRsData = articleService.isLoggedIn(rq.getMember());
-//        if(isLoggedInRsData.isFail()) {
-//            return rq.redirectWithMsg("/member/login", isLoggedInRsData);
-//        }
         return "article/createForm";
 
     }

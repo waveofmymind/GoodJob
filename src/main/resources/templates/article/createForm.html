@@ -43,7 +43,7 @@
 
             <div class="mb-4 border border-neutral flex items-center rounded-md">
                 <p class="pl-3">#</p>
-                <input type="text" id="hashTagInput" class="form-input w-full border-0 border-neutral rounded-md h-10" placeholder="태그를 입력하세요" onkeydown="if(event.keyCode===13) addHashTag(event)">
+                <input type="text" id="hashTagInput" class="form-input w-full border-0 border-neutral rounded-md h-10" placeholder="태그를 입력하세요" onkeydown="if(event.keyCode===13) addHashTag(event); else if(even.keyCode===8) return true; return false;">
             </div>
 
             <div id="hashTagList" class="flex flex-wrap mb-4">
@@ -63,11 +63,32 @@
 
 
     <script layout:fragment="script" type='text/javascript'>
+        function ArticleRequestForm__submit(form) {
+            if (form.title.value.length === 0) {
+                toastWarning('제목을 입력해야 합니다.');
+                form.title.focus();
+                return;
+            }
+
+            if(form.content.value.length === 0) {
+                toastWarning('내용을 입력해야 합니다.');
+                form.content.focus();
+                return;
+            }
+
+            form.submit();
+        }
         // 해시태그 추가를 위한 함수
         function addHashTag(event) {
             event.preventDefault();
             var hashTagInput = document.getElementById('hashTagInput');
             var hashTagText = hashTagInput.value.trim().replace(/\s+/g, '').toLowerCase(); // 띄어쓰기 제거 및 소문자로 변환
+
+            if(hashTagText.length > 10) {
+                toastWarning('해시태그는 최대 10자까지 작성할 수 있습니다.');
+                hashTagInput.focus();
+                return;
+            }
 
             if (hashTagText !== '') {
                 var hashTagList = document.getElementById('hashTagList');

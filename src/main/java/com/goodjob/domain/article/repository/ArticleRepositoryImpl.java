@@ -28,6 +28,23 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
 
         BooleanBuilder builder = new BooleanBuilder();
 
+
+
+        builder.and(article.isDeleted.eq(false));
+
+        switch(sortCode) {
+            case 2:
+                orderSpecifiers.add(article.viewCount.desc());
+                orderSpecifiers.add(article.id.desc());
+                break;
+            case 3:
+                orderSpecifiers.add(article.likesList.size().desc());
+                orderSpecifiers.add(article.id.desc());
+                break;
+            default:
+                orderSpecifiers.add(article.id.desc());
+                break;
+        }
         switch(category) {
             case "내용":
                 builder.or(article.content.contains(kw));
@@ -45,23 +62,6 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
                 builder.or(article.title.contains(kw));
                 break;
         }
-
-        builder.and(article.isDeleted.eq(false));
-
-        switch(sortCode) {
-            case 2:
-                orderSpecifiers.add(article.viewCount.desc());
-                orderSpecifiers.add(article.id.desc());
-                break;
-            case 3:
-                orderSpecifiers.add(article.likesList.size().desc());
-                orderSpecifiers.add(article.id.desc());
-                break;
-            default:
-                orderSpecifiers.add(article.id.desc());
-                break;
-        }
-
         return jpaQueryFactory
                 .selectFrom(article)
                 .innerJoin(article.member, member)
