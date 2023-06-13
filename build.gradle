@@ -83,7 +83,7 @@ dependencies {
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 
     // selenium
-    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.9.1'
+    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
 
     // jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'

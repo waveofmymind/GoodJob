@@ -38,7 +38,6 @@ spring:
           github:
             clientId: ${custom.github.client-id}
             client-secret: ${custom.github.client-secret}
-            scope: read:user, user:email
           google:
             clientId: ENC(hSIi04R6g7gCu8jmuvbKIkVDQLgIj3RfcIov1f6iwwjYtwMqKhgQ4DzV7QYoJ92ZU83mjxgSRDsagDlxNcqyoUT8i2OnhuEbGQaA7kvt/Pc=)
             client-secret: ENC(Sy6gQZ0OSIHABvUqpBZKJOBMQFdW6zIHkBnGrHY8WKAhU+ZhOja0RyFww2CU1GNC)
