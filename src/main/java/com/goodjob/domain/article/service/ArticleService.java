@@ -6,6 +6,8 @@ import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.article.mapper.ArticleMapper;
 import com.goodjob.domain.article.repository.ArticleRepository;
 import com.goodjob.domain.comment.entity.Comment;
+import com.goodjob.domain.file.entity.File;
+import com.goodjob.domain.file.service.FileService;
 import com.goodjob.domain.hashTag.entity.HashTag;
 import com.goodjob.domain.hashTag.service.HashTagService;
 import com.goodjob.domain.member.entity.Member;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -29,25 +32,13 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final ArticleMapper articleMapper;
     private final HashTagService hashTagService;
+    private final FileService fileService;
 
 
     public Page<ArticleResponseDto> findAll(int page, int sortCode, String category, String query) {
         Pageable pageable = PageRequest.of(page, 10);
 
         List<Article> articles = articleRepository.findQslBySortCode(sortCode, category, query);
-
-        List<ArticleResponseDto> articleResponseDtos = articles
-                .stream()
-                .map(articleMapper::toDto)
-                .collect(Collectors.toList());
-
-        return convertToPage(articleResponseDtos, pageable);
-    }
-
-    public Page<ArticleResponseDto> findTopFive() {
-        Pageable pageable = PageRequest.of(0, 5);
-
-        List<Article> articles = articleRepository.findQslBySortCode(1, "제목", "");
 
         List<ArticleResponseDto> articleResponseDtos = articles
                 .stream()
@@ -116,15 +107,22 @@ public class ArticleService {
 
         Article article = articleOp.get();
 
-
         if(article.isDeleted()) {
             return RsData.of("F-2", "해당 게시글은 이미 삭제되었습니다.");
         }
 
+
         return RsData.of("S-1", "게시글에 대한 정보를 가져옵니다.", article);
     }
 
-    public void createArticle(Member author, ArticleRequestDto articleRequestDto) {
+    public RsData createArticle(Member author, ArticleRequestDto articleRequestDto) {
+        if(articleRequestDto.getTitle().trim().equals("")) {
+            return RsData.of("F-1", "제목을 입력해야 합니다.");
+        }
+
+        if(articleRequestDto.getContent().trim().equals("")) {
+            return RsData.of("F-2", "내용을 입력해야 합니다.");
+        }
 
         Article article = Article
                 .builder()
@@ -141,6 +139,8 @@ public class ArticleService {
         articleRepository.save(article);
 
         hashTagService.applyHashTags(article, articleRequestDto.getHashTagStr());
+
+        return RsData.of("S-1", "게시글을 성공적으로 생성하였습니다.", article);
     }
 
     @Transactional
@@ -151,10 +151,20 @@ public class ArticleService {
             return articleRsData;
         }
 
+
+
         Article article = articleRsData.getData();
 
         if(article.getMember().getId() != author.getId()) {
             return RsData.of("F-3", "수정 권한이 없습니다.");
+        }
+
+        if(articleRequestDto.getTitle().trim().equals("")) {
+            return RsData.of("F-4", "제목을 입력해야 합니다.");
+        }
+
+        if(articleRequestDto.getContent().trim().equals("")) {
+            return RsData.of("F-5", "내용을 입력해야 합니다.");
         }
 
         article.setTitle(articleRequestDto.getTitle());
@@ -200,16 +210,4 @@ public class ArticleService {
         return RsData.of("S-1", "게시글이 삭제되었습니다.", article);
     }
 
-    public Long getCreatedArticleId() {
-        Long id = (long) articleRepository.findAll().size();
-        return id;
-    }
-
-    public RsData isLoggedIn(Member member) {
-        if(member == null) {
-            return RsData.of("F-1", "게시글을 작성하려면 로그인을 해야 합니다.");
-        }
-
-        return RsData.of("S-1", "게시글 작성 페이지로 이동합니다.");
-    }
 }

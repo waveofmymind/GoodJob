@@ -42,6 +42,7 @@ public class Article extends BaseEntity {
     private String title;
 
     @Setter
+    @Column(columnDefinition = "text")
     private String content;
 
     @Setter
@@ -61,9 +62,7 @@ public class Article extends BaseEntity {
     @Builder.Default
     private List<HashTag> hashTagList = new ArrayList<>();
 
-    @Transient
-    @Builder.Default
-    private Map<String, Object> extra = new LinkedHashMap<>();
+
 
     // TODO: 의존관계
 }

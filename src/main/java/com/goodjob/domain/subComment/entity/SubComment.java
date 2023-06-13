@@ -33,6 +33,7 @@ public class SubComment extends BaseEntity {
     private Comment comment;
 
     @Setter
+    @Column(columnDefinition = "text")
     private String content;
 
     @OneToMany(mappedBy = "subComment", cascade = {CascadeType.ALL}, fetch=FetchType.EAGER)

@@ -33,7 +33,7 @@
                     </li>
                     <li th:each="article, loop : ${paging}" class="bg-white p-3 flex justify-between border-b h-11">
                         <a th:href="@{|/article/detail/${article.id}|}" th:text="${article.title}" class="text-sm flex-grow"></a>
-                        <p th:text="${article.member.username}" class="text-xs  w-16 text-center"></p>
+                        <p th:text="${article.member.nickname}" class="text-xs  w-16 text-center truncate overflow-ellipsis"></p>
                         <div th:text="${#lists.size(article.likesList)}" class="text-xs  w-16 text-center"></div>
                         <p th:text="${article.commentsCount}" class="text-xs  w-16 text-center"></p>
                         <p th:text="${article.viewCount}" class="text-xs  w-16 text-center"></p>
