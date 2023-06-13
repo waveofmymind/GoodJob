@@ -21,7 +21,7 @@ public class KeywordService {
 
         Keyword keyword = Keyword
                 .builder()
-                .content(keywordContent)
+                .content(keywordContent.toLowerCase())
                 .build();
 
         keywordRepository.save(keyword);
