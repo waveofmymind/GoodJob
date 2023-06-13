@@ -67,7 +67,7 @@
         function addHashTag(event) {
             event.preventDefault();
             var hashTagInput = document.getElementById('hashTagInput');
-            var hashTagText = hashTagInput.value.trim().replace(/\s+/g, ''); // 띄어쓰기 제거
+            var hashTagText = hashTagInput.value.trim().replace(/\s+/g, '').toLowerCase(); // 띄어쓰기 제거 및 소문자로 변환
 
             if (hashTagText !== '') {
                 var hashTagList = document.getElementById('hashTagList');

@@ -37,10 +37,10 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
                 builder.or(article.content.contains(kw));
                 break;
             case "글쓴이":
-                builder.or(member.username.contains(kw));
+                builder.or(member.nickname.contains(kw));
                 break;
             case "해시태그":
-                builder.or(hashTag.keyword.content.contains(kw));
+                builder.or(hashTag.keyword.content.toLowerCase().contains(kw));
             default:
                 builder.or(article.title.contains(kw));
                 break;

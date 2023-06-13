@@ -38,15 +38,6 @@ public class ArticleController {
     private final S3Service s3Service;
     private final FileService fileService;
 
-    @GetMapping("/main")
-    public String main(Model model) {
-        Page<ArticleResponseDto> paging = articleService.findTopFive();
-
-        model.addAttribute("paging", paging);
-
-        return "article/main";
-    }
-
     @GetMapping("/list")
     public String list(Model model, @RequestParam(value="page", defaultValue="0") int page, ToListForm toListForm) {
         Page<ArticleResponseDto> paging = articleService.findAll(page, toListForm.sortCode, toListForm.category, toListForm.query);
@@ -82,7 +73,7 @@ public class ArticleController {
     }
 
     @PostMapping("/create")
-    public String createArticle(@Valid ArticleRequestDto articleRequestDto, MultipartRequest multipartRequest, FileRequest fileRequest) throws IOException {
+    public String createArticle(@Valid ArticleRequestDto articleRequestDto, BindingResult bindingResult, MultipartRequest multipartRequest, FileRequest fileRequest) throws IOException {
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 
         RsData<Article> articleRsData = articleService.createArticle(rq.getMember(), articleRequestDto);

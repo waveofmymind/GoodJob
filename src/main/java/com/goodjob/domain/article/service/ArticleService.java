@@ -48,19 +48,6 @@ public class ArticleService {
         return convertToPage(articleResponseDtos, pageable);
     }
 
-    public Page<ArticleResponseDto> findTopFive() {
-        Pageable pageable = PageRequest.of(0, 5);
-
-        List<Article> articles = articleRepository.findQslBySortCode(1, "제목", "");
-
-        List<ArticleResponseDto> articleResponseDtos = articles
-                .stream()
-                .map(articleMapper::toDto)
-                .collect(Collectors.toList());
-
-        return convertToPage(articleResponseDtos, pageable);
-    }
-
     private Page<ArticleResponseDto> convertToPage(List<ArticleResponseDto> articles, Pageable pageable) {
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), articles.size());
