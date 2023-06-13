@@ -51,16 +51,16 @@
             <form th:action method="post" th:object="${loginRequestDto}" class="flex flex-col gap-6" onsubmit="LoginForm__submit(this); return false;">
                 <div class="form-control">
                     <label class="block mb-2">아이디</label>
-                    <input type="text" name="username" class="border-b border-info px-2 py-2 w-full focus:outline-none"
+                    <input type="text" name="username" class="border-b border-neutral px-2 py-2 w-full focus:outline-none"
                            placeholder="아이디를 입력하세요">
                 </div>
                 <div class="form-control">
                     <label class="block mb-2 mt-4">비밀번호</label>
-                    <input type="password" name="password" class="border-b border-info px-2 py-2 w-full focus:outline-none"
+                    <input type="password" name="password" class="border-b border-neutral px-2 py-2 w-full focus:outline-none"
                            placeholder="비밀번호를 입력하세요">
                 </div>
                 <div>
-                    <button type="submit" class="mt-4 bg-info text-white px-4 py-2 rounded-lg">로그인</button>
+                    <button type="submit" class="mt-4 bg-neutral text-white px-4 py-2 rounded-lg hover:bg-black">로그인</button>
                 </div>
             </form>
             <div class="space-y-4">
