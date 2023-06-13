@@ -36,7 +36,6 @@ public class MemberController {
     @PreAuthorize("isAnonymous()")
     public String join(@Valid JoinRequestDto joinRequestDto,
                        BindingResult bindingResult) {
-        // TODO: 중복확인로직 보완 - 중복확인 후 값을 바꾸면 그대로 넘어가는 문제.. 중복 확인 값을 같이 넘겨줄까?
         if (bindingResult.hasErrors()) {
             return "member/join";
         }
@@ -108,6 +107,10 @@ public class MemberController {
     @PostMapping("/join/valid/username")
     @ResponseBody
     public RsData<String> checkDuplicateUsername(String username) {
+        if (username.length() < 4) {
+            return RsData.of("F-1", "4자 이상 입력하세요.");
+        }
+
         Optional<Member> opMember = memberService.findByUsername(username);
         if (opMember.isPresent()) {
             return RsData.of("F-1", "이미 사용중인 아이디입니다.");
@@ -119,6 +122,10 @@ public class MemberController {
     @PostMapping("/join/valid/nickname")
     @ResponseBody
     public RsData checkDuplicateNickname(String nickname) {
+        if (nickname.length() < 4) {
+            return RsData.of("F-1", "4자 이상 입력하세요.");
+        }
+
         Optional<Member> opMember = memberService.findByNickName(nickname);
         if (opMember.isPresent()) {
             return RsData.of("F-1", "이미 사용중인 닉네임입니다.");
@@ -130,6 +137,10 @@ public class MemberController {
     @PostMapping("/join/valid/email")
     @ResponseBody
     public RsData checkDuplicateEmail(String email) {
+        if (email.length() < 4) {
+            return RsData.of("F-1", "4자 이상 입력하세요.");
+        }
+
         Optional<Member> opMember = memberService.findByEmail(email);
         if (opMember.isPresent()) {
             return RsData.of("F-1", "이미 사용중인 이메일입니다.");
