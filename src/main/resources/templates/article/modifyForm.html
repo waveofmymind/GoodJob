@@ -10,11 +10,11 @@
         <form class="mt-4" method="post" enctype="multipart/form-data">
             <!-- <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> -->
             <div class="mb-4">
-                <input type="text" name="title" th:value="${article.title}" class="form-input w-full border border-info rounded-md h-10 p-3" placeholder="제목을 입력하세요">
+                <input type="text" name="title" th:value="${article.title}" class="form-input w-full border border-neutral rounded-md h-10 p-3" placeholder="제목을 입력하세요">
             </div>
 
             <div class="mb-4">
-                <textarea name="content" oninput="handleTextareaInput(event)" th:text="${article.content}" class="form-textarea w-full h-64 resize-none border border-info rounded-md p-3" placeholder="본문을 입력하세요"></textarea>
+                <textarea name="content" oninput="handleTextareaInput(event)" th:text="${article.content}" class="form-textarea w-full h-64 resize-none border border-neutral rounded-md p-3" placeholder="본문을 입력하세요"></textarea>
             </div>
 
             <div class="flex justify-between mb-4">
@@ -23,7 +23,7 @@
                         <span th:text="|${i}번 이미지|"></span>
                         <label th:for="|file-input-${i}|">
                             <th:block th:if="${file != null}">
-                                <div class="upload-icon w-[100px] h-[97px] border border-2 border-solid border-info border-dotted rounded-md relative">
+                                <div class="upload-icon w-[100px] h-[97px] border border-2 border-solid border-neutral border-dotted rounded-md relative">
                                     <img class="w-[100px] h-[93px] rounded-md cursor-pointer preview-image" th:id="|preview-image-${i}|" th:src="${file.s3Url}">
                                     <button type="button" class="!bg-red-500 absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full w-6 h-6 flex items-center justify-center text-white" style="display: block;" th:id="|cancel-button-${i}|" th:onclick="|cancelFileSelect(${i})|">
                                         X
@@ -34,7 +34,7 @@
                                 </div>
                             </th:block>
                             <th:block th:if="${file == null}">
-                                <div class="upload-icon w-[100px] h-[97px] border border-2 border-solid border-info border-dotted rounded-md relative">
+                                <div class="upload-icon w-[100px] h-[97px] border border-2 border-solid border-neutral border-dotted rounded-md relative">
                                     <img class="w-[100px] h-[93px] rounded-md cursor-pointer preview-image" th:id="|preview-image-${i}|" src="https://i.ibb.co/d7wH0dJ/image4.png">
                                     <button type="button" class="!bg-red-500 absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full w-6 h-6 flex items-center justify-center text-white" style="display: none;" th:id="|cancel-button-${i}|" th:onclick="|cancelFileSelect(${i})|">
                                         X
@@ -48,14 +48,14 @@
                 </th:block>
             </div>
 
-            <div class="mb-4 border border-info flex items-center rounded-md">
+            <div class="mb-4 border border-neutral flex items-center rounded-md">
                 <p class="pl-3">#</p>
-                <input type="text" id="hashTagInput" class="form-input w-full border-0 border-info rounded-md h-10" placeholder="태그를 입력하세요" onkeydown="if(event.keyCode===13) addHashTag(event)">
+                <input type="text" id="hashTagInput" class="form-input w-full border-0 border-neutral rounded-md h-10" placeholder="태그를 입력하세요" onkeydown="if(event.keyCode===13) addHashTag(event)">
             </div>
 
             <div id="hashTagList" class="flex flex-wrap mb-4">
                 <div th:if="${!article.hashTagList.isEmpty()}" th:each="hashTag : ${article.hashTagList}">
-                    <div class="bg-blue-200 px-2 py-1 rounded-full m-1">
+                    <div class="bg-gray-300 px-2 py-1 rounded-full m-1">
                         <span th:text="|#${hashTag.keyword.content}|" class="keyword"></span>
                         <span onclick="this.parentNode.remove();" class="ml-1 cursor-pointer">&times;</span>
                     </div>
@@ -90,7 +90,7 @@
 <!--                </div>-->
 <!--            </th:block>-->
 
-            <button type="submit" class="register bg-info hover:bg-blue-500 text-white font-bold px-4 py-2 rounded border-info" onclick="submitForm()">저장하기</button>
+            <button type="submit" class="register bg-neutral hover:bg-black text-white font-bold px-4 py-2 rounded border-neutral" onclick="submitForm()">저장하기</button>
         </form>
     </div>
 
@@ -108,7 +108,7 @@
                 var hashTagList = document.getElementById('hashTagList');
                 var listItems = document.createElement('div');
                 var listItem = document.createElement('span');
-                listItems.className = 'bg-blue-200 px-2 py-1 rounded-full m-1'
+                listItems.className = 'bg-gray-300 px-2 py-1 rounded-full m-1'
                 listItem.className = 'keyword';
                 listItem.textContent = '#' + hashTagText;
                 listItem.id = 'hashTagItem_' + hashTagText;
