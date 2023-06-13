@@ -17,7 +17,7 @@ spring:
 
 scheduler:
   cron:
-    job: "0 0 20/12 * * *"
+    job: "0 0 6/6 * * *"
 
 custom:
   github:
