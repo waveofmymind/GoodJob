@@ -36,6 +36,7 @@ public class Comment extends BaseEntity {
     private Article article;
 
     @Setter
+    @Column(columnDefinition = "text")
     private String content;
 
     @OneToMany(mappedBy = "comment", cascade = {CascadeType.ALL}, fetch=FetchType.EAGER)
