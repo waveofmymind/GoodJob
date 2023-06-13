@@ -16,9 +16,9 @@
                     <label class="block mb-2 text-sm">아이디</label>
                     <div class="flex items-center">
                         <input type="text" name="username" th:field="*{username}"
-                               class="border-b border-info px-2 py-2 w-full focus:outline-none form-control"
+                               class="border-b border-neutral px-2 py-2 w-full focus:outline-none form-control"
                                placeholder="아이디를 입력하세요">
-                        <button class="ml-2 bg-info text-white px-4 py-2 rounded-lg text-sm" onclick="checkDuplication(event);">중복확인</button>
+                        <button class="ml-2 bg-neutral text-white px-4 py-2 rounded-lg text-sm" onclick="checkDuplication(event);">중복확인</button>
                     </div>
                     <div class="mt-2">
                         <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-red-500"></span>
@@ -29,7 +29,7 @@
                     <div>
                         <label class="block mb-2 mt-4 text-sm">비밀번호</label>
                         <input type="password" name="password"
-                               class="border-b border-info px-2 py-2 w-full focus:outline-none form-control"
+                               class="border-b border-neutral px-2 py-2 w-full focus:outline-none form-control"
                                placeholder="비밀번호를 입력하세요">
                     </div>
                     <div class="mt-2">
@@ -40,7 +40,7 @@
                     <div>
                         <label class="block mb-2 mt-4 text-sm">비밀번호 확인</label>
                         <input type="password" name="confirmPassword"
-                               class="border-b border-info px-2 py-2 w-full focus:outline-none form-control"
+                               class="border-b border-neutral px-2 py-2 w-full focus:outline-none form-control"
                                placeholder="비밀번호를 다시 한 번 입력하세요">
                     </div>
                     <div class="mt-2">
@@ -53,9 +53,9 @@
                         <label class="block mb-2 mt-4 text-sm">닉네임</label>
                         <div class="flex items-center">
                             <input type="text" name="nickname" th:field="*{nickname}"
-                                   class="border-b border-info px-2 py-2 w-full focus:outline-none form-control"
+                                   class="border-b border-neutral px-2 py-2 w-full focus:outline-none form-control"
                                    placeholder="닉네임을 입력하세요">
-                            <button class="ml-2 bg-info text-white px-4 py-2 rounded-lg text-sm" onclick="checkDuplication(event);">중복확인</button>
+                            <button class="ml-2 bg-neutral text-white px-4 py-2 rounded-lg text-sm" onclick="checkDuplication(event);">중복확인</button>
                         </div>
                     </div>
                     <div class="mt-2">
@@ -69,9 +69,9 @@
                         <label class="block mb-2 mt-4 text-sm">이메일</label>
                         <div class="flex items-center">
                             <input type="email" name="email" th:field="*{email}"
-                                   class="border-b border-info px-2 py-2 w-full focus:outline-none form-control"
+                                   class="border-b border-neutral px-2 py-2 w-full focus:outline-none form-control"
                                    placeholder="이메일을 입력하세요">
-                            <button class="ml-2 bg-info text-white px-4 py-2 rounded-lg text-sm" onclick="checkDuplication(event);">중복확인</button>
+                            <button class="ml-2 bg-neutral text-white px-4 py-2 rounded-lg text-sm" onclick="checkDuplication(event);">중복확인</button>
                         </div>
                     </div>
                     <div class="mt-2">
@@ -79,7 +79,7 @@
                         <span id="emailMessage" style="display: none;">중복여부</span>
                     </div>
                 </div>
-                <button type="submit" onclick="submitForm()" class="mt-8 bg-info text-white px-4 py-2 rounded-lg text-sm">가입하기</button>
+                <button type="submit" onclick="submitForm()" class="mt-8 bg-neutral text-white px-4 py-2 rounded-lg text-sm">가입하기</button>
             </form>
         </div>
     </div>
