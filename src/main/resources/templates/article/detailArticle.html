@@ -21,7 +21,7 @@
 
         <div class="min-h-[200px]">
             <div style="word-wrap: break-word;">
-                <div class="text-sm pl-3 min-h-[60px]" style="word-break: break-word; white-space: pre-wrap;"  th:text="${article.content}"></div>
+                <div class="text-sm pl-3 min-h-[120px]" style="word-break: break-word; white-space: pre-wrap;"  th:text="${article.content}"></div>
             </div>
             <div class="flex flex-wrap ml-3">
                 <tr th:each="i : ${#numbers.sequence(1, 5)}" th:with="file=${article.extra.fileMap.get('file\_\_' + i)}" class="flex">
