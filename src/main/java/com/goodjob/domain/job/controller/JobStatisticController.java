@@ -26,9 +26,14 @@ public class JobStatisticController {
 
     @GetMapping("/search/all")
     public String SearchList(@RequestParam(value = "sector") String sector, @RequestParam(value = "career") String career
-                            , @RequestParam(value = "page", defaultValue = "0") int page, Model model) {
+                            , @RequestParam(value = "page", defaultValue = "0") int page, Model model, String keyword) {
 
-        Page<JobStatistic> paging = jobStatisticService.getList(sector , career, page);
+        Page<JobStatistic> paging;
+        if (keyword == null) {
+            paging = jobStatisticService.getList(sector, career, page);
+        } else {
+            paging = jobStatisticService.getList(sector, career, page, keyword);
+        }
         model.addAttribute("paging", paging);
         return "jobstatistic/list";
     }
