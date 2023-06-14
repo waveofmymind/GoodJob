@@ -61,7 +61,7 @@ public class WontedStatistic {
             process.waitFor();
             System.setProperty("webdriver.chrome.driver", "drivers/chromedriver_mac");
         } else if (os.contains("linux")) {
-            System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver/chromedriver");
+            System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
         }
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--headless=new");
