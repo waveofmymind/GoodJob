@@ -21,3 +21,7 @@ custom:
     client-secret: ENC(JdURofDmvQR3TiWNh+VdqlazykNYaNutWoQ9p1hk332miNDiAHR7wyhKXSivCebe1kTZ+TIC8Ic=)
   site:
     baseUrl: https://waveofmymind.shop
+
+scheduler:
+  cron:
+    job: "0 0 4 * * *"

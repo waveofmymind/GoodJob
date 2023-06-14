@@ -29,7 +29,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        //TODO: 추후 게시글 작성 경로 권한 추가 필요
         http.csrf(AbstractHttpConfigurer::disable).
                 sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(STATELESS)

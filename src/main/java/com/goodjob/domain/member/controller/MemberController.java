@@ -122,8 +122,8 @@ public class MemberController {
     @PostMapping("/join/valid/nickname")
     @ResponseBody
     public RsData checkDuplicateNickname(String nickname) {
-        if (nickname.length() < 4) {
-            return RsData.of("F-1", "4자 이상 입력하세요.");
+        if (nickname.length() < 2) {
+            return RsData.of("F-1", "2자 이상 입력하세요.");
         }
 
         Optional<Member> opMember = memberService.findByNickName(nickname);
@@ -132,20 +132,5 @@ public class MemberController {
         }
 
         return RsData.of("S-1", "사용 가능한 닉네임입니다.");
-    }
-
-    @PostMapping("/join/valid/email")
-    @ResponseBody
-    public RsData checkDuplicateEmail(String email) {
-        if (email.length() < 4) {
-            return RsData.of("F-1", "4자 이상 입력하세요.");
-        }
-
-        Optional<Member> opMember = memberService.findByEmail(email);
-        if (opMember.isPresent()) {
-            return RsData.of("F-1", "이미 사용중인 이메일입니다.");
-        }
-
-        return RsData.of("S-1", "사용 가능한 이메일입니다.");
     }
 }

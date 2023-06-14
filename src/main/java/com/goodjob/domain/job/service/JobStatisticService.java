@@ -6,10 +6,7 @@ import com.goodjob.domain.job.repository.JobStatisticRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -88,6 +85,22 @@ public class JobStatisticService {
             return jobStatisticRepository.findBySectorCode(sectorNum, pageable);
         }
         return jobStatisticRepository.findByCareerAndSectorCode(careerCode, sectorNum, pageable);
+    }
+
+    public Page<JobStatistic> getList(String sectorCode, String career, int page, String keyword) {
+        int sectorNum = Integer.parseInt(sectorCode);
+        int careerCode = Integer.parseInt(career);
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("startDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        if (careerCode == -1) {
+            Page<JobStatistic> bySectorCode = jobStatisticRepository.findBySectorCode(sectorNum, pageable);
+            List<JobStatistic> temp = bySectorCode.stream().filter(p -> p.getSubject().contains(keyword)).toList();
+            return new PageImpl<>(temp, pageable, temp.size());
+        }
+        Page<JobStatistic> byCareerAndSectorCode = jobStatisticRepository.findByCareerAndSectorCode(careerCode, sectorNum, pageable);
+        List<JobStatistic> temp = byCareerAndSectorCode.stream().filter(p -> p.getSubject().contains(keyword)).toList();
+        return new PageImpl<>(temp, pageable, temp.size());
     }
 
 

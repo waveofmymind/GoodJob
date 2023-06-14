@@ -6,11 +6,14 @@ server:
 spring:
   application:
     name: goodjob
+
   batch:
     jdbc:
       initialize-schema: always
+
   profiles:
     active: local
+
   servlet:
     multipart:
       max-file-size: 10MB
@@ -23,7 +26,17 @@ spring:
       hibernate:
         format_sql: true
         default_batch_fetch_size: 500
-
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ENC(cvymzsPL0u2oHZHlTlKfL60GreXJ7Rupp4+cQydpmmU=)
+    password: ENC(6wHw0SXic0xXnlKr+ocHmCzcydqa7//nPvFyelI3lZ8=)
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   messages:
     basename: message/messages
     encoding: UTF-8
