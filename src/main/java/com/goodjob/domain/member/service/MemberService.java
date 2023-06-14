@@ -35,10 +35,6 @@ public class MemberService {
             return RsData.of("F-1", "이미 존재하는 닉네임입니다.");
         }
 
-        if (opEmail.isPresent()) { // 이메일이 중복인 경우
-            return RsData.of("F-1", "이미 존재하는 이메일입니다.");
-        }
-
         return RsData.of("S-1", "회원가입이 가능합니다.");
     }
 
