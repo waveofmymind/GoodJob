@@ -15,10 +15,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
 
-scheduler:
-  cron:
-    job: "0 0 6/6 * * *"
-
 custom:
   github:
     client-id: ENC(KP2uJoq4/fKHp20/Ko41G8roZAGa30C75XkuWdpKeKI=)
