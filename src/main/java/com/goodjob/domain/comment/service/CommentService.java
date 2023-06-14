@@ -3,7 +3,6 @@ package com.goodjob.domain.comment.service;
 import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.article.service.ArticleService;
 import com.goodjob.domain.comment.dto.request.CommentRequestDto;
-import com.goodjob.domain.comment.dto.response.CommentResponseDto;
 import com.goodjob.domain.comment.entity.Comment;
 import com.goodjob.domain.comment.mapper.CommentMapper;
 import com.goodjob.domain.comment.repository.CommentRepository;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -64,18 +62,6 @@ public class CommentService {
         }
 
         return RsData.of("S-1", "댓글에 대한 정보를 가져옵니다.", comment);
-    }
-
-    public RsData getCommentResponseDto(Long id) {
-        RsData<Comment> commentRsData = getComment(id);
-
-        if(commentRsData.isFail()) {
-            return commentRsData;
-        }
-
-        Comment comment = commentRsData.getData();
-
-        return RsData.of("S-1", "댓글에 대한 정보를 가져옵니다", commentMapper.toDto(comment));
     }
 
     public RsData updateComment(Member author, Long id, CommentRequestDto commentRequestDto) {

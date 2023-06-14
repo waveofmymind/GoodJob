@@ -7,12 +7,8 @@ import com.goodjob.domain.member.entity.Member;
 import com.goodjob.domain.subComment.entity.SubComment;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,5 +46,4 @@ public class Comment extends BaseEntity {
     @Builder.Default
     private List<SubComment> subCommentList = new ArrayList<>();
 
-    // TODO: 의존관계
 }

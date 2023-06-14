@@ -4,8 +4,6 @@ import com.goodjob.domain.keyword.dto.response.KeyWordResponseDto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 public class HashTagResponseDto {

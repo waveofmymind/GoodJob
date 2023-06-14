@@ -1,6 +1,5 @@
 package com.goodjob.domain.subComment.repository;
 
-import com.goodjob.domain.comment.entity.Comment;
 import com.goodjob.domain.subComment.entity.SubComment;
 import org.springframework.data.jpa.repository.JpaRepository;
 

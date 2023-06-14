@@ -1,7 +1,6 @@
 package com.goodjob.domain.subComment.entity;
 
 import com.goodjob.domain.BaseEntity;
-import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.comment.entity.Comment;
 import com.goodjob.domain.likes.entity.Likes;
 import com.goodjob.domain.member.entity.Member;
@@ -42,6 +41,4 @@ public class SubComment extends BaseEntity {
 
     @Setter
     private boolean isDeleted;
-
-    // TODO: 의존관계
 }
