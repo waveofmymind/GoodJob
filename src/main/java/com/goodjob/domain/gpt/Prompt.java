@@ -41,7 +41,7 @@ public class Prompt {
                 Additionally, you must provide detailed advice on how to address each of these points for improvement
                             
                 Do not use '', "",{}, (), [] or emojis in all content.
-                            
+                  
                 Below is the '%s' section of the applicant's resume.
                             
                 Instructions1:
@@ -49,8 +49,9 @@ public class Prompt {
                 - Purpose: Enhance resume and increase chances of getting job
                 - Client Career Level: '%s'
                 - Improvement Point & Advice Language must be in korean.
-
-                                
+                
+                Please respond in JSON format only. No other messages. You don't even have to say hello.                                
+                
                 Instructions2:
                 You must write your improvement points unconditionally and absolutely in JSON format, as shown below.
                 Never add anything else. numbers, letters, etc.
