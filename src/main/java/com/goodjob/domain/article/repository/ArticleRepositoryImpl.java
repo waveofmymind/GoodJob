@@ -12,6 +12,7 @@ import java.util.Optional;
 
 import static com.goodjob.domain.article.entity.QArticle.article;
 import static com.goodjob.domain.hashTag.entity.QHashTag.hashTag;
+import static com.goodjob.domain.keyword.entity.QKeyword.keyword;
 import static com.goodjob.domain.member.entity.QMember.member;
 
 @RequiredArgsConstructor
@@ -43,19 +44,20 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
         }
         switch(category) {
             case "내용":
-                builder.or(article.content.contains(kw));
+                builder.and(article.content.contains(kw));
                 break;
             case "제목+내용":
-                builder.or(article.title.contains(kw));
-                builder.or(article.content.contains(kw));
+                builder.and(article.title.contains(kw));
+                builder.and(article.content.contains(kw));
                 break;
             case "글쓴이":
-                builder.or(member.nickname.contains(kw));
+                builder.and(member.nickname.contains(kw));
                 break;
             case "해시태그":
-                builder.or(hashTag.keyword.content.toLowerCase().contains(kw));
+                builder.and(article.hashTagList.any().keyword.content.toLowerCase().contains(kw));
+                break;
             default:
-                builder.or(article.title.contains(kw));
+                builder.and(article.title.contains(kw));
                 break;
         }
         return jpaQueryFactory
