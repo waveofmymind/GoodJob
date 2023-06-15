@@ -37,12 +37,7 @@ public class JobStatisticController {
         model.addAttribute("paging", paging);
         return "jobstatistic/list";
     }
-//        RsData<List<JobStatistic>> list = jobStatisticService.getList(jobRequestForm.getSector(), jobRequestForm.getCareer(), );
 
-//    @GetMapping("/list")
-//    public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page, String keyword){
-//
-//    }
 }
 
 

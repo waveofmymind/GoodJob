@@ -8,11 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface JobStatisticRepository extends JpaRepository<JobStatistic, Long> {
-    List<JobStatistic> findBySubjectAndUrl(String subject, String url);
     Page<JobStatistic> findByCareerAndSectorCode(int career, int sectorCode, Pageable pageable);
     Page<JobStatistic> findBySectorCode(int sectorCode, Pageable pageable);
-    List<JobStatistic> findBySectorCode(int sectorCode);
 
     List<JobStatistic> findByUrl(String url);
-    Page<JobStatistic> findBySubjectContaining(String keyword,Pageable pageable);
 }
