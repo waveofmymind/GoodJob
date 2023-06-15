@@ -9,6 +9,9 @@ import com.goodjob.domain.resume.dto.response.WhatGeneratedQuestionResponse;
 import com.goodjob.global.error.ErrorCode;
 import com.goodjob.global.error.exception.BusinessException;
 import com.theokanning.openai.completion.chat.ChatMessageRole;
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import com.goodjob.global.config.GptConfig;
@@ -32,10 +35,12 @@ import java.util.concurrent.Executors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Timed(value = "gpt.service")
 public class GptService {
 
     private final OpenAiService openAiService;
     private final ObjectMapper objectMapper;
+
     private final ExecutorService executorService = Executors.newFixedThreadPool(1);
 
     public ChatCompletionResult generate(List<ChatMessage> chatMessages) {
@@ -80,7 +85,7 @@ public class GptService {
 
     public WhatGeneratedQuestionResponse createdExpectedQuestionsAndAnswer(String job, String career, List<ResumeRequest> resumeData) {
 
-        // 멀티스레드 호출
+
         List<CompletableFuture<WhatGeneratedQuestionResponse>> futures = new ArrayList<>();
 
         for (ResumeRequest data : resumeData) {
@@ -91,7 +96,6 @@ public class GptService {
 
                     String futureResult = chatCompletionResult.getChoices().get(0).getMessage().getContent();
 
-                    log.info(futureResult);
                     return objectMapper.readValue(futureResult, WhatGeneratedQuestionResponse.class);
                 } catch (JsonProcessingException e) {
                     log.error(e.getMessage());
@@ -101,25 +105,24 @@ public class GptService {
 
             futures.add(future);
         }
-        log.info(futures.toString());
-            // 모든 CompletableFuture가 완료될 때까지 대기
-            CompletableFuture<Void> allFutures = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
-            try {
-                allFutures.get();
-            } catch (InterruptedException | ExecutionException e) {
-                log.error(e.getMessage());
-                throw new BusinessException(ErrorCode.THREAD_MALFUNCTION);
-            }
-
-            // CompletableFuture에서 결과를 추출해서 WhatGeneratedResponse 객체에 저장
-            WhatGeneratedQuestionResponse result = new WhatGeneratedQuestionResponse();
-            futures.stream()
-                    .map(CompletableFuture::join)
-                    .filter(content -> content.predictionResponse().size() != 0)
-                    .forEach(content -> result.predictionResponse().addAll(content.predictionResponse()));
-
-            return result;
+        // 모든 CompletableFuture가 완료될 때까지 대기
+        CompletableFuture<Void> allFutures = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+        try {
+            allFutures.get();
+        } catch (InterruptedException | ExecutionException e) {
+            log.error(e.getMessage());
+            throw new BusinessException(ErrorCode.THREAD_MALFUNCTION);
         }
+
+        // CompletableFuture에서 결과를 추출해서 WhatGeneratedResponse 객체에 저장
+        WhatGeneratedQuestionResponse result = new WhatGeneratedQuestionResponse();
+        futures.stream()
+                .map(CompletableFuture::join)
+                .filter(content -> content.predictionResponse().size() != 0)
+                .forEach(content -> result.predictionResponse().addAll(content.predictionResponse()));
+
+        return result;
+    }
 
     public WhatGeneratedImproveResponse createdImprovementPointsAndAdvice(String job, String career, List<ResumeRequest> resumeData) {
 
