@@ -2,7 +2,7 @@
 `2023.05.16` ~ `2023.06.16`
 > 생성 AI 기반 채용관련 커뮤니티 서비스
 
-[서비스 링크](https://waveofmymind.github.io)
+- [서비스 링크](https://waveofmymind.shop)
 
 ## 어떻게 기획됐나요?
 
@@ -74,8 +74,6 @@
 ## 기술적 도전 및 트러블 슈팅
 
 - [크롤링 트러블슈팅 - 박우영](https://velog.io/@wy9295/Java-%ED%81%AC%EB%A1%A4%EB%A7%81-%EC%97%90%EB%9F%AC%EB%AA%A8%EC%9D%8C)
-
-
 
 
 
