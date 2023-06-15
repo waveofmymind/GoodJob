@@ -7,7 +7,7 @@ public class Prompt {
                 Using the information below, generate interview questions about the resume that will help you assess the candidate's qualifications and fit for the role.
                 In addition, the model answer to the created question must also be created.
                             
-                Do not use '', "",{}, (), [] or emojis in all content.
+                Do not use ':','', "",{}, (), [] or emojis in all content.
                             
                 Below is the information about '%s' of the applicant.
                             
