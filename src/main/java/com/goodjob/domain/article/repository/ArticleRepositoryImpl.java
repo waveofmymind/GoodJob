@@ -48,7 +48,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom{
                 break;
             case "제목+내용":
                 builder.and(article.title.contains(kw));
-                builder.and(article.content.contains(kw));
+                builder.or(article.content.contains(kw));
                 break;
             case "글쓴이":
                 builder.and(member.nickname.contains(kw));
