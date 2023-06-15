@@ -23,7 +23,6 @@ public class GptConfig {
 
     @Bean
     public OpenAiService openAiService() {
-        log.info("token : {}을 활용한 OpenAiService 을 생성합니다.", token);
         return new OpenAiService(token, TIME_OUT);
     }
 }

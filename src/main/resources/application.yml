@@ -71,7 +71,7 @@ jasypt:
   encryptor:
     password: ${JASYPT_PASSWORD}
 openai:
-  token: ENC(oJ6ZWiFlU8DaCj5rVcKrhHMX/IYcI/HYC3FFfX9dY7OTC2HKBHyOoQ2rQNIgfzzzjzhl4JF0l3TdI8O8fpa6Rg==)
+  token: ENC(dQaDvbhWH3u2aGJyzLAj4kirMxGz8aLnmjuXo4NDQUuJEBjXUpb+AOQw1sTcDgTTVFv7ISwyrkREEM/YEhgnVg==)
 
 scheduler:
   cron:

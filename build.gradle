@@ -99,7 +99,7 @@ dependencies {
     // oauth
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
-    // AWS CloudWatch
+    // AWS CloudWatch appender
     implementation'ca.pjer:logback-awslogs-appender:1.6.0'
 
     // AWS S3
