@@ -1,5 +1,4 @@
 # GoodJob
----
 > 생성 AI 기반 채용관련 커뮤니티 서비스
 
 ## 어떻게 기획됐나요?
@@ -48,12 +47,18 @@
 
 ## 시스템 아키텍처
 
-![img.png](img.png)
+<img width="889" alt="image" src="https://github.com/waveofmymind/GoodJob/assets/93868431/579cfda8-c39c-4b8c-ba12-8ad0ce8e0d71">
 
 ## ERD
 
+![article](https://github.com/waveofmymind/GoodJob/assets/93868431/4a337a7d-e382-4ae1-b82f-4f5901ec945b)
+
+## 프로젝트 멤버
+
 
 ## 기술적 도전 및 트러블 슈팅
+
+
 
 
 
