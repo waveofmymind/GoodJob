@@ -1,16 +1,17 @@
 package com.goodjob.domain.resume.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.Builder;
+import lombok.*;
 
-public record ResumeRequest(
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class ResumeRequest{
         @NotBlank
-        String resumeType,
+        String resumeType;
 
         @NotBlank
-        String content
-) {
-        @Builder
-        public ResumeRequest {
-        }
+        String content;
 }

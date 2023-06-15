@@ -85,13 +85,13 @@ public class GptService {
 
         for (ResumeRequest data : resumeData) {
             CompletableFuture<WhatGeneratedQuestionResponse> future = CompletableFuture.supplyAsync(() -> {
-                List<ChatMessage> chatMessages = generateQuestionMessage(job, career, data.resumeType(), data.content());
+                List<ChatMessage> chatMessages = generateQuestionMessage(job, career, data.getResumeType(), data.getContent());
                 try {
                     ChatCompletionResult chatCompletionResult = generate(chatMessages);
 
                     String futureResult = chatCompletionResult.getChoices().get(0).getMessage().getContent();
 
-
+                    log.info(futureResult);
                     return objectMapper.readValue(futureResult, WhatGeneratedQuestionResponse.class);
                 } catch (JsonProcessingException e) {
                     log.error(e.getMessage());
@@ -128,7 +128,7 @@ public class GptService {
 
         for (ResumeRequest data : resumeData) {
             CompletableFuture<WhatGeneratedImproveResponse> future = CompletableFuture.supplyAsync(() -> {
-                List<ChatMessage> chatMessages = generateAdviceMessage(job, career, data.resumeType(), data.content());
+                List<ChatMessage> chatMessages = generateAdviceMessage(job, career, data.getResumeType(), data.getContent());
                 try {
                     ChatCompletionResult chatCompletionResult = generate(chatMessages);
 
