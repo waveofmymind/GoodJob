@@ -14,18 +14,16 @@
 <main layout:fragment="main" class="flex justify-center items-center h-auto mt-16">
 
     <script>
-        function addResumeSection() {
+        var sectionIndex = 0; // 섹션 인덱스를 추적하는 변수
 
+        function addResumeSection() {
             var resumeSectionsDiv = document.getElementById("resume-sections");
 
-            // Create a container div for the section
             var sectionDiv = document.createElement("div");
-            sectionDiv.classList.add("mb-4"); // Add margin-bottom to each section
+            sectionDiv.classList.add("mb-4");
 
-
-            // Create a select for resumeType
             var resumeTypeSelect = document.createElement("select");
-            resumeTypeSelect.name = "resumeType"; // 변경
+            resumeTypeSelect.name = "resumeRequests[" + sectionIndex + "].resumeType"; // 이름에 인덱스 사용
             resumeTypeSelect.classList.add("select", "select-bordered", "w-full", "max-w-xs", "mb-2");
 
             var options = [
@@ -42,7 +40,7 @@
             });
 
             var contentTextarea = document.createElement("textarea");
-            contentTextarea.name = "content"; // 변경
+            contentTextarea.name = "resumeRequests[" + sectionIndex + "].content"; // 이름에 인덱스 사용
             contentTextarea.classList.add("textarea", "textarea-bordered", "h-64", "mb-2");
             contentTextarea.placeholder = "선택한 분야에 맞는 이력서 내용을 작성해주세요.";
 
@@ -50,10 +48,9 @@
             deleteButton.type = "button";
             deleteButton.textContent = "삭제";
             deleteButton.classList.add("text-sm", "mb-2");
-            deleteButton.onclick = function () {
+            deleteButton.onclick = function() {
                 resumeSectionsDiv.removeChild(sectionDiv);
             };
-
 
             sectionDiv.appendChild(resumeTypeSelect);
             sectionDiv.appendChild(document.createElement("br"));
@@ -61,6 +58,8 @@
             sectionDiv.appendChild(deleteButton);
 
             resumeSectionsDiv.appendChild(sectionDiv);
+
+            sectionIndex++; // 다음 섹션에 사용할 인덱스 증가
         }
     </script>
 

@@ -24,20 +24,16 @@ public class ResumeFacade {
     public WhatGeneratedQuestionResponse generateQuestion(final CreatePromptRequest request) {
 
         log.debug("이력서 생성 update request : {}", request.toString());
-
-
-        List<ResumeRequest> resumeData = generateExpectedMapper.toResumeData(request.resumeType(), request.content());
-
-        return gptService.createdExpectedQuestionsAndAnswer(request.job(), request.career(), resumeData);
+        List<ResumeRequest> resumeData = request.getResumeRequests();
+        return gptService.createdExpectedQuestionsAndAnswer(request.getJob(), request.getCareer(), resumeData);
     }
 
     public WhatGeneratedImproveResponse generateAdvice(final CreatePromptRequest request) {
 
         log.debug("이력서 생성 update request : {}", request.toString());
 
+        List<ResumeRequest> resumeData = request.getResumeRequests();
 
-        List<ResumeRequest> resumeData = generateExpectedMapper.toResumeData(request.resumeType(), request.content());
-
-        return gptService.createdImprovementPointsAndAdvice(request.job(), request.career(), resumeData);
+        return gptService.createdImprovementPointsAndAdvice(request.getJob(), request.getCareer(), resumeData);
     }
 }
