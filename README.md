@@ -58,6 +58,7 @@
 
 ## 기술적 도전 및 트러블 슈팅
 
+<a href="https://velog.io/@wy9295/Java-%ED%81%AC%EB%A1%A4%EB%A7%81-%EC%97%90%EB%9F%AC%EB%AA%A8%EC%9D%8C">크롤링 트러블슈팅</a>
 
 
 
