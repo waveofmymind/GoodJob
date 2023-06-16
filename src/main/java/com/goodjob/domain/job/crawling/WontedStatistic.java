@@ -128,7 +128,6 @@ public class WontedStatistic {
                 subject = webElement.findElement(By.xpath(String.format("//*[@id=\"__next\"]/div[3]/div/div/div[4]/ul/li[%d]/div/a/div/div[1]", i))).getText();// 공고제목
                 company = webElement.findElement(By.xpath(String.format("//*[@id=\"__next\"]/div[3]/div/div/div[4]/ul/li[%d]/div/a/div/div[2]", i))).getText();// 회사명
                 url = webElement.findElement(By.xpath(String.format("//*[@id=\"__next\"]/div[3]/div/div/div[4]/ul/li[%d]/div/a", i))).getAttribute("href");
-                System.out.println(company + subject + url);
                 JobResponseDto jobResponseDto = new JobResponseDto(company, subject, url, sector, sectorCode, createDate, "상시채용", career);
                 WontedStatistic.setJobDtos(jobResponseDto);
             } catch (StaleElementReferenceException e) {
