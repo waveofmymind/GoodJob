@@ -73,8 +73,13 @@
 
 ## 기술적 도전 및 트러블 슈팅
 
+- [로그 수집을 위한 AWS CloudWatch 적용기 - 전상준](https://waveofmymind.github.io/posts/aws-cloudwatch/)
+- [효과적인 비즈니스 로직 모니터링 - 전상준](https://waveofmymind.github.io/posts/effective-monitoring/)
+- [챗 GPT API 사용기 - 전상준](https://waveofmymind.github.io/posts/springboot+chatgpt/)
+- [비동기 처리로 성능 향상시키기 - 전상준](https://waveofmymind.github.io/posts/async-processing/)
 - [크롤링 트러블슈팅 - 박우영](https://velog.io/@wy9295/Java-%ED%81%AC%EB%A1%A4%EB%A7%81-%EC%97%90%EB%9F%AC%EB%AA%A8%EC%9D%8C)
-
+- [Redis - 깃허브 로그인 과정에서 직렬화 오류 - 박찬규](https://velog.io/@qmrma987/SpringBoot-JWT-Redis-%EC%82%AC%EC%9A%A9%EC%A4%91-%EA%B9%83%ED%97%88%EB%B8%8C-%EB%A1%9C%EA%B7%B8%EC%9D%B8-API-serializationfailedexception-%EC%B2%98%EB%A6%AC)
+- [로그인 후 이전 페이지로 sendRedirect 요청시 NullPointerException 오류 - 박찬규](https://velog.io/@qmrma987/SpringBoot-Thymeleaf-JWT-Redis-%EC%82%AC%EC%9A%A9%EC%A4%91-sendRedirect-%EB%AC%B8%EC%A0%9C)
 
 
 

@@ -40,6 +40,7 @@ public class EmailVerificationService {
 
         return RsData.of("S-1", "이메일 전송이 완료되었습니다.");
     }
+
     public RsData verify(String verificationCode) {
         Optional<SendEmailLog> opVerificationCode = emailService.findByVerificationCode(verificationCode);
 

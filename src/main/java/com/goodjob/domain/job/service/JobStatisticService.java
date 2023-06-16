@@ -89,6 +89,7 @@ public class JobStatisticService {
 
 
 
+    @Transactional
     public void delete(JobStatistic jobStatistic) {
         jobStatisticRepository.delete(jobStatistic);
     }
