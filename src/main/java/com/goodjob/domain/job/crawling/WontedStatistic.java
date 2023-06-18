@@ -92,7 +92,7 @@ public class WontedStatistic {
 
                 // 새로운 내용이 로드될 때까지 대기
                 Thread.sleep(2000);
-
+                
                 // 새로운 높이를 얻음
                 Long newHeight = (Long) js.executeScript("return document.body.scrollHeight");
                 if (newHeight.equals(lastHeight)) {
