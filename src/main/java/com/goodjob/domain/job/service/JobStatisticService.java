@@ -32,7 +32,7 @@ public class JobStatisticService {
 
             jobStatisticRepository.save(company);
         } catch (IllegalStateException | DataIntegrityViolationException e) {
-            log.debug("중복데이터");
+            log.info("중복데이터");
         }
 
 
