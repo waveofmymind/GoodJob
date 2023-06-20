@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class CustomDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
 
@@ -21,7 +20,6 @@ public class CustomDetailsService implements UserDetailsService {
         Member member = memberRepository.findByUsername(username).orElseThrow(()
                 -> new UsernameNotFoundException("username(%s) not found".formatted(username)));
 
-        log.info("member= {}", member);
         return new User(member.getUsername(), member.getPassword(), member.getAuthorities());
     }
 }

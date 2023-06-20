@@ -35,7 +35,7 @@ public class Member extends BaseEntity {
 
     private String email;
 
-    private String userRole; // user, admin
+    private String userRole; // ROLE_USER, ROLE_PAYED, ADMIN
 
     private boolean isDeleted;
 
@@ -52,7 +52,7 @@ public class Member extends BaseEntity {
     // 현재 회원이 가지고 있는 권한들을 List<GrantedAuthority> 형태로 리턴
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("USER"));
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
         return authorities;
     }

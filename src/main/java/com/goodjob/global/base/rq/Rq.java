@@ -28,7 +28,7 @@ public class Rq {
     private final MemberService memberService;
     private final HttpServletRequest req;
     private final HttpServletResponse resp;
-//    private final User user;
+    private final User user;
     private Member member = null;
 
     public Rq(JwtProvider jwtProvider, CookieUt cookieUt, CustomDetailsService customDetailsService, MemberService memberService, HttpServletRequest req, HttpServletResponse resp) {
@@ -44,22 +44,18 @@ public class Rq {
         if (accessToken != null) {
             String token = accessToken.getValue();
             Map<String, Object> claims = jwtProvider.getClaims(token);
-            long userId = (int) claims.get("id");
-            Optional<Member> opMember = memberService.findById(userId);
+            String username = (String) claims.get("username");
 
-            if (opMember.isPresent()) {
-                member = opMember.get();
-            }
-//            this.user = (User) customDetailsService.loadUserByUsername(username);
-//        } else {
-//            this.user = null;
+            // 스프링 시큐리티 User 객체 받아옴
+            this.user = (User) customDetailsService.loadUserByUsername(username);
+        } else {
+            this.user = null;
         }
     }
 
     // 로그인 되어 있는지 체크
     public boolean isLogin() {
-        return member != null;
-//        return user != null;
+        return user != null;
     }
 
     // 로그아웃 되어 있는지 체크
@@ -71,10 +67,10 @@ public class Rq {
     public Member getMember() {
         if (isLogout()) return null;
 
-//        // 데이터가 없는지 체크
-//        if (member == null) {
-//            member = memberService.findByUsername(user.getUsername()).orElseThrow();
-//        }
+        // 데이터가 없는지 체크
+        if (member == null) {
+            member = memberService.findByUsername(user.getUsername()).orElseThrow();
+        }
 
         return member;
     }
