@@ -25,6 +25,8 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
 
     //jpa
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -47,8 +49,6 @@ dependencies {
     //redis
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-//    implementation 'org.springframework.session:spring-session-core'
-//    implementation 'org.springframework.session:spring-session-data-redis'
 
     //jasypt
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
