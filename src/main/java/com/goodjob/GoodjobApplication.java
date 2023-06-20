@@ -1,19 +1,15 @@
 package com.goodjob;
 
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
+import com.goodjob.core.CoreConfigurationLoader;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.context.annotation.Import;
 
+@Import({CoreConfigurationLoader.class, BatchConfigurationLoader.class})
 @SpringBootApplication
-@EnableBatchProcessing
-@EnableScheduling
-@EnableAsync
 public class GoodjobApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(GoodjobApplication.class, args);
     }
-
 }

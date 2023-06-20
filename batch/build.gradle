@@ -1,0 +1,8 @@
+dependencies {
+
+    // Spring Batch
+    implementation("org.springframework.boot:spring-boot-starter-batch")
+    implementation project(':core')
+    // selenium
+    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
+}

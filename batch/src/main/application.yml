@@ -1,0 +1,121 @@
+server:
+  port: 8080
+  tomcat:
+    use-relative-redirects: true
+
+spring:
+  application:
+    name: goodjob
+
+  batch:
+    jdbc:
+      initialize-schema: always
+
+  profiles:
+    active: local
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  jpa:
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 500
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ENC(cvymzsPL0u2oHZHlTlKfL60GreXJ7Rupp4+cQydpmmU=)
+    password: ENC(6wHw0SXic0xXnlKr+ocHmCzcydqa7//nPvFyelI3lZ8=)
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  messages:
+    basename: message/messages
+    encoding: UTF-8
+
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            clientId: ENC(ul/6POjcQljJQlL38MpYWmXCJDMgudx31KPb2M/kVJ4UxV+IfFD5+VddkvtbaptM)
+            client-name: Kakao
+            authorization-grant-type: authorization_code
+            redirect-uri: '${custom.site.baseUrl}/{action}/oauth2/code/{registrationId}'
+            client-authentication-method: POST
+          github:
+            clientId: ${custom.github.client-id}
+            client-secret: ${custom.github.client-secret}
+            redirect-uri: '${custom.site.baseUrl}/{action}/oauth2/code/{registrationId}'
+          google:
+            clientId: ENC(hSIi04R6g7gCu8jmuvbKIkVDQLgIj3RfcIov1f6iwwjYtwMqKhgQ4DzV7QYoJ92ZU83mjxgSRDsagDlxNcqyoUT8i2OnhuEbGQaA7kvt/Pc=)
+            client-secret: ENC(Sy6gQZ0OSIHABvUqpBZKJOBMQFdW6zIHkBnGrHY8WKAhU+ZhOja0RyFww2CU1GNC)
+            scope: profile, email
+            redirect-uri: '${custom.site.baseUrl}/{action}/oauth2/code/{registrationId}'
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+
+jasypt:
+  encryptor:
+    password: ${JASYPT_PASSWORD}
+openai:
+  token: ENC(dQaDvbhWH3u2aGJyzLAj4kirMxGz8aLnmjuXo4NDQUuJEBjXUpb+AOQw1sTcDgTTVFv7ISwyrkREEM/YEhgnVg==)
+
+scheduler:
+  cron:
+    job: "0 0 4 * * *"
+
+management:
+  info:
+    java:
+      enabled: true
+    os:
+      enabled: true
+    env:
+      enabled: true
+  endpoint:
+    health:
+      show-components: always
+  endpoints:
+    web:
+      exposure:
+        include: "prometheus,health,info,metrics"
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+accessKey:
+  saramin: ENC(vAiGCHWxA7xlfVU04DkiksG8V05r4NKVzDoqYA8WbkmF7O6g6pZ/RxidyvQ4YppZd9suBjOz0lHSBVSFQ0NqkA==)
+
+custom:
+  jwt:
+    secretKey: ENC(td8jcP/eOBMP9/6Nph0R0lmIzC5mhwk5ln46rp4GVt1mfwzI+J9YkA/bnu9dGxkzxRZk9k2dTWGmNUL2BLxVwQ==)
+  github:
+    client-id: ENC(Iem24CVhksoo9X1oT5QZzQa9xbAIuW9V2+Ym5HHpOCI=)
+    client-secret: ENC(hX0VNKg0dVX4qsjqVsA/KmedU8mY9Bc659TBeiFXkxXCwRuTmJ87y6/AVuC0DPp9POJkzcEthRU=)
+  site:
+    baseUrl: http://localhost:8080
+
+cloud:
+  aws:
+    credentials:
+      access-key: ENC(rbOdm2vVqOglwtVhJwUR/8hPxVW54h11M8Q9A0tcLu4=)
+      secret-key: ENC(oHci78cJS/opaH8RW1TP7g8EXBZToC/ry/Ply4uXPbxNSOxWHrd5bY3lZJZIN9rpHelJTuqOOoE=)
+    s3:
+      bucket: ENC(QNconszyoVHld+7Bnq3yZDpZg5vDGfCT)
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
