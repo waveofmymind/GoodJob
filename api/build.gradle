@@ -1,0 +1,21 @@
+dependencies {
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    implementation project(':core')
+    implementation project(':batch')
+
+    //view
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+
+}
+
+bootJar {
+    enabled(true)
+}
+
+jar {
+    enabled(false)
+}

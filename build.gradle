@@ -4,9 +4,13 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.0'
 }
 
-group = 'com.goodjob'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+bootJar {
+    enabled(false)
+}
+
+jar {
+    enabled(true)
+}
 
 configurations {
     compileOnly {
@@ -14,32 +18,36 @@ configurations {
     }
 }
 
-jar {
-    enabled = false
-}
 
 repositories {
     mavenCentral()
 }
-
 
 subprojects {
     apply plugin: 'java'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
 
+
     group = 'com.goodjob'
     version = '0.0.1-SNAPSHOT'
     sourceCompatibility = '17'
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
 
     repositories {
         mavenCentral()
     }
 
     dependencies {
+
+        implementation 'org.springframework.boot:spring-boot-starter-web'
         developmentOnly 'org.springframework.boot:spring-boot-devtools'
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-        implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -71,14 +79,15 @@ subprojects {
         // AWS CloudWatch appender
         implementation'ca.pjer:logback-awslogs-appender:1.6.0'
 
+        //jasypt
+        implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
+
+
         // Query Dsl
         implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
         annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
         annotationProcessor "jakarta.annotation:jakarta.annotation-api"
         annotationProcessor "jakarta.persistence:jakarta.persistence-api"
-
-        //jasypt
-        implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
 
         // xml
         implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '4.0.2'
@@ -89,25 +98,7 @@ subprojects {
         runtimeOnly 'com.mysql:mysql-connector-j'
         runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
-
     }
-
-    bootJar {
-        enabled = false
-    }
-
-    jar {
-        enabled = true
-    }
-//
-//    bootJar {
-//        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-//    }
-
-    tasks.named('test') {
-        useJUnitPlatform()
-    }
-
     clean {
         delete file('src/main/generated')
     }
@@ -115,55 +106,8 @@ subprojects {
         options.compilerArgs << '-Aquerydsl.generatedAnnotationClass=javax.annotation.Generated'
     }
 
-}
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
 
-
-
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation project(path: ':core')
-    implementation project(path: ':batch')
-
-    //Disk I/O
-    runtimeOnly 'com.mysql:mysql-connector-j'
-    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-
-
-    //view
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-
-
-
-    //lombok
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-
-
-    //test
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
-
-    // xml
-    implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '4.0.2'
-
-    //레이아웃
-    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
-
-}
-
-
-
-bootJar {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
-}
-
-clean {
-    delete file('src/main/generated')
-}
-compileJava {
-    options.compilerArgs << '-Aquerydsl.generatedAnnotationClass=javax.annotation.Generated'
 }

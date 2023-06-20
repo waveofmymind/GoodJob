@@ -7,7 +7,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import java.util.List;
 import java.util.Map;
 
-@Profile("local")
+@Profile("prod")
 public class ReplicationRoutingDataSource extends AbstractRoutingDataSource {
 
     private static final String READ = "read";

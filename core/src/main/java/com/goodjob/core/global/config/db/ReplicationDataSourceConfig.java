@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
-@Profile("local")
+@Profile("prod")
 public class ReplicationDataSourceConfig {
     private final ReplicationDataSourceProperties replicationDataSourceProperties;
 

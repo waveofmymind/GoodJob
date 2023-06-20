@@ -1,6 +1,6 @@
 package com.goodjob.batch;
 
-import com.goodjob.job.dto.JobResponseDto;
+import com.goodjob.batch.job.dto.JobResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.item.ItemProcessor;
 

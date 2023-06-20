@@ -1,10 +1,13 @@
 package com.goodjob.batch;
 
-import com.goodjob.job.api.SaraminApiManager;
-import com.goodjob.job.crawling.WontedStatistic;
-import com.goodjob.job.dto.JobResponseDto;
-import com.goodjob.job.entity.JobStatistic;
-import com.goodjob.job.service.JobStatisticService;
+
+
+import com.goodjob.batch.crawling.WontedStatistic;
+
+import com.goodjob.batch.job.api.SaraminApiManager;
+import com.goodjob.batch.job.dto.JobResponseDto;
+import com.goodjob.batch.job.entity.JobStatistic;
+import com.goodjob.batch.job.service.JobStatisticService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriverException;

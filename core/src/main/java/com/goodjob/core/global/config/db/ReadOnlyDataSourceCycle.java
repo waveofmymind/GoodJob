@@ -3,7 +3,7 @@ package com.goodjob.core.global.config.db;
 import org.springframework.context.annotation.Profile;
 
 import java.util.List;
-@Profile("local")
+@Profile("prod")
 public class ReadOnlyDataSourceCycle<T> {
     private List<T> readOnlyDataSourceLookupKeys;
     private int index = 0;
