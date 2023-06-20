@@ -29,7 +29,7 @@ public class CommentController {
             return rq.historyBack(commentRsData);
         }
 
-        return rq.redirectWithMsg("/article/detail/%s".formatted(id), commentRsData);
+        return "redirect:/article/detail/%s".formatted(id);
     }
 
 

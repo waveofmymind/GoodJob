@@ -29,7 +29,7 @@ public class LikesController {
             return rq.historyBack(likesRsData);
         }
 
-        return rq.redirectWithMsg("/article/detail/%s".formatted(id), likesRsData);
+        return "redirect:/article/detail/%s".formatted(id);
     }
 
     @PostMapping("/like/comment/{id}")
@@ -42,7 +42,7 @@ public class LikesController {
             return rq.historyBack(likesRsData);
         }
 
-        return rq.redirectWithMsg("/article/detail/%s".formatted(likesRsData.getData().getComment().getArticle().getId()), likesRsData);
+        return "redirect:/article/detail/%s".formatted(likesRsData.getData().getComment().getArticle().getId());
     }
 
     @PostMapping("/like/subComment/{id}")
@@ -55,6 +55,6 @@ public class LikesController {
             return rq.historyBack(likesRsData);
         }
 
-        return rq.redirectWithMsg("/article/detail/%s".formatted(likesRsData.getData().getSubComment().getComment().getArticle().getId()), likesRsData);
+        return "redirect:/article/detail/%s".formatted(likesRsData.getData().getSubComment().getComment().getArticle().getId());
     }
 }

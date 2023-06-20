@@ -5,13 +5,17 @@ import com.goodjob.domain.article.dto.response.ArticleResponseDto;
 import com.goodjob.domain.article.entity.Article;
 import com.goodjob.domain.article.mapper.ArticleMapper;
 import com.goodjob.domain.article.repository.ArticleRepository;
+import com.goodjob.domain.comment.dto.response.CommentResponseDto;
 import com.goodjob.domain.comment.entity.Comment;
 import com.goodjob.domain.file.service.FileService;
 import com.goodjob.domain.hashTag.service.HashTagService;
+import com.goodjob.domain.likes.mapper.LikesMapper;
 import com.goodjob.domain.member.entity.Member;
+import com.goodjob.domain.subComment.dto.response.SubCommentResponseDto;
 import com.goodjob.domain.subComment.entity.SubComment;
 import com.goodjob.global.base.rsData.RsData;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -25,13 +29,16 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ArticleService {
     private final ArticleRepository articleRepository;
     private final ArticleMapper articleMapper;
+    private final LikesMapper likesMapper;
     private final HashTagService hashTagService;
     private final FileService fileService;
 
 
+    @Transactional(readOnly = true)
     public Page<ArticleResponseDto> findAll(int page, int sortCode, String category, String query) {
         Pageable pageable = PageRequest.of(page, 10);
 
@@ -39,7 +46,11 @@ public class ArticleService {
 
         List<ArticleResponseDto> articleResponseDtos = articles
                 .stream()
-                .map(articleMapper::toDto)
+                .map(article -> {
+                    ArticleResponseDto articleResponseDto = articleMapper.toDto(article);
+                    countCommentsAndSubComments(articleResponseDto);
+                    return articleResponseDto;
+                })
                 .collect(Collectors.toList());
 
         return convertToPage(articleResponseDtos, pageable);
@@ -53,15 +64,15 @@ public class ArticleService {
         return new PageImpl<>(content, pageable, articles.size());
     }
 
-    private void countCommentsAndSubComments(Article article) {
-        List<Comment> commentList = article.getCommentList();
+    private void countCommentsAndSubComments(ArticleResponseDto articleResponseDto) {
+        List<CommentResponseDto> commentList = articleResponseDto.getCommentList();
         Long sum = 0L;
 
-        for(Comment comment : commentList) {
-            if (!comment.isDeleted()) {
+        for(CommentResponseDto commentResponseDto : commentList) {
+            if (!commentResponseDto.isDeleted()) {
                 sum++;
-                List<SubComment> subCommentList = comment.getSubCommentList();
-                for(SubComment subComment : subCommentList) {
+                List<SubCommentResponseDto> subCommentList = commentResponseDto.getSubCommentList();
+                for(SubCommentResponseDto subComment : subCommentList) {
                     if(!subComment.isDeleted()) {
                         sum++;
                     }
@@ -69,11 +80,10 @@ public class ArticleService {
             }
         }
 
-        article.setCommentsCount(sum);
-        articleRepository.save(article);
-
+        articleResponseDto.setCommentsCount(sum);
     }
 
+    @Transactional
     public RsData getArticleResponseDto(Long id) {
         RsData<Article> articleRsData = getArticle(id);
 
@@ -83,14 +93,15 @@ public class ArticleService {
 
         Article article = articleRsData.getData();
 
-        return RsData.of("S-1", "게시글에 대한 정보를 가져옵니다.", articleMapper.toDto(article));
+        ArticleResponseDto articleResponseDto = increaseViewCount(article);
+        countCommentsAndSubComments(articleResponseDto);
+
+        return RsData.of("S-1", "게시글에 대한 정보를 가져옵니다.", articleResponseDto);
     }
 
-    @Transactional
-    public ArticleResponseDto increaseViewCount(Article article) {
+    private ArticleResponseDto increaseViewCount(Article article) {
         Long viewCount = article.getViewCount();
         article.setViewCount(viewCount + 1);
-        countCommentsAndSubComments(article);
         ArticleResponseDto articleResponseDto = articleMapper.toDto(article);
         return articleResponseDto;
     }
@@ -132,7 +143,6 @@ public class ArticleService {
                 .title(articleRequestDto.getTitle())
                 .content(articleRequestDto.getContent())
                 .viewCount(0L)
-                .commentsCount(0L)
                 .isDeleted(false)
                 .likesList(null)
                 .build();
@@ -176,9 +186,6 @@ public class ArticleService {
         article.setContent(articleRequestDto.getContent());
         hashTagService.applyHashTags(article, articleRequestDto.getHashTagStr());
 
-        articleRepository.save(article);
-
-
         return RsData.of("S-1", "게시글이 수정되었습니다.", article);
     }
 
@@ -209,8 +216,6 @@ public class ArticleService {
         }
 
         article.setDeleted(true);
-
-        articleRepository.save(article);
 
         return RsData.of("S-1", "게시글이 삭제되었습니다.", article);
     }

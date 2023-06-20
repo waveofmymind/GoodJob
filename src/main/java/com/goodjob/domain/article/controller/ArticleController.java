@@ -47,17 +47,17 @@ public class ArticleController {
 
     @GetMapping("/detail/{id}")
     public String detailArticle (Model model, @PathVariable("id") Long id, CommentRequestDto commentRequestDto, SubCommentRequestDto subCommentRequestDto) {
-        RsData<Article> articleRsData = articleService.getArticle(id);
-        if(articleRsData.isFail()) {
-            return rq.historyBack(articleRsData);
+        RsData<ArticleResponseDto> articleResponseDtoRsData = articleService.getArticleResponseDto(id);
+        if(articleResponseDtoRsData.isFail()) {
+            return rq.historyBack(articleResponseDtoRsData);
         }
-        ArticleResponseDto articleResponseDto = articleService.increaseViewCount(articleRsData.getData());
+        ArticleResponseDto articleResponseDto = articleResponseDtoRsData.getData();
+
         Map<String, File> fileMap = fileService.getFileMap(articleResponseDto.getId());
         articleResponseDto.getExtra().put("fileMap", fileMap);
 
         model.addAttribute("article", articleResponseDto);
         return "article/detailArticle";
-
     }
 
     @GetMapping("/create")
