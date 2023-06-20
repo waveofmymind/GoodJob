@@ -29,10 +29,3 @@ bootJar {
 jar {
     enabled(false)
 }
-
-clean {
-    delete file('src/main/generated')
-}
-compileJava {
-    options.compilerArgs << '-Aquerydsl.generatedAnnotationClass=javax.annotation.Generated'
-}
