@@ -31,7 +31,7 @@ public class SubCommentController {
             return rq.historyBack(subCommentRsData);
         }
 
-        return rq.redirectWithMsg("/article/detail/%s".formatted(subCommentRsData.getData().getComment().getArticle().getId()), subCommentRsData);
+        return "redirect:/article/detail/%s".formatted(subCommentRsData.getData().getComment().getArticle().getId());
     }
 
     @PostMapping("/update/{id}")

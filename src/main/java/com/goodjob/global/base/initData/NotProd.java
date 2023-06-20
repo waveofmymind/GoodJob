@@ -45,7 +45,6 @@ public class NotProd {
                             .title("테스트%s".formatted(i))
                             .content("내용테스트%s".formatted(i))
                             .viewCount(0L)
-                            .commentsCount(0L)
                             .build();
                     articleRepository.save(article);
                 }
