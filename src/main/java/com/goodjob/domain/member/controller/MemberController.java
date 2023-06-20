@@ -84,14 +84,6 @@ public class MemberController {
         return rq.redirectWithMsg("/", loginRsData);
     }
 
-    @DeleteMapping("/delete/{id}")
-    @PreAuthorize("isAuthenticated()")
-    public String delete(@PathVariable Long id) {
-        memberService.delete(id);
-
-        return "member/join";
-    }
-
     @PostMapping("/logout")
     @PreAuthorize("isAuthenticated()")
     public String logout() {
@@ -102,6 +94,14 @@ public class MemberController {
         rq.expireCookie("accessToken");
 
         return rq.redirectWithMsg("/", "로그아웃 되었습니다.");
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String delete(@PathVariable Long id) {
+        memberService.delete(id);
+
+        return "member/join";
     }
 
     @PostMapping("/join/valid/username")
