@@ -186,9 +186,6 @@ public class ArticleService {
         article.setContent(articleRequestDto.getContent());
         hashTagService.applyHashTags(article, articleRequestDto.getHashTagStr());
 
-        articleRepository.save(article);
-
-
         return RsData.of("S-1", "게시글이 수정되었습니다.", article);
     }
 
@@ -219,8 +216,6 @@ public class ArticleService {
         }
 
         article.setDeleted(true);
-
-        articleRepository.save(article);
 
         return RsData.of("S-1", "게시글이 삭제되었습니다.", article);
     }

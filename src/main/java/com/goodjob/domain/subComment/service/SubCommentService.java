@@ -9,6 +9,7 @@ import com.goodjob.domain.subComment.repository.SubCommentRepository;
 import com.goodjob.global.base.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -64,6 +65,7 @@ public class SubCommentService {
         return RsData.of("S-1", "답글에 대한 정보를 가져옵니다.", subComment);
     }
 
+    @Transactional
     public RsData updateComment(Member author, Long id, SubCommentRequestDto subCommentRequestDto) {
         RsData<SubComment> subCommentRsData = getSubComment(id);
 
@@ -79,11 +81,11 @@ public class SubCommentService {
 
         subComment.setContent(subCommentRequestDto.getContent());
 
-        subCommentRepository.save(subComment);
 
         return RsData.of("S-1", "답글이 수정되었습니다.", subComment);
     }
 
+    @Transactional
     public RsData deleteSubComment(Member author, Long id) {
         RsData<SubComment> subCommentRsData = getSubComment(id);
 
@@ -99,7 +101,6 @@ public class SubCommentService {
 
 
         subComment.setDeleted(true);
-        subCommentRepository.save(subComment);
 
         return RsData.of("S-1", "답글이 삭제되었습니다.", subComment);
     }
