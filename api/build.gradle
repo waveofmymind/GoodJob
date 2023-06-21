@@ -1,8 +1,5 @@
 dependencies {
 
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-
     implementation project(':core')
     implementation project(':batch')
 
@@ -14,6 +11,7 @@ dependencies {
 
 bootJar {
     enabled = true
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 jar {
