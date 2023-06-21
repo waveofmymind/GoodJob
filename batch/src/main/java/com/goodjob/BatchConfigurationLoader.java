@@ -16,6 +16,5 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @ComponentScan
 @EnableAutoConfiguration
-//@EnableJpaRepositories(basePackages = {"com.goodjob.batch.job.repository"})
 public class BatchConfigurationLoader {
 }
