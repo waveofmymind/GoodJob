@@ -69,7 +69,7 @@ public class WontedStatistic {
         chromeOptions.addArguments("--no-sandbox");
         chromeOptions.addArguments("--disable-dev-shm-usage");
         chromeOptions.addArguments("--disable-gpu");
-        chromeOptions.setCapability("ignoreProtectedModeSettings", true); //deprecated
+//        chromeOptions.setCapability("ignoreProtectedModeSettings", true); //deprecated
 
         WebDriver driver = new ChromeDriver(chromeOptions);
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
@@ -130,6 +130,7 @@ public class WontedStatistic {
                 company = webElement.findElement(By.xpath(String.format("//*[@id=\"__next\"]/div[3]/div/div/div[4]/ul/li[%d]/div/a/div/div[2]", i))).getText();// 회사명
                 url = webElement.findElement(By.xpath(String.format("//*[@id=\"__next\"]/div[3]/div/div/div[4]/ul/li[%d]/div/a", i))).getAttribute("href");
                 JobResponseDto jobResponseDto = new JobResponseDto(company, subject, url, sector, sectorCode, createDate, "상시채용", career);
+                System.out.println(company);
                 WontedStatistic.setJobDtos(jobResponseDto);
             } catch (StaleElementReferenceException e) {
                 log.debug(e.getMessage());

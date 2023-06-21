@@ -4,7 +4,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-batch")
     implementation project(':core')
     // selenium
-    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
+    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.8.1'
 }
 
 bootJar {
