@@ -59,6 +59,14 @@ public class Member extends BaseEntity {
         return authorities;
     }
 
+    public boolean isPayed() {
+        if (userRole == "ROLE_PAYED") {
+            return true;
+        }
+
+        return false;
+    }
+
     public Map<String, Object> toClaims() {
         return Map.of(
                 "id", getId(),
