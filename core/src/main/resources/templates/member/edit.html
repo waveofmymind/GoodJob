@@ -1,0 +1,19 @@
+<html layout:decorate="~{layout/layout.html}">
+<head>
+    <title>회원정보수정</title>
+</head>
+<body>
+
+<main layout:fragment="main" class="container my-3 mx-auto">
+    <div class="flex justify-center items-center min-h-screen">
+        <div class="w-96 bg-white p-8 rounded-lg mb-64">
+            <form th:action method="post" th:object="${loginRequestDto}" class="flex flex-col gap-6" onsubmit="LoginForm__submit(this); return false;">
+                <div class="form-control">
+                    <label class="block mb-2">닉네임</label>
+                    <input type="text" name="username" class="border-b border-neutral px-2 py-2 w-full focus:outline-none"
+                           placeholder="아이디를 입력하세요">
+                </div>
+            </form>
+        </div>
+    </div>
+</main>

@@ -9,7 +9,6 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
 public class JoinRequestDto {
     @NotBlank(message = "아이디는 필수항목입니다.")
     @Size(min = 4, max = 30, message = "4자 이상 30자 이하로 입력해주세요.")
