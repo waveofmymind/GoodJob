@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-@Configuration
+//@Configuration
 @Profile("local")
 public class NotProd {
 
