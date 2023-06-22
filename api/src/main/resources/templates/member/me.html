@@ -1,55 +1,66 @@
 <html layout:decorate="~{layout/layout.html}">
 <head>
     <title>마이페이지</title>
+
+    <style>
+        .premium {
+            color: #d3b500;
+        }
+
+        .normal {
+            color: #2020a3;
+        }
+    </style>
+</head>
 </head>
 <body>
 
 <main layout:fragment="main" class="container my-3 mx-auto">
     <div class="flex justify-center items-center min-h-screen rounded-lg">
-        <div class="w-120 bg-white p-8 border rounded-lg">
-            <div>
-                <h2 class="text-2xl font-semibold mb-4" style="display: flex">내 정보</h2>
-                <button class="ml-2 bg-neutral text-white px-4 py-2 rounded-lg text-sm flex" style="margin-left:auto;">회원정보수정</button>
+        <div class="bg-white p-8 border rounded-lg">
+            <div class="flex items-center justify-between">
+                <h2 class="text-2xl font-semibold mb-4" style="display: inline">내 정보</h2>
+                <button class="ml-2 bg-neutral text-white px-4 py-2 rounded-lg text-sm flex">회원정보수정</button>
             </div>
             <div class="space-y-2">
                 <p>아이디: <span th:text="${@rq.member.username}">유저아이디</span></p>
                 <p>닉네임: <span th:text="${@rq.member.nickname}">유저닉네임</span></p>
                 <p>이메일: <span th:text="${@rq.member.email}">유저이메일</span></p>
-                <p>회원등급: <span th:text="${@rq.member.isPayed}">회원등급</span></p>
-                <!--                <li th:if="${@rq.member.isPayed}" class="mr-6">회원등급: <span th:text="${@rq.member.isPayed} ? '프리미엄 회원' : '일반 회원'"></span></li>-->
+                <p>회원등급: <span th:text="${@rq.member.isPayed} ? '프리미엄 회원' : '일반 회원'"
+                               th:class="${@rq.member.isPayed} ? 'premium' : 'normal'"></span></p>
             </div>
 
-            <h2 class="text-2xl font-semibold mb-4 mt-4">회원정보 수정</h2>
-            <div class="flex items-center">
-                <form class="flex items-center mt-2">
-                    <label for="newNickname" class="mr-2">새 닉네임:</label>
-                    <input type="text" id="newNickname" name="newNickname"
-                           class="border border-gray-300 rounded px-2 py-1">
-                    <button class="ml-2 bg-neutral text-white px-4 py-2 rounded-lg text-sm"
-                            onclick="checkDuplication(event);">중복확인
-                    </button>
-                </form>
-            </div>
+            <!--            <h2 class="text-2xl font-semibold mb-4 mt-4">결제카드 정보</h2>-->
+            <!--            <div class="flex items-center">-->
+            <!--                <form class="flex items-center mt-2">-->
+            <!--                    <label for="newNickname" class="mr-2">카드정보</label>-->
+            <!--                    <input type="text" id="newNickname" name="newNickname"-->
+            <!--                           class="border border-gray-300 rounded px-2 py-1">-->
+            <!--                    <button class="ml-2 bg-neutral text-white px-4 py-2 rounded-lg text-sm"-->
+            <!--                            onclick="checkDuplication(event);">중복확인-->
+            <!--                    </button>-->
+            <!--                </form>-->
+            <!--            </div>-->
 
             <h3 class="text-2xl font-semibold mb-4 mt-4">내가 쓴 글</h3>
-            <div class="flex items-center">
-                <ul id="myArticles" class="list-disc ml-8">
-                    <li>글 1</li>
-                    <li>글 2</li>
-                    <li>글 3</li>
-                    <!-- 필요한 경우 JavaScript를 사용하여 동적으로 글 목록을 추가할 수 있습니다. -->
-                </ul>
+            <div class="space-y-2">
+                <div th:each="article, loop: ${@rq.member.articles}">
+                    <p th:if="${loop.index} < 5" th:text="${article.title}" class="text-xs  w-16 text-center">글 제목</p>
+                </div>
+                <div class="flex justify-content: flex-end">
+                    <a href="" class="text-xs w-16 text-center" style="margin-left: auto; color: gray;">>전체보기</a>
+                </div>
             </div>
 
-            <h3 class="text-2xl font-semibold mb-4 mt-4">내가 쓴 댓글</h3>
-            <div class="flex items-center">
-                <ul id="myComments" class="list-disc ml-8">
-                    <li>댓글 1</li>
-                    <li>댓글 2</li>
-                    <li>댓글 3</li>
-                    <!-- 필요한 경우 JavaScript를 사용하여 동적으로 댓글 목록을 추가할 수 있습니다. -->
-                </ul>
-            </div>
+            <!--            <h3 class="text-2xl font-semibold mb-4 mt-4">내가 쓴 댓글</h3>-->
+            <!--            <div class="space-y-2">-->
+            <!--                <div th:each="comment : ${@rq.member.comments}" th:limit="5">-->
+            <!--                    <p th:text="${comment.contents}" class="text-xs  w-16 text-center">글 제목</p>-->
+            <!--                </div>-->
+            <!--                <div>-->
+            <!--                    <a href="" class="text-xs  w-16 text-center" style="margin-left: auto;">>전체보기</a>-->
+            <!--                </div>-->
+            <!--            </div>-->
 
             <h3 class="text-2xl font-semibold mb-4 mt-4">GPT 답변 내용</h3>
             <div class="flex items-center">

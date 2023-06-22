@@ -43,7 +43,7 @@ public class Member extends BaseEntity {
 
     private String providerType; // 일반회원인지, 카카오로 가입한 회원인지, 구글로 가입한 회원인지
 
-    @OneToMany(mappedBy = "member", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Builder.Default
     private List<Article> articles = new ArrayList<>();
 
