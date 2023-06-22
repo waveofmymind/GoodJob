@@ -84,7 +84,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 member.getAuthorities()
         );
 
-        // 스프링 시큐리티 내에 우리가 만든 authentication 객체를 저장할 context 생성
+        // 스프링 시큐리티 내에 authentication 객체를 저장할 context 생성
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         // context 에 유저정보 저장
         context.setAuthentication(authentication);

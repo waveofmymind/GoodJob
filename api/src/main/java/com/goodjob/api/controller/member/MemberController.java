@@ -1,5 +1,6 @@
 package com.goodjob.api.controller.member;
 
+import com.goodjob.core.domain.member.dto.request.EditRequestDto;
 import com.goodjob.core.global.base.redis.RedisUt;
 import com.goodjob.core.global.base.rsData.RsData;
 import com.goodjob.core.domain.member.dto.request.JoinRequestDto;
@@ -85,14 +86,6 @@ public class MemberController {
         return rq.redirectWithMsg("/", loginRsData);
     }
 
-    @DeleteMapping("/delete/{id}")
-    @PreAuthorize("isAuthenticated()")
-    public String delete(@PathVariable Long id) {
-        memberService.delete(id);
-
-        return "member/join";
-    }
-
     @PostMapping("/logout")
     @PreAuthorize("isAuthenticated()")
     public String logout() {
@@ -103,6 +96,57 @@ public class MemberController {
         rq.expireCookie("accessToken");
 
         return rq.redirectWithMsg("/", "로그아웃 되었습니다.");
+    }
+
+    @GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
+    public String showMe() {
+        return "member/me";
+    }
+
+    @GetMapping("/edit")
+    @PreAuthorize("isAuthenticated()")
+    public String showEdit() {
+        return "member/edit";
+    }
+
+    @PatchMapping("/edit/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String edit(@PathVariable Long id, EditRequestDto editRequestDto,
+                       BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "member/edit";
+        }
+
+        RsData updateRsData = memberService.update(rq.getMember(), editRequestDto);
+
+        if (updateRsData.isFail()) {
+            rq.historyBack(updateRsData);
+        }
+
+        return rq.redirectWithMsg("/member/me", updateRsData);
+    }
+
+    @PostMapping("/edit/confirm/password")
+    @ResponseBody
+    public String confirmPassword(String password) {
+        String memberPassword = rq.getMember().getPassword();
+        boolean isMatched = memberService.matchPassword(password, memberPassword);
+
+        // TODO: 추후 로직 리팩토링
+        if (!isMatched) {
+            return "member/confirm-password";
+        }
+
+        return "redirect:/member/edit";
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String delete(@PathVariable Long id) {
+        memberService.delete(id);
+
+        return "member/join";
     }
 
     @PostMapping("/join/valid/username")

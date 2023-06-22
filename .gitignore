@@ -342,6 +342,7 @@ gradle-app.setting
 *.hprof
 
 /src/main/resources/application-local.yml
+/src/main/resources/application-test.yml
 
 ### main 폴더 내의 /generated 폴더 추가
 **/build/**

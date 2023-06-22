@@ -8,7 +8,6 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
 public class LoginRequestDto {
     @Size(min = 4, max = 30)
     @NotBlank(message = "아이디는 필수항목입니다.")

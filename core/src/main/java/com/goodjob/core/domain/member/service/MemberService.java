@@ -1,6 +1,7 @@
 package com.goodjob.core.domain.member.service;
 
 
+import com.goodjob.core.domain.member.dto.request.EditRequestDto;
 import com.goodjob.core.domain.member.dto.request.JoinRequestDto;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.repository.MemberRepository;
@@ -22,22 +23,6 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
     private final JwtProvider jwtProvider;
-
-    private RsData canJoin(JoinRequestDto joinRequestDto) {
-        Optional<Member> opUsername = findByUsername(joinRequestDto.getUsername());
-        Optional<Member> opNickname = findByNickname(joinRequestDto.getNickname());
-        Optional<Member> opEmail = findByEmail(joinRequestDto.getEmail());
-
-        if (opUsername.isPresent()) { // 로그인 계정이 중복인 경우
-            return RsData.of("F-1", "이미 존재하는 계정입니다.");
-        }
-
-        if (opNickname.isPresent()) { // 닉네임이 중복인 경우
-            return RsData.of("F-1", "이미 존재하는 닉네임입니다.");
-        }
-
-        return RsData.of("S-1", "회원가입이 가능합니다.");
-    }
 
     @Transactional
     public RsData<Member> join(JoinRequestDto joinRequestDto) {
@@ -62,6 +47,22 @@ public class MemberService {
         memberRepository.save(member);
 
         return RsData.of("S-1", "%s님의 회원가입이 완료되었습니다.".formatted(joinRequestDto.getNickname()), member);
+    }
+
+    private RsData canJoin(JoinRequestDto joinRequestDto) {
+        Optional<Member> opUsername = findByUsername(joinRequestDto.getUsername());
+        Optional<Member> opNickname = findByNickname(joinRequestDto.getNickname());
+        Optional<Member> opEmail = findByEmail(joinRequestDto.getEmail());
+
+        if (opUsername.isPresent()) { // 로그인 계정이 중복인 경우
+            return RsData.of("F-1", "이미 존재하는 계정입니다.");
+        }
+
+        if (opNickname.isPresent()) { // 닉네임이 중복인 경우
+            return RsData.of("F-1", "이미 존재하는 닉네임입니다.");
+        }
+
+        return RsData.of("S-1", "회원가입이 가능합니다.");
     }
 
     // 일반회원가입, 소셜로그인 회원가입 나눠 처리
@@ -135,12 +136,6 @@ public class MemberService {
         return memberRepository.findByNickname(nickname);
     }
 
-    @Transactional
-    public void delete(Long id) {
-        memberRepository.deleteById(id);
-
-    }
-
     // 소셜 로그인할때마다 동작
     public RsData<Member> whenSocialLogin(String providerType, String username, String email) {
         Optional<Member> opMember = findByUsername(username);
@@ -150,6 +145,36 @@ public class MemberService {
         }
 
         return socialJoin(providerType, username, "", email); // 최초 1회 실행
+    }
+
+    public boolean matchPassword(String password, String memberPassword) {
+        String encodedPassword = passwordEncoder.encode(password);
+
+        if (passwordEncoder.matches(encodedPassword, memberPassword)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    @Transactional
+    public RsData update(Member member, EditRequestDto editRequestDto) {
+        String nickname = editRequestDto.getNickname();
+        Optional<Member> opNickName = findByNickName(nickname);
+
+        if (opNickName.isPresent()) {
+            return RsData.of("F-1", "이미 존재하는 닉네임 입니다.");
+        }
+
+        member.setNickname(nickname);
+        memberRepository.save(member);
+
+        return RsData.of("S-1", "회원 정보가 수정되었습니다.");
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        memberRepository.deleteById(id);
     }
 }
 
