@@ -15,6 +15,16 @@
             height: 100%;
         }
 
+        video {
+            position: absolute;
+            width: 100%;
+            height: auto;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
         img {
             width: 100%;
             height: auto;
@@ -37,7 +47,10 @@
 </head>
 <body>
 <main layout:fragment="main" class="flex-grow flex items-center justify-center">
-    <img class="image-container" src="https://i.ibb.co/XWcR7dc/image6.png" style="filter: brightness(30%);" alt="">
+    <video autoplay loop muted>
+        <source src="/main.mp4" type="video/mp4">
+    </video>
+<!--    <img class="image-container" src="https://i.ibb.co/XWcR7dc/image6.png" style="filter: brightness(30%);" alt="">-->
     <div class="image-text">
         <p style="font-size:48px">
             GoodJob!<br>
