@@ -1,4 +1,4 @@
-package com.goodjob.core.domain.s3.controller;
+package com.goodjob.api.controller.file;
 
 
 

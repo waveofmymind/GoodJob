@@ -1,4 +1,4 @@
-package com.goodjob.core.domain.member.controller;
+package com.goodjob.api.controller.member;
 
 import com.goodjob.core.domain.member.dto.request.EditRequestDto;
 import com.goodjob.core.global.base.redis.RedisUt;
