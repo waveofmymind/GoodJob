@@ -160,5 +160,4 @@ public class GptService {
 
         return result;
     }
-
 }

@@ -1,4 +1,4 @@
-package com.goodjob.batch.job.controller;
+package com.goodjob.api.controller.job;
 
 import com.goodjob.batch.job.dto.JobRequestForm;
 import com.goodjob.batch.job.entity.JobStatistic;

@@ -1,4 +1,4 @@
-package com.goodjob.core.domain.resume.controller;
+package com.goodjob.api.controller.resume;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goodjob.core.domain.resume.dto.request.ResumeRequest;

@@ -1,4 +1,4 @@
-package com.goodjob.core.domain.article.controller;
+package com.goodjob.api.controller.article;
 
 
 import com.goodjob.core.domain.article.dto.request.ArticleRequestDto;

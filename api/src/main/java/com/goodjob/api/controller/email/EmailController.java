@@ -1,4 +1,4 @@
-package com.goodjob.core.domain.email.controller;
+package com.goodjob.api.controller.email;
 
 import com.goodjob.core.domain.email.service.EmailVerificationService;
 import com.goodjob.core.global.base.rsData.RsData;
