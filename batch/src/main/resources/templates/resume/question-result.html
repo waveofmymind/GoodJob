@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout/layout.html}">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.6/dist/full.css" rel="stylesheet" type="text/css"/>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css"/>
+
+    <title>면접 예상 질문</title>
+</head>
+<body>
+<main layout:fragment="main" class="flex justify-center items-center h-auto mt-16">
+
+
+    <script>
+        function downloadText() {
+            var elements = document.querySelectorAll(".question, .bestAnswer");
+            var txtData = '';
+            for (var i = 0; i < elements.length; i++) {
+                if (elements[i].classList.contains("question")) {
+                    txtData += '예상 질문: ';
+                } else if (elements[i].classList.contains("bestAnswer")) {
+                    txtData += '모범 답안: ';
+                }
+                txtData += elements[i].textContent + '\n';
+                if (elements[i].classList.contains("bestAnswer")) {
+                    txtData += '\n'; // 모범 답안 뒤에 추가적인 여백 줄을 추가합니다.
+                }
+            }
+
+            var blob = new Blob([txtData], { type: 'text/plain' });
+            var url = URL.createObjectURL(blob);
+
+            var link = document.createElement('a');
+            link.download = 'question.txt';
+            link.href = url;
+
+            link.click();
+        }
+    </script>
+
+
+
+    <div class="w-full max-w-2xl mx-auto">
+        <h1 class="text-2xl mb-6">🧐 이런 점이 궁금해요</h1>
+        <div th:each="predictionResponse, stat : ${predictionResponses}">
+            <th:block th:if="${stat.index % 3 == 0}">
+                <div class="border-t-2 pt-6">
+                    <h2 class="text-xl mb-2">요청 <span th:text="${(stat.index / 3) + 1}"></span></h2>
+                </div>
+            </th:block>
+            <div class="border-t-2 py-6">
+                <h2 class="text-2xl mb-2 question" th:text="${predictionResponse.question}">Question</h2>
+                <p class="bestAnswer" th:text="${predictionResponse.bestAnswer}">Best answer</p>
+            </div>
+        </div>
+        <button type="button" onClick="downloadText()" className="mt-8">텍스트 파일로 저장하기</button>
+    </div>
+</main>
+</body>
+</html>

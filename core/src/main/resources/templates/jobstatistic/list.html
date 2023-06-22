@@ -1,0 +1,82 @@
+<html layout:decorate="~{layout/layout.html}">
+<head><title>통계 목록</title></head>
+
+<body>
+<main layout:fragment="main" class="flex items-center justify-center flex-col">
+<!--  <div class="flex justify-end w-11/12">-->
+<!--    <div></div>-->
+<!--    <div class="mr-20">-->
+<!--      <div th:replace="~{jobstatistic/fragment/search :: search (${search})}"></div>-->
+<!--    </div>-->
+<!--  </div>-->
+  <div class="flex justify-around w-9/12 overflow-x-auto">
+    <table class="table w-full">
+      <thead class="text-slate-200 text-center">
+      <tr>
+        <th scope="col" class="text-cyan-500">번호</th>
+        <th scope="col" class="text-cyan-500">제목</th>
+        <th scope="col" class="text-cyan-500"> 공고시작일 </th>
+        <th scope="col" class="text-cyan-500"> 공고 마감일 </th>
+      </tr>
+      </thead>
+
+      <tbody class="text-center">
+      <tr class="hover" th:each="jobStatistic, loop : ${paging}">
+
+        <td class="">
+          <div class="text-sm text-gray-500"
+               th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></div>
+        </td>
+        <td>
+          <a th:href="@{|${jobStatistic.url}|}"
+             th:text="${jobStatistic.subject}"
+             class="text-cyan-500"></a>
+        </td>
+        <!--        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">-->
+        <!--          <div th:text="${jobStatistic. 아직 미정}"></div>-->
+        <!--        </td>-->
+        <!-- 작성일 -->
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          <div th:text="${jobStatistic.startDate}"></div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          <div th:text="${jobStatistic.deadLine}"></div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 페이징 처리 시작 -->
+  <div class="btn-group">
+    <div th:if="${!paging.isEmpty()}"
+         class="pagination flex justify-center space-x-2">
+
+      <a th:href="@{/jobstatistic/search/all(page=${paging.number - 1},sector=${param.sector},career=${param.career})}"
+         class="btn"
+         th:classappend="${!paging.hasPrevious} ? 'sr-only'">
+        이전
+      </a>
+
+      <span th:each="page: ${#numbers.sequence(0, paging.totalPages - 1)}"
+            class="btn"
+            th:classappend="${page == paging.number} ? 'active'"
+            th:if="${page >= paging.number - 5 and page <= paging.number + 5}">
+
+            <a th:text="${page + 1}" th:href="@{/jobstatistic/search/all(page=${page},sector=${param.sector},career=${param.career})}"></a>
+        </span>
+
+      <a th:href="@{/jobstatistic/search/all(page=${paging.number + 1},sector=${param.sector},career=${param.career})}"
+         class="btn"
+         th:classappend="${!paging.hasNext} ? 'sr-only'">
+        다음
+      </a>
+    </div>
+  </div>
+  <!-- 페이징 처리 종료 -->
+
+
+</main>
+</body>
+</html>
+

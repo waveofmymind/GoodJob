@@ -1,0 +1,15 @@
+dependencies {
+
+    implementation project(':core')
+    implementation project(':batch')
+
+}
+
+bootJar {
+    enabled = true
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+jar {
+    enabled = false
+}

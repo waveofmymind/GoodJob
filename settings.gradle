@@ -1,1 +1,5 @@
 rootProject.name = 'GoodJob'
+
+include 'core','batch', 'api'
+
+
