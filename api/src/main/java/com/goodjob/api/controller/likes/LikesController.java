@@ -1,4 +1,4 @@
-package com.goodjob.core.domain.likes.controller;
+package com.goodjob.api.controller.likes;
 
 
 import com.goodjob.core.domain.likes.dto.request.LikesRequestDto;

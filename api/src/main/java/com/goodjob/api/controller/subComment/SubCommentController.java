@@ -1,4 +1,4 @@
-package com.goodjob.core.domain.subComment.controller;
+package com.goodjob.api.controller.subComment;
 
 
 import com.goodjob.core.domain.subComment.dto.request.SubCommentRequestDto;

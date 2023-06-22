@@ -1,4 +1,4 @@
-package com.goodjob.core.domain.comment.controller;
+package com.goodjob.api.controller.comment;
 
 
 import com.goodjob.core.domain.comment.dto.request.CommentRequestDto;

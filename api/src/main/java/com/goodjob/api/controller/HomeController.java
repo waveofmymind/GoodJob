@@ -1,4 +1,4 @@
-package com.goodjob.core.domain.home.controller;
+package com.goodjob.api.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
