@@ -1,17 +1,18 @@
 package com.goodjob.core.global.rq;
 
 
-import com.goodjob.core.global.base.jwt.JwtProvider;
-import com.goodjob.core.global.security.CustomDetailsService;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
 import com.goodjob.core.global.base.cookie.CookieUt;
+import com.goodjob.core.global.base.jwt.JwtProvider;
 import com.goodjob.core.global.base.rsData.RsData;
 import com.goodjob.core.global.util.Ut;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
@@ -25,28 +26,24 @@ import java.util.Optional;
 public class Rq {
     private final JwtProvider jwtProvider;
     private final CookieUt cookieUt;
-    private final CustomDetailsService customDetailsService;
     private final MemberService memberService;
     private final HttpServletRequest req;
     private final HttpServletResponse resp;
     private final User user;
     private Member member = null;
 
-    public Rq(JwtProvider jwtProvider, CookieUt cookieUt, CustomDetailsService customDetailsService, MemberService memberService, HttpServletRequest req, HttpServletResponse resp) {
+    public Rq(JwtProvider jwtProvider, CookieUt cookieUt, MemberService memberService, HttpServletRequest req, HttpServletResponse resp) {
         this.jwtProvider = jwtProvider;
         this.cookieUt = cookieUt;
-        this.customDetailsService = customDetailsService;
         this.memberService = memberService;
         this.req = req;
         this.resp = resp;
 
-        // jwt 토큰에서 회원의 인증정보를 가져옴
-        Cookie accessToken = cookieUt.getCookie(req, "accessToken");
-        if (accessToken != null) {
-            String token = accessToken.getValue();
-            Map<String, Object> claims = jwtProvider.getClaims(token);
-            String username = (String) claims.get("username");
-            this.user = (User) customDetailsService.loadUserByUsername(username);
+        SecurityContext context = SecurityContextHolder.getContext();
+        Object principal = context.getAuthentication().getPrincipal();
+
+        if (principal instanceof User) {
+            this.user = (User) principal;
         } else {
             this.user = null;
         }
