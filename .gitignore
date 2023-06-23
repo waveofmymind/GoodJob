@@ -341,7 +341,8 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 
-/api/src/main/resources/application-local.yml
+/src/main/resources/application-local.yml
+/src/main/resources/application-test.yml
 
 ### main 폴더 내의 /generated 폴더 추가
 **/build/**
@@ -351,4 +352,3 @@ gradle-app.setting
 
 /core/src/main/generated/**
 /batch/src/main/generated/**
-/src/main/resources/application-local.yml

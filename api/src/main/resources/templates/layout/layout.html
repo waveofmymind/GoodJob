@@ -17,8 +17,8 @@
       <ul class="menu menu-horizontal px-1">
         <li><a href="/member/login" th:if="${@rq.logout}" class="btn btn-ghost normal-case text-xl">로그인</a></li>
         <li><a href="/member/join" th:if="${@rq.logout}" class="btn btn-ghost normal-case text-xl">회원가입</a></li>
+        <li><a href="/member/me" th:if="${@rq.login}" class="btn btn-ghost normal-case text-xl" th:text="|${@rq.member.nickname}님 환영합니다.|"></a></li>
         <li>
-          <span class="btn btn-ghost normal-case text-xl" th:if="${@rq.login}" th:text="|${@rq.member.nickname}님 환영합니다.|"></span>
           <a href="javascript:;" th:if="${@rq.login}" onclick="$(this).next().submit();" class="btn btn-ghost normal-case text-xl">로그아웃</a>
           <form th:if="${@rq.login}" hidden th:action="|/member/logout|" method="POST"></form>
         </li>

@@ -8,6 +8,7 @@ import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
 import com.goodjob.core.domain.subComment.repository.SubCommentRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Deprecated
 public class NotProd {
 
+    @Bean
     CommandLineRunner initData(MemberService memberService, ArticleRepository articleRepository, CommentRepository commentRepository, SubCommentRepository subCommentRepository) {
         return new CommandLineRunner() {
             @Override
