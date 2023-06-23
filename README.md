@@ -48,9 +48,13 @@
 - Naver Cloud PlatForm
   - CentOS 7.8
 - Docker
+- Google Cloud PlatForm
+- Kubernetes
+- Confluence Kafka
 - NginX ProxyManager
 - Jenkins
 - AWS RDS
+- AWS Route 53
 - AWS S3
 - AWS CloudWatch
 - Grafana + Prometheus
