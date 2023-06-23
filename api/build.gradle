@@ -2,6 +2,7 @@ dependencies {
 
     implementation project(':core')
     implementation project(':batch')
+    implementation project(':gpt')
 
 }
 
