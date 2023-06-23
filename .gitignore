@@ -341,10 +341,14 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 
-/src/main/resources/application-local.yml
+/api/src/main/resources/application-local.yml
 
 ### main 폴더 내의 /generated 폴더 추가
 **/build/**
 
 /drivers/**
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,java,gradle,intellij,intellij+all,intellij+iml
+
+/core/src/main/generated/**
+/batch/src/main/generated/**
+/src/main/resources/application-local.yml
