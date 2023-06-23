@@ -47,7 +47,7 @@ public class Member extends BaseEntity {
     @Builder.Default
     private List<Article> articles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 
