@@ -45,17 +45,25 @@
 
 **DevOps**
 
-- Naver Cloud PlatForm
-  - CentOS 7.8
-- Docker
-- NginX ProxyManager
+- ~~Naver Cloud PlatForm~~
+  - ~~CentOS 7.8~~
+- ~~Docker~~
+- ~~NginX ProxyManager~~
+- Google Cloud Platform
+- Kubernetes
+- Confluent Kafka
 - Jenkins
 - AWS RDS
+- AWS Route53
 - AWS S3
 - AWS CloudWatch
+- Apache JMeter
+- Ngrinder
 - Grafana + Prometheus
 
 ## 시스템 아키텍처
+
+>추후 변경 예정
 
 <img width="889" alt="image" src="https://github.com/waveofmymind/GoodJob/assets/93868431/579cfda8-c39c-4b8c-ba12-8ad0ce8e0d71">
 
