@@ -68,6 +68,14 @@ public class Member extends BaseEntity {
         return false;
     }
 
+    public boolean isSocialMember() {
+        if (providerType.equals("GOODJOB")) {
+            return false;
+        }
+
+        return true;
+    }
+
     public Map<String, Object> toClaims() {
         return Map.of(
                 "id", getId(),

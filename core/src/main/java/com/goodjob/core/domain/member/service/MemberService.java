@@ -8,6 +8,7 @@ import com.goodjob.core.domain.member.repository.MemberRepository;
 import com.goodjob.core.global.base.rsData.RsData;
 import com.goodjob.core.global.base.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
@@ -52,7 +54,6 @@ public class MemberService {
     private RsData canJoin(JoinRequestDto joinRequestDto) {
         Optional<Member> opUsername = findByUsername(joinRequestDto.getUsername());
         Optional<Member> opNickname = findByNickname(joinRequestDto.getNickname());
-        Optional<Member> opEmail = findByEmail(joinRequestDto.getEmail());
 
         if (opUsername.isPresent()) { // 로그인 계정이 중복인 경우
             return RsData.of("F-1", "이미 존재하는 계정입니다.");
@@ -104,10 +105,11 @@ public class MemberService {
         }
 
         Member member = opMember.get();
-        boolean matches = passwordEncoder.matches(password, member.getPassword());
+        boolean matches = passwordEncoder.matches(password, opMember.get().getPassword());
 
         if (!matches) {
-            return RsData.of("F-1", "아이디 혹은 비밀번호가 틀립니다.");
+            log.info("비밀번호틀림!");
+            return RsData.of("F-2", "아이디 혹은 비밀번호가 틀립니다.");
         }
 
         String accessToken = jwtProvider.genToken(member.toClaims());

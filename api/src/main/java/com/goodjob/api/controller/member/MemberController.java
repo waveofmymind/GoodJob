@@ -12,6 +12,7 @@ import com.goodjob.core.global.rq.Rq;
 import jakarta.servlet.http.Cookie;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ import java.util.Optional;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/member")
+@Slf4j
 public class MemberController {
 
     private final Rq rq;
@@ -71,6 +73,7 @@ public class MemberController {
         RsData loginRsData = memberService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
 
         if (loginRsData.isFail()) {
+            log.info("실패했다.");
             return rq.historyBack(loginRsData);
         }
 
