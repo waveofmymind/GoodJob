@@ -23,6 +23,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: -1;
+            filter: brightness(50%);
         }
 
         img {
@@ -36,7 +37,7 @@
 
         .image-text {
             position: absolute;
-            top: 50%;
+            top: 80%;
             left: 50%;
             transform: translate(-50%, -50%);
             color: white;
@@ -48,13 +49,15 @@
 <body>
 <main layout:fragment="main" class="flex-grow flex items-center justify-center">
     <video autoplay loop muted>
-        <source src="/main.mp4" type="video/mp4">
+        <source src="https://openaicomproductionae4b.blob.core.windows.net/production-twill-01/121dd5e0-eaea-424d-bdf2-db02ca1f5e55/gpt-4-92586ac_1080p60.mp4" type="video/mp4">
     </video>
+
 <!--    <img class="image-container" src="https://i.ibb.co/XWcR7dc/image6.png" style="filter: brightness(30%);" alt="">-->
     <div class="image-text">
-        <p style="font-size:48px">
-            GoodJob!<br>
-            취업의 길잡이</p>
+
+<!--        <h1 class="f-display-2 pointer-events-auto">Creating safe AGI that benefits all of humanity</h1>-->
+        <p style="font-size:60px">
+            May I be a guide for your employment journey!</p>
     </div>
 </main>
 </body>

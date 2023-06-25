@@ -89,7 +89,6 @@ public class GptService {
                 List<ChatMessage> chatMessages = generateQuestionMessage(job, career, data.getResumeType(), data.getContent());
                 try {
                     ChatCompletionResult chatCompletionResult = generate(chatMessages);
-                    log.info("생성된 질문 : {}", chatCompletionResult.toString());
                     String futureResult = chatCompletionResult.getChoices().get(0).getMessage().getContent();
 
                     return objectMapper.readValue(futureResult, WhatGeneratedQuestionResponse.class);

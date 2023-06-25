@@ -13,6 +13,7 @@ spring:
 
   profiles:
     active: local
+    include: gpt
 
   servlet:
     multipart:
