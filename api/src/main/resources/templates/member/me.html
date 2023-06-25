@@ -11,7 +11,27 @@
             color: #2020a3;
         }
     </style>
-</head>
+
+    <script>
+        function openModal() {
+            const modalContainer = document.getElementById("modalContainer");
+
+            fetch("/member/edit/confirm/password", {
+                method: 'get'
+            })
+                .then(response => response.text())
+                .then(html => {
+                    modalContainer.innerHTML = html;
+                    const modal = modalContainer.querySelector("#modal");
+                    modal.style.display = "block";
+                });
+        }
+
+        function closeModal() {
+            const modalContainer = document.getElementById("modalContainer");
+            modalContainer.innerHTML = "";
+        }
+    </script>
 </head>
 <body>
 
@@ -20,7 +40,8 @@
         <div class="bg-white p-8 border rounded-lg">
             <div class="flex items-center justify-between">
                 <h2 class="text-2xl font-semibold mb-4" style="display: inline">내 정보</h2>
-                <button class="ml-2 bg-neutral text-white px-4 py-2 rounded-lg text-sm flex">회원정보수정</button>
+                <button class="ml-2 bg-neutral text-white px-4 py-2 rounded-lg text-sm flex"
+                        onclick="openModal()" >회원정보수정</button>
             </div>
             <div class="space-y-2">
                 <p>아이디: <span th:text="${@rq.member.username}">유저아이디</span></p>
@@ -28,6 +49,11 @@
                 <p>이메일: <span th:text="${@rq.member.email}">유저이메일</span></p>
                 <p>회원등급: <span th:text="${@rq.member.isPayed} ? '프리미엄 회원' : '일반 회원'"
                                th:class="${@rq.member.isPayed} ? 'premium' : 'normal'"></span></p>
+            </div>
+
+            <!-- 모달 창을 인클루드 -->
+            <div id="modalContainer">
+
             </div>
 
             <!--            <h2 class="text-2xl font-semibold mb-4 mt-4">결제카드 정보</h2>-->
@@ -74,5 +100,6 @@
         </div>
     </div>
 </main>
+
 </body>
 </html>

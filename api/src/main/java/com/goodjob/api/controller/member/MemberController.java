@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -89,9 +90,9 @@ public class MemberController {
     @PostMapping("/logout")
     @PreAuthorize("isAuthenticated()")
     public String logout() {
-        String username = rq.getMember().getUsername();
+        String userId = String.valueOf(rq.getMember().getId());
         // 레디스에서 리프레시토큰삭제
-        redisUt.deleteToken(username);
+        redisUt.deleteToken(userId);
         // 쿠키삭제
         rq.expireCookie("accessToken");
 
@@ -127,15 +128,18 @@ public class MemberController {
         return rq.redirectWithMsg("/member/me", updateRsData);
     }
 
-    @PostMapping("/edit/confirm/password")
-    @ResponseBody
-    public String confirmPassword(String password) {
-        String memberPassword = rq.getMember().getPassword();
-        boolean isMatched = memberService.matchPassword(password, memberPassword);
+    @GetMapping("/edit/confirm/password")
+    public String showConfirmPassword() {
+        return "member/confirm-password";
+    }
 
-        // TODO: 추후 로직 리팩토링
-        if (!isMatched) {
-            return "member/confirm-password";
+    @PostMapping("/edit/confirm/password")
+    public String confirmPassword(String passwordToEdit) {
+        String memberPassword = rq.getMember().getPassword();
+        RsData<String> matchRsData = memberService.matchPassword(passwordToEdit, memberPassword);
+
+        if (matchRsData.isFail()) {
+            return rq.redirectWithMsg("/member/me", matchRsData);
         }
 
         return "redirect:/member/edit";

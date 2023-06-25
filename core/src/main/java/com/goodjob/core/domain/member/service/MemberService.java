@@ -104,7 +104,6 @@ public class MemberService {
         }
 
         Member member = opMember.get();
-
         boolean matches = passwordEncoder.matches(password, member.getPassword());
 
         if (!matches) {
@@ -147,14 +146,12 @@ public class MemberService {
         return socialJoin(providerType, username, "", email); // 최초 1회 실행
     }
 
-    public boolean matchPassword(String password, String memberPassword) {
-        String encodedPassword = passwordEncoder.encode(password);
-
-        if (passwordEncoder.matches(encodedPassword, memberPassword)) {
-            return true;
+    public RsData<String> matchPassword(String passwordToEdit, String memberPassword) {
+        if (!passwordEncoder.matches(passwordToEdit, memberPassword)) {
+            return RsData.of("F-1", "비밀번호가 일치하지않습니다.");
         }
 
-        return false;
+        return RsData.of("S-1", "비밀번호가 일치합니다. 회원정보수정 페이지로 이동합니다.");
     }
 
     @Transactional
