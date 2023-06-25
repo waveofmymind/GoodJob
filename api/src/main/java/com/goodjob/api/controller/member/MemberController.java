@@ -24,7 +24,6 @@ import java.util.Optional;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/member")
-@Slf4j
 public class MemberController {
 
     private final Rq rq;
@@ -73,7 +72,6 @@ public class MemberController {
         RsData loginRsData = memberService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
 
         if (loginRsData.isFail()) {
-            log.info("실패했다.");
             return rq.historyBack(loginRsData);
         }
 

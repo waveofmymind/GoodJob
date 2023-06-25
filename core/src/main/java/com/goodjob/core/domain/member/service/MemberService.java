@@ -20,7 +20,6 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-@Slf4j
 public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
@@ -108,7 +107,6 @@ public class MemberService {
         boolean matches = passwordEncoder.matches(password, opMember.get().getPassword());
 
         if (!matches) {
-            log.info("비밀번호틀림!");
             return RsData.of("F-2", "아이디 혹은 비밀번호가 틀립니다.");
         }
 
@@ -119,10 +117,6 @@ public class MemberService {
 
     private Optional<Member> findByNickname(String nickname) {
         return memberRepository.findByNickname(nickname);
-    }
-
-    public Optional<Member> findByEmail(String email) {
-        return memberRepository.findByEmail(email);
     }
 
     public Optional<Member> findByUsername(String username) {
