@@ -105,6 +105,13 @@ public class JobStatisticService {
         return jobStatisticRepository.findAll();
     }
 
+
+    // upsert TODO:TEST 후 변경
+    @Transactional
+    public void upsert(JobResponseDto dto) {
+        jobStatisticRepository.upsert(dto);
+    }
+
 }
 
 
