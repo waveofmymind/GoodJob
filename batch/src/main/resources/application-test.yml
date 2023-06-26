@@ -18,4 +18,5 @@ spring:
       port: 6379
 scheduler:
   cron:
-    job: "0 */3 * * * *"
+    job: "30 47 16 * * *"
+

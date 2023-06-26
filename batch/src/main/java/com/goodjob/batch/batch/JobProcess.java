@@ -1,4 +1,4 @@
-package com.goodjob.batch;
+package com.goodjob.batch.batch;
 
 import com.goodjob.batch.job.dto.JobResponseDto;
 import lombok.RequiredArgsConstructor;
