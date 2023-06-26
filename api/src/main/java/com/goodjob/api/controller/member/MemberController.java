@@ -108,25 +108,15 @@ public class MemberController {
 
     @GetMapping("/edit")
     @PreAuthorize("isAuthenticated()")
-    public String showEdit() {
+    public String showEdit(EditRequestDto editRequestDto) {
         return "member/edit";
     }
 
-    @PatchMapping("/edit/{id}")
+    @PatchMapping("/edit")
     @PreAuthorize("isAuthenticated()")
-    public String edit(@PathVariable Long id, EditRequestDto editRequestDto,
-                       BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "member/edit";
-        }
-
-        RsData updateRsData = memberService.update(rq.getMember(), editRequestDto);
-
-        if (updateRsData.isFail()) {
-            rq.historyBack(updateRsData);
-        }
-
-        return rq.redirectWithMsg("/member/me", updateRsData);
+    @ResponseBody
+    public RsData<String> edit(EditRequestDto editRequestDto) {
+        return memberService.update(rq.getMember(), editRequestDto);
     }
 
     @GetMapping("/edit/confirm/password")

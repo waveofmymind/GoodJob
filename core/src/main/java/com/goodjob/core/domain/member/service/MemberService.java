@@ -107,7 +107,7 @@ public class MemberService {
         boolean matches = passwordEncoder.matches(password, opMember.get().getPassword());
 
         if (!matches) {
-            return RsData.of("F-2", "아이디 혹은 비밀번호가 틀립니다.");
+            return RsData.of("F-1", "아이디 혹은 비밀번호가 틀립니다.");
         }
 
         String accessToken = jwtProvider.genToken(member.toClaims());
@@ -154,6 +154,10 @@ public class MemberService {
     public RsData update(Member member, EditRequestDto editRequestDto) {
         String nickname = editRequestDto.getNickname();
         Optional<Member> opNickName = findByNickName(nickname);
+
+        if (nickname.length() < 2) {
+            return RsData.of("F-1", "2자 이상 입력해주세요.");
+        }
 
         if (opNickName.isPresent()) {
             return RsData.of("F-1", "이미 존재하는 닉네임 입니다.");
