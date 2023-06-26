@@ -19,6 +19,10 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.step.tasklet.Tasklet;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.json.JsonItemReader;
+import org.springframework.batch.item.support.ListItemReader;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,16 +50,18 @@ public class BatchConfiguration {
     @Bean
     public Job job1(JobRepository jobRepository) {
         return new JobBuilder("job1", jobRepository)
-                .start(step1(jobRepository)) // 사람인
-                .next(step2(jobRepository)) // 원티드 백엔드
-                .next(step3(jobRepository)) // 원티드 프론트
-                .next(step4(jobRepository)) // 원티드 풀스택
-                .next(step5(jobRepository)) // 중복된 값 필터하고 db저장
-//                .start(chunkSaram(jobRepository)) // 청크
+//                .start(step1(jobRepository)) // 사람인
+//                .next(step2(jobRepository)) // 원티드 백엔드
+//                .next(step3(jobRepository)) // 원티드 프론트
+//                .next(step4(jobRepository)) // 원티드 풀스택
+//                .next(step5(jobRepository)) // 중복된 값 필터하고 db저장
+                .start(chunkSaram(jobRepository)) // 청크
                 .next(step6(jobRepository)) // 기존 값들 초기화
                 .next(step7(jobRepository)) // 데이터 삭제
                 .build();
     }
+
+
 
 
     @Bean
@@ -266,38 +272,39 @@ public class BatchConfiguration {
      *
      * 백엔드 84, 프론트 92, 풀스택 2232
      */
-//    @Bean
-//    @JobScope
-//    public Step chunkSaram(JobRepository repository) {
-//        return new StepBuilder("chunk", repository)
-//                .<JobResponseDto,JobResponseDto>chunk(1000, transactionManager)
-//                .reader(saraminReader())
-//                .processor(process())
-//                .writer(saraminWriter()).build();
-//    }
-//
-//    @Bean
-//    @StepScope
-//    public ItemReader<JobResponseDto> saraminReader() {
-//        // 검색일 최소, 최대 값 설정으로 이후 값만 받아오기
-//        SaraminApiManager.saraminStatistic(84);
-//        SaraminApiManager.saraminStatistic(92);
-//        SaraminApiManager.saraminStatistic(2232);
-//        List<JobResponseDto> jobResponseDtos = SaraminApiManager.getJobResponseDtos();
-//        return new ListItemReader<>(jobResponseDtos);
-//    }
-//
-//    @Bean
-//    @StepScope
-//    public JobProcess process() {
-//        return new JobProcess();
-//    }
-//
-//    @Bean
-//    @StepScope
-//    public ItemWriter<JobResponseDto> saraminWriter() {
-//        return dto -> dto.getItems().forEach(jobStatisticService::create);
-//    }
+    @Bean
+    @JobScope
+    public Step chunkSaram(JobRepository repository) {
+        return new StepBuilder("chunk", repository)
+                .<JobResponseDto,JobResponseDto>chunk(1000, transactionManager)
+                .reader(saraminReader())
+                .processor(process())
+                .writer(saraminWriter()).build();
+    }
+
+    @Bean
+    @StepScope
+    public ItemReader<JobResponseDto> saraminReader() {
+        // 검색일 최소, 최대 값 설정으로 이후 값만 받아오기
+        SaraminApiManager.saraminStatistic(84);
+        SaraminApiManager.saraminStatistic(92);
+        SaraminApiManager.saraminStatistic(2232);
+        List<JobResponseDto> jobResponseDtos = SaraminApiManager.getJobResponseDtos();
+        return new ListItemReader<>(jobResponseDtos);
+    }
+
+
+    @Bean
+    @StepScope
+    public JobProcess process() {
+        return new JobProcess();
+    }
+
+    @Bean
+    @StepScope
+    public ItemWriter<JobResponseDto> saraminWriter() {
+        return dto -> dto.getItems().forEach(jobStatisticService::upsert);
+    }
 }
 
 

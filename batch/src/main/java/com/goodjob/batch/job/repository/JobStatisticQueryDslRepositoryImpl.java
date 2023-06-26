@@ -15,8 +15,11 @@ public class JobStatisticQueryDslRepositoryImpl implements JobStatisticQueryDslR
     private final JPAQueryFactory jpaQueryFactory;
 
 
+
     @Override
     public List<JobStatistic> findAll() {
         return null;
     }
+
+
 }
