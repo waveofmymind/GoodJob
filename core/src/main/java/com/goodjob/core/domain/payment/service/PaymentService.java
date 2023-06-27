@@ -1,5 +1,6 @@
 package com.goodjob.core.domain.payment.service;
 
+import com.goodjob.core.domain.payment.dto.request.PaymentRequestDto;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -16,14 +17,13 @@ import java.util.Base64;
 public class PaymentService {
 
 
-    public HttpURLConnection sendPaymentRequest(String clientSecret, String tossUrl,
-                                                String orderId, Integer amount, String paymentKey) throws IOException {
+    public HttpURLConnection sendPaymentRequest(String clientSecret, String tossUrl, PaymentRequestDto paymentRequestDto) throws IOException {
 
         Base64.Encoder encoder = Base64.getEncoder();
         byte[] encodedBytes = encoder.encode(clientSecret.getBytes("UTF-8"));
         String authorizations = "Basic " + new String(encodedBytes, 0, encodedBytes.length);
 
-        URL url = new URL("https://api.tosspayments.com/v1/payments/" + paymentKey);
+        URL url = new URL(tossUrl + paymentRequestDto.getPaymentKey());
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestProperty("Authorization", authorizations);
@@ -32,8 +32,8 @@ public class PaymentService {
         connection.setDoOutput(true);
 
         JSONObject obj = new JSONObject();
-        obj.put("orderId", orderId);
-        obj.put("amount", amount);
+        obj.put("orderId", paymentRequestDto.getOrderId());
+        obj.put("amount", paymentRequestDto.getAmount());
 
         OutputStream outputStream = connection.getOutputStream();
         outputStream.write(obj.toString().getBytes("UTF-8"));

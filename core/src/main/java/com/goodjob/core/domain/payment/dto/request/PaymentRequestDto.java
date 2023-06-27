@@ -1,9 +1,12 @@
 package com.goodjob.core.domain.payment.dto.request;
 
+import lombok.Getter;
+
+@Getter
 public class PaymentRequestDto {
     String orderId;
 
-    Integer amount;
-
     String paymentKey;
+
+    Integer amount;
 }

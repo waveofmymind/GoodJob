@@ -17,12 +17,8 @@ public class EmailController {
 
     @PostMapping("/send")
     @ResponseBody
-    public RsData sendEmail(String email) {
-        if (email.length() < 5) {
-            return RsData.of("F-1", "올바른 이메일을 입력하세요.");
-        }
-
-        return emailVerificationService.send(email);
+    public void sendEmail(String email) {
+        emailVerificationService.send(email);
     }
 
     @PostMapping("/verify")
