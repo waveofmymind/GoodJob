@@ -19,4 +19,4 @@ spring:
 
 scheduler:
   cron:
-    job: "30 38 00 * * *"
+    job: "30 11 10 * * *"

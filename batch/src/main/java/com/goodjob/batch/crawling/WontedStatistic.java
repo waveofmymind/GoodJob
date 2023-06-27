@@ -25,7 +25,7 @@ public class WontedStatistic {
 
     private final static List<JobResponseDto> jobResponseDtos = new ArrayList<>();
 
-    public List<JobResponseDto> getJobResponseDtos() {
+    public static List<JobResponseDto> getJobResponseDtos() {
         return jobResponseDtos;
     }
 

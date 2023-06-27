@@ -33,7 +33,7 @@ public class BatchScheduler {
     public void runJob() {
         log.debug("스케줄링 하는중");
         try {
-            jobLauncher.run(batchConfiguration.job1(jobRepository, batchConfiguration.chunkSaram(jobRepository), batchConfiguration.chunkSaram(jobRepository) ,batchConfiguration.wontedFrontStep(jobRepository), batchConfiguration.wontedFullStackStep(jobRepository)),
+            jobLauncher.run(batchConfiguration.job1(jobRepository),
                     new JobParametersBuilder().addDate("date", new Date()).toJobParameters());
         } catch (JobParametersInvalidException | JobExecutionAlreadyRunningException | JobRestartException |
                  JobInstanceAlreadyCompleteException | UnexpectedRollbackException e) {
