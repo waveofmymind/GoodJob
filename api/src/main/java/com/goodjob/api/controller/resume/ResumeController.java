@@ -1,12 +1,14 @@
 package com.goodjob.api.controller.resume;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goodjob.core.domain.resume.dto.request.CreatePromptRequest;
 import com.goodjob.core.domain.resume.dto.request.ResumeRequest;
 import com.goodjob.core.domain.resume.dto.response.WhatGeneratedImproveResponse;
-import com.goodjob.core.domain.resume.dto.response.WhatGeneratedQuestionResponse;
 import com.goodjob.core.domain.resume.facade.ResumeFacade;
 import com.goodjob.core.global.rq.Rq;
+import com.goodjob.core.domain.resume.adaptor.KafkaPredictionProducer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -21,7 +23,8 @@ import org.springframework.web.bind.annotation.*;
 public class ResumeController {
 
     private final Rq rq;
-    private final ResumeFacade resumeFacade;
+    private final KafkaPredictionProducer kafkaPredictionProducer;
+    private final ObjectMapper objectMapper;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -35,13 +38,16 @@ public class ResumeController {
     }
 
     @PostMapping("/questions")
-    public String generateQuestion(@ModelAttribute CreatePromptRequest request, Model model) {
+    public String generateQuestion(@ModelAttribute CreatePromptRequest request) throws JsonProcessingException {
+        if (rq.getMember() == null) {
+            request.setMemberId(null);
+            //TODO: 비로그인시 별도 페이지 생성
+        } else {
+            request.setMemberId(rq.getMember().getId());
+            kafkaPredictionProducer.sendQuestionRequest(objectMapper.writeValueAsString(request));
+        }
 
-        WhatGeneratedQuestionResponse generated = resumeFacade.generateQuestion(request);
-        log.info(generated.toString());
-        model.addAttribute("predictionResponses", generated.predictionResponse());
-
-        return "resume/question-result";
+        return "resume/request-complete";
     }
 
     @GetMapping("/advices")
@@ -50,11 +56,16 @@ public class ResumeController {
     }
 
     @PostMapping("/advices")
-    public String generateAdvice(@ModelAttribute CreatePromptRequest request, Model model) {
-        WhatGeneratedImproveResponse generated = resumeFacade.generateAdvice(request);
-        model.addAttribute("improveResponses", generated.improvementResponse());
+    public String generateAdvice(@ModelAttribute CreatePromptRequest request) throws JsonProcessingException {
+        if (rq.getMember() == null) {
+            request.setMemberId(null);
+            //TODO: 비로그인시 별도 페이지 생성
+        } else {
+            request.setMemberId(rq.getMember().getId());
+            kafkaPredictionProducer.sendQuestionRequest(objectMapper.writeValueAsString(request));
+        }
 
-        return "resume/advice-result";
+        return "resume/request-complete";
     }
 
 
