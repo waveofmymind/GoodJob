@@ -207,26 +207,26 @@ public class BatchConfiguration {
     public Tasklet taskletStatistic() {
         return (contribution, chunkContext) -> {
             List<JobResponseDto> pureSaram = SaraminApiManager.getJobResponseDtos();
-            List<JobResponseDto> filterSaram = jobStatisticService.sameDtoFilter(pureSaram, pureSaram);
+//            List<JobResponseDto> filterSaram = jobStatisticService.sameDtoFilter(pureSaram, pureSaram);
 
             List<JobResponseDto> pureWonted = WontedStatistic.getJobResponseDtos();
-            List<JobResponseDto> filterWonted = jobStatisticService.sameDtoFilter(pureWonted, pureWonted);
+//            List<JobResponseDto> filterWonted = jobStatisticService.sameDtoFilter(pureWonted, pureWonted);
+//
+//            // 사람인 에서 받은것 잡코리아 동일내용 필터
+//            List<JobResponseDto> saram = jobStatisticService.getFilterDto(filterSaram, filterWonted);
+//            // 잡코리아 에서 받은것 사람인 동일내용 필터
+//            List<JobResponseDto> wonted = jobStatisticService.getFilterDto(filterWonted, filterSaram);
 
-            // 사람인 에서 받은것 잡코리아 동일내용 필터
-            List<JobResponseDto> saram = jobStatisticService.getFilterDto(filterSaram, filterWonted);
-            // 잡코리아 에서 받은것 사람인 동일내용 필터
-            List<JobResponseDto> wonted = jobStatisticService.getFilterDto(filterWonted, filterSaram);
-
-            for (JobResponseDto dto : saram) {
+            for (JobResponseDto dto : pureSaram) {
                 try {
-                    jobStatisticService.create(dto);
+                    jobStatisticService.upsert(dto);
                 } catch (IllegalStateException | DataIntegrityViolationException e) {
                     log.error(e.getMessage());
                 }
             }
-            for (JobResponseDto dto : wonted) {
+            for (JobResponseDto dto : pureWonted) {
                 try {
-                    jobStatisticService.create(dto);
+                    jobStatisticService.upsert(dto);
                 } catch (IllegalStateException | DataIntegrityViolationException e) {
                     log.error(e.getMessage());
                 }
@@ -293,9 +293,6 @@ public class BatchConfiguration {
 
 
 
-/**
- * chunk
- */
 
 /**
  //     * Chunk Processing
