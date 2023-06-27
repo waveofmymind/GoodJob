@@ -28,8 +28,6 @@ subprojects {
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
 
-        implementation 'org.springframework.kafka:spring-kafka'
-        testImplementation 'org.springframework.kafka:spring-kafka-test'
 
 
     group = 'com.goodjob'
