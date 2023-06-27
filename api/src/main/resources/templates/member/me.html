@@ -38,37 +38,41 @@
 <main layout:fragment="main" class="container my-3 mx-auto">
     <div class="flex justify-center items-center min-h-screen rounded-lg">
         <div class="bg-white p-8 border rounded-lg">
-            <div class="flex items-center justify-between">
-                <h2 class="text-2xl font-semibold mb-4" style="display: inline">내 정보</h2>
-                <button th:if="${!@rq.member.isSocialMember}" class="ml-2 bg-neutral text-white px-4 py-2 rounded-lg text-sm flex"
-                        onclick="openModal()" >회원정보수정</button>
-                <a href="/member/edit"  th:if="${@rq.member.isSocialMember}"
-                   class="ml-2 bg-neutral text-white px-4 py-2 rounded-lg text-sm flex">회원정보수정</a>
-            </div>
-            <div class="space-y-2">
-                <p>아이디: <span th:text="${@rq.member.username}">유저아이디</span></p>
-                <p>닉네임: <span th:text="${@rq.member.nickname}">유저닉네임</span></p>
-                <p>이메일: <span th:text="${@rq.member.email}">유저이메일</span></p>
-                <p>회원등급: <span th:text="${@rq.member.isPayed} ? '프리미엄 회원' : '일반 회원'"
-                               th:class="${@rq.member.isPayed} ? 'premium' : 'normal'"></span></p>
+            <div class="mb-4">
+                <div class="mb-2 flex items-start justify-between">
+                    <h2 class="text-2xl font-semibold mb-4" style="display: inline">내 정보</h2>
+                    <button th:if="${!@rq.member.isSocialMember}" class="bg-neutral text-white px-4 py-2 rounded-lg text-sm"
+                            onclick="openModal()">회원정보수정
+                    </button>
+                    <a href="/member/edit" th:if="${@rq.member.isSocialMember}"
+                       class="bg-neutral text-white px-4 py-2 rounded-lg text-sm">회원정보수정</a>
+                </div>
+
+                <div class="space-y-2 mb-2">
+                    <p>아이디: <span th:text="${@rq.member.username}">유저아이디</span></p>
+                    <p>닉네임: <span th:text="${@rq.member.nickname}">유저닉네임</span></p>
+                    <p>이메일: <span th:text="${@rq.member.email}">유저이메일</span></p>
+                    <p>회원등급: <span th:text="${@rq.member.isPayed} ? '프리미엄 회원' : '일반 회원'"
+                                   th:class="${@rq.member.isPayed} ? 'premium' : 'normal'"></span></p>
+                </div>
+                <!-- 모달 창을 인클루드 -->
+                <div id="modalContainer">
+                </div>
             </div>
 
-            <!-- 모달 창을 인클루드 -->
-            <div id="modalContainer">
-
+            <div class="mb-4">
+                <h2 class="text-2xl font-semibold mb-4 mt-4">결제카드 정보(임시)</h2>
+                <div class="flex items-center">
+                    <form class="flex items-center mt-2">
+                        <label for="newNickname" class="mr-2">카드정보</label>
+                        <input type="text" id="newNickname" name="newNickname"
+                               class="border border-gray-300 rounded px-2 py-1">
+                        <button class="ml-2 bg-neutral text-white px-4 py-2 rounded-lg text-sm"
+                                onclick="checkDuplication(event);">중복확인
+                        </button>
+                    </form>
+                </div>
             </div>
-
-            <!--            <h2 class="text-2xl font-semibold mb-4 mt-4">결제카드 정보</h2>-->
-            <!--            <div class="flex items-center">-->
-            <!--                <form class="flex items-center mt-2">-->
-            <!--                    <label for="newNickname" class="mr-2">카드정보</label>-->
-            <!--                    <input type="text" id="newNickname" name="newNickname"-->
-            <!--                           class="border border-gray-300 rounded px-2 py-1">-->
-            <!--                    <button class="ml-2 bg-neutral text-white px-4 py-2 rounded-lg text-sm"-->
-            <!--                            onclick="checkDuplication(event);">중복확인-->
-            <!--                    </button>-->
-            <!--                </form>-->
-            <!--            </div>-->
 
             <h3 class="text-2xl font-semibold mb-4 mt-4">내가 쓴 글</h3>
             <div class="space-y-2">
