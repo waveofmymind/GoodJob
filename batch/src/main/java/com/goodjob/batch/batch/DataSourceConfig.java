@@ -1,4 +1,4 @@
-package com.goodjob.batch;
+package com.goodjob.batch.batch;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

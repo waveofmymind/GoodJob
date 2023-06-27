@@ -16,6 +16,5 @@ spring:
     redis:
       host: localhost
       port: 6379
-scheduler:
-  cron:
-    job: "0 */3 * * * *"
+
+
