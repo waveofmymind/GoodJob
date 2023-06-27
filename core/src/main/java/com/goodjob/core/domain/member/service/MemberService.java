@@ -8,6 +8,7 @@ import com.goodjob.core.domain.member.repository.MemberRepository;
 import com.goodjob.core.global.base.rsData.RsData;
 import com.goodjob.core.global.base.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +53,6 @@ public class MemberService {
     private RsData canJoin(JoinRequestDto joinRequestDto) {
         Optional<Member> opUsername = findByUsername(joinRequestDto.getUsername());
         Optional<Member> opNickname = findByNickname(joinRequestDto.getNickname());
-        Optional<Member> opEmail = findByEmail(joinRequestDto.getEmail());
 
         if (opUsername.isPresent()) { // 로그인 계정이 중복인 경우
             return RsData.of("F-1", "이미 존재하는 계정입니다.");
@@ -104,8 +104,7 @@ public class MemberService {
         }
 
         Member member = opMember.get();
-
-        boolean matches = passwordEncoder.matches(password, member.getPassword());
+        boolean matches = passwordEncoder.matches(password, opMember.get().getPassword());
 
         if (!matches) {
             return RsData.of("F-1", "아이디 혹은 비밀번호가 틀립니다.");
@@ -118,10 +117,6 @@ public class MemberService {
 
     private Optional<Member> findByNickname(String nickname) {
         return memberRepository.findByNickname(nickname);
-    }
-
-    public Optional<Member> findByEmail(String email) {
-        return memberRepository.findByEmail(email);
     }
 
     public Optional<Member> findByUsername(String username) {
@@ -147,20 +142,22 @@ public class MemberService {
         return socialJoin(providerType, username, "", email); // 최초 1회 실행
     }
 
-    public boolean matchPassword(String password, String memberPassword) {
-        String encodedPassword = passwordEncoder.encode(password);
-
-        if (passwordEncoder.matches(encodedPassword, memberPassword)) {
-            return true;
+    public RsData<String> matchPassword(String passwordToEdit, String memberPassword) {
+        if (!passwordEncoder.matches(passwordToEdit, memberPassword)) {
+            return RsData.of("F-1", "비밀번호가 일치하지않습니다.");
         }
 
-        return false;
+        return RsData.of("S-1", "비밀번호가 일치합니다. 회원정보수정 페이지로 이동합니다.");
     }
 
     @Transactional
     public RsData update(Member member, EditRequestDto editRequestDto) {
         String nickname = editRequestDto.getNickname();
         Optional<Member> opNickName = findByNickName(nickname);
+
+        if (nickname.length() < 2) {
+            return RsData.of("F-1", "2자 이상 입력해주세요.");
+        }
 
         if (opNickName.isPresent()) {
             return RsData.of("F-1", "이미 존재하는 닉네임 입니다.");

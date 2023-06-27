@@ -47,7 +47,7 @@ public class Member extends BaseEntity {
     @Builder.Default
     private List<Article> articles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 
@@ -66,6 +66,14 @@ public class Member extends BaseEntity {
         }
 
         return false;
+    }
+
+    public boolean isSocialMember() {
+        if (providerType.equals("GOODJOB")) {
+            return false;
+        }
+
+        return true;
     }
 
     public Map<String, Object> toClaims() {

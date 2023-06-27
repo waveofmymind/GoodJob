@@ -51,7 +51,7 @@ subprojects {
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-        //lombok
+        // lombok
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
 
@@ -60,7 +60,7 @@ subprojects {
         runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
         runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-        //security
+        // security
         implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
         implementation 'org.springframework.boot:spring-boot-starter-security'
         implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
@@ -68,10 +68,9 @@ subprojects {
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
 
-        //view
+        // view
         implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
         implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
-
 
         // actuator
         implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -83,9 +82,8 @@ subprojects {
         // AWS CloudWatch appender
         implementation'ca.pjer:logback-awslogs-appender:1.6.0'
 
-        //jasypt
+        // jasypt
         implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
-
 
         // Query Dsl
         implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
@@ -95,13 +93,16 @@ subprojects {
 
         // xml
         implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '4.0.2'
+
         // Mail
         implementation 'org.springframework.boot:spring-boot-starter-mail'
 
-        //Disk I/O
+        // Disk I/O
         runtimeOnly 'com.mysql:mysql-connector-j'
         runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
+        // SimpleJSON
+        implementation 'com.googlecode.json-simple:json-simple:1.1.1'
     }
     clean {
         delete file('src/main/generated')

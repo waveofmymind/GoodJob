@@ -14,6 +14,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,7 +28,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-
+@Slf4j
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
     private final MemberService memberService;
@@ -56,6 +57,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     }
                 }
             } catch (ExpiredJwtException e) {
+                log.info("토큰 만료");
                 String userId = String.valueOf(opMember.get().getId());
                 Long ttl = redisUt.getExpire(userId);
 
