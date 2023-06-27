@@ -2,9 +2,11 @@ package com.goodjob.batch.crawling;
 
 import com.goodjob.batch.job.dto.JobResponseDto;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -42,6 +44,7 @@ public class WontedStatistic {
      * @throws IOException
      * @throws InterruptedException
      */
+    @Async
     public void crawlWebsite(int jobCode, int career) throws InterruptedException, IOException, WebDriverException {
         String os = System.getProperty("os.name").toLowerCase();
 
