@@ -1,5 +1,6 @@
 package com.goodjob.core.domain.resume.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embeddable;
 
@@ -10,6 +11,7 @@ import java.util.List;
 @Embeddable
 public class Contents {
     @ElementCollection
+    @Column(columnDefinition = "TEXT")
     private List<String> contents;
 
     protected Contents() {
