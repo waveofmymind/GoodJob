@@ -10,10 +10,10 @@ spring:
       password: ENC(SJoUAh3qgBbC8t7APRidV6fgQ3+npv3n)
       write:
         name: write
-        url: ENC(IFNoAiPIH/illgvXcB69wRVj+VYYwTqdf6g5huYw5LJUOR6tgpYzP7/rlu1pZ1GKdHFtpmKkrW7AYoHGaTYvAoA02t+ccIVR+EH+q2Bv+A4JjHKQjY12gEUhWuXuprD4)
+        url: ENC(PSmFWkbu9dVJxnXbKCLfnolNzewXeC2saFlG7ucozYRMGVwlQMAzN2rfwue/a3Zyy0nDeOCabjFxy5aKUxo92j11QfoUbGs5j12+oWN8MIOeBn2Q75nd86EEDQKhL1JiY7JW6zn/glhFpkY5DOtQwEFeP50GBhVl)
       reads:
         - name: read1
-          url: ENC(OKc5PK/Fj/qGdDtuf1FpRjbD9HaMTapUvnsTHqNpa7GWkElYew6oG91wM6V3yElmNCUarWfTX6PPBLPkuUA2u85mjj87fCc5P5rBKmnly3G2AxBBgobW44WOzRiyi7IPcjsT1Nf5PKk=)
+          url: ENC(d+8j9c1Mn1isCh9MfkLbu3P5VhSNfdHNtgeYsGtkYim0WcaZm85ge8e1dKA4NojmfyHU2YenILyYSS2QBGdmM0v1yaC32FSzGh0jT6wghJFFZ1wzjeieN1CSgaiwaFNqZRwD8V1OAAjmaBqj0AJS7wFsQqmFL43Okn7PmrFftXw=)
 
   jpa:
     hibernate:
