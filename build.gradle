@@ -102,6 +102,14 @@ subprojects {
         runtimeOnly 'com.mysql:mysql-connector-j'
         runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
+
+        // WebSocket
+        implementation 'org.springframework.boot:spring-boot-starter-websocket'
+        implementation group: 'org.webjars', name: 'stomp-websocket', version: '2.3.3-1'
+
+        // javax.annotation 추가
+        implementation 'javax.annotation:javax.annotation-api:1.3.2'
+
     }
     clean {
         delete file('src/main/generated')

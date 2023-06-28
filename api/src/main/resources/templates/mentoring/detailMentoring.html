@@ -22,7 +22,10 @@
             </div>
         </div>
         <hr class="border-neutral mb-4">
-        <a th:href="@{/mentoring/create}" class="ml-2 my-3 bg-neutral text-white px-4 py-2 rounded-lg text-sm hover:bg-black">신청하기</a>
+        <form class="mr-3" th:action="@{/chat/room/{id}(id=${mentoring.id})}" method="post">
+            <button type="submit" class="ml-2 bg-neutral text-white px-4 py-2 rounded-lg text-sm hover:bg-black">신청하기
+            </button>
+        </form>
     </div>
 
     <script layout:fragment="script" type='text/javascript'>
