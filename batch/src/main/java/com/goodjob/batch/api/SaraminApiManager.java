@@ -62,10 +62,10 @@ public class SaraminApiManager {
                 String subject = job.getPosition().getTitle();
                 String url = job.getUrl();
                 String sector = job.getPosition().getIndustry().getName();
-
+                String place = job.getPosition().getLocation().getPlace();
                 long postTimeStamp = Long.parseLong(job.getPostingTimestamp());
                 long deadLineTimeStamp;
-                System.out.println("사람인 마감일" + job.getExpirationDate());
+
                 if (job.getExpirationDate() == null) {
                     deadLineTimeStamp = 0L;
                 } else {
@@ -80,13 +80,13 @@ public class SaraminApiManager {
                 String createDate = cd.format(formatter);
                 String deadLine = null;
                 if (deadLineTimeStamp == 0L) {
-                    deadLine = "상시채용";
+                    deadLine = "상시";
                 } else {
                     deadLine = dl.format(formatter);
                 }
                 int career = job.getPosition().getExperienceLevel().getCareer();
-
-                JobResponseDto jobResponseDto = new JobResponseDto(company, subject, url, sector, sectorCode, createDate, deadLine, career);
+                System.out.println("사람인 장소" + place);
+                JobResponseDto jobResponseDto = new JobResponseDto(company, subject, url, sector, sectorCode, createDate, deadLine, career, place);
                 setJobDtos(jobResponseDto);
             }
         } catch (NullPointerException e) {

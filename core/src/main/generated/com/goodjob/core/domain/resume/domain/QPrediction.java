@@ -31,7 +31,7 @@ public class QPrediction extends EntityPathBase<Prediction> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final NumberPath<Long> member = createNumber("member", Long.class);
+    public final NumberPath<Long> memberId = createNumber("memberId", Long.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
