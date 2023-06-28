@@ -35,6 +35,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 @Configuration
@@ -124,7 +125,7 @@ public class BatchConfiguration {
             for (int i = 0; i < 10; i++) {
                 try {
                     wontedStatistic.crawlWebsite(back, i);
-                }  catch (IOException | InterruptedException | WebDriverException e) {
+                }  catch (IOException | InterruptedException | WebDriverException | ExecutionException e) {
                     log.error(e.getMessage());
                 }
             }
@@ -148,7 +149,7 @@ public class BatchConfiguration {
             for (int i = 0; i < 10; i++) {
                 try {
                     wontedStatistic.crawlWebsite(front, i);
-                }  catch (IOException | InterruptedException | WebDriverException e) {
+                }  catch (IOException | InterruptedException | WebDriverException | ExecutionException e) {
                     log.error(e.getMessage());
                 }
             }
@@ -175,7 +176,7 @@ public class BatchConfiguration {
             for (int i = 0; i < 10; i++) {
                 try {
                     wontedStatistic.crawlWebsite(fullStack, i);
-                } catch (IOException | InterruptedException | WebDriverException e) {
+                } catch (IOException | InterruptedException | WebDriverException | ExecutionException e) {
                     log.error(e.getMessage());
                 }
             }

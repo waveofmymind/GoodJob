@@ -27,6 +27,8 @@ public class QJobStatistic extends EntityPathBase<JobStatistic> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final StringPath place = createString("place");
+
     public final StringPath sector = createString("sector");
 
     public final NumberPath<Integer> sectorCode = createNumber("sectorCode", Integer.class);
