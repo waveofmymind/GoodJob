@@ -26,6 +26,11 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
+    @GetMapping("/showPage")
+    public String showPaymentPage() {
+        return "payment/payment-page";
+    }
+
     @GetMapping("/success")
     public String paymentResult(PaymentRequestDto paymentRequestDto, Model model) throws Exception {
 
