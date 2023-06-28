@@ -20,5 +20,4 @@ public class KafkaPredictionProducer {
     public void sendAdviceRequest(String message) {
         this.kafkaTemplate.send(TOPIC_ADVICE, message);
     }
-
 }
