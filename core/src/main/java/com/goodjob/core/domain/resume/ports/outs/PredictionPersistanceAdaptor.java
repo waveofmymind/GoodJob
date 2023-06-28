@@ -7,6 +7,7 @@ import com.goodjob.core.domain.resume.ports.in.SavePredictionPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -22,5 +23,10 @@ public class PredictionPersistanceAdaptor implements SavePredictionPort, FindPre
     @Override
     public Optional<Prediction> findPredictionByMemberId(Long memberId) {
         return predictionRepository.findByMemberId(memberId);
+    }
+
+    @Override
+    public List<Prediction> findPredictionsByMemberId(Long memberId) {
+        return predictionRepository.findAllByMemberId(memberId);
     }
 }
