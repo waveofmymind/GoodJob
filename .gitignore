@@ -349,3 +349,6 @@ gradle-app.setting
 
 /drivers/**
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,java,gradle,intellij,intellij+all,intellij+iml
+
+/core/src/main/generated/**
+/batch/src/main/generated/**

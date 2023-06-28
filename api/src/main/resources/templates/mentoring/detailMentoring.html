@@ -1,0 +1,41 @@
+<html layout:decorate="~{layout/layout.html}">
+<head>
+    <title>게시글 상세 페이지</title>
+</head>
+<body>
+<main layout:fragment="main" class="container my-3 mx-auto">
+
+    <div class="container mx-auto py-8 w-1/2">
+        <a href="/mentoring/list" class="bg-white text-neutral px-1 py-1 mb-3 rounded-md flex-start hover:bg-gray-200">&lt; 전체 멘토링</a>
+        <h1 class="text-2xl font-bold flex-grow pl-3 mt-2 truncate overflow-ellipsis" th:text="${mentoring.title}"></h1>
+        <div class="flex justify-between mt-2 mb-1">
+            <p class="text-xs mt-2 mr-2 w-80 ml-3" th:text="${mentoring.member.nickname}"></p>
+            <p class="flex-grow text-xs mt-2" th:text="${#temporals.format(mentoring.createdDate, 'yyyy-MM-dd HH:mm')}"></p>
+            <a th:href="@{|/mentoring/update/${mentoring.id}|}" th:if="${@rq.login  and @rq.member.id == mentoring.member.id}" class="text-xs text-black mt-2 underline text-gray-400">수정</a>
+            <a href="javascript:void(0);" th:if="${@rq.login and @rq.member.id == mentoring.member.id}" th:data-uri="@{|/mentoring/delete/${mentoring.id}|}" class="delete text-xs text-black mt-2 mx-2 underline text-gray-400">삭제</a>
+        </div>
+        <hr class="border-neutral mb-4">
+
+        <div class="min-h-[200px]">
+            <div style="word-wrap: break-word;">
+                <div class="text-sm pl-3 min-h-[120px]" style="word-break: break-word; white-space: pre-wrap;"  th:text="${mentoring.content}"></div>
+            </div>
+        </div>
+        <hr class="border-neutral mb-4">
+        <a th:href="@{/mentoring/create}" class="ml-2 my-3 bg-neutral text-white px-4 py-2 rounded-lg text-sm hover:bg-black">신청하기</a>
+    </div>
+
+    <script layout:fragment="script" type='text/javascript'>
+        const delete_elements = document.getElementsByClassName("delete");
+        Array.from(delete_elements).forEach(function(element) {
+            element.addEventListener('click', function() {
+                if(confirm("정말로 삭제하시겠습니까?")) {
+                    location.href = this.dataset.uri;
+                };
+            });
+        });
+    </script>
+</main>
+
+</body>
+</html>
