@@ -29,6 +29,7 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
 
 
+
     group = 'com.goodjob'
     version = '0.0.1-SNAPSHOT'
     sourceCompatibility = '17'

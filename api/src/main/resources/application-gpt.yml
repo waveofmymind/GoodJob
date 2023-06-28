@@ -1,6 +1,6 @@
 spring:
   kafka:
-    bootstrap-servers: 10.112.4.7:9092 # 카프카 서비스의 클러스터 IP와 포트
+    bootstrap-servers: ENC(sb9NXPYQOd2kNE+97cv80aDt4n0vlbcLxOXV+LcBY60=)
     consumer:
       group-id: gptgroup
       auto-offset-reset: earliest
