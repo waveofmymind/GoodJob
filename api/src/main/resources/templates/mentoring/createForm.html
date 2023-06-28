@@ -1,0 +1,32 @@
+<html layout:decorate="~{layout/layout.html}">
+<head>
+    <title>멘토링 작성</title>
+
+    <style>
+        .image-upload > input
+        {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<main layout:fragment="main" class="container mx-auto">
+    <div class="container mx-auto py-8 w-1/2">
+        <h1 class="text-2xl font-bold">멘토링 작성</h1>
+
+        <form class="mt-4" th:object="${mentoringRequestDto}" method="post" enctype="multipart/form-data">
+            <div class="mb-4">
+                <input type="text" name="title" th:field="*{title}" class="form-input w-full border border-neutral rounded-md h-10 p-3" placeholder="제목을 입력하세요">
+            </div>
+
+            <div class="mb-4">
+                <textarea name="content" th:field="*{content}" class="form-textarea w-full h-64 resize-none border border-neutral rounded-md p-3" placeholder="본문을 입력하세요"></textarea>
+            </div>
+
+            <button type="submit" class="register bg-neutral hover:bg-black text-white font-bold px-4 py-2 rounded border-neutral" >저장하기</button>
+        </form>
+    </div>
+</main>
+
+</body>
+</html>

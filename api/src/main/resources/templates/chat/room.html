@@ -1,0 +1,145 @@
+<html layout:decorate="~{layout/layout.html}">
+<head>
+    <title>게시글 상세 페이지</title>
+</head>
+<body>
+<main layout:fragment="main" class="container my-3 mx-auto">
+    <th:block th:fragment="content">
+
+        <!-- 수정된 HTML -->
+
+        <div id="chat" class="chat">
+            <div class="chat-header clearfix">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="chat-about">
+                            <span id="myId" class="m-b-0" th:text="${room.name}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="msgArea" class="chat-history">
+                <div style="list-style: none" th:each="message : ${messages}">
+                    <div th:if="${message.sender} == null" class="chat-message admin-message">
+                        <div class="message-content alert alert-secondary">
+                            <b th:text="관리자 + ' : ' + ${message.message}"></b>
+                        </div>
+                    </div>
+                    <div th:if="${message.sender != null and message.sender.username == member.username}" class="chat-message my-message">
+                        <div class="message-content alert alert-secondary">
+                            <b th:text="${message.sender.nickname} + ' : ' + ${message.message}" style="word-break: break-all;"></b>
+                        </div>
+                    </div>
+                    <div th:if="${message.sender != null and message.sender.username != member.username}" class="chat-message other-message">
+                        <div class="message-content alert alert-warning">
+                            <b th:text="${message.sender.nickname} + ' : ' + ${message.message}" style="word-break: break-all;"></b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-message clearfix">
+                <input id="msg" type="text" class="form-control" placeholder="Enter text here...">
+                <button id="button-send" type="button" class="input-group-text" data-toggle="tooltip"
+                        data-placement="top" title="Send a message">
+                    <i id="plane" class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+        <script th:inline="javascript">
+            $(document).ready(function () {
+
+                var roomId = [[${room.roomId}]];
+                var roomName = [[${room.name}]];
+                var username = [[${member.nickname}]];
+
+                console.log(roomName + ", " + roomId + ", " + username);
+
+                var sockJs = new SockJS("/stomp/chat");
+                //1. SockJS를 내부에 들고있는 stomp를 내어줌
+                var stomp = Stomp.over(sockJs);
+
+                //2. connection이 맺어지면 실행
+                stomp.connect({}, function () {
+                    console.log("STOMP Connection")
+
+                    //4. subscribe(path, callback)으로 메세지를 받을 수 있음
+                    stomp.subscribe("/sub/chat/room/" + roomId, function (chat) {
+                        var content = JSON.parse(chat.body);
+
+                        var writer = content.writer;
+                        var str = '';
+
+                        if (writer === username) {
+                            str = "<div class='chat-message my-message'>";
+                            str += "<div class='message-content alert alert-secondary'>";
+                            str += "<b>" + writer + " : " + content.message + "</b>";
+                            str += "</div></div>";
+                        } else {
+                            str = "<div class='chat-message other-message'>";
+                            str += "<div class='message-content alert alert-warning'>";
+                            str += "<b>" + writer + " : " + content.message + "</b>";
+                            str += "</div></div>";
+                        }
+
+                        $("#msgArea").append(str);
+                        $('#chat').scrollTop($('#chat')[0].scrollHeight);
+                    });
+
+                    //3. send(path, header, message)로 메세지를 보낼 수 있음
+                    stomp.send('/pub/chat/enter', {}, JSON.stringify({roomId: roomId, writer: username}))
+                });
+
+                //엔터를 누르면 메시지 전송
+                $("#msg").on("keydown", function (event) {
+                    if (event.keyCode === 13) {
+                        event.preventDefault();
+                        document.getElementById('button-send').click();
+                        $('#chat').scrollTop($('#chat')[0].scrollHeight);
+                    }
+
+                    // 스크롤 아래로 내리기
+                    var chatHistory = document.getElementById("msgArea");
+                    chatHistory.scrollTop = chatHistory.scrollHeight;
+                });
+
+                $("#button-send").on("click", function (e) {
+                    var msg = document.getElementById("msg");
+
+                    console.log(username + ":" + msg.value);
+                    stomp.send('/pub/chat/message', {}, JSON.stringify({
+                        roomId: roomId,
+                        message: msg.value,
+                        writer: username
+                    }));
+                    msg.value = '';
+
+                    // 스크롤 아래로 내리기
+                    var chatHistory = document.getElementById("msgArea");
+                    chatHistory.scrollTop = chatHistory.scrollHeight;
+
+                });
+            });
+
+            $('#chat').scrollTop($('#chat')[0].scrollHeight);
+
+            // 채팅방이 로드 되었을 때
+            $(document).ready(function () {
+                $('#chat').scrollTop($('#chat')[0].scrollHeight);
+
+                // 하단 스크롤 이동 버튼
+                $('.button-send').click(function (e) {
+                    $('#chat').scrollTop($('#chat')[0].scrollHeight);
+                });
+            });
+
+
+        </script>
+    </th:block>
+</main>
+
+</body>
+</html>
