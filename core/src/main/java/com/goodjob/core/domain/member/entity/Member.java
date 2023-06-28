@@ -57,7 +57,7 @@ public class Member extends BaseEntity {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
-        // userRole이 ROLE_PAYED인 회원은 추가로 ROLE_PAYED 권한도 가진다.
+        // userRole이 premium인 회원은 추가로 ROLE_PAYED 권한도 가진다.
         if (isPayed()) {
             authorities.add(new SimpleGrantedAuthority("ROLE_PAYED"));
         }
@@ -67,7 +67,7 @@ public class Member extends BaseEntity {
     }
 
     public boolean isPayed() {
-        if (userRole == "premium") {
+        if (userRole.equals("premium")) {
             return true;
         }
 
