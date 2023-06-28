@@ -182,8 +182,7 @@ public class WontedStatistic {
             } catch (InterruptedException e) {
                 cnt++;
                 if (cnt > 100) {
-                    System.out.println("요기 에러임#################");
-                    log.error(e.getMessage());
+                    log.error("detail scroll error" + e.getMessage());
                     break;
                 }
             }
