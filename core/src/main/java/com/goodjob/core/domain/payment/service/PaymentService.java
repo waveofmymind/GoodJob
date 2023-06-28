@@ -5,6 +5,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -13,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 @Service
+@Transactional(readOnly = true)
 public class PaymentService {
 
 
@@ -50,5 +52,9 @@ public class PaymentService {
         responseStream.close();
 
         return jsonObject;
+    }
+
+    public void upgradeMembership() {
+
     }
 }

@@ -61,6 +61,8 @@ public class PaymentController {
             model.addAttribute("message", (String) jsonObject.get("message"));
         }
 
+        // TODO: 회원 등급 업그레이드
+        paymentService.upgradeMembership();
         return "payment/success";
     }
 
