@@ -1,9 +1,10 @@
 package com.goodjob.core.domain.resume.dto.response;
 
 
-import com.goodjob.core.domain.resume.domain.Answers;
-import com.goodjob.core.domain.resume.domain.ExpectedQuestion;
-import com.goodjob.core.domain.resume.domain.Questions;
+import com.goodjob.core.domain.resume.domain.Contents;
+import com.goodjob.core.domain.resume.domain.ServiceType;
+import com.goodjob.core.domain.resume.domain.Titles;
+import com.goodjob.core.domain.resume.dto.request.PredictionServiceRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,23 +18,24 @@ public record WhatGeneratedQuestionResponse(
         this(new ArrayList<>());
     }
 
-    public ExpectedQuestion toExpectedQuestion() {
-        List<String> questionsList = predictionResponse.stream()
+    public PredictionServiceRequest toServiceDto(Long memberId) {
+        List<String> titleList = predictionResponse.stream()
                 .map(PredictionResponse::question)
-                .collect(Collectors.toList());
+                .toList();
 
-        List<String> answersList = predictionResponse.stream()
+        List<String> contentList = predictionResponse.stream()
                 .map(PredictionResponse::bestAnswer)
-                .collect(Collectors.toList());
+                .toList();
 
-        Questions questions = Questions.of(questionsList);
-        Answers answers = Answers.of(answersList);
+        Titles titles = Titles.of(titleList);
+        Contents contents = Contents.of(contentList);
 
-        return ExpectedQuestion.builder()
-                .questions(questions)
-                .answers(answers)
+        return PredictionServiceRequest.builder()
+                .serviceType(ServiceType.EXPECTED_QUESTION)
+                .memberId(memberId)
+                .titles(titles)
+                .contents(contents)
                 .build();
     }
 
 }
-

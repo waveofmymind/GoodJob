@@ -10,6 +10,7 @@ import java.util.List;
 @Setter
 public class CreatePromptRequest {
 
+    private Long memberId;
     private String job;
     private String career;
     private List<ResumeRequest> resumeRequests;
