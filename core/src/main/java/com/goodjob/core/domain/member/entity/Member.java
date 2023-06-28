@@ -37,7 +37,8 @@ public class Member extends BaseEntity {
 
     private String email;
 
-    private String userRole; // ROLE_USER, ROLE_PAYED, ROLE_ADMIN(예정)
+    @Setter
+    private String userRole; // free(ROLE_USER), premium(ROLE_PAYED), mentor(ROLE_MENTOR)(예정)
 
     private boolean isDeleted;
 
@@ -66,7 +67,7 @@ public class Member extends BaseEntity {
     }
 
     public boolean isPayed() {
-        if (userRole == "ROLE_PAYED") {
+        if (userRole == "premium") {
             return true;
         }
 
