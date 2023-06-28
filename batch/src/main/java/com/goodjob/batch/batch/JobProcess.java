@@ -1,6 +1,6 @@
 package com.goodjob.batch.batch;
 
-import com.goodjob.batch.job.dto.JobResponseDto;
+import com.goodjob.core.domain.job.dto.JobResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
@@ -8,7 +8,6 @@ import org.springframework.batch.core.annotation.AfterStep;
 import org.springframework.batch.item.ItemProcessor;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 @RequiredArgsConstructor
 public class JobProcess implements ItemProcessor<JobResponseDto, JobResponseDto> {
