@@ -13,12 +13,13 @@
     var clientKey = 'test_ck_D4yKeq5bgrpgNXkdALXVGX0lzW6Y'
     var tossPayments = TossPayments(clientKey)
 
+    const randomValue = Date.now().toString(36).substring(2);
+
     var button = document.getElementById('payment-button') // 결제하기 버튼
 
     button.addEventListener('click', function () {
-        const randomValue = Date.now().toString(36).substring(2);
         tossPayments.requestPayment('카드', {
-            amount: 11900,
+            amount: 2000000,
             orderId: randomValue,
             orderName: '토스 티셔츠 외 2건',
             customerName: '박토스',

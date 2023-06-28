@@ -52,8 +52,14 @@
                     <p>아이디: <span th:text="${@rq.member.username}">유저아이디</span></p>
                     <p>닉네임: <span th:text="${@rq.member.nickname}">유저닉네임</span></p>
                     <p>이메일: <span th:text="${@rq.member.email}">유저이메일</span></p>
-                    <p>회원등급: <span th:text="${@rq.member.isPayed} ? '프리미엄 회원' : '일반 회원'"
-                                   th:class="${@rq.member.isPayed} ? 'premium' : 'normal'"></span></p>
+                    <p>회원등급:
+                        <span th:text="${@rq.member.isPayed} ? '프리미엄 회원' : '일반 회원'"
+                              th:class="${@rq.member.isPayed} ? 'premium' : 'normal'">
+                        </span>
+                        <a href="/payment/payment" th:if="${@rq.member.isSocialMember}"
+                           class="bg-neutral text-white px-4 py-2 rounded-lg text-sm">결제하기
+                        </a>
+                    </p>
                 </div>
                 <!-- 모달 창을 인클루드 -->
                 <div id="modalContainer">
