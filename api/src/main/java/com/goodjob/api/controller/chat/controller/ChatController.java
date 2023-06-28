@@ -4,8 +4,6 @@ package com.goodjob.api.controller.chat.controller;
 import com.goodjob.core.domain.chat.dto.ChatRoomDetailDTO;
 import com.goodjob.core.domain.chat.entity.ChatMessage;
 import com.goodjob.core.domain.chat.service.ChatService;
-import com.goodjob.core.domain.goods.entity.Goods;
-import com.goodjob.core.domain.goods.service.GoodsService;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
 import com.goodjob.core.domain.mentoring.entity.Mentoring;
@@ -66,7 +64,7 @@ public class ChatController {
             return rq.historyBack("이미 판매자와의 채팅방이 존재합니다. ");
         }
 
-        model.addAttribute("roomName", chatService.createChatRoom(member1, member2).getRoomName());
+        model.addAttribute("room", chatService.createChatRoom(member1, member2));
 
         return rq.redirectWithMsg("/chat/rooms", "채팅방이 개설되었습니다.");
     }

@@ -28,7 +28,7 @@ public class MessageController {
         List<ChatMessage> messages = chatService.findByRoomId(roomId);
 
         if (messages.size() == 0) {
-            message.setMessage(message.getWriter() + "님이 물건 구매를 원합니다.");
+            message.setMessage(message.getWriter() + "님이 입장하였습니다.");
             chatService.createChatMessage(message);
             template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
             return;
