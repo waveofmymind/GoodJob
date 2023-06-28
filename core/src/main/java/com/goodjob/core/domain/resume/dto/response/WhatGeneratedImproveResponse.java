@@ -32,7 +32,7 @@ public record WhatGeneratedImproveResponse (
 
         return PredictionServiceRequest.builder()
                 .serviceType(ServiceType.EXPECTED_ADVICE)
-                .member(memberId)
+                .memberId(memberId)
                 .titles(titles)
                 .contents(contents)
                 .build();

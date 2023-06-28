@@ -12,7 +12,7 @@ import lombok.*;
 @Setter
 public class PredictionServiceRequest {
 
-    private Long member;
+    private Long memberId;
     private Titles titles;
     private Contents contents;
     private ServiceType serviceType;
@@ -21,7 +21,7 @@ public class PredictionServiceRequest {
 
         return Prediction.builder()
                 .serviceType(serviceType)
-                .member(member)
+                .memberId(memberId)
                 .titles(titles)
                 .contents(contents)
                 .build();
