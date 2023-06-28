@@ -62,7 +62,7 @@ public class ResumeController {
             //TODO: 비로그인시 별도 페이지 생성
         } else {
             request.setMemberId(rq.getMember().getId());
-            kafkaPredictionProducer.sendQuestionRequest(objectMapper.writeValueAsString(request));
+            kafkaPredictionProducer.sendAdviceRequest(objectMapper.writeValueAsString(request));
         }
 
         return "resume/request-complete";
