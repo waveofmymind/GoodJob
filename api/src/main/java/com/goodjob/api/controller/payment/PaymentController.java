@@ -1,9 +1,9 @@
 package com.goodjob.api.controller.payment;
 
+import com.goodjob.core.domain.payment.dto.request.PaymentRequestDto;
 import com.goodjob.core.domain.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,11 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.HttpURLConnection;
-import java.nio.charset.StandardCharsets;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,14 +26,15 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
-    @GetMapping("/success")
-    public String paymentResult(
-            Model model,
-            @RequestParam(value = "orderId") String orderId,
-            @RequestParam(value = "amount") Integer amount,
-            @RequestParam(value = "paymentKey") String paymentKey) throws Exception {
+    @GetMapping("/showPage")
+    public String showPaymentPage() {
+        return "payment/payment-page";
+    }
 
-        HttpURLConnection connection = paymentService.sendPaymentRequest(clientSecret, tossUrl, orderId, amount, paymentKey);
+    @GetMapping("/success")
+    public String paymentResult(PaymentRequestDto paymentRequestDto, Model model) throws Exception {
+
+        HttpURLConnection connection = paymentService.sendPaymentRequest(clientSecret, tossUrl, paymentRequestDto);
 
         int code = connection.getResponseCode();
         boolean isSuccess = code == 200 ? true : false;
@@ -64,6 +61,8 @@ public class PaymentController {
             model.addAttribute("message", (String) jsonObject.get("message"));
         }
 
+        // TODO: 회원 등급 업그레이드
+        paymentService.upgradeMembership();
         return "payment/success";
     }
 

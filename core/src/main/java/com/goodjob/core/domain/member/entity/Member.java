@@ -56,7 +56,12 @@ public class Member extends BaseEntity {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
-        // TODO: 유료회원과 구분
+        // userRole이 ROLE_PAYED인 회원은 추가로 ROLE_PAYED 권한도 가진다.
+        if (isPayed()) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_PAYED"));
+        }
+
+        // TODO: 멘토권한
         return authorities;
     }
 

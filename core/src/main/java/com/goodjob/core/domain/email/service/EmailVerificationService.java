@@ -15,7 +15,7 @@ public class EmailVerificationService {
 
     private final EmailService emailService;
     @Async
-    public RsData send(String email) {
+    public void send(String email) {
 
         String title = "[이메일인증] GoodJob 이메일 인증 코드입니다. 코드를 입력하여 회원가입을 완료해주세요.";
         String uuid = UUID.randomUUID().toString().replaceAll("-", "");
@@ -36,9 +36,6 @@ public class EmailVerificationService {
                 + "</html>";
 
         emailService.sendEmail(email, title, body, verificationCode);
-
-
-        return RsData.of("S-1", "이메일 전송이 완료되었습니다.");
     }
 
     public RsData verify(String verificationCode) {
