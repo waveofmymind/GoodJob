@@ -85,4 +85,14 @@ public class MentoringService {
 
         return RsData.of("S-1", "게시글을 성공적으로 생성하였습니다.", mentoring);
     }
+
+    public RsData<Mentoring> findById(Long id) {
+        Optional<Mentoring> mentoringOp = mentoringRepository.findById(id);
+
+        if(!mentoringOp.isPresent()) {
+            return RsData.of("F-1", "해당 멘토링이 존재하지 않습니다.");
+        }
+
+        return RsData.of("S-1", "멘토링을 성공적으로 가져왔습니다.", mentoringOp.get());
+    }
 }

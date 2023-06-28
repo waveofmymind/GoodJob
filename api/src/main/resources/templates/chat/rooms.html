@@ -1,0 +1,29 @@
+<html layout:decorate="~{layout/layout.html}">
+<head>
+    <title>게시글 상세 페이지</title>
+</head>
+<body>
+<main layout:fragment="main" class="container my-3 mx-auto">
+    <div class="container mx-auto p-8 w-2/3">
+        <div class="flex items-center justify-between h-16">
+            <a href="/article/list" class="text-2xl font-bold flex-grow">채팅방 목록</a>
+        </div>
+        <ul class="container">
+            <li class="bg-neutral text-white p-3 flex justify-between border-b h-11 rounded-md">
+                <div class="text-sm ">상대방 이름</div>
+                <div class="text-sm ">마지막 내용</div>
+                <div class="text-sm ">날짜</div>
+            </li>
+            <li th:each="room : ${list}" class="bg-white p-3 flex justify-between border-b h-11">
+                <div class="chat-name" th:text="${#strings.equals(room.sender.nickname, myNickname) ? room.receiver.nickname : room.sender.nickname}"></div>
+                <a class="chat-preview" th:href="@{/chat/room(roomId=${room.roomId})}" th:text="${room.lastMessage}"></a>
+                <div class="chat-time" th:text="${#temporals.format(room.lastMessageTime, 'MM-dd HH:mm')}"></div>
+            </li>
+
+        </ul>
+
+    </div>
+    </main>
+
+    </body>
+</html>
