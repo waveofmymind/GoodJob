@@ -4,8 +4,6 @@ package com.goodjob.api.controller.chat.controller;
 import com.goodjob.core.domain.chat.dto.ChatRoomDetailDTO;
 import com.goodjob.core.domain.chat.entity.ChatMessage;
 import com.goodjob.core.domain.chat.service.ChatService;
-import com.goodjob.core.domain.goods.entity.Goods;
-import com.goodjob.core.domain.goods.service.GoodsService;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
 import com.goodjob.core.domain.mentoring.entity.Mentoring;
