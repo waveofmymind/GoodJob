@@ -32,11 +32,10 @@ public record WhatGeneratedQuestionResponse(
 
         return PredictionServiceRequest.builder()
                 .serviceType(ServiceType.EXPECTED_QUESTION)
-                .member(memberId)
+                .memberId(memberId)
                 .titles(titles)
                 .contents(contents)
                 .build();
     }
 
 }
-
