@@ -1,7 +1,7 @@
 package com.goodjob.core.domain.resume.facade;
 
 import com.goodjob.core.domain.resume.domain.Prediction;
-import com.goodjob.core.domain.resume.domain.usecase.SavePredictionUseCase;
+import com.goodjob.core.domain.resume.usecase.SavePredictionUseCase;
 import com.goodjob.core.domain.resume.dto.request.PredictionServiceRequest;
 import com.goodjob.core.domain.resume.ports.in.SavePredictionPort;
 import lombok.RequiredArgsConstructor;

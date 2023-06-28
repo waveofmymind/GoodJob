@@ -3,7 +3,7 @@ package com.goodjob.core.domain.resume.facade;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goodjob.core.domain.gpt.GptService;
-import com.goodjob.core.domain.resume.domain.usecase.SavePredictionUseCase;
+import com.goodjob.core.domain.resume.usecase.SavePredictionUseCase;
 import com.goodjob.core.domain.resume.dto.request.CreatePromptRequest;
 import com.goodjob.core.domain.resume.dto.request.ResumeRequest;
 import com.goodjob.core.domain.resume.dto.response.WhatGeneratedImproveResponse;
