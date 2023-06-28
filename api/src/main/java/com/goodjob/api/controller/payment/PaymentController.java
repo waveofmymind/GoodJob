@@ -2,7 +2,9 @@ package com.goodjob.api.controller.payment;
 
 import com.goodjob.core.domain.payment.dto.request.PaymentRequestDto;
 import com.goodjob.core.domain.payment.service.PaymentService;
+import com.goodjob.core.global.rq.Rq;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -24,7 +26,12 @@ public class PaymentController {
     @Value("${payment.url}")
     private String tossUrl;
 
+    @Value("${payment.price}")
+    private Long price;
+
     private final PaymentService paymentService;
+
+    private final Rq rq;
 
     @GetMapping("/showPage")
     public String showPaymentPage() {
@@ -33,6 +40,9 @@ public class PaymentController {
 
     @GetMapping("/success")
     public String paymentResult(PaymentRequestDto paymentRequestDto, Model model) throws Exception {
+        if (!price.equals(paymentRequestDto.getAmount())) {
+            return rq.historyBack("잘못된 접근입니다.");
+        }
 
         HttpURLConnection connection = paymentService.sendPaymentRequest(clientSecret, tossUrl, paymentRequestDto);
 
@@ -41,29 +51,11 @@ public class PaymentController {
 
         JSONObject jsonObject = paymentService.getPaymentResponse(connection, isSuccess);
 
-        model.addAttribute("isSuccess", isSuccess);
-        model.addAttribute("responseStr", jsonObject.toJSONString());
-        model.addAttribute("method", (String) jsonObject.get("method"));
-        model.addAttribute("orderName", (String) jsonObject.get("orderName"));
-
-        if (((String) jsonObject.get("method")) != null) {
-            if (((String) jsonObject.get("method")).equals("카드")) {
-                model.addAttribute("cardNumber", (String) ((JSONObject) jsonObject.get("card")).get("number"));
-            } else if (((String) jsonObject.get("method")).equals("가상계좌")) {
-                model.addAttribute("accountNumber", (String) ((JSONObject) jsonObject.get("virtualAccount")).get("accountNumber"));
-            } else if (((String) jsonObject.get("method")).equals("계좌이체")) {
-                model.addAttribute("bank", (String) ((JSONObject) jsonObject.get("transfer")).get("bank"));
-            } else if (((String) jsonObject.get("method")).equals("휴대폰")) {
-                model.addAttribute("customerMobilePhone", (String) ((JSONObject) jsonObject.get("mobilePhone")).get("customerMobilePhone"));
-            }
-        } else {
-            model.addAttribute("code", (String) jsonObject.get("code"));
-            model.addAttribute("message", (String) jsonObject.get("message"));
-        }
-
+        paymentService.save(jsonObject);
         // TODO: 회원 등급 업그레이드
-        paymentService.upgradeMembership();
-        return "payment/success";
+//        paymentService.upgradeMembership();
+
+        return rq.redirectWithMsg("/", "결제 완료되었습니다.");
     }
 
     @GetMapping("/fail")

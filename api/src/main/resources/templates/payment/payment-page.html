@@ -42,15 +42,15 @@
     <script>
         var clientKey = 'test_ck_D4yKeq5bgrpgNXkdALXVGX0lzW6Y'
         var tossPayments = TossPayments(clientKey)
-        const randomValue = Date.now().toString(36).substring(2);
+        const randomValue = Date.now().toString(36);
 
         var button = document.getElementById('payment-button') // 결제하기 버튼
 
         button.addEventListener('click', function () {
             tossPayments.requestPayment('카드', {
-                amount: 2000000,
+                amount: 5900,
                 orderId: randomValue,
-                orderName: '프리미엄 회원권',
+                orderName: 'premium',
                 successUrl: window.location.origin + '/payment/success',
                 failUrl: window.location.origin + '/payment/fail',
             })
