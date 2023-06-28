@@ -20,6 +20,7 @@ public class ChatMessage extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    @Column(columnDefinition = "text")
     private String message;
 
     @ManyToOne(fetch = FetchType.LAZY)

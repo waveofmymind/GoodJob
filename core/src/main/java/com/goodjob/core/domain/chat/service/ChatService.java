@@ -33,9 +33,8 @@ public class ChatService {
         return chatRoom;
     }
 
-    public ChatRoomDetailDTO findRoomById(String id) {
-        ChatRoom chatRoom = chatRoomRepository.findByRoomId(id).orElse(null);
-        return ChatRoomDetailDTO.toChatRoomDetailDTO(chatRoom);
+    public ChatRoom findRoomById(String id) {
+        return chatRoomRepository.findByRoomId(id).orElse(null);
     }
 
 

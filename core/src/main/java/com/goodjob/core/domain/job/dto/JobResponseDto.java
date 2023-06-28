@@ -23,4 +23,6 @@ public class JobResponseDto {
     private String deadLine; // 마감일
 
     private int career; // 경력
+
+    private String place; // 지역
 }

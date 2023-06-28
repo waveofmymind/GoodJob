@@ -1,62 +1,181 @@
 <html layout:decorate="~{layout/layout.html}">
 <head>
     <title>게시글 상세 페이지</title>
+    <style>
+        .custom-width {
+            display: inline-block;
+            width: max-content;
+            max-width: 500px;
+            word-wrap: break-word;
+        }
+         #msg {
+             height: auto;
+         }
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .wrap .chat {
+            display: flex;
+            padding: 5px;
+        }
+
+        .wrap .chat .icon {
+            position: relative;
+            overflow: hidden;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #eee;
+        }
+
+        .wrap .chat .icon i {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            font-size: 2.5rem;
+            color: #aaa;
+            transform: translateX(-50%);
+        }
+
+        .wrap .chat .textbox {
+            position: relative;
+            display: inline-block;
+            max-width: calc(100% - 70px);
+            padding: 12px;
+            margin-top: 7px;
+            font-size: 16px;
+            border-radius: 10px;
+        }
+
+        .wrap .chat .textbox::before {
+            position: absolute;
+            display: block;
+            top: 0;
+            font-size: 1.5rem;
+        }
+
+        .wrap .ch1 .textbox {
+            margin-left: 20px;
+            max-width: 500px;
+            background-color: #3d4351;
+            color: white;
+        }
+
+        .wrap .ch1 .textbox::before {
+            left: -15px;
+            content: "◀";
+            color: #3d4351;
+        }
+
+        .wrap .ch2 {
+            justify-content:flex-end;
+        }
+
+        .wrap .ch2 .textbox {
+            margin-right: 20px;
+            max-width: 500px;
+            background-color: #dbdbdc;
+        }
+
+        .wrap .ch2 .textbox::before {
+            right: -15px;
+            content: "▶";
+            color: #dbdbdc;
+        }
+    </style>
 </head>
 <body>
 <main layout:fragment="main" class="container my-3 mx-auto">
-    <th:block th:fragment="content">
+    <div class="container mx-auto w-[800px]">
 
         <!-- 수정된 HTML -->
 
-        <div id="chat" class="chat">
-            <div class="chat-header clearfix">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="chat-about">
-                            <span id="myId" class="m-b-0" th:text="${room.name}"></span>
-                        </div>
-                    </div>
-                </div>
+            <div class="flex justify-center bg-neutral my-3 rounded-md text-white p-3">
+                <span class="m-b-0" th:if="${room.sender.username == member.username}" th:text="${room.receiver.nickname}"></span>
+                <span class="m-b-0" th:if="${room.sender.username != member.username}" th:text="${room.sender.nickname}"></span>
             </div>
-            <div id="msgArea" class="chat-history">
+            <div id="msgArea" class="chat-history wrap">
                 <div style="list-style: none" th:each="message : ${messages}">
-                    <div th:if="${message.sender} == null" class="chat-message admin-message">
-                        <div class="message-content alert alert-secondary">
-                            <b th:text="관리자 + ' : ' + ${message.message}"></b>
+                    <div th:if="${message.sender} == null" class="col-6 flex justify-end chat ch1">
+                        <div class="bg-red-300 p-3 rounded-md custom-width mb-2">
+                            <div class="textbox" th:text="관리자 + ' : ' + ${message.message}"></div>
                         </div>
                     </div>
-                    <div th:if="${message.sender != null and message.sender.username == member.username}" class="chat-message my-message">
-                        <div class="message-content alert alert-secondary">
-                            <b th:text="${message.sender.nickname} + ' : ' + ${message.message}" style="word-break: break-all;"></b>
-                        </div>
+                    <div th:if="${message.sender != null and message.sender.username == member.username}" class="col-6 flex justify-end chat ch2">
+                        <div class="textbox"th:text="${message.message}" style="word-break: break-all;"></div>
                     </div>
-                    <div th:if="${message.sender != null and message.sender.username != member.username}" class="chat-message other-message">
-                        <div class="message-content alert alert-warning">
-                            <b th:text="${message.sender.nickname} + ' : ' + ${message.message}" style="word-break: break-all;"></b>
-                        </div>
+                    <div th:if="${message.sender != null and message.sender.username != member.username}" class="chat-message other-message chat ch1">
+                        <div class="textbox" th:text="${message.message}" style="word-break: break-all;"></div>
                     </div>
                 </div>
             </div>
-            <div class="chat-message clearfix">
-                <input id="msg" type="text" class="form-control" placeholder="Enter text here...">
-                <button id="button-send" type="button" class="input-group-text" data-toggle="tooltip"
+            <div class="chat-message clearfix flex mt-3">
+                <textarea id="msg" rows="1" type="text" class="form-control border border-gray-300 rounded-md flex items-center flex-grow mr-2 resize-none py-3 pl-3 max-h-[200px]" oninput="autoResize()" placeholder="Enter text here..."></textarea>
+                <button id="button-send" type="button" class="btn btn-outline-secondary" data-toggle="tooltip"
                         data-placement="top" title="Send a message">
-                    <i id="plane" class="fas fa-paper-plane"></i>
+                    전송
                 </button>
             </div>
-        </div>
 
 
         <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
         <script th:inline="javascript">
+            // 스크롤을 아래로 내리는 함수
+            function scrollToBottom() {
+                var chatHistory = document.getElementById("msgArea");
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            }
+
+            // 페이지 로드가 완료되었을 때 실행되는 함수
+            window.addEventListener('load', function() {
+                scrollToBottom(); // 스크롤을 아래로 내리기
+
+                var textarea = document.getElementById('msg');
+                textarea.focus(); // textarea에 포커스 주기
+            });
+
+
+
+            /* 글의 높이에 맞게 높이를 조절하는 함수 */
+            function autoResize() {
+                const textarea = document.getElementById('msg');
+                textarea.style.height = 'auto';
+                textarea.style.height = `${textarea.scrollHeight}px`;
+            }
+
+            window.addEventListener('load', function() {
+                autoResize();
+            });
+
+            // Shift+Enter를 누르면 줄바꿈
+            const msgInput = document.getElementById("msg");
+
+            msgInput.addEventListener("keydown", function (event) {
+                if (event.shiftKey && event.keyCode === 13) {
+                    event.preventDefault();
+                    const currentCursorPosition = this.selectionStart;
+                    this.value =
+                        this.value.substring(0, currentCursorPosition) +
+                        "\n" +
+                        this.value.substring(this.selectionEnd);
+                    this.selectionStart = this.selectionEnd = currentCursorPosition + 1;
+                }
+            });
+
             $(document).ready(function () {
 
                 var roomId = [[${room.roomId}]];
-                var roomName = [[${room.name}]];
                 var username = [[${member.nickname}]];
 
-                console.log(roomName + ", " + roomId + ", " + username);
+                console.log(roomId + ", " + username);
 
                 var sockJs = new SockJS("/stomp/chat");
                 //1. SockJS를 내부에 들고있는 stomp를 내어줌
@@ -73,15 +192,16 @@
                         var writer = content.writer;
                         var str = '';
 
-                        if (writer === username) {
-                            str = "<div class='chat-message my-message'>";
-                            str += "<div class='message-content alert alert-secondary'>";
-                            str += "<b>" + writer + " : " + content.message + "</b>";
+                        if(writer === username){
+                            str += "<div class='col-6 flex justify-end chat ch2'>";
+                            str += "<div class=\"textbox\" style=\"word-break: break-all;\">";
+                            str += content.message.replace(/\n/g, "<br>");
                             str += "</div></div>";
-                        } else {
-                            str = "<div class='chat-message other-message'>";
-                            str += "<div class='message-content alert alert-warning'>";
-                            str += "<b>" + writer + " : " + content.message + "</b>";
+                        }
+                        else{
+                            str += "<div class='col-6 flex justify-end chat ch1'>";
+                            str += "<div class=\"textbox\" style=\"word-break: break-all;\">";
+                            str += content.message.replace(/\n/g, "<br>");
                             str += "</div></div>";
                         }
 
@@ -93,12 +213,15 @@
                     stomp.send('/pub/chat/enter', {}, JSON.stringify({roomId: roomId, writer: username}))
                 });
 
+
                 //엔터를 누르면 메시지 전송
                 $("#msg").on("keydown", function (event) {
                     if (event.keyCode === 13) {
-                        event.preventDefault();
-                        document.getElementById('button-send').click();
-                        $('#chat').scrollTop($('#chat')[0].scrollHeight);
+                        if (!event.shiftKey) {
+                            event.preventDefault();
+                            document.getElementById('button-send').click();
+                            $('#chat').scrollTop($('#chat')[0].scrollHeight);
+                        }
                     }
 
                     // 스크롤 아래로 내리기
@@ -106,8 +229,20 @@
                     chatHistory.scrollTop = chatHistory.scrollHeight;
                 });
 
+
+
                 $("#button-send").on("click", function (e) {
                     var msg = document.getElementById("msg");
+                    var msg_content = msg.value.trim();
+                    // 빈칸인 경우 경고창 띄우기
+                    if (msg_content === "") {
+                        alert("내용을 입력해주세요.");
+                        return;
+                    }
+
+
+                    const textarea = document.getElementById('msg');
+                    textarea.style.height = 'auto';
 
                     console.log(username + ":" + msg.value);
                     stomp.send('/pub/chat/message', {}, JSON.stringify({
@@ -118,8 +253,8 @@
                     msg.value = '';
 
                     // 스크롤 아래로 내리기
-                    var chatHistory = document.getElementById("msgArea");
-                    chatHistory.scrollTop = chatHistory.scrollHeight;
+                    scrollToBottom(); // 스크롤을 아래로 내리기
+                    textarea.focus(); // 텍스트 영역에 다시 포커스를 줌
 
                 });
             });
@@ -138,7 +273,7 @@
 
 
         </script>
-    </th:block>
+    </div>
 </main>
 
 </body>

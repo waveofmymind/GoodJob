@@ -28,7 +28,8 @@ public interface JobStatisticRepository extends JpaRepository<JobStatistic, Long
                   start_date,
                   dead_line,
                   career,
-                  sector_code
+                  sector_code,
+                  place
                   )
                   VALUES(
                   :#{#dto.company},
@@ -38,13 +39,15 @@ public interface JobStatisticRepository extends JpaRepository<JobStatistic, Long
                   :#{#dto.createDate},
                   :#{#dto.deadLine},
                   :#{#dto.career},
-                  :#{#dto.sectorCode}
+                  :#{#dto.sectorCode},
+                  :#{#dto.place}
                   )
                   ON DUPLICATE KEY UPDATE
                     company = :#{#dto.company},
                     sector = :#{#dto.sector},
                     career = :#{#dto.career},
-                 	subject = :#{#dto.subject}
+                 	subject = :#{#dto.subject},
+                 	place = :#{#dto.place}
         """, nativeQuery = true)
     void upsert(@Param("dto") JobResponseDto dto);
 }

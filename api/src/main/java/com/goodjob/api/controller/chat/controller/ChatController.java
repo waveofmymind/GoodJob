@@ -64,7 +64,7 @@ public class ChatController {
             return rq.historyBack("이미 판매자와의 채팅방이 존재합니다. ");
         }
 
-        model.addAttribute("roomName", chatService.createChatRoom(member1, member2).getRoomName());
+        model.addAttribute("room", chatService.createChatRoom(member1, member2));
 
         return rq.redirectWithMsg("/chat/rooms", "채팅방이 개설되었습니다.");
     }

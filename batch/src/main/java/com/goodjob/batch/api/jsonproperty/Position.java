@@ -17,4 +17,7 @@ public class Position {
 
     @JsonProperty("experience-level")
     private ExperienceLevel experienceLevel;
+
+    @JsonProperty("location")
+    private Location location;
 }

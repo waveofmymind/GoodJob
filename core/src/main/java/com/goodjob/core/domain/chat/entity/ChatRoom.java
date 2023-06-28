@@ -34,8 +34,6 @@ public class ChatRoom extends BaseEntity {
 //    @Builder.Default
 //    private List<ChatMember> chatMembers = new ArrayList<>();
 
-    private String roomName;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id")
     private Member sender;
@@ -55,7 +53,5 @@ public class ChatRoom extends BaseEntity {
 
     public void addMessage(ChatMessage chatMessage) {
         chatList.add(chatMessage);
-
-//        chatMessage.getChatRoom().addMessage(chatMessage);
     }
 }
