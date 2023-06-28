@@ -15,7 +15,7 @@ public class Prediction extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long member;
+    private Long memberId;
 
     @Enumerated(EnumType.STRING)
     private ServiceType serviceType;
