@@ -20,5 +20,4 @@ public enum ResumeType {
     ResumeType(String value) {
         this.value = value;
     }
-
 }

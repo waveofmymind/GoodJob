@@ -1,8 +1,7 @@
 package com.goodjob.batch.crawling;
 
-import com.goodjob.batch.job.dto.JobResponseDto;
+import com.goodjob.core.domain.job.dto.JobResponseDto;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.A;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -16,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.goodjob.batch.job.Constants.*;
+import static com.goodjob.batch.Constants.*;
 
 
 @Component

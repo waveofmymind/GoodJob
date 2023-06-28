@@ -1,8 +1,8 @@
 package com.goodjob.api.controller.job;
 
-import com.goodjob.batch.job.dto.JobRequestForm;
-import com.goodjob.batch.job.entity.JobStatistic;
-import com.goodjob.batch.job.service.JobStatisticService;
+import com.goodjob.core.domain.job.dto.JobRequestForm;
+import com.goodjob.core.domain.job.entity.JobStatistic;
+import com.goodjob.core.domain.job.service.JobStatisticService;
 import com.goodjob.core.global.rq.Rq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

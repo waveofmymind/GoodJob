@@ -120,3 +120,7 @@ cloud:
       static: ap-northeast-2
     stack:
       auto: false
+
+payment:
+  url: https://api.tosspayments.com/v1/payments/
+  client-secret: ENC(pWhrwlF9tmLUrZYC+Nml2Yhdsl114PDkA8yS1JgfPa19267gr+e0NoHwyTJFhfDn)
