@@ -343,6 +343,7 @@ gradle-app.setting
 
 /src/main/resources/application-local.yml
 /src/main/resources/application-test.yml
+/api/src/main/resources/application-local.yml
 
 ### main 폴더 내의 /generated 폴더 추가
 **/build/**

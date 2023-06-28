@@ -28,5 +28,16 @@
     </div>
   </div>
 </header>
+
+<script>
+  var socket = new SockJS('/stomp/chat');
+  var stompClient = Stomp.over(socket);
+  stompClient.connect({}, function(frame) {
+    stompClient.subscribe('/sub/notifications', function(notification) {
+      toastNotice(notification.body);
+    });
+  });
+</script>
+
 </body>
 </html>

@@ -25,6 +25,7 @@ public class ResumeFacade {
     private final GptService gptService;
     private final ObjectMapper objectMapper;
     private final SavePredictionUseCase savePredictionUseCase;
+
     @KafkaListener(topics = "question-request", groupId = "gptgroup")
     public void generatedQuestionResponseWithKafka(String message) {
         try {
@@ -43,6 +44,7 @@ public class ResumeFacade {
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.CREATE_PREDICTION_QUESTION);
         }
+
     }
 
     @KafkaListener(topics = "answer-request", groupId = "gptgroup")

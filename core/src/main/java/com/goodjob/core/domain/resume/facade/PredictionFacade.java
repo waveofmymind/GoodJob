@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -30,5 +32,10 @@ public class PredictionFacade implements SavePredictionUseCase, FindPredictionUs
     @Override
     public Prediction getPrediction(Long memberId) {
         return findPredictionPort.findPredictionByMemberId(memberId).orElseThrow(() -> new BusinessException(ErrorCode.PREDICTION_NOT_FOUND));
+    }
+
+    @Override
+    public List<Prediction> getPredictions(Long memberId) {
+        return findPredictionPort.findPredictionsByMemberId(memberId);
     }
 }
