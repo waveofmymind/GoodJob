@@ -40,8 +40,12 @@ public class PaymentController {
 
     @GetMapping("/success")
     public String paymentResult(PaymentRequestDto paymentRequestDto, Model model) throws Exception {
-        if (!price.equals(paymentRequestDto.getAmount())) {
+        if (!price.equals(paymentRequestDto.getAmount())) { // 상품가격 다른 경우
             return rq.historyBack("잘못된 접근입니다.");
+        }
+
+        if (rq.getMember().isPayed()) { // 이미 구매한 경우
+            return rq.historyBack("이미 프리미엄 회원입니다.");
         }
 
         HttpURLConnection connection = paymentService.sendPaymentRequest(clientSecret, tossUrl, paymentRequestDto);
@@ -52,8 +56,7 @@ public class PaymentController {
         JSONObject jsonObject = paymentService.getPaymentResponse(connection, isSuccess);
 
         paymentService.save(jsonObject);
-        // TODO: 회원 등급 업그레이드
-//        paymentService.upgradeMembership();
+        paymentService.upgradeMembership();
 
         return rq.redirectWithMsg("/", "결제 완료되었습니다.");
     }
