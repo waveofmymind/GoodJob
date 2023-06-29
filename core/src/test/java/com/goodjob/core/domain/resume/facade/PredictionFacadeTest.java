@@ -5,6 +5,7 @@ import com.goodjob.core.domain.resume.domain.Prediction;
 import com.goodjob.core.domain.resume.domain.ServiceType;
 import com.goodjob.core.domain.resume.domain.Titles;
 import com.goodjob.core.domain.resume.dto.request.PredictionServiceRequest;
+import com.goodjob.core.domain.resume.dto.response.ResponsePredictionDto;
 import com.goodjob.core.domain.resume.ports.in.FindPredictionPort;
 import com.goodjob.core.domain.resume.ports.in.SavePredictionPort;
 import com.goodjob.core.global.error.exception.BusinessException;
@@ -65,10 +66,10 @@ class PredictionFacadeTest {
         when(findPredictionPort.findPredictionByMemberId(memberId)).thenReturn(Optional.of(expectedPrediction));
 
         // When
-        Prediction result = predictionFacade.getPrediction(memberId);
+        ResponsePredictionDto result = predictionFacade.getPredictionByMemberId(memberId);
 
         // Then
-        assertEquals(expectedPrediction, result);
+        assertEquals(expectedPrediction.getContents(), result.getContents());
     }
     @DisplayName("주어진 memberId에 해당하는 Prediction이 없으면 예외가 발생한다.")
     @Test
@@ -78,6 +79,6 @@ class PredictionFacadeTest {
         when(findPredictionPort.findPredictionByMemberId(memberId)).thenReturn(Optional.empty());
 
         // When & Then
-        assertThrows(BusinessException.class, () -> predictionFacade.getPrediction(memberId));
+        assertThrows(BusinessException.class, () -> predictionFacade.getPredictionByMemberId(memberId));
     }
 }
