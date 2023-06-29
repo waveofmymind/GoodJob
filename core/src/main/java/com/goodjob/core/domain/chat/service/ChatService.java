@@ -82,4 +82,23 @@ public class ChatService {
         return true;
     }
 
+    @Transactional
+    public void deleteRoom(String roomId) {
+        ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId).orElse(null);
+        chatRoomRepository.delete(chatRoom);
+    }
+
+    @Transactional
+    public void permitRoom(String roomId) {
+        ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId).orElse(null);
+        chatRoom.setStatus(1);
+        chatRoomRepository.save(chatRoom);
+    }
+
+    @Transactional
+    public void rejectRoom(String roomId) {
+        ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId).orElse(null);
+        chatRoom.setStatus(2);
+        chatRoomRepository.save(chatRoom);
+    }
 }
