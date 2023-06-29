@@ -107,7 +107,7 @@ public class JobStatisticService {
     }
 
 
-    // upsert TODO:TEST 후 변경
+    // upsert
     @Transactional
     @Async
     public void upsert(JobResponseDto dto) {
