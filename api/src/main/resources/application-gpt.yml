@@ -1,6 +1,6 @@
 spring:
   kafka:
-    bootstrap-servers: ENC(sb9NXPYQOd2kNE+97cv80aDt4n0vlbcLxOXV+LcBY60=)
+    bootstrap-servers: ENC(6F+VLIbqIrOjPGAGk2t77Di1WjpvhjXfQfIsY6ONifIdj/bslI85/314g9yMzJsI)
     consumer:
       group-id: gptgroup
       auto-offset-reset: earliest
