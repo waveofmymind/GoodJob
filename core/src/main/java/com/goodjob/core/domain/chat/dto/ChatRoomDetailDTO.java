@@ -21,8 +21,7 @@ public class ChatRoomDetailDTO {
     private Member receiver;
     private String roomId;
     private String name;
-    private String lastMessage;
-    private LocalDateTime lastMessageTime;
+    private int status;
 
     public static ChatRoomDetailDTO toChatRoomDetailDTO(ChatRoom chatRoom){
         ChatRoomDetailDTO chatRoomDetailDTO = new ChatRoomDetailDTO();
@@ -33,19 +32,7 @@ public class ChatRoomDetailDTO {
         chatRoomDetailDTO.setSender(chatRoom.getSender());
         chatRoomDetailDTO.setReceiver(chatRoom.getReceiver());
         chatRoomDetailDTO.setRoomId(chatRoom.getRoomId());
-
-
-
-        if (chatList.size() == 0) {
-            chatRoomDetailDTO.setLastMessage("입장해서 채팅하세요!");
-            chatRoomDetailDTO.setLastMessageTime(LocalDateTime.now());
-        }
-
-        else {
-            chatRoomDetailDTO.setLastMessage(chatList.get(chatList.size() - 1).getMessage());
-            chatRoomDetailDTO.setLastMessageTime(chatList.get(chatList.size()-1).getCreatedDate());
-        }
-
+        chatRoomDetailDTO.setStatus(chatRoom.getStatus());
 
         return chatRoomDetailDTO;
     }

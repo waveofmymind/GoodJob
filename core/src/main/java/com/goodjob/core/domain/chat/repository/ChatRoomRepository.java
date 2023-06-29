@@ -13,7 +13,7 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     @Query("SELECT cr FROM ChatRoom cr JOIN FETCH cr.sender JOIN FETCH cr.receiver")
     List<ChatRoom> findAll();
 
-    @Query("SELECT cr FROM ChatRoom cr JOIN FETCH cr.sender crs JOIN FETCH cr.receiver crr")
+    @Query("SELECT cr FROM ChatRoom cr JOIN FETCH cr.sender crs JOIN FETCH cr.receiver crr WHERE crs.username = :username OR crr.username = :username ORDER BY cr.id desc")
     List<ChatRoom> findByChatRoom_Username(@Param("username") String username);
 
     @Query("SELECT cr FROM ChatRoom cr JOIN FETCH cr.sender JOIN FETCH cr.receiver WHERE cr.roomId = :roomId")

@@ -23,7 +23,7 @@
         </div>
         <hr class="border-neutral mb-4">
         <form class="mr-3" th:action="@{/chat/room/{id}(id=${mentoring.id})}" method="post">
-            <button type="submit" class="ml-2 bg-neutral text-white px-4 py-2 rounded-lg text-sm hover:bg-black">신청하기
+            <button type="submit" class="apply ml-2 bg-neutral text-white px-4 py-2 rounded-lg text-sm hover:bg-black" onclick="return confirm('정말로 신청하시겠습니까?')">신청하기
             </button>
         </form>
     </div>

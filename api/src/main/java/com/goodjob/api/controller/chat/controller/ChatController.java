@@ -66,7 +66,7 @@ public class ChatController {
 
         model.addAttribute("room", chatService.createChatRoom(member1, member2));
 
-        return rq.redirectWithMsg("/chat/rooms", "채팅방이 개설되었습니다.");
+        return rq.redirectWithMsg("/chat/rooms", "커피챗이 신청되었습니다.");
     }
 
     //채팅방 상세
@@ -89,6 +89,30 @@ public class ChatController {
         return "chat/room";
     }
 
+    //채팅방 삭제
+    @GetMapping("/delete/room")
+    public String deleteRoom(String roomId, Model model, @AuthenticationPrincipal User user){
+
+        chatService.deleteRoom(roomId);
+
+        return "redirect:/chat/rooms";
+    }
+
+    //채팅방 수락
+    @GetMapping("/permit/room")
+    public String permitRoom(String roomId, Model model, @AuthenticationPrincipal User user){
+        chatService.permitRoom(roomId);
+
+        return "redirect:/chat/rooms";
+    }
+
+    //채팅방 거절
+    @GetMapping("/reject/room")
+    public String rejectRoom(String roomId, Model model, @AuthenticationPrincipal User user){
+        chatService.rejectRoom(roomId);
+        return "redirect:/chat/rooms";
+
+    }
 
 
 }

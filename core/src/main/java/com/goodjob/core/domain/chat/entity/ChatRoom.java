@@ -42,16 +42,29 @@ public class ChatRoom extends BaseEntity {
     @JoinColumn(name = "receiver_id")
     private Member receiver;
 
+    @Setter
+    private int status;
+
     public static ChatRoom create(Member sender, Member receiver) {
         return ChatRoom.builder()
                 .roomId(UUID.randomUUID().toString())
                 .sender(sender)
                 .receiver(receiver)
                 .chatList(new ArrayList<>())
+                .status(0)
                 .build();
     }
 
     public void addMessage(ChatMessage chatMessage) {
         chatList.add(chatMessage);
+    }
+
+
+    public String getStatusDisplayName() {
+        return switch (status) {
+            case 1 -> "수락";
+            case 2 -> "거절";
+            default -> "대기중";
+        };
     }
 }

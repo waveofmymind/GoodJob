@@ -1,27 +1,83 @@
 <html layout:decorate="~{layout/layout.html}">
 <head>
     <title>게시글 상세 페이지</title>
+    <style>
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+        }
+    </style>
 </head>
 <body>
 <main layout:fragment="main" class="container my-3 mx-auto">
-    <div class="container mx-auto p-8 w-2/3">
+    <div class="container mx-auto p-8 w-1/2">
         <div class="flex items-center justify-between h-16">
             <a href="/article/list" class="text-2xl font-bold flex-grow">채팅방 목록</a>
         </div>
         <ul class="container">
             <li class="bg-neutral text-white p-3 flex justify-between border-b h-11 rounded-md">
-                <div class="text-sm ">상대방 이름</div>
-                <div class="text-sm ">마지막 내용</div>
-                <div class="text-sm ">날짜</div>
+                <div class="text-sm flex-grow">번호</div>
+                <div class="text-sm flex-grow">상대방 이름</div>
+                <div class="text-sm flex-grow">신청 시간</div>
+                <div class="text-sm invisible w-16">입장</div>
             </li>
-            <li th:each="room : ${list}" class="bg-white p-3 flex justify-between border-b h-11">
-                <div class="chat-name" th:text="${#strings.equals(room.sender.nickname, myNickname) ? room.receiver.nickname : room.sender.nickname}"></div>
-                <a class="chat-preview" th:href="@{/chat/room(roomId=${room.roomId})}" th:text="${room.lastMessage}"></a>
-                <div class="chat-time" th:text="${#temporals.format(room.lastMessageTime, 'MM-dd HH:mm')}"></div>
+            <li th:each="room, roomStat : ${list}" class="bg-white p-3 flex justify-between border-b h-11">
+                <div class="text-sm flex-grow" th:text="${list.size() - roomStat.count + 1}"></div>
+                <div class="text-sm flex-grow " th:text="${#strings.equals(room.sender.nickname, myNickname) ? room.receiver.nickname : room.sender.nickname}"></div>
+                <div th:if="${room.sender.nickname == @rq.member.nickname}">
+                    <a class="w-12 flex justify-end" th:if="${room.status == 0}">
+                        <p class="text-sm">대기중...</p>
+                    </a>
+                    <a class="w-12 flex justify-end" th:if="${room.status == 1}" th:href="@{/chat/room(roomId=${room.roomId})}">
+                        <p class="text-sm underline">입장</p>
+                    </a>
+                    <a class="w-12 flex justify-end" th:if="${room.status == 2}" th:href="@{/chat/delete/room(roomId=${room.roomId})}" onclick="return confirm('정말로 삭제하시겠습니까?')">
+                        <p class="text-sm tooltip">
+                            ❌
+                            <span class="tooltip-text">신청이 거절되었습니다.</span>
+                        </p>
+                    </a>
+                </div>
+                <div th:if="${room.receiver.nickname == @rq.member.nickname}">
+                    <div th:if="${room.status == 0}">
+                        <a th:href="@{/chat/permit/room(roomId=${room.roomId})}">✅</a>
+                        <a th:href="@{/chat/reject/room(roomId=${room.roomId})}">❌</a>
+                    </div>
+                    <div th:if="${room.status == 1}">
+                        <a class="w-12 flex justify-end" th:if="${room.status == 1}" th:href="@{/chat/room(roomId=${room.roomId})}">
+                            <p class="text-sm underline">입장</p>
+                        </a>
+                    </div>
+                    <div th:if="${room.status == 2}">
+                        <p class="text-sm tooltip">
+                            ❌
+                            <span class="tooltip-text">거절한 채팅방입니다.</span>
+                        </p>
+                    </div>
+                </div>
+
             </li>
 
         </ul>
-
     </div>
     </main>
 
