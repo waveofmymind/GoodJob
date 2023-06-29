@@ -74,10 +74,6 @@ jasypt:
 openai:
   token: ENC(dQaDvbhWH3u2aGJyzLAj4kirMxGz8aLnmjuXo4NDQUuJEBjXUpb+AOQw1sTcDgTTVFv7ISwyrkREEM/YEhgnVg==)
 
-scheduler:
-  cron:
-    job: "* * * * * *"
-
 management:
   info:
     java:

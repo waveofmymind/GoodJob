@@ -63,13 +63,11 @@
 
 ## 시스템 아키텍처
 
->추후 변경 예정
-
-<img width="889" alt="image" src="https://github.com/waveofmymind/GoodJob/assets/93868431/579cfda8-c39c-4b8c-ba12-8ad0ce8e0d71">
+![Blank diagram (1)](https://github.com/waveofmymind/GoodJob/assets/93868431/5850241f-baca-4380-9ece-f10d7e022508)
 
 ## ERD
 
-![article](https://github.com/waveofmymind/GoodJob/assets/93868431/4a337a7d-e382-4ae1-b82f-4f5901ec945b)
+![goodjob06302](https://github.com/waveofmymind/GoodJob/assets/93868431/e698c43f-6f7d-40ab-bf2c-8b793be66194)
 
 ## 프로젝트 멤버
 
