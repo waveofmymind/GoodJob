@@ -63,9 +63,7 @@
 
 ## 시스템 아키텍처
 
->추후 변경 예정
-
-<img width="889" alt="image" src="https://github.com/waveofmymind/GoodJob/assets/93868431/579cfda8-c39c-4b8c-ba12-8ad0ce8e0d71">
+![Blank diagram](https://github.com/waveofmymind/GoodJob/assets/93868431/515fd8e5-0307-4bd6-aea5-b1bd18947bf5)
 
 ## ERD
 
