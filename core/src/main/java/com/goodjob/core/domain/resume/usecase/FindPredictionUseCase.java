@@ -1,6 +1,5 @@
 package com.goodjob.core.domain.resume.usecase;
 
-import com.goodjob.core.domain.resume.domain.Prediction;
 import com.goodjob.core.domain.resume.dto.response.ResponsePredictionDto;
 
 import java.util.List;
@@ -11,5 +10,5 @@ public interface FindPredictionUseCase {
 
     ResponsePredictionDto getPredictionById(Long id);
 
-    List<Prediction> getPredictions(Long memberId);
+    List<ResponsePredictionDto> getPredictions(Long memberId);
 }

@@ -109,9 +109,10 @@
             <div class="mb-4">
                 <h3 class="text-2xl font-semibold mb-4 mt-4">이력서 검토 내용</h3>
                 <div class="space-y-2">
-                    <div th:each="predictionDto, loop : ${@rq.getResponsePredictionDto()}">
-                        <a th:if="${loop.index} < 5" th:text="${predictionDto.createDate}" class="text-xs w-16 text-center"
-                           th:href="@{'/resumes/detail/' + ${predictionDto.id}}"
+                    <div th:each="prediction, loop : ${@rq.predictions}">
+                        <a th:if="${loop.index} < 5" th:href="@{'/resumes/detail/' + ${prediction.id}}"
+                           th:text="${#temporals.format(prediction.createdDate, 'yy.MM.dd HH:mm')}"
+                           class="text-xs w-16 text-center"
                            style="margin-left: auto; color: gray;">
                             이력서 답변 생성일자</a>
                     </div>
