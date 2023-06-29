@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface FindPredictionPort {
 
+    Optional<Prediction> findPredictionById(Long id);
+
     Optional<Prediction> findPredictionByMemberId(Long memberId);
 
     List<Prediction> findPredictionsByMemberId(Long memberId);

@@ -7,13 +7,14 @@ import com.goodjob.core.domain.resume.dto.request.PredictionServiceRequest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public record WhatGeneratedImproveResponse (
 
     List<ImprovementResponse> improvementResponse
 
-)
-    {
+) {
     public WhatGeneratedImproveResponse() {
         this(new ArrayList<>());
     }
@@ -37,4 +38,16 @@ public record WhatGeneratedImproveResponse (
                 .contents(contents)
                 .build();
     }
+
+    public static WhatGeneratedImproveResponse of(Titles titles, Contents contents) {
+        List<String> titleList = titles.getTitles();
+        List<String> contentList = contents.getContents();
+
+        List<ImprovementResponse> improvementResponses = IntStream.range(0, titleList.size())
+                .mapToObj(i -> new ImprovementResponse(titleList.get(i), contentList.get(i)))
+                .collect(Collectors.toList());
+
+        return new WhatGeneratedImproveResponse(improvementResponses);
     }
+
+}

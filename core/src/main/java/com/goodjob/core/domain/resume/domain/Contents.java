@@ -22,7 +22,7 @@ public class Contents {
         this.contents = new ArrayList<>(questions);
     }
 
-    public List<String> getAnswers() {
+    public List<String> getContents() {
         return Collections.unmodifiableList(contents);
     }
 
