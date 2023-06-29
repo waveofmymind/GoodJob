@@ -21,6 +21,11 @@ public class PredictionPersistanceAdaptor implements SavePredictionPort, FindPre
     }
 
     @Override
+    public Optional<Prediction> findPredictionById(Long id) {
+        return predictionRepository.findById(id);
+    }
+
+    @Override
     public Optional<Prediction> findPredictionByMemberId(Long memberId) {
         return predictionRepository.findByMemberId(memberId);
     }
