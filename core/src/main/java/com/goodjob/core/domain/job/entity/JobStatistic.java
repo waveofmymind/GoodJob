@@ -36,6 +36,8 @@ public class JobStatistic {
 
     private int sectorCode;
 
+    private String place;
+
     public static JobStatistic create(JobResponseDto jobResponseDto) {
         return builder()
                 .company(jobResponseDto.getCompany())
@@ -45,6 +47,7 @@ public class JobStatistic {
                 .sector(jobResponseDto.getSector())
                 .startDate(jobResponseDto.getCreateDate())
                 .deadLine(jobResponseDto.getDeadLine())
-                .career(jobResponseDto.getCareer()).build();
+                .career(jobResponseDto.getCareer())
+                .place(jobResponseDto.getPlace()).build();
     }
 }

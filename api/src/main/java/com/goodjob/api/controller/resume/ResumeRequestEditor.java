@@ -22,5 +22,3 @@ public class ResumeRequestEditor extends PropertyEditorSupport {
         }
     }
 }
-
-
