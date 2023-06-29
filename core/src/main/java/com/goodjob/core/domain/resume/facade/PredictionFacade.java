@@ -1,6 +1,7 @@
 package com.goodjob.core.domain.resume.facade;
 
 import com.goodjob.core.domain.resume.domain.Prediction;
+import com.goodjob.core.domain.resume.dto.response.ResponsePredictionDto;
 import com.goodjob.core.domain.resume.ports.in.FindPredictionPort;
 import com.goodjob.core.domain.resume.usecase.FindPredictionUseCase;
 import com.goodjob.core.domain.resume.usecase.SavePredictionUseCase;
@@ -30,8 +31,15 @@ public class PredictionFacade implements SavePredictionUseCase, FindPredictionUs
     }
 
     @Override
-    public Prediction getPrediction(Long memberId) {
-        return findPredictionPort.findPredictionByMemberId(memberId).orElseThrow(() -> new BusinessException(ErrorCode.PREDICTION_NOT_FOUND));
+    public ResponsePredictionDto getPredictionByMemberId(Long memberId) {
+        Prediction prediction = findPredictionPort.findPredictionByMemberId(memberId).orElseThrow(() -> new BusinessException(ErrorCode.PREDICTION_NOT_FOUND));
+        return ResponsePredictionDto.toDto(prediction);
+    }
+
+    @Override
+    public ResponsePredictionDto getPredictionById(Long id) {
+        Prediction prediction = findPredictionPort.findPredictionById(id).orElseThrow(() -> new BusinessException(ErrorCode.PREDICTION_NOT_FOUND));
+        return ResponsePredictionDto.toDto(prediction);
     }
 
     @Override

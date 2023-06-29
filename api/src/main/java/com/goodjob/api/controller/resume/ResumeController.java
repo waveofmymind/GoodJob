@@ -3,9 +3,13 @@ package com.goodjob.api.controller.resume;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.goodjob.core.domain.resume.domain.ServiceType;
 import com.goodjob.core.domain.resume.dto.request.CreatePromptRequest;
 import com.goodjob.core.domain.resume.dto.request.ResumeRequest;
+import com.goodjob.core.domain.resume.dto.response.ResponsePredictionDto;
 import com.goodjob.core.domain.resume.dto.response.WhatGeneratedImproveResponse;
+import com.goodjob.core.domain.resume.dto.response.WhatGeneratedQuestionResponse;
+import com.goodjob.core.domain.resume.facade.PredictionFacade;
 import com.goodjob.core.domain.resume.facade.ResumeFacade;
 import com.goodjob.core.global.rq.Rq;
 import com.goodjob.core.domain.resume.adaptor.KafkaPredictionProducer;
@@ -25,6 +29,7 @@ public class ResumeController {
     private final Rq rq;
     private final KafkaPredictionProducer kafkaPredictionProducer;
     private final ObjectMapper objectMapper;
+    private final PredictionFacade predictionFacade;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -68,5 +73,16 @@ public class ResumeController {
         return "resume/request-complete";
     }
 
+    @GetMapping("/detail/{predictionId}")
+    public String showDetailForm(@PathVariable("predictionId") Long id, Model model) {
+        ResponsePredictionDto predictionDto = predictionFacade.getPredictionById(id);
 
+        if (predictionDto.getServiceType() == ServiceType.EXPECTED_ADVICE) {
+            model.addAttribute("improveResponses", WhatGeneratedImproveResponse.of(predictionDto.getTitles(), predictionDto.getContents()));
+            return "resume/advice-result";
+        } else {
+            model.addAttribute("predictionResponses", WhatGeneratedQuestionResponse.of(predictionDto.getTitles(), predictionDto.getContents()));
+            return "resume/question-result";
+        }
+    }
 }
