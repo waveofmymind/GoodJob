@@ -3,13 +3,17 @@ package com.goodjob.core.global.rq;
 
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
+import com.goodjob.core.domain.resume.dto.response.ResponsePredictionDto;
+import com.goodjob.core.domain.resume.facade.PredictionFacade;
 import com.goodjob.core.global.base.cookie.CookieUt;
 import com.goodjob.core.global.base.jwt.JwtProvider;
 import com.goodjob.core.global.base.rsData.RsData;
+import com.goodjob.core.global.error.exception.BusinessException;
 import com.goodjob.core.global.util.Ut;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,21 +27,26 @@ import java.util.Optional;
 
 @Component
 @RequestScope
+@Slf4j
 public class Rq {
     private final JwtProvider jwtProvider;
     private final CookieUt cookieUt;
     private final MemberService memberService;
     private final HttpServletRequest req;
     private final HttpServletResponse resp;
+    private final PredictionFacade predictionFacade;
     private final User user;
     private Member member = null;
 
-    public Rq(JwtProvider jwtProvider, CookieUt cookieUt, MemberService memberService, HttpServletRequest req, HttpServletResponse resp) {
+    private ResponsePredictionDto responsePredictionDto = null;
+
+    public Rq(JwtProvider jwtProvider, CookieUt cookieUt, MemberService memberService, HttpServletRequest req, HttpServletResponse resp, PredictionFacade predictionFacade) {
         this.jwtProvider = jwtProvider;
         this.cookieUt = cookieUt;
         this.memberService = memberService;
         this.req = req;
         this.resp = resp;
+        this.predictionFacade = predictionFacade;
 
         SecurityContext context = SecurityContextHolder.getContext();
         Object principal = context.getAuthentication().getPrincipal();
@@ -162,5 +171,23 @@ public class Rq {
         expireCookie(cookie.getName());
 
         return preUrl;
+    }
+
+    public boolean hasPredictionDto() {
+        if (responsePredictionDto == null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public ResponsePredictionDto getResponsePredictionDto() {
+        try {
+            responsePredictionDto = predictionFacade.getPredictionByMemberId(member.getId());
+        } catch (BusinessException e) {
+            log.error("error= {}", e.getMessage());
+        }
+
+        return responsePredictionDto;
     }
 }
