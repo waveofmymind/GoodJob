@@ -43,6 +43,7 @@ public class PredictionFacade implements SavePredictionUseCase, FindPredictionUs
         return ResponsePredictionDto.toDto(prediction);
     }
 
+    @Override
     public List<ResponsePredictionDto> getPredictions(Long memberId) {
         List<Prediction> predictions = findPredictionPort.findPredictionsByMemberId(memberId);
 
