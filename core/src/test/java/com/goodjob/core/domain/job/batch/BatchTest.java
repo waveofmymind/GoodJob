@@ -18,11 +18,11 @@ import java.util.Date;
 public class BatchTest {
 
     @Autowired
-    private JobLauncherTestUtils jobLauncherTestUtils;
+    JobLauncherTestUtils jobLauncherTestUtils;
 
     @Test
     @DisplayName("job 테스트")
-    public void simpleJob_test() throws Exception {
+    void simpleJob_test() throws Exception {
         JobParameters jobParameters = new JobParametersBuilder()
                 .addDate("date", new Date())
                 .toJobParameters();
