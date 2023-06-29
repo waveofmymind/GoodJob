@@ -185,7 +185,7 @@ public class Rq {
         try {
             responsePredictionDto = predictionFacade.getPredictionByMemberId(member.getId());
         } catch (BusinessException e) {
-            log.error("error= {}", e.getMessage());
+            log.info("BusinessException= {}", e.getMessage());
         }
 
         return responsePredictionDto;

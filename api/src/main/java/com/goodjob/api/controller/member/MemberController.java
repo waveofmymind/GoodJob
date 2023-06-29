@@ -1,13 +1,12 @@
 package com.goodjob.api.controller.member;
 
 import com.goodjob.core.domain.member.dto.request.EditRequestDto;
+import com.goodjob.core.domain.member.dto.request.JoinRequestDto;
+import com.goodjob.core.domain.member.dto.request.LoginRequestDto;
+import com.goodjob.core.domain.member.entity.Member;
+import com.goodjob.core.domain.member.service.MemberService;
 import com.goodjob.core.global.base.redis.RedisUt;
 import com.goodjob.core.global.base.rsData.RsData;
-import com.goodjob.core.domain.member.dto.request.JoinRequestDto;
-import com.goodjob.core.domain.member.entity.Member;
-import com.goodjob.core.domain.member.dto.request.LoginRequestDto;
-import com.goodjob.core.domain.member.service.MemberService;
-
 import com.goodjob.core.global.rq.Rq;
 import jakarta.servlet.http.Cookie;
 import jakarta.validation.Valid;
@@ -15,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -145,6 +143,16 @@ public class MemberController {
         memberService.delete(id);
 
         return "member/join";
+    }
+
+    @GetMapping("/show/articles")
+    public String showArticles() {
+        return "member/myArticles";
+    }
+
+    @GetMapping("/show/comments")
+    public String showComments() {
+        return "member/myComments";
     }
 
     @PostMapping("/join/valid/username")
