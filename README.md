@@ -63,7 +63,7 @@
 
 ## 시스템 아키텍처
 
-![Blank diagram](https://github.com/waveofmymind/GoodJob/assets/93868431/515fd8e5-0307-4bd6-aea5-b1bd18947bf5)
+![Blank diagram (1)](https://github.com/waveofmymind/GoodJob/assets/93868431/5850241f-baca-4380-9ece-f10d7e022508)
 
 ## ERD
 
