@@ -70,9 +70,6 @@ public class PaymentController {
             @RequestParam(value = "code") Integer code
     ) throws Exception {
 
-        model.addAttribute("code", code);
-        model.addAttribute("message", message);
-
-        return "payment/fail";
+        return rq.redirectWithMsg("/", "결제 실패: %s".formatted(message));
     }
 }
