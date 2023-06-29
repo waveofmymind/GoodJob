@@ -69,7 +69,7 @@
 
 ## ERD
 
-![article](https://github.com/waveofmymind/GoodJob/assets/93868431/4a337a7d-e382-4ae1-b82f-4f5901ec945b)
+![goodjob0630](https://github.com/waveofmymind/GoodJob/assets/93868431/e3566798-7d76-4dd4-bb09-9fdf784b9e5e)
 
 ## 프로젝트 멤버
 
