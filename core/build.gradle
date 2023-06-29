@@ -17,6 +17,8 @@ dependencies {
 
     //mapstruct
     implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+    testImplementation project(path: ':batch')
+    testImplementation project(path: ':api')
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 
 
@@ -26,6 +28,10 @@ dependencies {
     // WebSocket
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+    // Spring Batch
+    testImplementation 'org.springframework.batch:spring-batch-test'
+
 }
 
 bootJar {
