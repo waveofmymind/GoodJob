@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,8 +43,11 @@ public class PredictionFacade implements SavePredictionUseCase, FindPredictionUs
         return ResponsePredictionDto.toDto(prediction);
     }
 
-    @Override
-    public List<Prediction> getPredictions(Long memberId) {
-        return findPredictionPort.findPredictionsByMemberId(memberId);
+    public List<ResponsePredictionDto> getPredictions(Long memberId) {
+        List<Prediction> predictions = findPredictionPort.findPredictionsByMemberId(memberId);
+
+        return predictions.stream()
+                .map(ResponsePredictionDto::toDto)
+                .collect(Collectors.toList());
     }
 }

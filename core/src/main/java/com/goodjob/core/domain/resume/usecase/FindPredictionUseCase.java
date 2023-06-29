@@ -11,5 +11,5 @@ public interface FindPredictionUseCase {
 
     ResponsePredictionDto getPredictionById(Long id);
 
-    List<Prediction> getPredictions(Long memberId);
+    List<ResponsePredictionDto> getPredictions(Long memberId);
 }
