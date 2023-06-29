@@ -10,5 +10,5 @@ public class PaymentRequestDto {
 
     String paymentKey;
 
-    Integer amount;
+    Long amount;
 }

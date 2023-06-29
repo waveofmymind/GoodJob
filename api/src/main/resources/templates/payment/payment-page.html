@@ -17,7 +17,7 @@
                 <p class="text-gray-600 mt-2 mb-3 text-left">면접 예상 질문 서비스 이용 가능</p>
                 <p class="text-gray-600 mt-2 mb-3 text-left">채용공고 서비스 이용 가능</p>
                 <p class="text-gray-600 mt-2 mb-3 text-left">커뮤니티 서비스 이용 가능</p>
-                <p class="text-red-500 mt-2 mb-3 text-left">멘토 커피챗 서비스 이용 불가</p>
+                <p class="text-red-500 mt-2 mb-3 text-left">멘토링 서비스 이용 불가</p>
             </div>
         </div>
 
@@ -25,10 +25,11 @@
             <div class="text-center">
                 <h1 class="text-4xl font-semibold" style="color: #ffc307;">Premium</h1>
                 <hr class="mb-4 mt-4">
-                <p class="text-blue-600 mt-2 mb-3 text-left">이력서 검토 서비스 무제한 이용 가능</p>
-                <p class="text-blue-600 mt-2 mb-3 text-left">면접 예상 질문 서비스 무제한 이용 가능</p>
-                <p class="text-blue-600 mt-2 mb-3 text-left">멘토 커피챗 서비스 이용 가능</p>
-                <p class="text-blue-600 mt-2 mb-3 text-left">커피챗 상담 내용 파일로 제공</p>
+                <p class="text-red-500 mt-2 mb-3 text-left">코인 제한 없이 생성 AI 무제한 이용 가능</p>
+                <p class="text-gray-600 mt-2 mb-3 text-left">이력서 검토 서비스 무제한 이용 가능</p>
+                <p class="text-gray-600 mt-2 mb-3 text-left">면접 예상 질문 서비스 무제한 이용 가능</p>
+                <p class="text-gray-600 mt-2 mb-3 text-left">멘토링 서비스 이용 가능</p>
+                <p class="text-gray-600 mt-2 mb-3 text-left">멘토링 내역 파일로 제공</p>
 
                 <p class="text-gray-500 text-sm text-center">₩5,900/월 • VAT 포함</p>
                 <button id="payment-button" class="btn btn-lg btn-block">시작하기</button>
@@ -42,15 +43,15 @@
     <script>
         var clientKey = 'test_ck_D4yKeq5bgrpgNXkdALXVGX0lzW6Y'
         var tossPayments = TossPayments(clientKey)
-        const randomValue = Date.now().toString(36).substring(2);
+        const randomValue = Date.now().toString(36);
 
         var button = document.getElementById('payment-button') // 결제하기 버튼
 
         button.addEventListener('click', function () {
             tossPayments.requestPayment('카드', {
-                amount: 2000000,
+                amount: 5900,
                 orderId: randomValue,
-                orderName: '프리미엄 회원권',
+                orderName: 'premium',
                 successUrl: window.location.origin + '/payment/success',
                 failUrl: window.location.origin + '/payment/fail',
             })
