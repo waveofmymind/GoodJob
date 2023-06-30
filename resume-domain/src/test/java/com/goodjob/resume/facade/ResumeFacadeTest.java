@@ -1,15 +1,14 @@
-package com.goodjob.core.domain.resume.facade;
+package com.goodjob.resume.facade;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.goodjob.core.CoreConfigurationLoader;
-import com.goodjob.core.domain.gpt.GptService;
-import com.goodjob.core.domain.resume.dto.request.CreatePromptRequest;
-import com.goodjob.core.domain.resume.dto.response.ImprovementResponse;
-import com.goodjob.core.domain.resume.dto.response.PredictionResponse;
-import com.goodjob.core.domain.resume.dto.response.WhatGeneratedImproveResponse;
-import com.goodjob.core.domain.resume.dto.response.WhatGeneratedQuestionResponse;
-import com.goodjob.core.domain.resume.usecase.SavePredictionUseCase;
+import com.goodjob.resume.dto.request.CreatePromptRequest;
+import com.goodjob.resume.dto.response.ImprovementResponse;
+import com.goodjob.resume.dto.response.PredictionResponse;
+import com.goodjob.resume.dto.response.WhatGeneratedImproveResponse;
+import com.goodjob.resume.dto.response.WhatGeneratedQuestionResponse;
+import com.goodjob.resume.gpt.GptService;
+import com.goodjob.resume.usecase.SavePredictionUseCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class ResumeFacadeTest {
