@@ -1,6 +1,9 @@
 package com.goodjob.core.domain.payment.service;
 
 import com.goodjob.core.domain.payment.dto.request.PaymentRequestDto;
+import com.goodjob.core.domain.payment.entitiy.Payment;
+import com.goodjob.core.domain.payment.repository.PaymentRepository;
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -15,11 +18,12 @@ import java.util.Base64;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class PaymentService {
 
+    private final PaymentRepository paymentRepository;
 
     public HttpURLConnection sendPaymentRequest(String clientSecret, String tossUrl, PaymentRequestDto paymentRequestDto) throws IOException {
-
         Base64.Encoder encoder = Base64.getEncoder();
         byte[] encodedBytes = encoder.encode(clientSecret.getBytes("UTF-8"));
         String authorizations = "Basic " + new String(encodedBytes, 0, encodedBytes.length);
@@ -54,7 +58,16 @@ public class PaymentService {
         return jsonObject;
     }
 
-    public void upgradeMembership() {
+    @Transactional
+    public void save(JSONObject jsonObject) {
+        Payment payment = Payment.builder()
+                .orderId((String) jsonObject.get("orderId"))
+                .productName((String) jsonObject.get("orderName"))
+                .paymentAmount((Long) jsonObject.get("balanceAmount"))
+                .paymentMethod((String) jsonObject.get("method"))
+                .paymentStatus((String) jsonObject.get("status"))
+                .build();
 
+        paymentRepository.save(payment);
     }
 }

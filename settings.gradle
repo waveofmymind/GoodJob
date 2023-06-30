@@ -1,4 +1,5 @@
 rootProject.name = 'GoodJob'
 
 include 'core','batch', 'api'
+include 'resume-domain'
 

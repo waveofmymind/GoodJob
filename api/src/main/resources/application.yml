@@ -74,10 +74,6 @@ jasypt:
 openai:
   token: ENC(dQaDvbhWH3u2aGJyzLAj4kirMxGz8aLnmjuXo4NDQUuJEBjXUpb+AOQw1sTcDgTTVFv7ISwyrkREEM/YEhgnVg==)
 
-scheduler:
-  cron:
-    job: "* * * * * *"
-
 management:
   info:
     java:
@@ -124,3 +120,4 @@ cloud:
 payment:
   url: https://api.tosspayments.com/v1/payments/
   client-secret: ENC(pWhrwlF9tmLUrZYC+Nml2Yhdsl114PDkA8yS1JgfPa19267gr+e0NoHwyTJFhfDn)
+  price: 5900

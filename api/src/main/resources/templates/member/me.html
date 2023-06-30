@@ -37,7 +37,7 @@
 
 <main layout:fragment="main" class="container my-3 mx-auto">
     <div class="flex justify-center items-center min-h-screen rounded-lg">
-        <div class="bg-white p-8 border rounded-lg">
+        <div class="bg-white p-8 border rounded-lg" style="width: 500px;">
             <div class="mb-4">
                 <div class="mb-2 flex justify-between">
                     <div>
@@ -80,48 +80,69 @@
                 </div>
             </div>
 
+            <!--            <div class="mb-4">-->
+            <!--                <h2 class="text-2xl font-semibold mb-4 mt-4">결제카드 정보(임시)</h2>-->
+            <!--                <div class="flex items-center">-->
+            <!--                    <form class="flex items-center mt-2">-->
+            <!--                        <label for="newNickname" class="mr-2">카드정보</label>-->
+            <!--                        <input type="text" id="newNickname" name="newNickname"-->
+            <!--                               class="border border-gray-300 rounded px-2 py-1">-->
+            <!--                        <button class="ml-2 bg-neutral text-white px-4 py-2 rounded-lg text-sm"-->
+            <!--                                onclick="checkDuplication(event);">중복확인-->
+            <!--                        </button>-->
+            <!--                    </form>-->
+            <!--                </div>-->
+            <!--            </div>-->
             <div class="mb-4">
-                <h2 class="text-2xl font-semibold mb-4 mt-4">결제카드 정보(임시)</h2>
+                <h3 class="text-2xl font-semibold mb-4 mt-4">내가 쓴 글</h3>
+                <div class="space-y-2">
+                    <div th:each="article, loop: ${@rq.member.articles}">
+                        <p th:if="${loop.index} < 5" th:text="${article.title}" class="text-xs w-16 text-center">글
+                            제목</p>
+                    </div>
+                    <div class="flex justify-content: flex-end">
+                        <a href="" class="text-xs w-16 text-center" style="margin-left: auto; color: gray;">>전체보기</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h3 class="text-2xl font-semibold mb-4 mt-4">내가 쓴 댓글</h3>
+                <div class="space-y-2">
+                    <div th:each="comment, loop : ${@rq.member.comments}">
+                        <p th:if="${loop.index} < 5" th:text="${comment.content}" class="text-xs w-16 text-center">
+                            댓글내용</p>
+                    </div>
+                    <div class="flex justify-content: flex-end">
+                        <a href="" class="text-xs  w-16 text-center" style="margin-left: auto; color: gray;">>전체보기</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h3 class="text-2xl font-semibold mb-4 mt-4">이력서 검토 내용</h3>
                 <div class="flex items-center">
-                    <form class="flex items-center mt-2">
-                        <label for="newNickname" class="mr-2">카드정보</label>
-                        <input type="text" id="newNickname" name="newNickname"
-                               class="border border-gray-300 rounded px-2 py-1">
-                        <button class="ml-2 bg-neutral text-white px-4 py-2 rounded-lg text-sm"
-                                onclick="checkDuplication(event);">중복확인
-                        </button>
-                    </form>
+                    <div th:each="predictionDto, loop : ${@rq.getResponsePredictionDto()}">
+                        <a th:if="${loop.index} < 5" th:text="${predictionDto.createDate}" class="text-xs w-16 text-center"
+                           th:href="@{'/resumes/detail/' + ${predictionDto.id}}"
+                           style="margin-left: auto; color: gray;">
+                            이력서 답변 생성일자</a>
+                    </div>
+                    <div class="flex justify-content: flex-end">
+                        <a href="" class="text-xs  w-16 text-center" style="margin-left: auto; color: gray;">>전체보기</a>
+                    </div>
                 </div>
             </div>
 
-            <h3 class="text-2xl font-semibold mb-4 mt-4">내가 쓴 글</h3>
-            <div class="space-y-2">
-                <div th:each="article, loop: ${@rq.member.articles}">
-                    <p th:if="${loop.index} < 5" th:text="${article.title}" class="text-xs w-16 text-center">글 제목</p>
+            <div class="mb-4">
+                <h3 class="text-2xl font-semibold mb-4 mt-4">면접 예상 질문 내용</h3>
+                <div class="flex items-center">
+                    <ul class="list-disc ml-8">
+                        <li>댓글 1</li>
+                        <li>댓글 2</li>
+                        <li>댓글 3</li>
+                    </ul>
                 </div>
-                <div class="flex justify-content: flex-end">
-                    <a href="" class="text-xs w-16 text-center" style="margin-left: auto; color: gray;">>전체보기</a>
-                </div>
-            </div>
-
-            <h3 class="text-2xl font-semibold mb-4 mt-4">내가 쓴 댓글</h3>
-            <div class="space-y-2">
-                <div th:each="comment, loop : ${@rq.member.comments}">
-                    <p th:if="${loop.index} < 5" th:text="${comment.content}" class="text-xs w-16 text-center">댓글내용</p>
-                </div>
-                <div class="flex justify-content: flex-end">
-                    <a href="" class="text-xs  w-16 text-center" style="margin-left: auto; color: gray;">>전체보기</a>
-                </div>
-            </div>
-
-            <h3 class="text-2xl font-semibold mb-4 mt-4">GPT 답변 내용</h3>
-            <div class="flex items-center">
-                <ul id="gpt" class="list-disc ml-8">
-                    <li>댓글 1</li>
-                    <li>댓글 2</li>
-                    <li>댓글 3</li>
-                    <!-- 필요한 경우 JavaScript를 사용하여 동적으로 댓글 목록을 추가할 수 있습니다. -->
-                </ul>
             </div>
         </div>
     </div>

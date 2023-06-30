@@ -24,6 +24,7 @@ import java.util.Optional;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/member")
+@Slf4j
 public class MemberController {
 
     private final Rq rq;
@@ -85,6 +86,7 @@ public class MemberController {
             return rq.redirectWithMsg(previousUrl, loginRsData);
         }
 
+        log.info("로그인 요청한 유저id ={}", rq.getMember().getId());
         return rq.redirectWithMsg("/", loginRsData);
     }
 
@@ -97,6 +99,7 @@ public class MemberController {
         // 쿠키삭제
         rq.expireCookie("accessToken");
 
+        log.info("로그아웃한 유저id ={}", userId);
         return rq.redirectWithMsg("/", "로그아웃 되었습니다.");
     }
 

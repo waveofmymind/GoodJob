@@ -5,10 +5,9 @@ import com.goodjob.core.domain.member.dto.request.EditRequestDto;
 import com.goodjob.core.domain.member.dto.request.JoinRequestDto;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.repository.MemberRepository;
-import com.goodjob.core.global.base.rsData.RsData;
 import com.goodjob.core.global.base.jwt.JwtProvider;
+import com.goodjob.core.global.base.rsData.RsData;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +42,7 @@ public class MemberService {
                 .email(joinRequestDto.getEmail())
                 .isDeleted(false)
                 .providerType("GOODJOB")
+                .userRole("free")
                 .build();
 
         memberRepository.save(member);
@@ -89,6 +89,7 @@ public class MemberService {
                 .email(email)
                 .isDeleted(false)
                 .providerType(providerType)
+                .userRole("free")
                 .build();
 
         memberRepository.save(member);
@@ -172,6 +173,13 @@ public class MemberService {
     @Transactional
     public void delete(Long id) {
         memberRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void upgradeMembership(Member member) {
+        member.setUserRole("premium");
+
+        memberRepository.save(member);
     }
 }
 
