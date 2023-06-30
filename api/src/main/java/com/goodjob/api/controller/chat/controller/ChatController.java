@@ -91,7 +91,8 @@ public class ChatController {
     @GetMapping("/delete/room")
     public String deleteRoom(String roomId, Model model, @AuthenticationPrincipal User user){
 
-        chatService.deleteRoom(roomId);
+        Member member = memberService.findByUsername(user.getUsername()).orElse(null);
+        chatService.deleteRoom(roomId, member);
 
         return "redirect:/chat/rooms";
     }
@@ -112,13 +113,6 @@ public class ChatController {
 
     }
 
-    //채팅 종료
-    @GetMapping("/quit/room")
-    public String quitRoom(String roomId, Model model, @AuthenticationPrincipal User user){
-        chatService.quitRoom(roomId);
-        return "redirect:/chat/room";
-
-    }
 
 
 }

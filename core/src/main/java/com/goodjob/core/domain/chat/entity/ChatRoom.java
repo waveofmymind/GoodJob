@@ -47,6 +47,9 @@ public class ChatRoom extends BaseEntity {
 
     private LocalDateTime reservationTime;
 
+    @Setter
+    private boolean visible;
+
     public static ChatRoom create(Member sender, Member receiver, String date, String time) {
         String[] dateArr = date.split("-");
         int year = Integer.parseInt(dateArr[0]);
@@ -60,6 +63,7 @@ public class ChatRoom extends BaseEntity {
                 .chatList(new ArrayList<>())
                 .status(0)
                 .reservationTime(LocalDateTime.of(year, month, day, Integer.parseInt(time), 0, 0))
+                .visible(true)
                 .build();
     }
 

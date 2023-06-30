@@ -120,7 +120,7 @@
         <div class="flex justify-center items-center bg-neutral my-3 rounded-md text-white p-3 relative">
             <span class="m-b-0" th:if="${room.sender.username == member.username}" th:text="${room.receiver.nickname}"></span>
             <span class="m-b-0" th:if="${room.sender.username != member.username}" th:text="${room.sender.nickname}"></span>
-            <a id="quit-button" th:if="${room.receiver.username == member.username}" th:href="@{/chat/quit/room(roomId=${room.roomId})}" class="absolute right-4">종료</a>
+            <a id="quit-button" th:if="${room.receiver.username == member.username}" href="/chat/rooms" class="absolute right-4">종료</a>
         </div>
             <div id="msgArea" class="chat-history wrap">
                 <div style="list-style: none" th:each="message : ${messages}">
@@ -140,7 +140,9 @@
             <div class="chat-message clearfix flex mt-3">
                 <textarea id="msg" rows="1" type="text" class="form-control border border-gray-300 rounded-md flex items-center flex-grow mr-2 resize-none py-3 px-3"
                           oninput="autoResize()"
-                          th:placeholder="${room.reservationTime.isAfter(T(java.time.LocalDateTime).now()) ? '예약 시간이 지나야 채팅이 가능합니다' : ''}"></textarea>
+                          th:placeholder="${room.reservationTime.isAfter(T(java.time.LocalDateTime).now()) ? '예약 시간이 지나야 채팅이 가능합니다' : (room.status == 3 ? '채팅이 종료되었습니다.' : '')}"></textarea>
+
+
 
                 <button id="button-send" type="button" class="btn btn-outline-secondary" data-toggle="tooltip"
                         data-placement="top" title="Send a message">
@@ -165,6 +167,8 @@
 
                 if (reservationTime > currentTime) {
                     textarea.disabled = true; // 예약 시간이 지나지 않았으면 textarea 비활성화
+                } else if ([[${room.status == 3}]]) {
+                    textarea.disabled = true;
                 } else {
                     textarea.disabled = false; // 예약 시간이 지났으면 textarea 활성화
                 }
@@ -224,6 +228,7 @@
             });
 
             $(document).ready(function () {
+                var status= 0;
 
 
                 var roomId = [[${room.roomId}]];
@@ -238,6 +243,19 @@
                 //2. connection이 맺어지면 실행
                 stomp.connect({}, function () {
                     console.log("STOMP Connection")
+
+                    // 채팅방 상태 변경 시 UI 갱신
+                    stomp.subscribe('/sub/chat/quit/' + roomId, function (res) {
+                        status = res.body;
+                        console.log(status);
+                        var sendButton = $('#button-send');
+                        if (status === 3) {
+                            alert('채팅방이 종료되었습니다.');
+                            sendButton.attr('disabled', true);
+                        } else {
+                            sendButton.attr('disabled', false);
+                        }
+                    }, { id: 'room_status_' + roomId });
 
                     //4. subscribe(path, callback)으로 메세지를 받을 수 있음
                     stomp.subscribe("/sub/chat/room/" + roomId, function (chat) {
@@ -268,6 +286,7 @@
 
                     //3. send(path, header, message)로 메세지를 보낼 수 있음
                     stomp.send('/pub/chat/enter', {}, JSON.stringify({roomId: roomId, writer: username}))
+
                 });
 
 
@@ -296,6 +315,18 @@
                         return;
                     }
 
+                    if(status == 3) {
+                        alert("이미 종료된 채팅방입니다.");
+                        location.reload(); // 현재 페이지를 새로고침
+                        return;
+                    }
+
+                    // room.status가 3일 때 전송하지 않음
+                    if ([[${room.status == 3}]]) {
+                        alert("이미 종료된 채팅방입니다.");
+                        location.reload(); // 현재 페이지를 새로고침
+                    }
+
                     const textarea = document.getElementById('msg');
                     textarea.style.height = 'auto';
 
@@ -313,22 +344,11 @@
                     setTimeout(scrollToBottom, 0); // 메시지 추가가 화면에 반영된 후 스크롤을 아래로 내리기
                 });
 
-                $("quit-botton").on("click", function(event) {
-                    event.preventDefault();
-
-                    // 종료 이벤트 발송
-                    stomp.send('/pub/chat/quit', {}, JSON.stringify({ roomId: roomId, sender: username }));
-
-                });
-
-                // 종료 이벤트를 받는 핸들러를 추가합니다.
-                stomp.subscribe("/sub/chat/quit/" + roomId, function (quit) {
-                    var quitSender = JSON.parse(quit.body).sender;
-
-                    // textarea 비활성화
-                    var textarea = document.getElementById("msg");
-                    textarea.disabled = true;
-                    textarea.placeholder = quitSender + "님이 채팅을 종료하였습니다.";
+                $("#quit-button").on("click", function (e) {
+                    stomp.send('/pub/chat/quit', {}, JSON.stringify({
+                        roomId: roomId,
+                    }));
+                    alert("채팅이 종료되었습니다.");
                 });
             });
 
