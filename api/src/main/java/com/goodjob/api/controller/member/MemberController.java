@@ -145,10 +145,6 @@ public class MemberController {
         return "member/join";
     }
 
-    @GetMapping("/show/articles")
-    public String showArticles() {
-        return "member/myArticles";
-    }
 
     @GetMapping("/show/comments")
     public String showComments() {

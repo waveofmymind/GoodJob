@@ -8,11 +8,11 @@
     <div class="flex justify-center items-center min-h-screen rounded-lg">
         <div class="bg-white p-8 border rounded-lg" style="width: 500px;">
             <div class="mb-4">
-                <h3 class="text-2xl font-semibold mb-4 mt-4">내가 쓴 글</h3>
+                <h3 class="text-2xl font-semibold mb-4 mt-4">내가 쓴 댓글</h3>
                 <div class="space-y-2">
                     <div th:each="comment, loop: ${@rq.member.comments}">
-                        <p th:text="${comment.content}" class="text-xs w-16 text-center">글
-                            내용</p>
+                        <p th:text="${comment.content}" class="text-xs w-16 text-center">
+                            댓글 내용</p>
                     </div>
                 </div>
             </div>
