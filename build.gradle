@@ -49,9 +49,14 @@ subprojects {
         implementation 'org.springframework.boot:spring-boot-starter-web'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+
         developmentOnly 'org.springframework.boot:spring-boot-devtools'
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+
 
         // lombok
         compileOnly 'org.projectlombok:lombok'
@@ -101,7 +106,7 @@ subprojects {
 
         // Disk I/O
         runtimeOnly 'com.mysql:mysql-connector-j'
-        runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+        runtimeOnly 'com.h2database:h2'
 
         // WebSocket
         implementation 'org.springframework.boot:spring-boot-starter-websocket'
