@@ -117,7 +117,7 @@ public class MemberController {
     public String showMe(Model model) {
         Long id = rq.getMember().getId();
 
-        List<Article> articles = articleService.findAllByNickname(rq.getMember().getNickname());
+        List<Article> articles = articleService.findAllByMemberId(id);
         log.info("articles= {}", articles);
         List<Comment> comments = commentService.findAllByMemberId(id);
         log.info("comments= {}", comments);
@@ -168,7 +168,6 @@ public class MemberController {
 
         return "member/join";
     }
-
 
     @GetMapping("/show/comments")
     public String showComments() {
