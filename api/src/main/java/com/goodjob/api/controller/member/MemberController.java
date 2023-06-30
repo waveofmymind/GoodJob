@@ -95,7 +95,7 @@ public class MemberController {
             return rq.redirectWithMsg(previousUrl, loginRsData);
         }
 
-        log.info("로그인 요청한 유저id ={}", rq.getMember().getId());
+        log.debug("로그인 요청한 유저id ={}", rq.getMember().getId());
         return rq.redirectWithMsg("/", loginRsData);
     }
 
@@ -108,20 +108,21 @@ public class MemberController {
         // 쿠키삭제
         rq.expireCookie("accessToken");
 
-        log.info("로그아웃한 유저id ={}", userId);
+        log.debug("로그아웃한 유저id ={}", userId);
         return rq.redirectWithMsg("/", "로그아웃 되었습니다.");
     }
 
-
-    // TODO: articleService에 articles 가져오는메서드 추가, facade
     @GetMapping("/me")
     @PreAuthorize("isAuthenticated()")
     public String showMe(Model model) {
         Long id = rq.getMember().getId();
 
-        List<Article> articles = articleService.findAllByMemberId(id);
+        List<Article> articles = articleService.findAllByNickname(rq.getMember().getNickname());
+        log.info("articles= {}", articles);
         List<Comment> comments = commentService.findAllByMemberId(id);
+        log.info("comments= {}", comments);
         List<ResponsePredictionDto> predictions = predictionFacade.getPredictions(id);
+        log.info("predictions= {}", predictions);
 
         model.addAttribute("articles", articles);
         model.addAttribute("comments", comments);
