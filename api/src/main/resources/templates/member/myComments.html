@@ -1,11 +1,51 @@
 <html layout:decorate="~{layout/layout.html}">
 <head>
-    <title>회원가입</title>
+    <title>내가 쓴 댓글</title>
 
 </head>
 <body>
 <main layout:fragment="main" class="container my-3 mx-auto">
+    <div class="flex justify-center items-center min-h-screen rounded-lg">
+        <div class="bg-white p-8 border rounded-lg" style="width: 500px;">
+            <div class="mb-4">
+                <h3 class="text-2xl font-semibold mb-4 mt-4">내가 쓴 댓글</h3>
+                <div class="space-y-2">
+                    <div th:each="comment, loop: ${@rq.member.comments}">
+                        <p th:text="${comment.content}" class="text-xs w-16 text-center">
+                            댓글 내용</p>
+                    </div>
+                </div>
+            </div>
 
+            <!-- 페이징처리 시작 -->
+            <div th:if="${paging != null}" class="flex justify-center mb-6">
+                <div class="flex">
+                    <a class="page-link btn btn-sm btn-ghost grid-0 m-1" th:href="@{|?page=${paging.number-1}|}"
+                       th:classappend="${!paging.hasPrevious} ? 'invisible'">
+                        <span>&lt; 이전</span>
+                    </a>
+                    <a th:text="${page} + 1" class="page-link btn btn-sm btn-ghost m-1"
+                       th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+                       th:if="${page >= paging.number / 10 * 10 and page <= paging.number/10*10 + 9}"
+                       th:classappend="${page == paging.number} ? 'btn-outline pointer-events-none'"
+                       onclick="updatePageNumber()" th:attr="page=${page}"></a>
+                    <a class="page-link btn btn-sm btn-ghost m-1" th:href="@{|?page=${paging.number+1}|}" th:classappend="${!paging.hasNext()} ? 'invisible'">
+                        <span>다음 &gt;</span>
+                    </a>
+                </div>
+            </div>
+            <!-- 페이징처리 끝 -->
+        </div>
+    </div>
 </main>
+<script>
+    function updatePageNumber() {
+        const page = event.target.getAttribute('page');
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.delete('page');
+        currentUrl.searchParams.set('page', page);
+        window.location.href = currentUrl.href;
+    }
+</script>
 </body>
 </html>

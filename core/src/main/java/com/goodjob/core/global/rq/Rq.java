@@ -23,6 +23,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -38,8 +39,6 @@ public class Rq {
     private final PredictionFacade predictionFacade;
     private final User user;
     private Member member = null;
-
-    private ResponsePredictionDto responsePredictionDto = null;
 
     public Rq(JwtProvider jwtProvider, CookieUt cookieUt, MemberService memberService, HttpServletRequest req, HttpServletResponse resp, PredictionFacade predictionFacade) {
         this.jwtProvider = jwtProvider;
@@ -174,21 +173,13 @@ public class Rq {
         return preUrl;
     }
 
-    public boolean hasPredictionDto() {
-        if (responsePredictionDto == null) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public ResponsePredictionDto getResponsePredictionDto() {
+    public List<ResponsePredictionDto> getPredictions() {
         try {
-            responsePredictionDto = predictionFacade.getPredictionByMemberId(member.getId());
+            return predictionFacade.getPredictions(member.getId());
         } catch (BusinessException e) {
-            log.error("error= {}", e.getMessage());
+            log.info("BusinessException= {}", e.getMessage());
         }
 
-        return responsePredictionDto;
+        return null;
     }
 }
