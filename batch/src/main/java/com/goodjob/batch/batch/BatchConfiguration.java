@@ -1,12 +1,9 @@
 package com.goodjob.batch.batch;
 
 
-import com.goodjob.batch.crawling.WontedStatistic;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goodjob.batch.api.SaraminApiManager;
-import com.goodjob.core.domain.job.dto.JobResponseDto;
-import com.goodjob.core.domain.job.entity.JobStatistic;
-import com.goodjob.core.domain.job.service.JobStatisticService;
+import com.goodjob.batch.crawling.WontedStatistic;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriverException;
@@ -26,15 +23,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 
@@ -42,9 +33,11 @@ import java.util.concurrent.ExecutionException;
 @Slf4j
 @RequiredArgsConstructor
 public class BatchConfiguration {
-    private final JobStatisticService jobStatisticService;
     private final PlatformTransactionManager transactionManager;
 
+    private final BatchProducer producer;
+
+    private final ObjectMapper mapper;
 
     @Bean
     public TaskExecutor taskExecutor() {
@@ -69,18 +62,18 @@ public class BatchConfiguration {
         Flow wontedFullStack = new FlowBuilder<SimpleFlow>("wontedFullStack")
                 .start(step4(jobRepository))
                 .build();
-        Flow db = new FlowBuilder<SimpleFlow>("db작업")
-                .start(step5(jobRepository))
-                .next(step6(jobRepository))
-                .next(step7(jobRepository))
-                .build();
+//        Flow db = new FlowBuilder<SimpleFlow>("db작업")
+//                .start(step5(jobRepository))
+//                .next(step6(jobRepository))
+//                .next(step7(jobRepository))
+//                .build();
 
 
         return new JobBuilder("job1", jobRepository)
                 .incrementer(new RunIdIncrementer())
                 .start(saramin)
                 .split(taskExecutor()).add(wontedBack, wontedFront, wontedFullStack)
-                .next(db)
+//                .next(db)
                 .end()
                 .build();
     }
@@ -97,14 +90,18 @@ public class BatchConfiguration {
     @StepScope
     public Tasklet taskletSaramin() {
         return (contribution, chunkContext) -> {
-            System.out.println("사람인 테스크렛");
             //TODO: 사람인 공고 기간 필터로직 추가
             /**
              * @param sectorCode 백엔드 84, 프론트 92, 풀스택 2232
              */
-            SaraminApiManager.saraminStatistic(84);
-            SaraminApiManager.saraminStatistic(92);
-            SaraminApiManager.saraminStatistic(2232);
+            SaraminApiManager saraminApiManager = new SaraminApiManager(producer, mapper);
+            saraminApiManager.saraminStatistic(84);
+            saraminApiManager.saraminStatistic(92);
+            saraminApiManager.saraminStatistic(2232);
+
+//            SaraminApiManager.saraminStatistic(84);
+//            SaraminApiManager.saraminStatistic(92);
+//            SaraminApiManager.saraminStatistic(2232);
             return RepeatStatus.FINISHED;
         };
     }
@@ -120,7 +117,7 @@ public class BatchConfiguration {
     @StepScope
     public Tasklet taskletWontedBack() {
         return (contribution, chunkContext) -> {
-            WontedStatistic wontedStatistic = new WontedStatistic();
+            WontedStatistic wontedStatistic = new WontedStatistic(producer, mapper);
             int back = 872;
             for (int i = 0; i < 10; i++) {
                 try {
@@ -145,7 +142,7 @@ public class BatchConfiguration {
     public Tasklet taskletWontedFront() {
         return (contribution, chunkContext) -> {
             int front = 669;
-            WontedStatistic wontedStatistic = new WontedStatistic();
+            WontedStatistic wontedStatistic = new WontedStatistic(producer, mapper);
             for (int i = 0; i < 10; i++) {
                 try {
                     wontedStatistic.crawlWebsite(front, i);
@@ -172,7 +169,7 @@ public class BatchConfiguration {
     public Tasklet taskletWontedFullStack() {
         return (contribution, chunkContext) -> {
             int fullStack = 873;
-            WontedStatistic wontedStatistic = new WontedStatistic();
+            WontedStatistic wontedStatistic = new WontedStatistic(producer, mapper);
             for (int i = 0; i < 10; i++) {
                 try {
                     wontedStatistic.crawlWebsite(fullStack, i);
@@ -185,100 +182,93 @@ public class BatchConfiguration {
     }
 
 
-    @Bean
-    public Step step5(JobRepository jobRepository) {
-        return new StepBuilder("DB 작업", jobRepository)
-                .tasklet(taskletStatistic(), transactionManager)
-                .build();
-
-    }
-
-    @StepScope
-    @Bean
-    public Tasklet taskletStatistic() {
-        return (contribution, chunkContext) -> {
-            List<JobResponseDto> pureSaram = SaraminApiManager.getJobResponseDtos();
-//            List<JobResponseDto> filterSaram = jobStatisticService.sameDtoFilter(pureSaram, pureSaram);
-
-            List<JobResponseDto> pureWonted = WontedStatistic.getJobResponseDtos();
-//            List<JobResponseDto> filterWonted = jobStatisticService.sameDtoFilter(pureWonted, pureWonted);
+//    @Bean
+//    public Step step5(JobRepository jobRepository) {
+//        return new StepBuilder("DB 작업", jobRepository)
+//                .tasklet(taskletStatistic(), transactionManager)
+//                .build();
 //
-//            // 사람인 에서 받은것 잡코리아 동일내용 필터
-//            List<JobResponseDto> saram = jobStatisticService.getFilterDto(filterSaram, filterWonted);
-//            // 잡코리아 에서 받은것 사람인 동일내용 필터
-//            List<JobResponseDto> wonted = jobStatisticService.getFilterDto(filterWonted, filterSaram);
+//    }
 
-            for (JobResponseDto dto : pureSaram) {
-                try {
-                    jobStatisticService.upsert(dto);
-                } catch (IllegalStateException | DataIntegrityViolationException e) {
-                    log.error(e.getMessage());
-                }
-            }
-            for (JobResponseDto dto : pureWonted) {
-                try {
-                    jobStatisticService.upsert(dto);
-                } catch (IllegalStateException | DataIntegrityViolationException e) {
-                    log.error(e.getMessage());
-                }
-            }
-            return RepeatStatus.FINISHED;
-        };
-    }
+//    @StepScope
+//    @Bean
+//    public Tasklet taskletStatistic() {
+//        return (contribution, chunkContext) -> {
+//            List<JobResponseDto> pureSaram = SaraminApiManager.getJobResponseDtos();
 
+//            List<JobResponseDto> pureWonted = WontedStatistic.getJobResponseDtos();
 
-    @Bean
-    public Step step6(JobRepository repository) {
-        return new StepBuilder("List 초기화", repository)
-                .tasklet(taskletListClear(), transactionManager)
-                .build();
-    }
-
-    @StepScope
-    @Bean
-    public Tasklet taskletListClear() {
-        return (contribution, chunkContext) -> {
-            SaraminApiManager.resetList();
-            WontedStatistic.resetList();
-
-            return RepeatStatus.FINISHED;
-        };
-    }
+//            for (JobResponseDto dto : pureSaram) {
+//                try {
+//                    jobStatisticService.upsert(dto);
+//                } catch (IllegalStateException | DataIntegrityViolationException e) {
+//                    log.error(e.getMessage());
+//                }
+//            }
+//            for (JobResponseDto dto : pureWonted) {
+//                try {
+//                    jobStatisticService.upsert(dto);
+//                } catch (IllegalStateException | DataIntegrityViolationException e) {
+//                    log.error(e.getMessage());
+//                }
+//            }
+//            return RepeatStatus.FINISHED;
+//        };
+//    }
 
 
-    @Bean
-    public Step step7(JobRepository repository) {
-        return new StepBuilder("db삭제", repository)
-                .tasklet(taskletDbDelete(), transactionManager)
-                .build();
-    }
+//    @Bean
+//    public Step step6(JobRepository repository) {
+//        return new StepBuilder("List 초기화", repository)
+//                .tasklet(taskletListClear(), transactionManager)
+//                .build();
+//    }
 
-    @StepScope
-    @Bean
-    public Tasklet taskletDbDelete() {
-        return (contribution, chunkContext) -> {
-            List<JobStatistic> all = jobStatisticService.getAll();
-            LocalDateTime now = LocalDateTime.now();
-            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//    @StepScope
+//    @Bean
+//    public Tasklet taskletListClear() {
+//        return (contribution, chunkContext) -> {
+//            SaraminApiManager.resetList();
+//            WontedStatistic.resetList();
+//
+//            return RepeatStatus.FINISHED;
+//        };
+//    }
 
-            DateTimeFormatter dateTimeFormatter1 = new DateTimeFormatterBuilder().append(dateTimeFormatter)
-                    .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
-                    .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
-                    .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
-                    .toFormatter();
 
-            for (JobStatistic jobStatistic : all) {
-                if (jobStatistic.getDeadLine().equals("상시채용")) {
-                    String startDate = jobStatistic.getStartDate();
-                    LocalDateTime createDateTime = LocalDateTime.parse(startDate, dateTimeFormatter1).plusMonths(1);
-                    if (now.isAfter(createDateTime)) {
-                        jobStatisticService.delete(jobStatistic);
-                    }
-                }
-            }
-            return RepeatStatus.FINISHED;
-        };
-    }
+//    @Bean
+//    public Step step7(JobRepository repository) {
+//        return new StepBuilder("db삭제", repository)
+//                .tasklet(taskletDbDelete(), transactionManager)
+//                .build();
+//    }
+
+//    @StepScope
+//    @Bean
+//    public Tasklet taskletDbDelete() {
+//        return (contribution, chunkContext) -> {
+//            List<JobStatistic> all = jobStatisticService.getAll();
+//            LocalDateTime now = LocalDateTime.now();
+//            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//
+//            DateTimeFormatter dateTimeFormatter1 = new DateTimeFormatterBuilder().append(dateTimeFormatter)
+//                    .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
+//                    .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
+//                    .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
+//                    .toFormatter();
+//
+//            for (JobStatistic jobStatistic : all) {
+//                if (jobStatistic.getDeadLine().equals("상시채용")) {
+//                    String startDate = jobStatistic.getStartDate();
+//                    LocalDateTime createDateTime = LocalDateTime.parse(startDate, dateTimeFormatter1).plusMonths(1);
+//                    if (now.isAfter(createDateTime)) {
+//                        jobStatisticService.delete(jobStatistic);
+//                    }
+//                }
+//            }
+//            return RepeatStatus.FINISHED;
+//        };
+//    }
 
 }
 

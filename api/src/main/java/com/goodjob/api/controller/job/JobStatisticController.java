@@ -26,13 +26,19 @@ public class JobStatisticController {
 
     @GetMapping("/search/all")
     public String SearchList(@RequestParam(value = "sector") String sector, @RequestParam(value = "career") String career
-                            , @RequestParam(value = "page", defaultValue = "0") int page, Model model) {
+                            , @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "keyword", defaultValue = "") String keyword,Model model) {
 
-        Page<JobStatistic> paging = jobStatisticService.getList(sector, career, page);
-
-        model.addAttribute("paging", paging);
+        if (keyword == null) {
+            Page<JobStatistic> paging = jobStatisticService.getList(sector, career, page);
+            model.addAttribute("paging", paging);
+        }else {
+//        Page<JobStatistic> paging = jobStatisticService.getList(sector, career, page);
+            Page<JobStatistic> paging = jobStatisticService.getQueryList(keyword, sector, career, page);
+            model.addAttribute("paging", paging);
+        }
         return "jobstatistic/list";
     }
+
 
 }
 

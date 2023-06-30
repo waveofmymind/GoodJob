@@ -118,6 +118,10 @@ subprojects {
         // SimpleJSON
         implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 
+        // kafka
+        implementation 'org.springframework.kafka:spring-kafka'
+        testImplementation 'org.springframework.kafka:spring-kafka-test'
+
     }
     clean {
         delete file('src/main/generated')
