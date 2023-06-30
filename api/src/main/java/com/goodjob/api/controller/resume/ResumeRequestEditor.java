@@ -1,7 +1,7 @@
 package com.goodjob.api.controller.resume;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.goodjob.core.domain.resume.dto.request.ResumeRequest;
+import com.goodjob.resume.dto.request.ResumeRequest;
 import com.goodjob.core.global.error.ErrorCode;
 import com.goodjob.core.global.error.exception.BusinessException;
 

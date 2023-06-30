@@ -1,17 +1,16 @@
 package com.goodjob.api.controller.member;
 
 import com.goodjob.core.domain.article.entity.Article;
-import com.goodjob.core.domain.article.repository.ArticleRepository;
 import com.goodjob.core.domain.article.service.ArticleService;
 import com.goodjob.core.domain.member.dto.request.EditRequestDto;
 import com.goodjob.core.domain.member.dto.request.JoinRequestDto;
 import com.goodjob.core.domain.member.dto.request.LoginRequestDto;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
-import com.goodjob.core.domain.resume.facade.PredictionFacade;
 import com.goodjob.core.global.base.redis.RedisUt;
 import com.goodjob.core.global.base.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
+import com.goodjob.resume.facade.PredictionFacade;
 import jakarta.servlet.http.Cookie;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

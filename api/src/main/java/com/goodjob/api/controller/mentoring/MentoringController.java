@@ -1,19 +1,11 @@
 package com.goodjob.api.controller.mentoring;
 
 
-import com.goodjob.core.domain.article.dto.request.ArticleRequestDto;
-import com.goodjob.core.domain.article.dto.response.ArticleResponseDto;
-import com.goodjob.core.domain.article.entity.Article;
-import com.goodjob.core.domain.article.service.ArticleService;
-import com.goodjob.core.domain.comment.dto.request.CommentRequestDto;
-import com.goodjob.core.domain.file.dto.request.FileRequest;
-import com.goodjob.core.domain.file.entity.File;
 import com.goodjob.core.domain.file.service.FileService;
 import com.goodjob.core.domain.mentoring.dto.request.MentoringRequestDto;
 import com.goodjob.core.domain.mentoring.entity.Mentoring;
 import com.goodjob.core.domain.mentoring.service.MentoringService;
 import com.goodjob.core.domain.s3.service.S3Service;
-import com.goodjob.core.domain.subComment.dto.request.SubCommentRequestDto;
 import com.goodjob.core.global.base.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
 import jakarta.validation.Valid;

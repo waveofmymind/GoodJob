@@ -31,7 +31,7 @@
     </springProfile>
 
     <springProfile name="prod">
-        <root level="INFO">
+        <root level="WARN">
             <appender-ref ref="aws_cloud_watch_log"/>
         </root>
     </springProfile>
