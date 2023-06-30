@@ -1,10 +1,14 @@
 package com.goodjob.api.controller.member;
 
+import com.goodjob.core.domain.article.entity.Article;
+import com.goodjob.core.domain.article.repository.ArticleRepository;
+import com.goodjob.core.domain.article.service.ArticleService;
 import com.goodjob.core.domain.member.dto.request.EditRequestDto;
 import com.goodjob.core.domain.member.dto.request.JoinRequestDto;
 import com.goodjob.core.domain.member.dto.request.LoginRequestDto;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
+import com.goodjob.core.domain.resume.facade.PredictionFacade;
 import com.goodjob.core.global.base.redis.RedisUt;
 import com.goodjob.core.global.base.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
@@ -14,9 +18,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -27,6 +33,11 @@ public class MemberController {
 
     private final Rq rq;
     private final MemberService memberService;
+
+    private final ArticleService articleService;
+
+    private final PredictionFacade predictionFacade;
+
     private final RedisUt redisUt;
 
     @GetMapping("/join")
@@ -101,9 +112,20 @@ public class MemberController {
         return rq.redirectWithMsg("/", "로그아웃 되었습니다.");
     }
 
+
+    // TODO: articleService에 articles 가져오는메서드 추가, facade
     @GetMapping("/me")
     @PreAuthorize("isAuthenticated()")
-    public String showMe() {
+    public String showMe(Model model) {
+        Long id = rq.getMember().getId();
+
+        List<Article> articles = articleService.findAllByMemberId(id);
+//        predictionFacade.getPredictions(id);
+
+        model.addAttribute("articles", articles);
+//        model.addAttribute("comments", comments);
+//        model.addAttribute("predictions", predictions);
+
         return "member/me";
     }
 

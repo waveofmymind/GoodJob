@@ -44,11 +44,12 @@ public class Member extends BaseEntity {
 
     private String providerType; // 일반회원인지, 카카오로 가입한 회원인지, 구글로 가입한 회원인지
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    // TODO: 추후 지연로딩으로수정
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
     private List<Article> articles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 

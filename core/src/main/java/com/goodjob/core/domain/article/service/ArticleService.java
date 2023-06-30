@@ -216,4 +216,7 @@ public class ArticleService {
         return RsData.of("S-1", "게시글이 삭제되었습니다.", article);
     }
 
+    public List<Article> findAllByMemberId(Long memberId) {
+        return articleRepository.findAllByMemberId(memberId);
+    }
 }
