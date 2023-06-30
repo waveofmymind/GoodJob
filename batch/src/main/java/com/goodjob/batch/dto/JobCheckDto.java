@@ -1,4 +1,4 @@
-package com.goodjob.core.domain.job.dto;
+package com.goodjob.batch.dto;
 
 public record JobCheckDto(
         String company, String subject,

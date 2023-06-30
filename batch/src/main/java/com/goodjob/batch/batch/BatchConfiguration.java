@@ -90,6 +90,7 @@ public class BatchConfiguration {
     @StepScope
     public Tasklet taskletSaramin() {
         return (contribution, chunkContext) -> {
+            System.out.println("시작함");
             //TODO: 사람인 공고 기간 필터로직 추가
             /**
              * @param sectorCode 백엔드 84, 프론트 92, 풀스택 2232
