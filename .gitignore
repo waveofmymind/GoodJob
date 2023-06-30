@@ -353,3 +353,4 @@ gradle-app.setting
 
 /core/src/main/generated/**
 /batch/src/main/generated/**
+/batch/src/main/resources/application-local.yml
