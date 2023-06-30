@@ -27,8 +27,8 @@ public class ChatService {
     private final MemberService memberService;
 
     @Transactional
-    public ChatRoom createChatRoom(Member sender, Member receiver) {
-        ChatRoom chatRoom = ChatRoom.create(sender, receiver);
+    public ChatRoom createChatRoom(Member sender, Member receiver, String date, String time) {
+        ChatRoom chatRoom = ChatRoom.create(sender, receiver, date, time);
         chatRoomRepository.save(chatRoom);
         return chatRoom;
     }
@@ -99,6 +99,12 @@ public class ChatService {
     public void rejectRoom(String roomId) {
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId).orElse(null);
         chatRoom.setStatus(2);
+        chatRoomRepository.save(chatRoom);
+    }
+
+    public void quitRoom(String roomId) {
+        ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId).orElse(null);
+        chatRoom.setStatus(3);
         chatRoomRepository.save(chatRoom);
     }
 }

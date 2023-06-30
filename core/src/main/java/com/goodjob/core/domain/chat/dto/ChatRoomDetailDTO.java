@@ -7,6 +7,7 @@ import com.goodjob.core.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,6 +23,7 @@ public class ChatRoomDetailDTO {
     private String roomId;
     private String name;
     private int status;
+    private LocalDateTime reservationTime;
 
     public static ChatRoomDetailDTO toChatRoomDetailDTO(ChatRoom chatRoom){
         ChatRoomDetailDTO chatRoomDetailDTO = new ChatRoomDetailDTO();
@@ -33,6 +35,7 @@ public class ChatRoomDetailDTO {
         chatRoomDetailDTO.setReceiver(chatRoom.getReceiver());
         chatRoomDetailDTO.setRoomId(chatRoom.getRoomId());
         chatRoomDetailDTO.setStatus(chatRoom.getStatus());
+        chatRoomDetailDTO.setReservationTime(chatRoom.getReservationTime());
 
         return chatRoomDetailDTO;
     }

@@ -16,10 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -46,7 +43,8 @@ public class ChatController {
 
     //채팅방 개설
     @PostMapping("/room/{id}")
-    public String create(@PathVariable Long id, @AuthenticationPrincipal User user, Model model){
+    public String create(@PathVariable Long id, @AuthenticationPrincipal User user, Model model,
+                         @RequestParam("date") String date, @RequestParam("time") String time){
 
         Member member1 = memberService.findByUsername(user.getUsername()).orElse(null);
         RsData<Mentoring> mentoringRsData = mentoringService.findById(id);
@@ -64,7 +62,7 @@ public class ChatController {
             return rq.historyBack("이미 판매자와의 채팅방이 존재합니다. ");
         }
 
-        model.addAttribute("room", chatService.createChatRoom(member1, member2));
+        model.addAttribute("room", chatService.createChatRoom(member1, member2, date, time));
 
         return rq.redirectWithMsg("/chat/rooms", "커피챗이 신청되었습니다.");
     }
@@ -111,6 +109,14 @@ public class ChatController {
     public String rejectRoom(String roomId, Model model, @AuthenticationPrincipal User user){
         chatService.rejectRoom(roomId);
         return "redirect:/chat/rooms";
+
+    }
+
+    //채팅 종료
+    @GetMapping("/quit/room")
+    public String quitRoom(String roomId, Model model, @AuthenticationPrincipal User user){
+        chatService.quitRoom(roomId);
+        return "redirect:/chat/room";
 
     }
 

@@ -8,9 +8,25 @@
             max-width: 500px;
             word-wrap: break-word;
         }
-         #msg {
-             height: auto;
-         }
+        #msg {
+            height: auto;
+            max-height: 200px;
+            overflow: auto;
+        }
+
+        #msg::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #msg::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+        }
+
+        #msg::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+
         * {
             padding: 0;
             margin: 0;
@@ -89,6 +105,10 @@
             content: "▶";
             color: #dbdbdc;
         }
+        #msgArea {
+            height: 650px;
+            overflow-y: auto;
+        }
     </style>
 </head>
 <body>
@@ -97,10 +117,11 @@
 
         <!-- 수정된 HTML -->
 
-            <div class="flex justify-center bg-neutral my-3 rounded-md text-white p-3">
-                <span class="m-b-0" th:if="${room.sender.username == member.username}" th:text="${room.receiver.nickname}"></span>
-                <span class="m-b-0" th:if="${room.sender.username != member.username}" th:text="${room.sender.nickname}"></span>
-            </div>
+        <div class="flex justify-center items-center bg-neutral my-3 rounded-md text-white p-3 relative">
+            <span class="m-b-0" th:if="${room.sender.username == member.username}" th:text="${room.receiver.nickname}"></span>
+            <span class="m-b-0" th:if="${room.sender.username != member.username}" th:text="${room.sender.nickname}"></span>
+            <a id="quit-button" th:if="${room.receiver.username == member.username}" th:href="@{/chat/quit/room(roomId=${room.roomId})}" class="absolute right-4">종료</a>
+        </div>
             <div id="msgArea" class="chat-history wrap">
                 <div style="list-style: none" th:each="message : ${messages}">
                     <div th:if="${message.sender} == null" class="col-6 flex justify-end chat ch1">
@@ -117,7 +138,10 @@
                 </div>
             </div>
             <div class="chat-message clearfix flex mt-3">
-                <textarea id="msg" rows="1" type="text" class="form-control border border-gray-300 rounded-md flex items-center flex-grow mr-2 resize-none py-3 pl-3 max-h-[200px]" oninput="autoResize()" placeholder="Enter text here..."></textarea>
+                <textarea id="msg" rows="1" type="text" class="form-control border border-gray-300 rounded-md flex items-center flex-grow mr-2 resize-none py-3 px-3"
+                          oninput="autoResize()"
+                          th:placeholder="${room.reservationTime.isAfter(T(java.time.LocalDateTime).now()) ? '예약 시간이 지나야 채팅이 가능합니다' : ''}"></textarea>
+
                 <button id="button-send" type="button" class="btn btn-outline-secondary" data-toggle="tooltip"
                         data-placement="top" title="Send a message">
                     전송
@@ -128,18 +152,47 @@
         <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
         <script th:inline="javascript">
+            var reservationTimeTmp = [[${room.reservationTime}]];
+            function getCurrentTime() {
+                return new Date().getTime();
+            }
+
+            // 예약 시간과 현재 시간을 비교하여 textarea 활성화/비활성화
+            function checkReservationTime() {
+                var reservationTime = new Date(reservationTimeTmp).getTime();
+                var currentTime = getCurrentTime();
+                var textarea = document.getElementById("msg");
+
+                if (reservationTime > currentTime) {
+                    textarea.disabled = true; // 예약 시간이 지나지 않았으면 textarea 비활성화
+                } else {
+                    textarea.disabled = false; // 예약 시간이 지났으면 textarea 활성화
+                }
+            }
             // 스크롤을 아래로 내리는 함수
             function scrollToBottom() {
                 var chatHistory = document.getElementById("msgArea");
                 chatHistory.scrollTop = chatHistory.scrollHeight;
             }
 
+            var msgArea = document.getElementById("msgArea");
+            var observer = new MutationObserver(scrollToBottom);
+
+            var config = {
+                childList: true,
+                subtree: true,
+            };
+
+            observer.observe(msgArea, config);
+
             // 페이지 로드가 완료되었을 때 실행되는 함수
             window.addEventListener('load', function() {
+                checkReservationTime(); // 예약 시간 체크
                 scrollToBottom(); // 스크롤을 아래로 내리기
 
                 var textarea = document.getElementById('msg');
                 textarea.focus(); // textarea에 포커스 주기
+                autoResize();
             });
 
 
@@ -148,7 +201,7 @@
             function autoResize() {
                 const textarea = document.getElementById('msg');
                 textarea.style.height = 'auto';
-                textarea.style.height = `${textarea.scrollHeight}px`;
+                textarea.style.height = `${textarea.scrollHeight + 2}px`;
             }
 
             window.addEventListener('load', function() {
@@ -171,6 +224,7 @@
             });
 
             $(document).ready(function () {
+
 
                 var roomId = [[${room.roomId}]];
                 var username = [[${member.nickname}]];
@@ -207,6 +261,9 @@
 
                         $("#msgArea").append(str);
                         $('#chat').scrollTop($('#chat')[0].scrollHeight);
+
+                        // 스크롤을 아래로 내린 후 동작 완료 알리기
+                        setTimeout(scrollToBottom, 0);
                     });
 
                     //3. send(path, header, message)로 메세지를 보낼 수 있음
@@ -225,8 +282,7 @@
                     }
 
                     // 스크롤 아래로 내리기
-                    var chatHistory = document.getElementById("msgArea");
-                    chatHistory.scrollTop = chatHistory.scrollHeight;
+                    scrollToBottom();
                 });
 
 
@@ -240,7 +296,6 @@
                         return;
                     }
 
-
                     const textarea = document.getElementById('msg');
                     textarea.style.height = 'auto';
 
@@ -252,10 +307,28 @@
                     }));
                     msg.value = '';
 
-                    // 스크롤 아래로 내리기
-                    scrollToBottom(); // 스크롤을 아래로 내리기
                     textarea.focus(); // 텍스트 영역에 다시 포커스를 줌
 
+                    // 스크롤 아래로 내리기
+                    setTimeout(scrollToBottom, 0); // 메시지 추가가 화면에 반영된 후 스크롤을 아래로 내리기
+                });
+
+                $("quit-botton").on("click", function(event) {
+                    event.preventDefault();
+
+                    // 종료 이벤트 발송
+                    stomp.send('/pub/chat/quit', {}, JSON.stringify({ roomId: roomId, sender: username }));
+
+                });
+
+                // 종료 이벤트를 받는 핸들러를 추가합니다.
+                stomp.subscribe("/sub/chat/quit/" + roomId, function (quit) {
+                    var quitSender = JSON.parse(quit.body).sender;
+
+                    // textarea 비활성화
+                    var textarea = document.getElementById("msg");
+                    textarea.disabled = true;
+                    textarea.placeholder = quitSender + "님이 채팅을 종료하였습니다.";
                 });
             });
 
