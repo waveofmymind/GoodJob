@@ -34,7 +34,7 @@ spring:
 
 scheduler:
   cron:
-    job: "0 0 4 * * *"
+    job: "0 0 3/12 * * *"
 
 accessKey:
   saramin: ENC(vAiGCHWxA7xlfVU04DkiksG8V05r4NKVzDoqYA8WbkmF7O6g6pZ/RxidyvQ4YppZd9suBjOz0lHSBVSFQ0NqkA==)
