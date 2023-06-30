@@ -8,6 +8,7 @@ import com.goodjob.core.domain.chat.repository.ChatMessageRepository;
 import com.goodjob.core.domain.chat.repository.ChatRoomRepository;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
+import com.goodjob.core.global.base.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,8 +28,8 @@ public class ChatService {
     private final MemberService memberService;
 
     @Transactional
-    public ChatRoom createChatRoom(Member sender, Member receiver) {
-        ChatRoom chatRoom = ChatRoom.create(sender, receiver);
+    public ChatRoom createChatRoom(Member sender, Member receiver, String date, String time) {
+        ChatRoom chatRoom = ChatRoom.create(sender, receiver, date, time);
         chatRoomRepository.save(chatRoom);
         return chatRoom;
     }
@@ -83,9 +84,14 @@ public class ChatService {
     }
 
     @Transactional
-    public void deleteRoom(String roomId) {
+    public void deleteRoom(String roomId, Member member) {
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId).orElse(null);
-        chatRoomRepository.delete(chatRoom);
+        if(member.getNickname().equals(chatRoom.getSender().getNickname())) {
+            chatRoomRepository.delete(chatRoom);
+        } else if(member.getNickname().equals((chatRoom.getReceiver().getNickname()))) {
+            chatRoom.setVisible(false);
+            chatRoomRepository.save(chatRoom);
+        }
     }
 
     @Transactional
@@ -100,5 +106,14 @@ public class ChatService {
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId).orElse(null);
         chatRoom.setStatus(2);
         chatRoomRepository.save(chatRoom);
+    }
+
+    @Transactional
+    public RsData quitRoom(String roomId) {
+        ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId).orElse(null);
+        chatRoom.setStatus(3);
+        chatRoomRepository.save(chatRoom);
+
+        return RsData.of("S-1", "채팅을 종료합니다.", chatRoom);
     }
 }

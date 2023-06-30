@@ -5,8 +5,8 @@ import com.goodjob.core.domain.BaseEntity;
 import com.goodjob.core.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -45,13 +45,25 @@ public class ChatRoom extends BaseEntity {
     @Setter
     private int status;
 
-    public static ChatRoom create(Member sender, Member receiver) {
+    private LocalDateTime reservationTime;
+
+    @Setter
+    private boolean visible;
+
+    public static ChatRoom create(Member sender, Member receiver, String date, String time) {
+        String[] dateArr = date.split("-");
+        int year = Integer.parseInt(dateArr[0]);
+        int month = Integer.parseInt(dateArr[1]);
+        int day = Integer.parseInt(dateArr[2]);
+
         return ChatRoom.builder()
                 .roomId(UUID.randomUUID().toString())
                 .sender(sender)
                 .receiver(receiver)
                 .chatList(new ArrayList<>())
                 .status(0)
+                .reservationTime(LocalDateTime.of(year, month, day, Integer.parseInt(time), 0, 0))
+                .visible(true)
                 .build();
     }
 
@@ -64,6 +76,7 @@ public class ChatRoom extends BaseEntity {
         return switch (status) {
             case 1 -> "수락";
             case 2 -> "거절";
+            case 3 -> "종료";
             default -> "대기중";
         };
     }

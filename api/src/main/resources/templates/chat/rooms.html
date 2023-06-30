@@ -35,45 +35,57 @@
         </div>
         <ul class="container">
             <li class="bg-neutral text-white p-3 flex justify-between border-b h-11 rounded-md">
-                <div class="text-sm flex-grow">번호</div>
-                <div class="text-sm flex-grow">상대방 이름</div>
-                <div class="text-sm flex-grow">신청 시간</div>
-                <div class="text-sm invisible w-16">입장</div>
+                <div class="text-sm flex items-center w-12">번호</div>
+                <div class="text-sm flex items-center w-1/4 justify-center">상대방 이름</div>
+                <div class="text-sm flex items-center w-1/4 justify-center">신청 시간</div>
+                <div class="text-sm flex items-center w-1/4 justify-center invisible">입장</div>
             </li>
-            <li th:each="room, roomStat : ${list}" class="bg-white p-3 flex justify-between border-b h-11">
-                <div class="text-sm flex-grow" th:text="${list.size() - roomStat.count + 1}"></div>
-                <div class="text-sm flex-grow " th:text="${#strings.equals(room.sender.nickname, myNickname) ? room.receiver.nickname : room.sender.nickname}"></div>
-                <div th:if="${room.sender.nickname == @rq.member.nickname}">
-                    <a class="w-12 flex justify-end" th:if="${room.status == 0}">
+            <li th:each="room, roomStat : ${list}" class="bg-white p-3 flex justify-between border-b h-11" th:if="${room.sender.nickname == @rq.member.nickname}">
+                <div class="text-sm flex items-center w-12" th:text="${list.size() - roomStat.count + 1}"></div>
+                <div class="text-sm flex items-center w-1/4 justify-center" th:text="${#strings.equals(room.sender.nickname, myNickname) ? room.receiver.nickname : room.sender.nickname}"></div>
+                <div class="text-sm flex items-center w-1/4 justify-center" th:text="${#temporals.format(room.reservationTime, 'yy.MM.dd HH:00')} + ' ~ ' + ${#temporals.format(room.reservationTime.plusHours(1), 'HH:00')}"></div>
+                <div class="text-sm flex items-center w-1/4 justify-end pr-4">
+                    <a th:if="${room.status == 0}">
                         <p class="text-sm">대기중...</p>
                     </a>
-                    <a class="w-12 flex justify-end" th:if="${room.status == 1}" th:href="@{/chat/room(roomId=${room.roomId})}">
+                    <a th:if="${room.status == 1}" th:href="@{/chat/room(roomId=${room.roomId})}">
                         <p class="text-sm underline">입장</p>
                     </a>
-                    <a class="w-12 flex justify-end" th:if="${room.status == 2}" th:href="@{/chat/delete/room(roomId=${room.roomId})}" onclick="return confirm('정말로 삭제하시겠습니까?')">
+                    <a th:if="${room.status == 2}" th:href="@{/chat/delete/room(roomId=${room.roomId})}" onclick="return confirm('정말로 삭제하시겠습니까?')">
                         <p class="text-sm tooltip">
                             ❌
                             <span class="tooltip-text">신청이 거절되었습니다.</span>
                         </p>
                     </a>
+                    <a th:if="${room.status == 3}" th:href="@{/chat/room(roomId=${room.roomId})}">
+                        <p class="text-sm underline">종료됨</p>
+                    </a>
                 </div>
-                <div th:if="${room.receiver.nickname == @rq.member.nickname}">
+            </li>
+            <li th:each="room, roomStat : ${list}" class="bg-white p-3 flex justify-between border-b h-11" th:if="${room.receiver.nickname == @rq.member.nickname and room.visible}">
+                <div class="text-sm flex items-center w-12" th:text="${list.size() - roomStat.count + 1}"></div>
+                <div class="text-sm flex items-center w-1/4 justify-center" th:text="${#strings.equals(room.sender.nickname, myNickname) ? room.receiver.nickname : room.sender.nickname}"></div>
+                <div class="text-sm flex items-center w-1/4 justify-center" th:text="${#temporals.format(room.reservationTime, 'yy.MM.dd HH:00')} + ' ~ ' + ${#temporals.format(room.reservationTime.plusHours(1), 'HH:00')}"></div>
+                <div class="text-sm flex items-center w-1/4 justify-end pr-4">
                     <div th:if="${room.status == 0}">
                         <a th:href="@{/chat/permit/room(roomId=${room.roomId})}">✅</a>
                         <a th:href="@{/chat/reject/room(roomId=${room.roomId})}">❌</a>
                     </div>
-                    <div th:if="${room.status == 1}">
-                        <a class="w-12 flex justify-end" th:if="${room.status == 1}" th:href="@{/chat/room(roomId=${room.roomId})}">
-                            <p class="text-sm underline">입장</p>
-                        </a>
-                    </div>
-                    <div th:if="${room.status == 2}">
+                    <a th:if="${room.status == 1}" th:href="@{/chat/room(roomId=${room.roomId})}">
+                        <p class="text-sm underline">입장</p>
+                    </a>
+                    <a th:if="${room.status == 2}" th:href="@{/chat/delete/room(roomId=${room.roomId})}" onclick="return confirm('정말로 삭제하시겠습니까?')">
                         <p class="text-sm tooltip">
                             ❌
                             <span class="tooltip-text">거절한 채팅방입니다.</span>
                         </p>
-                    </div>
+                    </a>
+                    <a th:if="${room.status == 3}" th:href="@{/chat/room(roomId=${room.roomId})}">
+                        <p class="text-sm underline">종료됨</p>
+                    </a>
                 </div>
+            </li>
+
 
             </li>
 

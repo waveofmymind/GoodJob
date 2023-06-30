@@ -1,4 +1,4 @@
-package com.goodjob.core.domain.resume.domain;
+package com.goodjob.resume.domain;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -16,7 +16,7 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEmbeddableSerializer")
 public class QContents extends BeanPath<Contents> {
 
-    private static final long serialVersionUID = -1061001959L;
+    private static final long serialVersionUID = -595126466L;
 
     public static final QContents contents1 = new QContents("contents1");
 

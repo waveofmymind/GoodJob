@@ -1,6 +1,29 @@
 <html layout:decorate="~{layout/layout.html}">
 <head>
     <title>게시글 상세 페이지</title>
+    <style>
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            width: 400px;
+            height: 600px;
+
+        }
+    </style>
 </head>
 <body>
 <main layout:fragment="main" class="container my-3 mx-auto">
@@ -22,21 +45,77 @@
             </div>
         </div>
         <hr class="border-neutral mb-4">
-        <form class="mr-3" th:action="@{/chat/room/{id}(id=${mentoring.id})}" method="post">
-            <button type="submit" class="apply ml-2 bg-neutral text-white px-4 py-2 rounded-lg text-sm hover:bg-black" onclick="return confirm('정말로 신청하시겠습니까?')">신청하기
-            </button>
-        </form>
+        <button type="button" class="apply ml-2 bg-neutral text-white px-4 py-2 rounded-lg text-sm hover:bg-black" onclick="openModal()">신청하기</button>
+
+
+
+        <!-- 모달 창 -->
+        <div id="modal" class="modal-overlay">
+            <div class="modal-content">
+                <!-- 모달 내용 -->
+                <form class="mr-3" th:action="@{/chat/room/{id}(id=${mentoring.id})}" method="post">
+                    <p><input type="date" name="date" id="date-input"></p>
+                    <select name="time" class="border py-2 px-3 rounded-md">
+                        <option value="12">12:00 ~ 13:00</option>
+                        <option value="13">13:00 ~ 14:00</option>
+                        <option value="14">14:00 ~ 15:00</option>
+                        <option value="15">15:00 ~ 16:00</option>
+                        <option value="16">16:00 ~ 17:00</option>
+                        <option value="17">17:00 ~ 18:00</option>
+                        <option value="18">18:00 ~ 19:00</option>
+                        <option value="19">19:00 ~ 20:00</option>
+                        <option value="20">20:00 ~ 21:00</option>
+                        <option value="21">21:00 ~ 22:00</option>
+                        <option value="22">22:00 ~ 23:00</option>
+                        <option value="23">23:00 ~ 24:00</option>
+                    </select>
+                    <button type="submit" class="apply ml-2 bg-neutral text-white px-4 py-2 rounded-lg text-sm hover:bg-black" onclick="return confirm('정말로 신청하시겠습니까?')">신청하기
+                    </button>
+                </form>
+                <button type="button" onclick="closeModal()">닫기</button>
+            </div>
+        </div>
     </div>
 
     <script layout:fragment="script" type='text/javascript'>
+        var today = new Date();
+        var tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        var year = tomorrow.getFullYear();
+        var month = String(tomorrow.getMonth() + 1).padStart(2, '0');
+        var day = String(tomorrow.getDate()).padStart(2, '0');
+        var tomorrowDate = year + '-' + month + '-' + day;
+
+        document.getElementById("date-input").setAttribute("min", tomorrowDate);
+        function openModal() {
+            document.getElementById("modal").style.display = "flex";
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+
         const delete_elements = document.getElementsByClassName("delete");
         Array.from(delete_elements).forEach(function(element) {
             element.addEventListener('click', function() {
-                if(confirm("정말로 삭제하시겠습니까?")) {
+                if (confirm("정말로 삭제하시겠습니까?")) {
                     location.href = this.dataset.uri;
                 };
             });
         });
+        window.onload = function() {
+            var currentDate = new Date().toISOString().slice(0, 10);
+            var currentTime = new Date().toTimeString().slice(0, 8);
+
+            var dateInput = document.querySelector('input[type="date"]');
+            var timeInput = document.querySelector('input[type="time"]');
+
+            dateInput.value = currentDate;
+            timeInput.value = currentTime;
+        };
     </script>
 </main>
 
