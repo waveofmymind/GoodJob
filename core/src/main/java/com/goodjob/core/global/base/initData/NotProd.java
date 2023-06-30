@@ -6,12 +6,13 @@ import com.goodjob.core.domain.comment.repository.CommentRepository;
 import com.goodjob.core.domain.member.dto.request.JoinRequestDto;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
-import com.goodjob.core.domain.resume.domain.Contents;
-import com.goodjob.core.domain.resume.domain.Prediction;
-import com.goodjob.core.domain.resume.domain.ServiceType;
-import com.goodjob.core.domain.resume.domain.Titles;
-import com.goodjob.core.domain.resume.ports.outs.PredictionRepository;
+
 import com.goodjob.core.domain.subComment.repository.SubCommentRepository;
+import com.goodjob.resume.domain.Contents;
+import com.goodjob.resume.domain.Prediction;
+import com.goodjob.resume.domain.ServiceType;
+import com.goodjob.resume.domain.Titles;
+import com.goodjob.resume.ports.outs.PredictionRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

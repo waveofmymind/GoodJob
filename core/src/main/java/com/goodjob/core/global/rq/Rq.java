@@ -3,13 +3,14 @@ package com.goodjob.core.global.rq;
 
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
-import com.goodjob.core.domain.resume.dto.response.ResponsePredictionDto;
-import com.goodjob.core.domain.resume.facade.PredictionFacade;
+
 import com.goodjob.core.global.base.cookie.CookieUt;
 import com.goodjob.core.global.base.jwt.JwtProvider;
 import com.goodjob.core.global.base.rsData.RsData;
 import com.goodjob.core.global.error.exception.BusinessException;
 import com.goodjob.core.global.util.Ut;
+import com.goodjob.resume.dto.response.ResponsePredictionDto;
+import com.goodjob.resume.facade.PredictionFacade;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

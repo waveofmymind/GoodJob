@@ -1,17 +1,13 @@
-package com.goodjob.core;
+package com.goodjob.resume;
 
-import com.goodjob.resume.ResumeConfigurationLoader;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-
 
 @Configuration
 @ComponentScan
 @EnableAutoConfiguration
-@Import({ResumeConfigurationLoader.class})
-@EnableJpaRepositories(basePackages = "com.goodjob.core")
-public class CoreConfigurationLoader {
+@EnableJpaRepositories(basePackages = "com.goodjob.resume")
+public class ResumeConfigurationLoader {
 }
