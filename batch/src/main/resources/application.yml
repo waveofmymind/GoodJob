@@ -1,0 +1,44 @@
+server:
+  port: 8081
+
+spring:
+  profiles:
+    active: local
+  kafka:
+    bootstrap-servers: ENC(FOPXKkmokR4Ms+fA/Z1xUyn+bPC2MKAtnto16KEgZjzM1DSxTt8Yr44mWiCRARyVlmgjEz5rZP0OVI9uWgPWpQ==)
+    consumer:
+      group-id: gptgroup
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  batch:
+    jdbc:
+      initialize-schema: always
+  application:
+    name: goodjob_batch
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ENC(vq2FwXBAn4z0Wi9ASNB3n0hcHTYHjrvY7RGbXnkDRQ5oJOawSSUzHRfep7Eh2YzvSSmEwmeaSSETEu10zeR3TOT39x1uwWGiCeFpYLB7dg8P69CTIlYYyDjT3kXtQri3i9Rb9W1fRkMxLg55JneDPHsH4ypqDemPkWzgozO7RN4)
+    username: ENC(mAVSIC58xLOew8Eoqox+hA==)
+    password: ENC(SJoUAh3qgBbC8t7APRidV6fgQ3+npv3n)
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+scheduler:
+  cron:
+    job: "0 0 4 * * *"
+
+accessKey:
+  saramin: ENC(vAiGCHWxA7xlfVU04DkiksG8V05r4NKVzDoqYA8WbkmF7O6g6pZ/RxidyvQ4YppZd9suBjOz0lHSBVSFQ0NqkA==)
+
+jasypt:
+  encryptor:
+    password: ${JASYPT_PASSWORD}

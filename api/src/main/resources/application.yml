@@ -7,9 +7,6 @@ spring:
   application:
     name: goodjob
 
-  batch:
-    jdbc:
-      initialize-schema: always
 
   profiles:
     active: local
@@ -93,8 +90,6 @@ management:
     tags:
       application: ${spring.application.name}
 
-accessKey:
-  saramin: ENC(vAiGCHWxA7xlfVU04DkiksG8V05r4NKVzDoqYA8WbkmF7O6g6pZ/RxidyvQ4YppZd9suBjOz0lHSBVSFQ0NqkA==)
 
 custom:
   jwt:

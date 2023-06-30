@@ -2,8 +2,8 @@ package com.goodjob.batch.crawling;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goodjob.batch.batch.BatchProducer;
-import com.goodjob.core.domain.job.dto.JobCheckDto;
-import com.goodjob.core.domain.job.dto.JobResponseDto;
+import com.goodjob.batch.dto.JobCheckDto;
+import com.goodjob.batch.dto.JobResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;

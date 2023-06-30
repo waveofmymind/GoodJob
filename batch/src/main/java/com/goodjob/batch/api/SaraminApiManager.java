@@ -7,7 +7,7 @@ import com.goodjob.batch.Constants;
 import com.goodjob.batch.api.jsonproperty.Job;
 import com.goodjob.batch.api.jsonproperty.JobsWrapper;
 import com.goodjob.batch.batch.BatchProducer;
-import com.goodjob.core.domain.job.dto.JobResponseDto;
+import com.goodjob.batch.dto.JobResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
