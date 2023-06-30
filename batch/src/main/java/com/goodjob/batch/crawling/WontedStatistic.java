@@ -1,15 +1,16 @@
 package com.goodjob.batch.crawling;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.goodjob.batch.batch.BatchProducer;
 import com.goodjob.core.domain.job.dto.JobCheckDto;
 import com.goodjob.core.domain.job.dto.JobResponseDto;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.A;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -27,21 +28,24 @@ import static com.goodjob.batch.Constants.*;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class WontedStatistic {
 
-    private final static List<JobResponseDto> jobResponseDtos = new ArrayList<>();
+//    private final static List<JobResponseDto> jobResponseDtos = new ArrayList<>();
 
-    public static List<JobResponseDto> getJobResponseDtos() {
-        return jobResponseDtos;
-    }
+    private final BatchProducer producer;
+    private final ObjectMapper objectMapper;
+//    public static List<JobResponseDto> getJobResponseDtos() {
+//        return jobResponseDtos;
+//    }
 
-    public static void setJobDtos(JobResponseDto jobDtos) {
-        jobResponseDtos.add(jobDtos);
-    }
+//    public static void setJobDtos(JobResponseDto jobDtos) {
+//        jobResponseDtos.add(jobDtos);
+//    }
 
-    public static void resetList() {
-        jobResponseDtos.clear();
-    }
+//    public static void resetList() {
+//        jobResponseDtos.clear();
+//    }
 
 
     /**
@@ -121,6 +125,7 @@ public class WontedStatistic {
                 company = webElement.findElement(By.xpath(String.format("//*[@id=\"__next\"]/div[3]/div/div/div[4]/ul/li[%d]/div/a/div/div[2]", i))).getText();// 회사명
                 url = webElement.findElement(By.xpath(String.format("//*[@id=\"__next\"]/div[3]/div/div/div[4]/ul/li[%d]/div/a", i))).getAttribute("href");
                 JobCheckDto checkDto = new JobCheckDto(company, subject, url, sector, sectorCode, createDate, career);
+//TODO:               producer.batchProducer(checkDto);
 //                System.out.println(company); //TODO: 삭제 예정
                 checkDtos.add(checkDto);
             } catch (StaleElementReferenceException e) {
@@ -174,6 +179,7 @@ public class WontedStatistic {
 
                 // 새로운 높이를 얻음
                 Long newHeight = (Long) js.executeScript("return document.body.scrollHeight");
+
                 ExpectedCondition<WebElement> place = ExpectedConditions.visibilityOfElementLocated(By.xpath(placeXpath));
                 ExpectedCondition<WebElement> deadLine = ExpectedConditions.visibilityOfElementLocated(By.xpath(deadLineXpath));
                 if (newHeight.equals(lastHeight) || (place.apply(driver) != null && deadLine.apply(driver) != null)) {
@@ -190,14 +196,14 @@ public class WontedStatistic {
     }
 
     @Async
-    public void detailPage(WebDriver driver,JobCheckDto checkDto) throws ExecutionException, InterruptedException, IOException {
+    public void detailPage(WebDriver driver, JobCheckDto checkDto) throws ExecutionException, InterruptedException, IOException {
         driver.get(checkDto.url());
-
         scrollDown(driver, "//*[@id=\"__next\"]/div[3]/div[1]/div[1]/div[1]/div[2]/section[2]/div[2]/span[2]", "//*[@id=\"__next\"]/div[3]/div[1]/div[1]/div[1]/div[2]/section[2]/div[1]/span[2]");
         String place = driver.findElement(By.xpath("//*[@id=\"__next\"]/div[3]/div[1]/div[1]/div[1]/div[2]/section[2]/div[2]/span[2]")).getText();
         String deadLine = driver.findElement(By.xpath("//*[@id=\"__next\"]/div[3]/div[1]/div[1]/div[1]/div[2]/section[2]/div[1]/span[2]")).getText();
         JobResponseDto jobResponseDto = new JobResponseDto(checkDto.company(), checkDto.subject(), checkDto.url(), checkDto.sector(), checkDto.sectorCode(), checkDto.createDate(), deadLine, checkDto.career(), place);
-        jobResponseDtos.add(jobResponseDto);
+//        jobResponseDtos.add(jobResponseDto);
+        producer.batchProducer(objectMapper.writeValueAsString(jobResponseDto));
     }
 }
 

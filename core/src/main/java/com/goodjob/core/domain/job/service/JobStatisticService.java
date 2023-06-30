@@ -4,6 +4,7 @@ package com.goodjob.core.domain.job.service;
 
 import com.goodjob.core.domain.job.dto.JobResponseDto;
 import com.goodjob.core.domain.job.entity.JobStatistic;
+import com.goodjob.core.domain.job.repository.JobStatisticQueryDslRepositoryImpl;
 import com.goodjob.core.domain.job.repository.JobStatisticRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class JobStatisticService {
     private final JobStatisticRepository jobStatisticRepository;
+
+    private final JobStatisticQueryDslRepositoryImpl queryDslRepository;
 
     /**
      * create
@@ -80,6 +83,9 @@ public class JobStatisticService {
     }
 
 
+    /**
+     * select Logic
+     */
 
     public Page<JobStatistic> getList(String sectorCode, String career, int page){
         int sectorNum = Integer.parseInt(sectorCode);
@@ -95,6 +101,16 @@ public class JobStatisticService {
 
 
 
+    public Page<JobStatistic> getQueryList(String keyword, String sectorCode, String career, int page) {
+        int sectorNum = Integer.parseInt(sectorCode);
+        int careerCode = Integer.parseInt(career);
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("startDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+
+        return queryDslRepository.filterList(keyword, pageable);
+    }
+
     @Transactional
     public void delete(JobStatistic jobStatistic) {
         jobStatisticRepository.delete(jobStatistic);
@@ -106,6 +122,9 @@ public class JobStatisticService {
         return jobStatisticRepository.findAll();
     }
 
+    /**
+     * batch Logic
+     */
 
     // upsert
     @Transactional
@@ -113,7 +132,6 @@ public class JobStatisticService {
     public void upsert(JobResponseDto dto) {
         jobStatisticRepository.upsert(dto);
     }
-
 }
 
 
