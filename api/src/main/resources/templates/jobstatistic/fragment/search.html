@@ -2,7 +2,9 @@
 
   <div class="form-control">
     <div class="input-group">
-      <form th:action="@{/jobstatistic/search/all(sector=${param.sector},career=${param.career})}" method="get" class="form-inline">
+      <form th:action="@{/jobstatistic/search/all}" method="get" class="form-inline">
+        <input type="hidden" name="sector" th:value="${param.sector}" />
+        <input type="hidden" name="career" th:value="${param.career}" />
         <input type="text" name="keyword" placeholder="검색어를 입력해주세요" class="input input-bordered"/>
         <button class="btn btn-square align-content">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -12,6 +14,7 @@
           </svg>
         </button>
       </form>
+
     </div>
   </div>
 </div>
