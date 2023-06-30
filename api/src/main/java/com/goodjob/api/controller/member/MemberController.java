@@ -2,6 +2,8 @@ package com.goodjob.api.controller.member;
 
 import com.goodjob.core.domain.article.entity.Article;
 import com.goodjob.core.domain.article.service.ArticleService;
+import com.goodjob.core.domain.comment.entity.Comment;
+import com.goodjob.core.domain.comment.service.CommentService;
 import com.goodjob.core.domain.member.dto.request.EditRequestDto;
 import com.goodjob.core.domain.member.dto.request.JoinRequestDto;
 import com.goodjob.core.domain.member.dto.request.LoginRequestDto;
@@ -10,6 +12,7 @@ import com.goodjob.core.domain.member.service.MemberService;
 import com.goodjob.core.global.base.redis.RedisUt;
 import com.goodjob.core.global.base.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
+import com.goodjob.resume.dto.response.ResponsePredictionDto;
 import com.goodjob.resume.facade.PredictionFacade;
 import jakarta.servlet.http.Cookie;
 import jakarta.validation.Valid;
@@ -32,11 +35,9 @@ public class MemberController {
 
     private final Rq rq;
     private final MemberService memberService;
-
     private final ArticleService articleService;
-
+    private final CommentService commentService;
     private final PredictionFacade predictionFacade;
-
     private final RedisUt redisUt;
 
     @GetMapping("/join")
@@ -119,11 +120,12 @@ public class MemberController {
         Long id = rq.getMember().getId();
 
         List<Article> articles = articleService.findAllByMemberId(id);
-//        predictionFacade.getPredictions(id);
+        List<Comment> comments = commentService.findAllByMemberId(id);
+        List<ResponsePredictionDto> predictions = predictionFacade.getPredictions(id);
 
         model.addAttribute("articles", articles);
-//        model.addAttribute("comments", comments);
-//        model.addAttribute("predictions", predictions);
+        model.addAttribute("comments", comments);
+        model.addAttribute("predictions", predictions);
 
         return "member/me";
     }

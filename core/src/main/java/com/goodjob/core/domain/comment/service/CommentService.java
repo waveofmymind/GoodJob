@@ -27,7 +27,7 @@ public class CommentService {
     public RsData createComment(Member member, Long id, CommentRequestDto commentRequestDto) {
         RsData<Article> articleRsData = articleService.getArticle(id);
 
-        if(articleRsData.isFail()) {
+        if (articleRsData.isFail()) {
             return articleRsData;
         }
 
@@ -47,17 +47,17 @@ public class CommentService {
     public RsData getComment(Long id) {
         Optional<Comment> commentOp = commentRepository.findById(id);
 
-        if(commentOp.isEmpty()) {
+        if (commentOp.isEmpty()) {
             return RsData.of("F-1", "해당 댓글이 존재하지 않습니다.");
         }
 
         Comment comment = commentOp.get();
 
-        if(comment.isDeleted()) {
+        if (comment.isDeleted()) {
             return RsData.of("F-2", "해당 댓글은 이미 삭제되었습니다.");
         }
 
-        if(comment.getArticle().isDeleted()) {
+        if (comment.getArticle().isDeleted()) {
             return RsData.of("F-3", "게시글이 이미 삭제되었습니다.");
         }
 
@@ -67,13 +67,13 @@ public class CommentService {
     public RsData updateComment(Member author, Long id, CommentRequestDto commentRequestDto) {
         RsData<Comment> commentRsData = getComment(id);
 
-        if(commentRsData.isFail()) {
+        if (commentRsData.isFail()) {
             return commentRsData;
         }
 
         Comment comment = commentRsData.getData();
 
-        if(comment.getMember().getId() != author.getId()) {
+        if (comment.getMember().getId() != author.getId()) {
             return RsData.of("F-4", "수정 권한이 없습니다.");
         }
 
@@ -88,19 +88,19 @@ public class CommentService {
     public RsData deleteComment(Member author, Long id) {
         RsData<Comment> commentRsData = getComment(id);
 
-        if(commentRsData.isFail()) {
+        if (commentRsData.isFail()) {
             return commentRsData;
         }
 
         Comment comment = commentRsData.getData();
 
-        if(comment.getMember().getId() != author.getId()) {
+        if (comment.getMember().getId() != author.getId()) {
             return RsData.of("F-4", "삭제 권한이 없습니다.");
         }
 
         List<SubComment> subCommentList = comment.getSubCommentList();
 
-        for(SubComment subComment : subCommentList) {
+        for (SubComment subComment : subCommentList) {
             subComment.setDeleted(true);
         }
 
@@ -108,5 +108,9 @@ public class CommentService {
         commentRepository.save(comment);
 
         return RsData.of("S-1", "댓글이 삭제되었습니다.", comment);
-        }
+    }
+
+    public List<Comment> findAllByMemberId(Long memberId) {
+        return commentRepository.findAllByMemberId(memberId);
+    }
 }
