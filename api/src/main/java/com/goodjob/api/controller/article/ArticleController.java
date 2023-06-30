@@ -142,4 +142,13 @@ public class ArticleController {
         private String query = "";
 
     }
+
+    @GetMapping("/show/list")
+    public String showArticles(Model model, @RequestParam(value="page", defaultValue="0") int page) {
+        Page<ArticleResponseDto> paging = articleService.findAll(page, 1, "글쓴이", rq.getMember().getNickname());
+        model.addAttribute("paging", paging);
+
+        return "member/myArticles";
+    }
+
 }
