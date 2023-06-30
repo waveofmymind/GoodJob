@@ -9,6 +9,7 @@ import com.goodjob.core.global.rq.Rq;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,5 +59,11 @@ public class CommentController {
         Comment comment = commentRsData.getData();
 
         return rq.redirectWithMsg("/article/detail/%s".formatted(comment.getArticle().getId()), commentRsData);
+    }
+
+    @GetMapping("/comment/show/list")
+    public String showComments(Model model) {
+
+        return "member/myComments";
     }
 }
