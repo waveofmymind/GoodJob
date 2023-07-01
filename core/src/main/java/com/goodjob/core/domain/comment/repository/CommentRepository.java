@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    List<Comment> findAllByMemberId(Long memberId);
 
     @Query("SELECT c FROM Comment c WHERE c.member.id= :memberId ORDER BY c.createdDate DESC")
     List<Comment> findAllByMemberIdOrderByCreatedDateDesc(@Param("memberId") Long memberId);

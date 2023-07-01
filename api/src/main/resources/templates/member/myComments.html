@@ -10,6 +10,22 @@
             <div class="mb-4">
                 <h3 class="text-2xl font-semibold mb-4 mt-4">내가 쓴 댓글</h3>
                 <div class="space-y-2">
+                    <ul class="container">
+                        <li class="bg-neutral text-white p-3 flex justify-between border-b h-11 rounded-md">
+                            <div class="text-sm flex-grow ">게시글 제목</div>
+                            <div class="text-sm flex-grow ">댓글 내용</div>
+                        </li>
+                        <li th:each="article, loop : ${paging}" class="bg-white p-3 flex justify-between border-b h-11">
+                            <a th:href="@{|/article/detail/${article.id}|}"
+                               th:text="${article.title.length() > 15 ? article.title.substring(0, 15) + '...' : article.title}"
+                               class="text-sm flex-grow text-gray-600">
+                            </a>
+                            <div th:text="${#lists.size(article.likesList)}" class="text-xs  w-16 text-center"></div>
+                            <p th:text="${article.commentsCount}" class="text-xs  w-16 text-center"></p>
+                            <p th:text="${article.viewCount}" class="text-xs  w-16 text-center"></p>
+                        </li>
+                    </ul>
+
                     <div th:each="comment, loop: ${comments}">
                         <p th:text="${comment.content}" class="text-xs w-16 text-center">
                             댓글 내용</p>

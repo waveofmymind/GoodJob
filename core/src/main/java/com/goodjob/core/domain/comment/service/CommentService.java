@@ -1,8 +1,10 @@
 package com.goodjob.core.domain.comment.service;
 
+import com.goodjob.core.domain.article.dto.response.ArticleResponseDto;
 import com.goodjob.core.domain.article.entity.Article;
 import com.goodjob.core.domain.article.service.ArticleService;
 import com.goodjob.core.domain.comment.dto.request.CommentRequestDto;
+import com.goodjob.core.domain.comment.dto.response.CommentResponseDto;
 import com.goodjob.core.domain.comment.entity.Comment;
 import com.goodjob.core.domain.comment.mapper.CommentMapper;
 import com.goodjob.core.domain.comment.repository.CommentRepository;
@@ -10,11 +12,16 @@ import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.subComment.entity.SubComment;
 import com.goodjob.core.global.base.rsData.RsData;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -112,5 +119,26 @@ public class CommentService {
 
     public List<Comment> findAllByMemberId(Long memberId) {
         return commentRepository.findAllByMemberIdOrderByCreatedDateDesc(memberId);
+    }
+
+    public Page<CommentResponseDto> findAllByMemberIdToPage(int page, Long memberId) {
+        Pageable pageable = PageRequest.of(page, 10);
+
+        List<Comment> comments = commentRepository.findAllByMemberIdOrderByCreatedDateDesc(memberId);
+
+        List<CommentResponseDto> commentResponseDtos = comments
+                .stream()
+                .map(commentMapper::toDto)
+                .collect(Collectors.toList());
+
+        return convertToPage(commentResponseDtos, pageable);
+    }
+
+    private Page<CommentResponseDto> convertToPage(List<CommentResponseDto> comments, Pageable pageable) {
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), comments.size());
+
+        List<CommentResponseDto> content = comments.subList(start, end);
+        return new PageImpl<>(content, pageable, comments.size());
     }
 }
