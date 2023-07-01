@@ -4,7 +4,6 @@ import com.goodjob.core.domain.article.dto.response.ArticleResponseDto;
 import com.goodjob.core.domain.article.entity.Article;
 import com.goodjob.core.domain.article.service.ArticleService;
 import com.goodjob.core.domain.comment.dto.request.CommentRequestDto;
-import com.goodjob.core.domain.comment.dto.response.CommentResponseDto;
 import com.goodjob.core.domain.comment.entity.Comment;
 import com.goodjob.core.domain.comment.mapper.CommentMapper;
 import com.goodjob.core.domain.comment.repository.CommentRepository;
@@ -121,24 +120,20 @@ public class CommentService {
         return commentRepository.findAllByMemberIdOrderByCreatedDateDesc(memberId);
     }
 
-    public Page<CommentResponseDto> findAllByMemberIdToPage(int page, Long memberId) {
+    public Page<Comment> findAllByMemberIdToPage(int page, Long memberId) {
         Pageable pageable = PageRequest.of(page, 10);
 
         List<Comment> comments = commentRepository.findAllByMemberIdOrderByCreatedDateDesc(memberId);
 
-        List<CommentResponseDto> commentResponseDtos = comments
-                .stream()
-                .map(commentMapper::toDto)
-                .collect(Collectors.toList());
-
-        return convertToPage(commentResponseDtos, pageable);
+        return convertToPage(comments, pageable);
     }
 
-    private Page<CommentResponseDto> convertToPage(List<CommentResponseDto> comments, Pageable pageable) {
+    private Page<Comment> convertToPage(List<Comment> comments, Pageable pageable) {
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), comments.size());
 
-        List<CommentResponseDto> content = comments.subList(start, end);
+        List<Comment> content = comments.subList(start, end);
         return new PageImpl<>(content, pageable, comments.size());
     }
+
 }
