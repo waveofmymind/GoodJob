@@ -14,8 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-@SpringBootTest(classes = {JobStatisticService.class, JobStatisticRepository.class, GoodjobApplication.class})
 @Transactional
+@SpringBootTest(classes = {JobStatisticService.class, GoodjobApplication.class})
 public class JobServiceTest {
 
     @Autowired
@@ -32,10 +32,6 @@ public class JobServiceTest {
     JobResponseDto forDtoSet(int i) {
         return new JobResponseDto("company" + i, "subject" + i, "url" + i, "sector" + i, 1 + i, "create" + i, "deadLine" + i, 1 + i, "place" + i);
     }
-
-
-
-
 
     @DisplayName("filter")
     @Test
@@ -58,4 +54,16 @@ public class JobServiceTest {
         Assertions.assertEquals(100, filter.size());
     }
 
+//    @DisplayName("BatchDelete")
+//    @Test
+//    void batchDeleteTest() {
+//        for (int i = 0; i < 100; i++) {
+//            forDtoSet(i);
+//            jobStatisticService.create(forDtoSet(i));
+//        }
+//        Assertions.assertEquals(100, jobStatisticRepository.findAll().size());
+//        List<JobStatistic> all = jobStatisticService.getAll();
+//        jobStatisticService.regularlyDelete(all);
+//        Assertions.assertEquals(0, jobStatisticRepository.findAll().size());
+//    }
 }

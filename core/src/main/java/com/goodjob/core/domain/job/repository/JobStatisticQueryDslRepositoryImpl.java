@@ -20,7 +20,6 @@ public class JobStatisticQueryDslRepositoryImpl implements JobStatisticQueryDslR
     private final JPAQueryFactory jpaQueryFactory;
 
 
-
     @Override
     public Page<JobStatistic> filterList(String subject, Pageable pageable) {
         List<JobStatistic> fetch = jpaQueryFactory.select(jobStatistic)
@@ -32,4 +31,15 @@ public class JobStatisticQueryDslRepositoryImpl implements JobStatisticQueryDslR
                 .fetch();
         return new PageImpl<>(fetch, pageable, fetch.size());
     }
+
+    @Override
+    public List<JobStatistic> findDeadLine(String today, String aMonthAgo) {
+
+        return jpaQueryFactory.select(jobStatistic)
+                .from(jobStatistic)
+                .where(jobStatistic.deadLine.eq("상시").and(jobStatistic.startDate.eq(aMonthAgo)), jobStatistic.deadLine.eq(today))
+                .fetch();
+    }
+
+
 }

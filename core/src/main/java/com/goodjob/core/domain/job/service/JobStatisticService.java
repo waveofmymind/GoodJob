@@ -14,9 +14,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,6 +134,20 @@ public class JobStatisticService {
     @Async
     public void upsert(JobResponseDto dto) {
         jobStatisticRepository.upsert(dto);
+    }
+
+    @Scheduled(cron = "0 0 4 * * *")
+    public void regularlyDeadLineFind() {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String today = now.format(dateTimeFormatter);
+        String aMonthAgo = now.minusMonths(1).format(dateTimeFormatter);
+        regularlyDelete(queryDslRepository.findDeadLine(today, aMonthAgo));
+    }
+
+    @Transactional
+    public void regularlyDelete(List<JobStatistic> deadLine) {
+        jobStatisticRepository.deleteAllInBatch(deadLine);
     }
 }
 
