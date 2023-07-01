@@ -219,4 +219,5 @@ public class ArticleService {
     public List<Article> findAllByMemberId(Long memberId) {
         return articleRepository.findAllByMemberIdOrderByCreatedDateDesc(memberId);
     }
+
 }

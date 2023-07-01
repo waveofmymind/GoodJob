@@ -84,7 +84,8 @@
                 <h3 class="text-2xl font-semibold mb-4 mt-4">내가 쓴 글</h3>
                 <div class="space-y-2">
                     <div th:each="article, loop: ${articles}">
-                        <a th:if="${loop.index} < 5" th:href="@{|/article/detail/${article.id}|}"
+                        <a th:if="${loop.index} < 5"
+                           th:href="@{|/article/detail/${article.id}|}"
                            th:text="${article.title}"
                            class="text-xs w-16 text-center ml-2" style="color: gray;">글 제목</a>
                     </div>
@@ -98,7 +99,9 @@
                 <h3 class="text-2xl font-semibold mb-4 mt-4">내가 쓴 댓글</h3>
                 <div class="space-y-2">
                     <div th:each="comment, loop : ${comments}">
-                        <a th:if="${loop.index} < 5" th:text="${comment.content}"
+                        <a th:if="${loop.index} < 5"
+                           th:href="@{|/article/detail/${comment.article.id}|}"
+                           th:text="${comment.content.length() > 25 ? comment.content.substring(0, 25) + '...' : comment.content}"
                            class="text-xs w-16 text-center ml-2" style="color: gray;">댓글내용</a>
                     </div>
                     <div class="flex justify-content: flex-end">

@@ -21,7 +21,7 @@
                         <li th:each="article, loop : ${paging}" class="bg-white p-3 flex justify-between border-b h-11">
                             <a th:href="@{|/article/detail/${article.id}|}"
                                th:text="${article.title.length() > 15 ? article.title.substring(0, 15) + '...' : article.title}"
-                               class="text-sm flex-grow text-gray-600">
+                               class="text-sm flex-grow text-gray-600 hover:text-primary">
                             </a>
                             <div th:text="${#lists.size(article.likesList)}" class="text-xs  w-16 text-center"></div>
                             <p th:text="${article.commentsCount}" class="text-xs  w-16 text-center"></p>
