@@ -150,5 +150,4 @@ public class ArticleController {
 
         return "member/myArticles";
     }
-
 }
