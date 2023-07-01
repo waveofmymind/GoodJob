@@ -111,6 +111,6 @@ public class CommentService {
     }
 
     public List<Comment> findAllByMemberId(Long memberId) {
-        return commentRepository.findAllByMemberId(memberId);
+        return commentRepository.findAllByMemberIdOrderByCreatedDateDesc(memberId);
     }
 }
