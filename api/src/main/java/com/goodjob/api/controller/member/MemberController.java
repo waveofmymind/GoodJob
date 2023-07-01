@@ -118,11 +118,8 @@ public class MemberController {
         Long id = rq.getMember().getId();
 
         List<Article> articles = articleService.findAllByMemberId(id);
-        log.info("articles= {}", articles);
         List<Comment> comments = commentService.findAllByMemberId(id);
-        log.info("comments= {}", comments);
         List<ResponsePredictionDto> predictions = predictionFacade.getPredictions(id);
-        log.info("predictions= {}", predictions);
 
         model.addAttribute("articles", articles);
         model.addAttribute("comments", comments);
