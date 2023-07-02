@@ -21,7 +21,7 @@
             </div>
             <div class="mb-4">
                 <p>직무(필수)</p>
-                <select class="select select-bordered w-full max-w-xs" id="job" name="job">
+                <select th:field="*{job}" class="select select-bordered w-full max-w-xs" id="job" name="job">
                     <option value="백엔드 개발자">백엔드 개발자</option>
                     <option value="프론트엔드 개발자">프론트엔드 개발자</option>
                     <option value="풀스택 개발자">풀스택 개발자</option>
@@ -29,7 +29,7 @@
             </div>
             <div class="mb-4">
                 <p>경력(필수)</p>
-                <select class="select select-bordered w-full max-w-xs" id="career" name="career">
+                <select th:field="*{career}" class="select select-bordered w-full max-w-xs" id="career" name="career">
                     <option value="신입(1년 이하)">신입(1년 이하)</option>
                     <option value="주니어(1~3년)">주니어(1~3년)</option>
                     <option value="미들(4~8년)">미들(4~8년)</option>

@@ -35,8 +35,12 @@ public class Mentoring extends BaseEntity {
     @Column(columnDefinition = "text")
     private String content;
 
+    @Setter
     private String job;
+    @Setter
     private String career;
+    @Setter
     private String currentJob;
+    @Setter
     private String preferredTime;
 }
