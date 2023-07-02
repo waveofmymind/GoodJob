@@ -24,14 +24,14 @@
                             </div>
                             <div class="overflow-hidden whitespace-nowrap text-ellipsis w-1/2">
                                 <span th:text="${comment.content}"
-                                   class="text-sm text-gray-600">댓글 내용</span>
+                                      class="text-sm text-gray-600">댓글 내용</span>
                             </div>
                         </li>
                     </ul>
                 </div>
             </div>
 
-            <!--            &lt;!&ndash; 페이징처리 시작 &ndash;&gt;-->
+            <!-- 페이징처리 시작 -->
             <div th:if="${paging != null}" class="flex justify-center mb-6">
                 <div class="flex">
                     <a class="page-link btn btn-sm btn-ghost grid-0 m-1" th:href="@{|?page=${paging.number-1}|}"
