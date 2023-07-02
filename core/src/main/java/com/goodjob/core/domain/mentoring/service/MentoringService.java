@@ -1,19 +1,10 @@
 package com.goodjob.core.domain.mentoring.service;
 
 
-import com.goodjob.core.domain.article.dto.request.ArticleRequestDto;
-import com.goodjob.core.domain.article.dto.response.ArticleResponseDto;
-import com.goodjob.core.domain.article.entity.Article;
-import com.goodjob.core.domain.article.mapper.ArticleMapper;
-import com.goodjob.core.domain.article.repository.ArticleRepository;
-import com.goodjob.core.domain.comment.entity.Comment;
-import com.goodjob.core.domain.file.service.FileService;
-import com.goodjob.core.domain.hashTag.service.HashTagService;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.mentoring.dto.request.MentoringRequestDto;
 import com.goodjob.core.domain.mentoring.entity.Mentoring;
 import com.goodjob.core.domain.mentoring.repository.MentoringRepository;
-import com.goodjob.core.domain.subComment.entity.SubComment;
 import com.goodjob.core.global.base.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,21 +12,19 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class MentoringService {
     private final MentoringRepository mentoringRepository;
 
-    public Page<Mentoring> findAll(int page) {
-        Pageable pageable = PageRequest.of(page, 10);
+    public Page<Mentoring> findAll(int page, String category, String query) {
+        Pageable pageable = PageRequest.of(page, 12);
 
-        List<Mentoring> mentorings = mentoringRepository.findAll();
+        List<Mentoring> mentorings = mentoringRepository.findQslBySearch(category, query);
 
 
         return convertToPage(mentorings, pageable);
@@ -61,7 +50,7 @@ public class MentoringService {
         return RsData.of("S-1", "게시글에 대한 정보를 가져옵니다.", mentoring);
     }
 
-    public RsData<Mentoring> createMentoring(Member member, MentoringRequestDto mentoringRequestDto) {
+    public RsData<Mentoring> createMentoring(Member member, MentoringRequestDto mentoringRequestDto, String job, String career) {
         if(mentoringRequestDto.getTitle().trim().equals("")) {
             return RsData.of("F-1", "제목을 입력해야 합니다.");
         }
@@ -79,6 +68,10 @@ public class MentoringService {
                 .member(member)
                 .title(mentoringRequestDto.getTitle())
                 .content(mentoringRequestDto.getContent())
+                .job(job)
+                .career(career)
+                .currentJob(mentoringRequestDto.getCurrentJob())
+                .preferredTime(mentoringRequestDto.getPreferredTime())
                 .build();
 
         mentoringRepository.save(mentoring);

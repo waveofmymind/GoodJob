@@ -34,8 +34,8 @@ public class MentoringController {
     private final FileService fileService;
 
     @GetMapping("/list")
-    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page) {
-        Page<Mentoring> paging = mentoringService.findAll(page);
+    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page, ToListForm toListForm) {
+        Page<Mentoring> paging = mentoringService.findAll(page, toListForm.category, toListForm.query);
         model.addAttribute("paging", paging);
 
         return "mentoring/list";
@@ -61,13 +61,21 @@ public class MentoringController {
     }
 
     @PostMapping("/create")
-    public String createMentoring(@Valid MentoringRequestDto mentoringRequestDto, BindingResult bindingResult) throws IOException {
-        RsData<Mentoring> mentoringRsData = mentoringService.createMentoring(rq.getMember(), mentoringRequestDto);
+    public String createMentoring(@Valid MentoringRequestDto mentoringRequestDto, BindingResult bindingResult,
+                                  @RequestParam("job") String job, @RequestParam("career") String career) throws IOException {
+        RsData<Mentoring> mentoringRsData = mentoringService.createMentoring(rq.getMember(), mentoringRequestDto, job, career);
         if(mentoringRsData.isFail()) {
             return rq.historyBack(mentoringRsData);
         }
         Mentoring mentoring = mentoringRsData.getData();
 
         return "redirect:/mentoring/detail/%s".formatted(mentoring.getId());
+    }
+
+    @Setter
+    public static class ToListForm {
+        private String category = "제목";
+        private String query = "";
+
     }
 }
