@@ -18,9 +18,10 @@
         .modal-content {
             background-color: #fff;
             padding: 20px;
+            padding-bottom: 0px;
             border-radius: 5px;
             width: 400px;
-            height: 600px;
+            height: auto;
 
         }
     </style>
@@ -54,25 +55,36 @@
             <div class="modal-content">
                 <!-- 모달 내용 -->
                 <form class="mr-3" th:action="@{/chat/room/{id}(id=${mentoring.id})}" method="post">
-                    <p><input type="date" name="date" id="date-input"></p>
-                    <select name="time" class="border py-2 px-3 rounded-md">
-                        <option value="12">12:00 ~ 13:00</option>
-                        <option value="13">13:00 ~ 14:00</option>
-                        <option value="14">14:00 ~ 15:00</option>
-                        <option value="15">15:00 ~ 16:00</option>
-                        <option value="16">16:00 ~ 17:00</option>
-                        <option value="17">17:00 ~ 18:00</option>
-                        <option value="18">18:00 ~ 19:00</option>
-                        <option value="19">19:00 ~ 20:00</option>
-                        <option value="20">20:00 ~ 21:00</option>
-                        <option value="21">21:00 ~ 22:00</option>
-                        <option value="22">22:00 ~ 23:00</option>
-                        <option value="23">23:00 ~ 24:00</option>
-                    </select>
-                    <button type="submit" class="apply ml-2 bg-neutral text-white px-4 py-2 rounded-lg text-sm hover:bg-black" onclick="return confirm('정말로 신청하시겠습니까?')">신청하기
-                    </button>
+                    <div class="flex">
+                        <p>날짜 : </p>
+                        <input type="date" name="date" id="date-input" class="mb-2 mx-2">
+                    </div>
+                    <div class="flex items-center">
+                        <p>시간 : </p>
+                        <select name="time" class="py-2 rounded-md my-2 mx-2">
+                            <option value="12">12:00 ~ 13:00</option>
+                            <option value="13">13:00 ~ 14:00</option>
+                            <option value="14">14:00 ~ 15:00</option>
+                            <option value="15">15:00 ~ 16:00</option>
+                            <option value="16">16:00 ~ 17:00</option>
+                            <option value="17">17:00 ~ 18:00</option>
+                            <option value="18">18:00 ~ 19:00</option>
+                            <option value="19">19:00 ~ 20:00</option>
+                            <option value="20">20:00 ~ 21:00</option>
+                            <option value="21">21:00 ~ 22:00</option>
+                            <option value="22">22:00 ~ 23:00</option>
+                            <option value="23">23:00 ~ 24:00</option>
+                        </select>
+                    </div>
+
+                    <div class="flex">
+                        <div class="flex-grow">
+                            <button type="submit" class="mt-2 apply bg-neutral text-white px-4 py-2 rounded-lg text-sm hover:bg-black" onclick="return confirm('정말로 신청하시겠습니까?')">신청하기</button>
+                        </div>
+                        <button type="button" onclick="closeModal()">닫기</button>
+                    </div>
                 </form>
-                <button type="button" onclick="closeModal()">닫기</button>
+
             </div>
         </div>
     </div>

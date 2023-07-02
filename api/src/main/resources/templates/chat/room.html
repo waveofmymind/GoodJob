@@ -97,13 +97,13 @@
         .wrap .ch2 .textbox {
             margin-right: 20px;
             max-width: 500px;
-            background-color: #dbdbdc;
+            background-color: #9ba2af;
         }
 
         .wrap .ch2 .textbox::before {
             right: -15px;
             content: "▶";
-            color: #dbdbdc;
+            color: #9ba2af;
         }
         #msgArea {
             height: 650px;
@@ -117,38 +117,40 @@
 
         <!-- 수정된 HTML -->
 
-        <div class="flex justify-center items-center bg-neutral my-3 rounded-md text-white p-3 relative">
+        <div class="flex justify-center items-center bg-neutral rounded-t-md text-white p-3 relative">
             <span class="m-b-0" th:if="${room.sender.username == member.username}" th:text="${room.receiver.nickname}"></span>
             <span class="m-b-0" th:if="${room.sender.username != member.username}" th:text="${room.sender.nickname}"></span>
-            <a id="quit-button" th:if="${room.receiver.username == member.username}" href="/chat/rooms" class="absolute right-4">종료</a>
+            <a id="quit-button" th:if="${room.receiver.username == member.username and room.status != 3}" href="/chat/rooms" class="absolute right-4">종료</a>
+            <a th:if="${room.receiver.username == member.username and room.status == 3}" th:href="@{/chat/delete/room(roomId=${room.roomId})}" class="absolute right-4" onclick="return confirm('정말로 삭제하시겠습니까?')">삭제</a>
+            <a th:if="${room.sender.username == member.username}" th:href="@{/chat/delete/room(roomId=${room.roomId})}" class="absolute right-4" onclick="return confirm('정말로 삭제하시겠습니까?')">삭제</a>
         </div>
-            <div id="msgArea" class="chat-history wrap">
-                <div style="list-style: none" th:each="message : ${messages}">
-                    <div th:if="${message.sender} == null" class="col-6 flex justify-end chat ch1">
-                        <div class="bg-red-300 p-3 rounded-md custom-width mb-2">
-                            <div class="textbox" th:text="관리자 + ' : ' + ${message.message}"></div>
-                        </div>
-                    </div>
-                    <div th:if="${message.sender != null and message.sender.username == member.username}" class="col-6 flex justify-end chat ch2">
-                        <div class="textbox"th:text="${message.message}" style="word-break: break-all;"></div>
-                    </div>
-                    <div th:if="${message.sender != null and message.sender.username != member.username}" class="chat-message other-message chat ch1">
-                        <div class="textbox" th:text="${message.message}" style="word-break: break-all;"></div>
+        <div id="msgArea" class="chat-history wrap bg-gray-200">
+            <div style="list-style: none" th:each="message : ${messages}">
+                <div th:if="${message.sender} == null" class="col-6 flex justify-end chat ch1">
+                    <div class="bg-red-300 p-3 rounded-md custom-width mb-2">
+                        <div class="textbox" th:text="관리자 + ' : ' + ${message.message}"></div>
                     </div>
                 </div>
+                <div th:if="${message.sender != null and message.sender.username == member.username}" class="col-6 flex justify-end chat ch2">
+                    <div class="textbox"th:text="${message.message}" style="word-break: break-all;"></div>
+                </div>
+                <div th:if="${message.sender != null and message.sender.username != member.username}" class="chat-message other-message chat ch1">
+                    <div class="textbox" th:text="${message.message}" style="word-break: break-all;"></div>
+                </div>
             </div>
-            <div class="chat-message clearfix flex mt-3">
-                <textarea id="msg" rows="1" type="text" class="form-control border border-gray-300 rounded-md flex items-center flex-grow mr-2 resize-none py-3 px-3"
-                          oninput="autoResize()"
-                          th:placeholder="${room.reservationTime.isAfter(T(java.time.LocalDateTime).now()) ? '예약 시간이 지나야 채팅이 가능합니다' : (room.status == 3 ? '채팅이 종료되었습니다.' : '')}"></textarea>
+        </div>
+        <div class="chat-message clearfix flex p-3 bg-gray-200 rounded-b-md">
+            <textarea id="msg" rows="1" type="text" class="form-control border border-gray-300 rounded-md flex items-center flex-grow mr-2 resize-none py-3 px-3"
+                      oninput="autoResize()"
+                      th:placeholder="${room.reservationTime.isAfter(T(java.time.LocalDateTime).now()) ? '예약 시간이 지나야 채팅이 가능합니다' : (room.status == 3 ? '채팅이 종료되었습니다.' : '')}"></textarea>
 
 
 
-                <button id="button-send" type="button" class="btn btn-outline-secondary" data-toggle="tooltip"
-                        data-placement="top" title="Send a message">
-                    전송
-                </button>
-            </div>
+            <button id="button-send" type="button" class="btn btn-outline-secondary" data-toggle="tooltip"
+                    data-placement="top" title="Send a message">
+                전송
+            </button>
+        </div>
 
 
         <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
@@ -345,6 +347,10 @@
                 });
 
                 $("#quit-button").on("click", function (e) {
+                    if(!confirm("정말로 삭제하시겠습니까?")) {
+                        e.preventDefault();
+                        return;
+                    };
                     stomp.send('/pub/chat/quit', {}, JSON.stringify({
                         roomId: roomId,
                     }));

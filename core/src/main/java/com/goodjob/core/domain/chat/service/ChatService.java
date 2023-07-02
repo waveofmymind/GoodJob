@@ -102,9 +102,10 @@ public class ChatService {
     }
 
     @Transactional
-    public void rejectRoom(String roomId) {
+    public void rejectRoom(String roomId, String content) {
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId).orElse(null);
         chatRoom.setStatus(2);
+        chatRoom.setRejectionReason(content);
         chatRoomRepository.save(chatRoom);
     }
 
