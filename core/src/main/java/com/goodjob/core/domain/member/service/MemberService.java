@@ -181,5 +181,14 @@ public class MemberService {
 
         memberRepository.save(member);
     }
+
+    @Transactional
+    public RsData applyMentor(Member member) {
+        member.setUserRole("mentor");
+
+        memberRepository.save(member);
+
+        return RsData.of("S-1", "멘토 등급이 되었습니다.");
+    }
 }
 
