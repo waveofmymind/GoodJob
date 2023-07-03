@@ -10,7 +10,6 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 public class Prediction extends BaseEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

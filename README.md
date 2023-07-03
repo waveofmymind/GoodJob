@@ -45,25 +45,21 @@
 
 **DevOps**
 
-- ~~Naver Cloud PlatForm~~
-  - ~~CentOS 7.8~~
-- ~~Docker~~
-- ~~NginX ProxyManager~~
 - Google Cloud Platform
 - Kubernetes
-- Confluent Kafka
+- Kafka 3.4.0 KRaft
+- Docker
 - Jenkins
 - AWS RDS
 - AWS Route53
 - AWS S3
 - AWS CloudWatch
 - Apache JMeter
-- Ngrinder
 - Grafana + Prometheus
 
-## 시스템 아키텍처
+## 시스템 아키텍처(2023.07.03)
 
-![Blank diagram (1)](https://github.com/waveofmymind/GoodJob/assets/93868431/5850241f-baca-4380-9ece-f10d7e022508)
+![스크린샷 2023-07-03 오전 12 42 39](https://github.com/waveofmymind/GoodJob/assets/93868431/8c8047a3-25f7-439f-a84b-70af4cf07b68)
 
 ## ERD
 
