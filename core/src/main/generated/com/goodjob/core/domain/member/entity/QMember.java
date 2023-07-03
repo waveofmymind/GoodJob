@@ -24,6 +24,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final ListPath<com.goodjob.core.domain.article.entity.Article, com.goodjob.core.domain.article.entity.QArticle> articles = this.<com.goodjob.core.domain.article.entity.Article, com.goodjob.core.domain.article.entity.QArticle>createList("articles", com.goodjob.core.domain.article.entity.Article.class, com.goodjob.core.domain.article.entity.QArticle.class, PathInits.DIRECT2);
 
+    public final NumberPath<Integer> coin = createNumber("coin", Integer.class);
+
     public final ListPath<com.goodjob.core.domain.comment.entity.Comment, com.goodjob.core.domain.comment.entity.QComment> comments = this.<com.goodjob.core.domain.comment.entity.Comment, com.goodjob.core.domain.comment.entity.QComment>createList("comments", com.goodjob.core.domain.comment.entity.Comment.class, com.goodjob.core.domain.comment.entity.QComment.class, PathInits.DIRECT2);
 
     //inherited

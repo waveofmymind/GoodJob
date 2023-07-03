@@ -21,10 +21,12 @@ public class JwtProvider {
     @Autowired
     private RedisUt redisUt;
     private SecretKey cachedSecretKey;
-    public final static long TOKEN_VALIDATION_SECOND = 1000L * 60 * 30; // 30분
+
+    private final static long ACCESS_TOKEN_VALIDATION_SECOND = 1000L * 60 * 30; // 30분
+
     private final static long REFRESH_TOKEN_VALIDATION_SECOND = 1000L * 60 * 60 * 24 * 14; // 14일
 
-    @Value("${custom.jwt.secretKey}")
+    @Value("${custom.jwt.secret-key}")
     private String secretKeyPlain;
 
     private SecretKey _getSecretKey() {
@@ -45,7 +47,7 @@ public class JwtProvider {
     public String genToken(Map<String, Object> claims) {
         long now = new Date().getTime();
         // 지금으로부터 30분의 유효기간 가지는 accessToken 생성
-        Date accessTokenExpiresIn = new Date(now + TOKEN_VALIDATION_SECOND);
+        Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_VALIDATION_SECOND);
 
         long id = (long) claims.get("id");
         String userId = String.valueOf(id);
