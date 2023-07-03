@@ -1,34 +1,24 @@
 package com.goodjob.resume.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @Embeddable
+@Getter
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Titles {
-    @ElementCollection
-    @Column(columnDefinition = "TEXT")
-    private List<String> titles;
-
-    protected Titles() {
-        this.titles = new ArrayList<>();
-    }
-
-    public Titles(List<String> questions) {
-        this.titles = new ArrayList<>(questions);
-    }
-
-    public List<String> getTitles() {
-        return Collections.unmodifiableList(titles);
-    }
+    @OneToMany(fetch = FetchType.EAGER,orphanRemoval = true, cascade = CascadeType.PERSIST)
+    private List<Title> titles = new ArrayList<>();
 
     public static Titles of(List<String> questions) {
         Titles instance = new Titles();
-        instance.titles.addAll(questions);
+        questions.forEach(question -> instance.titles.add(Title.of(question)));
         return instance;
     }
 }
