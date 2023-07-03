@@ -7,6 +7,7 @@ import com.goodjob.core.domain.job.service.JobStatisticService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +16,10 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class BatchConsumer {
     private final JobStatisticService service;
-
     private final ObjectMapper objectMapper;
 
     @KafkaListener(topics = "job", groupId = "job-group")
-    public void batchConsumer(String message) throws JsonProcessingException {
-
+    public void batchConsumer(String message) {
         try {
             JobResponseDto jobResponseDto = objectMapper.readValue(message, JobResponseDto.class);
             log.debug("consume message : {}", jobResponseDto.getUrl());
