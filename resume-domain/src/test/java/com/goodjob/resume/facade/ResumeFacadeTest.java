@@ -16,6 +16,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
@@ -41,8 +43,8 @@ class ResumeFacadeTest {
         // Given
         String message = "테스트 메시지";
         CreatePromptRequest promptRequest = new CreatePromptRequest(1L, "Software backend Developer", "Newcomer", null);
-        WhatGeneratedQuestionResponse mockResponse = new WhatGeneratedQuestionResponse();
-        mockResponse.predictionResponse().add(new PredictionResponse("question", "answer"));
+        WhatGeneratedQuestionResponse mockResponse = new WhatGeneratedQuestionResponse(new ArrayList<>());
+        mockResponse.getPredictionResponse().add(new PredictionResponse("question", "answer"));
 
         when(objectMapper.readValue(message, CreatePromptRequest.class)).thenReturn(promptRequest);
 
@@ -62,8 +64,8 @@ class ResumeFacadeTest {
         // Given
         String message = "테스트 메시지";
         CreatePromptRequest promptRequest = new CreatePromptRequest(1L, "Software backend Developer", "Newcomer", null);
-        WhatGeneratedImproveResponse mockResponse = new WhatGeneratedImproveResponse();
-        mockResponse.improvementResponse().add(new ImprovementResponse("improvementPoint", "advice"));
+        WhatGeneratedImproveResponse mockResponse = new WhatGeneratedImproveResponse(new ArrayList<>());
+        mockResponse.getImprovementResponse().add(new ImprovementResponse("improvementPoint", "advice"));
 
         when(objectMapper.readValue(message, CreatePromptRequest.class)).thenReturn(promptRequest);
 
