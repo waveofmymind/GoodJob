@@ -204,7 +204,16 @@ public class MemberController {
 
     @GetMapping("/applyMentor")
     public String applyMentor() {
-        memberService.applyMentor(rq.getMember());
+        return "member/applyMentor";
+    }
+
+    @PostMapping("/applyMentor")
+    public String applyMentor(@RequestParam(name = "isMentor", required = false) boolean isMentor) {
+        if(isMentor) {
+            RsData<String> memberRsData = memberService.applyMentor(rq.getMember());
+
+            return rq.redirectWithMsg("/mentoring/list", memberRsData);
+        }
 
         return "redirect:/mentoring/list";
     }

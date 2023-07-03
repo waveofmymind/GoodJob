@@ -1,0 +1,25 @@
+<html layout:decorate="~{layout/layout.html}">
+<head>
+    <title>회원가입</title>
+
+    <script src="/resource/valid/valid.js"></script>
+
+</head>
+<body>
+<main layout:fragment="main" class="container my-3 mx-auto">
+    <div class="flex justify-center items-center min-h-screen">
+        <div class="w-96 bg-white p-8 rounded-lg">
+            <h2 class="text-2xl font-semibold mb-4">대충 멘토 지원하는 창</h2>
+            <form action="/member/applyMentor" method="POST">
+                <div class="flex">
+                    <p class="mr-2">당신은 멘토입니까?</p>
+                    <input type="checkbox" name="isMentor">
+                </div>
+                <button type="submit" class="register bg-neutral hover:bg-black text-white font-bold px-4 py-2 rounded border-neutral">제출</button>
+            </form>
+        </div>
+    </div>
+</main>
+</body>
+
+</html>
