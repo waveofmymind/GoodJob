@@ -1,5 +1,6 @@
-package com.goodjob.api.controller.member;
+package com.goodjob.api.controller;
 
+import com.goodjob.api.controller.member.MemberController;
 import com.goodjob.core.domain.member.dto.request.JoinRequestDto;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
