@@ -2,10 +2,10 @@
 - name: 'gcr.io/cloud-builders/docker'
   id: Build
   args:
-    - 'build'
-    - '-t'
-    - 'us-central1-docker.pkg.dev$PROJECT_ID/my-repository/goodjob-prod:$SHORT_SHA'
-    - '.'
+  - 'build'
+  - '-t'
+  - 'us-central1-docker.pkg.dev$PROJECT_ID/my-repository/goodjob-prod:$SHORT_SHA'
+  - '.'
 
 # This step pushes the image to Artifact Registry
 # The PROJECT_ID and SHORT_SHA variables are automatically
@@ -13,20 +13,20 @@
 - name: 'gcr.io/cloud-builders/docker'
   id: Push
   args:
-    - 'push'
-    - 'us-central1-docker.pkg.dev$PROJECT_ID/my-repository/goodjob-prod:$SHORT_SHA'
+  - 'push'
+  - 'us-central1-docker.pkg.dev$PROJECT_ID/my-repository/goodjob-prod:$SHORT_SHA'
 
 # This step pushes the manifest back to hello-cloudbuild-env
 - name: 'gcr.io/cloud-builders/gcloud'
   id: Push manifest
   entrypoint: /bin/sh
   args:
-    - '-c'
-    - |
-      set -x && \
-      cd hello-cloudbuild-env && \
-      git add kubernetes.yaml && \
-      git commit -m "Deploying image us-central1-docker.pkg.dev$PROJECT_ID/my-repository/goodjob-prod:${SHORT_SHA}
-      Built from commit ${COMMIT_SHA} of repository hello-cloudbuild-app
-      Author: $(git log --format='%an <%ae>' -n 1 HEAD)" && \
-      git push origin candidate
+  - '-c'
+  - |
+    set -x && \
+    cd hello-cloudbuild-env && \
+    git add kubernetes.yaml && \
+    git commit -m "Deploying image us-central1-docker.pkg.dev$PROJECT_ID/my-repository/goodjob-prod:${SHORT_SHA}
+    Built from commit ${COMMIT_SHA} of repository hello-cloudbuild-app
+    Author: $(git log --format='%an <%ae>' -n 1 HEAD)" && \
+    git push origin candidate
