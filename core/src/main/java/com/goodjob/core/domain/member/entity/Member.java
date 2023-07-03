@@ -64,6 +64,12 @@ public class Member extends BaseEntity {
             authorities.add(new SimpleGrantedAuthority("ROLE_PAYED"));
         }
 
+        // userRole이 mentor인 회원은 모든 권한을 부여한다.
+        if (isMentor()) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_PAYED"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_MENTOR"));
+        }
+
         // TODO: 멘토권한
         return authorities;
     }
@@ -90,5 +96,13 @@ public class Member extends BaseEntity {
                 "username", getUsername(),
                 "nickname", getNickname()
         );
+    }
+
+    public boolean isMentor() {
+        if (userRole.equals("mentor")) {
+            return true;
+        }
+
+        return false;
     }
 }

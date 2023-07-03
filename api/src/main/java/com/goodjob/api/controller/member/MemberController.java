@@ -202,4 +202,20 @@ public class MemberController {
 
         return RsData.of("S-1", "사용 가능한 닉네임입니다.");
     }
+
+    @GetMapping("/applyMentor")
+    public String applyMentor() {
+        return "member/applyMentor";
+    }
+
+    @PostMapping("/applyMentor")
+    public String applyMentor(@RequestParam(name = "isMentor", required = false) boolean isMentor) {
+        if(isMentor) {
+            RsData<String> memberRsData = memberService.applyMentor(rq.getMember());
+
+            return rq.redirectWithMsg("/mentoring/list", memberRsData);
+        }
+
+        return "redirect:/mentoring/list";
+    }
 }

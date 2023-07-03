@@ -10,6 +10,10 @@
         .normal {
             color: #2020a3;
         }
+
+        .mentor {
+            color: #3ADF00;
+        }
     </style>
 
     <script>
@@ -64,9 +68,9 @@
                     <div class="flex justify-between">
                         <div>
                             회원등급:
-                            <span th:text="${@rq.member.isPayed} ? '프리미엄 회원' : '일반 회원'"
-                                  th:class="${@rq.member.isPayed} ? 'premium' : 'normal'">
-                            </span>
+                            <span th:text="'프리미엄 회원'" class="premium" th:if="${@rq.member.userRole == 'premium'}"></span>
+                            <span th:text="'일반 회원'" class="normal" th:if="${@rq.member.userRole == 'free'}"></span>
+                            <span th:text="'멘토'" class="mentor" th:if="${@rq.member.userRole == 'mentor'}"></span>
                         </div>
                         <div>
                             <a href="/payment/showPage" th:if="${!@rq.member.isPayed()}"
