@@ -1,3 +1,17 @@
+steps:
+# This step clones the hello-cloudbuild-env repository
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: Clone env repository
+  entrypoint: /bin/sh
+  args:
+  - '-c'
+  - |
+    gcloud source repos clone hello-cloudbuild-env && \
+    cd hello-cloudbuild-env && \
+    git checkout candidate && \
+    git config user.email $(gcloud auth list --filter=status:ACTIVE --format='value(account)')
+
+
 # This step builds the container image.
 - name: 'gcr.io/cloud-builders/docker'
   id: Build
