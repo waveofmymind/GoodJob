@@ -18,7 +18,7 @@ public class BatchConsumer {
 
     private final ObjectMapper objectMapper;
 
-    @KafkaListener(topics = "job", groupId = ConsumerConfig.GROUP_ID_CONFIG)
+    @KafkaListener(topics = "job", groupId = "job-group")
     public void batchConsumer(String message) throws JsonProcessingException {
 
         try {
