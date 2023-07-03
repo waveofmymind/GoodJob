@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
@@ -164,5 +165,14 @@ public class Rq {
         expireCookie(cookie.getName());
 
         return preUrl;
+    }
+
+    public void oath2logout() {
+        // logoutUrl로 온 요청인지 확인 -> 맞으면 SecurityContext에서 인증객체 꺼내서
+        SecurityContext context = SecurityContextHolder.getContext();
+
+        // SecurityContenxtLogoutHandler에 인증 객체 전달.
+        SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+        logoutHandler.logout(req, resp, context.getAuthentication());
     }
 }

@@ -107,6 +107,7 @@ public class MemberController {
         redisUt.deleteToken(userId);
         // 쿠키삭제
         rq.expireCookie("accessToken");
+        rq.oath2logout();
 
         log.debug("로그아웃한 유저id ={}", userId);
         return rq.redirectWithMsg("/", "로그아웃 되었습니다.");
