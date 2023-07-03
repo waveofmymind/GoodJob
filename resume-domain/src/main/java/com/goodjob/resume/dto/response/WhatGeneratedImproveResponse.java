@@ -11,12 +11,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@Getter
-@AllArgsConstructor
-public class WhatGeneratedImproveResponse{
+public record WhatGeneratedImproveResponse (
 
-    List<ImprovementResponse> improvementResponse;
+        List<ImprovementResponse> improvementResponse
 
+) {
+    public WhatGeneratedImproveResponse() {
+        this(new ArrayList<>());
+    }
 
     public PredictionServiceRequest toServiceDto(Long memberId) {
         List<String> titleList = improvementResponse.stream()
