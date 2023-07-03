@@ -1,5 +1,5 @@
 # GoodJob 🤖
-`2023.05.16` ~ `2023.06.16`
+`2023.05.16` ~ `2023.06.16` ~ `2023.07.14`
 > 생성 AI 기반 채용관련 커뮤니티 서비스
 
 - [서비스 링크](https://waveofmymind.shop)
@@ -45,6 +45,7 @@
 
 **DevOps**
 
+<<<<<<< HEAD
 - ~~Naver Cloud PlatForm~~
   - ~~CentOS 7.8~~
 - ~~Docker~~
@@ -55,6 +56,18 @@
 - Jenkins
 - AWS RDS
 - AWS Route53
+=======
+- Naver Cloud PlatForm
+  - CentOS 7.8
+- Docker
+- Google Cloud PlatForm
+- Kubernetes
+- Confluence Kafka
+- NginX ProxyManager
+- Jenkins
+- AWS RDS
+- AWS Route 53
+>>>>>>> 68460b18ecb62cb22878a30c0ac18fe49c231747
 - AWS S3
 - AWS CloudWatch
 - Apache JMeter
