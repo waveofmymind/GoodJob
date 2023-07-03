@@ -18,7 +18,7 @@ public class BatchConsumer {
     private final JobStatisticService service;
     private final ObjectMapper objectMapper;
 
-    @KafkaListener(topics = "job-prod", groupId = "job-group")
+    @KafkaListener(topics = "job", groupId = "job-group")
     public void batchConsumer(String message) {
         try {
             JobResponseDto jobResponseDto = objectMapper.readValue(message, JobResponseDto.class);
