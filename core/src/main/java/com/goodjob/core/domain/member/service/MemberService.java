@@ -181,5 +181,12 @@ public class MemberService {
 
         memberRepository.save(member);
     }
+
+    @Transactional
+    public void applyMentor(Member member) {
+        member.setUserRole("mentor");
+
+        memberRepository.save(member);
+    }
 }
 

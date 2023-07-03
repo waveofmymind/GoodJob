@@ -32,7 +32,7 @@
         <div class="container mx-auto p-8 mentor-list w-[1000px]">
             <div class="flex items-center justify-between h-16">
                 <a href="/mentoring/list" class="text-2xl font-bold">👨‍🏫 전체 멘토링</a>
-                <a th:href="@{/mentoring/create}" class="ml-2 my-3 bg-neutral text-white px-4 py-2 rounded-lg text-sm hover:bg-black">멘토링 작성</a>
+                <a onclick="if(!checkMentor()) return false;" th:href="@{/mentoring/create}" class="ml-2 my-3 bg-neutral text-white px-4 py-2 rounded-lg text-sm hover:bg-black">멘토링 작성</a>
             </div>
             <ul class="grid-container">
                 <li th:each="mentoring, loop : ${paging}">
@@ -113,6 +113,26 @@
             currentUrl.searchParams.delete('page');
             currentUrl.searchParams.set('page', page);
             window.location.href = currentUrl.href;
+        }
+        function checkMentor() {
+            // 멘토인지 확인하는 로직을 여기에 작성합니다.
+            var isMentor = [[${@rq.member.userRole == "mentor"}]];
+
+            if (isMentor) {
+                // 멘토인 경우, 원래 기능을 실행합니다.
+                return true;
+            } else {
+                // 멘토가 아닌 경우, 확인 창을 띄웁니다.
+                var confirmMessage = "멘토만 작성할 수 있습니다. 멘토 지원을 하시겠습니까?";
+                var confirmResult = confirm(confirmMessage);
+
+                if (confirmResult) {
+                    // 확인 버튼을 누른 경우, "/apply/mentor"로 이동합니다.
+                    window.location.href = "/member/applyMentor";
+                }
+
+                return false;
+            }
         }
     </script>
 
