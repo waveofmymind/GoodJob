@@ -19,6 +19,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -107,6 +110,7 @@ public class MemberController {
         redisUt.deleteToken(userId);
         // 쿠키삭제
         rq.expireCookie("accessToken");
+        rq.oath2logout();
 
         log.debug("로그아웃한 유저id ={}", userId);
         return rq.redirectWithMsg("/", "로그아웃 되었습니다.");
