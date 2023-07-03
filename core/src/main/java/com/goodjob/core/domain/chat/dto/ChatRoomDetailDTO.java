@@ -25,6 +25,7 @@ public class ChatRoomDetailDTO {
     private int status;
     private LocalDateTime reservationTime;
     private boolean visible;
+    private String rejectionReason;
 
     public static ChatRoomDetailDTO toChatRoomDetailDTO(ChatRoom chatRoom){
         ChatRoomDetailDTO chatRoomDetailDTO = new ChatRoomDetailDTO();
@@ -38,6 +39,7 @@ public class ChatRoomDetailDTO {
         chatRoomDetailDTO.setStatus(chatRoom.getStatus());
         chatRoomDetailDTO.setReservationTime(chatRoom.getReservationTime());
         chatRoomDetailDTO.setVisible(chatRoom.isVisible());
+        chatRoomDetailDTO.setRejectionReason(chatRoom.getRejectionReason());
 
         return chatRoomDetailDTO;
     }

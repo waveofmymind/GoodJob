@@ -56,8 +56,6 @@ subprojects {
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-
-
         // lombok
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
@@ -98,15 +96,11 @@ subprojects {
         annotationProcessor "jakarta.annotation:jakarta.annotation-api"
         annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
-        // xml
-        implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '4.0.2'
-
         // Mail
         implementation 'org.springframework.boot:spring-boot-starter-mail'
 
         // Disk I/O
         runtimeOnly 'com.mysql:mysql-connector-j'
-        runtimeOnly 'com.h2database:h2'
 
         // WebSocket
         implementation 'org.springframework.boot:spring-boot-starter-websocket'

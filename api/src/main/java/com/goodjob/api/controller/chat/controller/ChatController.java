@@ -89,7 +89,7 @@ public class ChatController {
 
     //채팅방 삭제
     @GetMapping("/delete/room")
-    public String deleteRoom(String roomId, Model model, @AuthenticationPrincipal User user){
+    public String deleteRoom(String roomId, @AuthenticationPrincipal User user){
 
         Member member = memberService.findByUsername(user.getUsername()).orElse(null);
         chatService.deleteRoom(roomId, member);
@@ -99,16 +99,16 @@ public class ChatController {
 
     //채팅방 수락
     @GetMapping("/permit/room")
-    public String permitRoom(String roomId, Model model, @AuthenticationPrincipal User user){
+    public String permitRoom(String roomId){
         chatService.permitRoom(roomId);
 
         return "redirect:/chat/rooms";
     }
 
     //채팅방 거절
-    @GetMapping("/reject/room")
-    public String rejectRoom(String roomId, Model model, @AuthenticationPrincipal User user){
-        chatService.rejectRoom(roomId);
+    @PostMapping("/reject/room")
+    public String rejectRoom(String roomId, @RequestParam("content") String content){
+        chatService.rejectRoom(roomId, content);
         return "redirect:/chat/rooms";
 
     }
