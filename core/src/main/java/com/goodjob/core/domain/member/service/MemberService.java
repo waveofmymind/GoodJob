@@ -43,6 +43,7 @@ public class MemberService {
                 .isDeleted(false)
                 .providerType("GOODJOB")
                 .userRole("free")
+                .coin(10)
                 .build();
 
         memberRepository.save(member);
@@ -90,6 +91,7 @@ public class MemberService {
                 .isDeleted(false)
                 .providerType(providerType)
                 .userRole("free")
+                .coin(10)
                 .build();
 
         memberRepository.save(member);
@@ -177,14 +179,14 @@ public class MemberService {
 
     @Transactional
     public void upgradeMembership(Member member) {
-        member.setUserRole("premium");
+        member.upgradeMembership("premium");
 
         memberRepository.save(member);
     }
 
     @Transactional
     public RsData applyMentor(Member member) {
-        member.setUserRole("mentor");
+        member.upgradeMembership("mentor");
 
         memberRepository.save(member);
 

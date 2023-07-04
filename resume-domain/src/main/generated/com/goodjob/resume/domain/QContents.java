@@ -20,7 +20,7 @@ public class QContents extends BeanPath<Contents> {
 
     public static final QContents contents1 = new QContents("contents1");
 
-    public final ListPath<String, StringPath> contents = this.<String, StringPath>createList("contents", String.class, StringPath.class, PathInits.DIRECT2);
+    public final ListPath<Content, QContent> contents = this.<Content, QContent>createList("contents", Content.class, QContent.class, PathInits.DIRECT2);
 
     public QContents(String variable) {
         super(Contents.class, forVariable(variable));

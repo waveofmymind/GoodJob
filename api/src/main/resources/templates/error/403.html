@@ -1,0 +1,31 @@
+<html layout:decorate="~{layout/layout.html}">
+<head>
+    <title>403</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+<main layout:fragment="main" class="flex-grow flex items-center justify-center">
+    <p>⛔해당 페이지를 열람할 권한이 없습니다!</p>
+
+</main>
+</body>
+</html>

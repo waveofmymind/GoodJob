@@ -20,7 +20,7 @@ public class QTitles extends BeanPath<Titles> {
 
     public static final QTitles titles1 = new QTitles("titles1");
 
-    public final ListPath<String, StringPath> titles = this.<String, StringPath>createList("titles", String.class, StringPath.class, PathInits.DIRECT2);
+    public final ListPath<Title, QTitle> titles = this.<Title, QTitle>createList("titles", Title.class, QTitle.class, PathInits.DIRECT2);
 
     public QTitles(String variable) {
         super(Titles.class, forVariable(variable));

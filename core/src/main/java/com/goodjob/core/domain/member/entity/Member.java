@@ -70,7 +70,6 @@ public class Member extends BaseEntity {
             authorities.add(new SimpleGrantedAuthority("ROLE_MENTOR"));
         }
 
-        // TODO: 멘토권한
         return authorities;
     }
 
@@ -104,5 +103,10 @@ public class Member extends BaseEntity {
         }
 
         return false;
+    }
+
+    public void upgradeMembership(String targetMembership) {
+        this.userRole = targetMembership;
+        this.coin = -1;
     }
 }
