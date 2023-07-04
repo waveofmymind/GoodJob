@@ -1,5 +1,5 @@
 # GoodJob 🤖
-`2023.05.16` ~ `2023.06.16`
+`2023.05.16` ~ `2023.06.16` ~ `2023.07.14`
 > 생성 AI 기반 채용관련 커뮤니티 서비스
 
 - [서비스 링크](https://waveofmymind.shop)
@@ -44,6 +44,12 @@
 - Thymeleaf
 
 **DevOps**
+
+
+- ~~Naver Cloud PlatForm~~
+  - ~~CentOS 7.8~~
+- ~~Docker~~
+- ~~NginX ProxyManager~~
 
 - Google Cloud Platform
 - Kubernetes
