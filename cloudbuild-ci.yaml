@@ -28,14 +28,15 @@ steps:
     git checkout candidate && \
     git config user.email $(gcloud auth list --filter=status:ACTIVE --format='value(account)')
 
-  # This step generates the new manifest
+ # This step generates the new manifest
 - name: 'gcr.io/cloud-builders/gcloud'
   id: Generate manifest
   entrypoint: /bin/sh
   args:
   - '-c'
   - |
-    sed "s,IMAGE_NAME_PLACEHOLDER,us-central1-docker.pkg.dev/$PROJECT_ID/my-repository/goodjob-prod:$SHORT_SHA,g" kubernetes.yaml.tpl > hello-cloudbuild-env/kubernetes.yaml
+    cd hello-cloudbuild-env && \
+    sed "s,IMAGE_NAME_PLACEHOLDER,us-central1-docker.pkg.dev/$PROJECT_ID/my-repository/goodjob-prod:$SHORT_SHA,g" kubernetes.yaml.tpl > kubernetes.yaml
 
 - name: 'gcr.io/cloud-builders/gcloud'
   id: Push manifest
