@@ -38,7 +38,6 @@ public class SecurityConfig {
                                 "/subComment/create/**", "/subComment/update/**", "/subComment/delete/**", "/likes/like/article/**", "/likes/like/comment/**", "/likes/like/subComment/**",
                                 "/mentoring/list", "/mentoring/detail/**", "/chat/**", "/payment/**").hasAuthority("ROLE_USER")
                         .requestMatchers("/mentoring/create").hasAuthority("ROLE_MENTOR")
-                        // 멘토권한은 ROLE_MENTOR
                         .requestMatchers("/**", "/resumes/**", "/member/**", "/article/**", "/jobstatistic/**").permitAll()
                 )
                 .httpBasic(httpBasicConfigurer -> httpBasicConfigurer.disable())

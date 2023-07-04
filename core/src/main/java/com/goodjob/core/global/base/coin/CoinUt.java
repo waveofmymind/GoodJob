@@ -1,7 +1,9 @@
 package com.goodjob.core.global.base.coin;
 
 import com.goodjob.core.domain.member.entity.Member;
+import com.goodjob.core.global.base.rsData.RsData;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CoinUt {
@@ -12,8 +14,9 @@ public class CoinUt {
      *  코인 없는 경우 코인부족 알림창, 매일 4시 지급 알림(결제하기)
      */
 
+    @Transactional
     public boolean isServiceAvailable(Member member) {
-        // 유료 회원인 경우
+        // 유료 회원인 경우 코인 없이 이용 가능
         if (!member.getUserRole().equals("free")) {
             return true;
         }
@@ -24,6 +27,8 @@ public class CoinUt {
             return false;
         }
 
-        member.
+        member.deductCoin(); // 코인감소
+
+        return true;
     }
 }

@@ -108,4 +108,8 @@ public class Member extends BaseEntity {
         this.userRole = targetMembership;
         this.coin = -1;
     }
+
+    public void deductCoin() {
+        this.coin--;
+    }
 }

@@ -43,7 +43,7 @@ public class MemberService {
                 .isDeleted(false)
                 .providerType("GOODJOB")
                 .userRole("free")
-                .coin(10)
+                .coin(0)
                 .build();
 
         memberRepository.save(member);

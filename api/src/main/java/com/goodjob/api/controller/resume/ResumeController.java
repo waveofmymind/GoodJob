@@ -3,6 +3,8 @@ package com.goodjob.api.controller.resume;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.goodjob.core.global.base.coin.CoinUt;
+import com.goodjob.core.global.base.rsData.RsData;
 import com.goodjob.resume.domain.ServiceType;
 import com.goodjob.resume.dto.request.CreatePromptRequest;
 import com.goodjob.resume.dto.request.ResumeRequest;
@@ -30,6 +32,7 @@ public class ResumeController {
     private final KafkaPredictionProducer kafkaPredictionProducer;
     private final ObjectMapper objectMapper;
     private final PredictionFacade predictionFacade;
+    private final CoinUt coinUt;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -49,6 +52,12 @@ public class ResumeController {
             //TODO: 비로그인시 별도 페이지 생성
         } else {
             request.setMemberId(rq.getMember().getId());
+            boolean isServiceAvailable = coinUt.isServiceAvailable(rq.getMember());
+
+            if (!isServiceAvailable) {
+                return "resume/coin-shortage";
+            }
+
             kafkaPredictionProducer.sendQuestionRequest(objectMapper.writeValueAsString(request));
         }
 
@@ -67,6 +76,13 @@ public class ResumeController {
             //TODO: 비로그인시 별도 페이지 생성
         } else {
             request.setMemberId(rq.getMember().getId());
+            request.setMemberId(rq.getMember().getId());
+            boolean isServiceAvailable = coinUt.isServiceAvailable(rq.getMember());
+
+            if (!isServiceAvailable) {
+                return "resume/coin-shortage";
+            }
+
             kafkaPredictionProducer.sendAdviceRequest(objectMapper.writeValueAsString(request));
         }
 

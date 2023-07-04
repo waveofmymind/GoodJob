@@ -1,0 +1,63 @@
+<html layout:decorate="~{layout/layout.html}">
+<head>
+    <title>코인이 부족합니다!</title>
+    <script src="https://js.tosspayments.com/v1/payment"></script>
+
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+<main layout:fragment="main" class="flex-grow flex items-center justify-center">
+    <div class="text-center">
+        <div class="text-center text-2xl">
+            <p>💵 보유 코인이 부족합니다! </p>
+            <p class="text-gray-500 text-sm text-center">* 코인은 매일 04시에 초기화 됩니다.</p>
+            <p class="text-gray-500 text-sm text-center">결제를 통해 제한 없는 서비스를 누리세요!</p>
+        </div>
+
+        <div class="text-center mt-5" style="width: 300px;">
+            <p class="text-gray-500 text-sm text-center">₩5,900/월 • VAT 포함</p>
+            <button id="payment-button" class="btn btn-lg btn-block mt-2">시작하기</button>
+            <hr class="mb-4 mt-3">
+            <p class="text-gray-500 text-sm text-center">* 시작하기 버튼을 클릭하면 결제가 진행됩니다.</p>
+        </div>
+    </div>
+
+    <script>
+        var clientKey = 'test_ck_D4yKeq5bgrpgNXkdALXVGX0lzW6Y'
+        var tossPayments = TossPayments(clientKey)
+        const randomValue = Date.now().toString(36);
+
+        var button = document.getElementById('payment-button') // 결제하기 버튼
+
+        button.addEventListener('click', function () {
+            tossPayments.requestPayment('카드', {
+                amount: 5900,
+                orderId: randomValue,
+                orderName: 'premium',
+                successUrl: window.location.origin + '/payment/success',
+                failUrl: window.location.origin + '/payment/fail',
+            })
+        })
+    </script>
+</main>
+</body>
+</html>
