@@ -2,6 +2,8 @@ package com.goodjob.api.controller.member;
 
 import com.goodjob.core.domain.article.entity.Article;
 import com.goodjob.core.domain.article.service.ArticleService;
+import com.goodjob.core.domain.comment.entity.Comment;
+import com.goodjob.core.domain.comment.service.CommentService;
 import com.goodjob.core.domain.member.dto.request.EditRequestDto;
 import com.goodjob.core.domain.member.dto.request.JoinRequestDto;
 import com.goodjob.core.domain.member.dto.request.LoginRequestDto;
@@ -10,6 +12,7 @@ import com.goodjob.core.domain.member.service.MemberService;
 import com.goodjob.core.global.base.redis.RedisUt;
 import com.goodjob.core.global.base.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
+import com.goodjob.resume.dto.response.ResponsePredictionDto;
 import com.goodjob.resume.facade.PredictionFacade;
 import jakarta.servlet.http.Cookie;
 import jakarta.validation.Valid;
@@ -32,11 +35,9 @@ public class MemberController {
 
     private final Rq rq;
     private final MemberService memberService;
-
     private final ArticleService articleService;
-
+    private final CommentService commentService;
     private final PredictionFacade predictionFacade;
-
     private final RedisUt redisUt;
 
     @GetMapping("/join")
@@ -94,7 +95,7 @@ public class MemberController {
             return rq.redirectWithMsg(previousUrl, loginRsData);
         }
 
-        log.info("로그인 요청한 유저id ={}", rq.getMember().getId());
+        log.debug("로그인 요청한 유저id ={}", rq.getMember().getId());
         return rq.redirectWithMsg("/", loginRsData);
     }
 
@@ -106,24 +107,24 @@ public class MemberController {
         redisUt.deleteToken(userId);
         // 쿠키삭제
         rq.expireCookie("accessToken");
+        rq.oath2logout();
 
-        log.info("로그아웃한 유저id ={}", userId);
+        log.debug("로그아웃한 유저id ={}", userId);
         return rq.redirectWithMsg("/", "로그아웃 되었습니다.");
     }
 
-
-    // TODO: articleService에 articles 가져오는메서드 추가, facade
     @GetMapping("/me")
     @PreAuthorize("isAuthenticated()")
     public String showMe(Model model) {
         Long id = rq.getMember().getId();
 
         List<Article> articles = articleService.findAllByMemberId(id);
-//        predictionFacade.getPredictions(id);
+        List<Comment> comments = commentService.findAllByMemberId(id);
+        List<ResponsePredictionDto> predictions = predictionFacade.getPredictions(id);
 
         model.addAttribute("articles", articles);
-//        model.addAttribute("comments", comments);
-//        model.addAttribute("predictions", predictions);
+        model.addAttribute("comments", comments);
+        model.addAttribute("predictions", predictions);
 
         return "member/me";
     }
@@ -166,7 +167,6 @@ public class MemberController {
         return "member/join";
     }
 
-
     @GetMapping("/show/comments")
     public String showComments() {
         return "member/myComments";
@@ -200,5 +200,21 @@ public class MemberController {
         }
 
         return RsData.of("S-1", "사용 가능한 닉네임입니다.");
+    }
+
+    @GetMapping("/applyMentor")
+    public String applyMentor() {
+        return "member/applyMentor";
+    }
+
+    @PostMapping("/applyMentor")
+    public String applyMentor(@RequestParam(name = "isMentor", required = false) boolean isMentor) {
+        if(isMentor) {
+            RsData<String> memberRsData = memberService.applyMentor(rq.getMember());
+
+            return rq.redirectWithMsg("/mentoring/list", memberRsData);
+        }
+
+        return "redirect:/mentoring/list";
     }
 }

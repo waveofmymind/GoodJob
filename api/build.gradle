@@ -1,9 +1,7 @@
 dependencies {
 
     implementation project(':core')
-//    implementation project(':batch')
     implementation project(':resume-domain')
-//    implementation project(path: ':batch')
 
 
 }

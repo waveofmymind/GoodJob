@@ -1,6 +1,7 @@
 package com.goodjob.core.domain.job.repository;
 
 import com.goodjob.core.domain.job.entity.JobStatistic;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,14 +23,19 @@ public class JobStatisticQueryDslRepositoryImpl implements JobStatisticQueryDslR
 
     @Override
     public Page<JobStatistic> filterList(String subject, Pageable pageable) {
-        List<JobStatistic> fetch = jpaQueryFactory.select(jobStatistic)
+        JPAQuery<JobStatistic> query = jpaQueryFactory.select(jobStatistic)
                 .from(jobStatistic)
                 .where(jobStatistic.subject.contains(subject))
+                .orderBy(jobStatistic.id.desc());
+
+        List<JobStatistic> content = query
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(jobStatistic.id.desc())
                 .fetch();
-        return new PageImpl<>(fetch, pageable, fetch.size());
+
+        long total = query.fetchCount();
+
+        return new PageImpl<>(content, pageable, total);
     }
 
     @Override

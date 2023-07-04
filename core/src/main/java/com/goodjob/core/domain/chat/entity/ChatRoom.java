@@ -50,6 +50,10 @@ public class ChatRoom extends BaseEntity {
     @Setter
     private boolean visible;
 
+    @Setter
+    @Column(columnDefinition = "text")
+    private String rejectionReason;
+
     public static ChatRoom create(Member sender, Member receiver, String date, String time) {
         String[] dateArr = date.split("-");
         int year = Integer.parseInt(dateArr[0]);

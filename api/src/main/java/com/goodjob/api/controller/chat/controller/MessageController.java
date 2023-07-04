@@ -26,20 +26,6 @@ public class MessageController {
     private final SimpMessagingTemplate template;
     private final ChatService chatService;
 
-    @MessageMapping("/chat/enter")
-    public void enter(ChatMessageDTO message){
-
-        String roomId = message.getRoomId();
-
-        List<ChatMessage> messages = chatService.findByRoomId(roomId);
-
-        if (messages.size() == 0) {
-            message.setMessage(message.getWriter() + "님이 입장하였습니다.");
-            chatService.createChatMessage(message);
-            template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
-            return;
-        }
-    }
 
     @MessageMapping("/chat/message")
     public void message(ChatMessageDTO message){

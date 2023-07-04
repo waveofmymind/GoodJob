@@ -1,19 +1,17 @@
 package com.goodjob.resume.domain;
 
+import com.goodjob.resume.config.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.time.LocalDateTime;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
+@Where(clause = "is_deleted = false")
 @AllArgsConstructor
-public class Prediction {
-
+public class Prediction extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,9 +27,6 @@ public class Prediction {
     @Embedded
     private Contents contents;
 
-    @CreatedDate
-    private LocalDateTime createdDate;
-
-    @LastModifiedDate
-    private LocalDateTime lastModifiedDate;
+    @Builder.Default
+    private Boolean isDeleted = false;
 }

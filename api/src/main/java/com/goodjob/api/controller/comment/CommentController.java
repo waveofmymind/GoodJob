@@ -1,24 +1,29 @@
 package com.goodjob.api.controller.comment;
 
 
+import com.goodjob.core.domain.article.dto.response.ArticleResponseDto;
+import com.goodjob.core.domain.article.service.ArticleService;
 import com.goodjob.core.domain.comment.dto.request.CommentRequestDto;
+import com.goodjob.core.domain.comment.dto.response.CommentResponseDto;
 import com.goodjob.core.domain.comment.entity.Comment;
 import com.goodjob.core.domain.comment.service.CommentService;
 import com.goodjob.core.global.base.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/comment")
 public class CommentController {
     private final CommentService commentService;
+    private final ArticleService articleService;
     private final Rq rq;
 
     @PostMapping("/create/{id}")
@@ -58,5 +63,13 @@ public class CommentController {
         Comment comment = commentRsData.getData();
 
         return rq.redirectWithMsg("/article/detail/%s".formatted(comment.getArticle().getId()), commentRsData);
+    }
+
+    @GetMapping("/show/list")
+    public String showComments(Model model, @RequestParam(value="page", defaultValue="0") int page) {
+        Page<Comment> paging = commentService.findAllByMemberIdToPage(page, rq.getMember().getId());
+        model.addAttribute("paging", paging);
+
+        return "member/myComments";
     }
 }

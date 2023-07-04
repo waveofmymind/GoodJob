@@ -3,14 +3,10 @@ package com.goodjob.core.global.rq;
 
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
-
 import com.goodjob.core.global.base.cookie.CookieUt;
 import com.goodjob.core.global.base.jwt.JwtProvider;
 import com.goodjob.core.global.base.rsData.RsData;
-import com.goodjob.core.global.error.exception.BusinessException;
 import com.goodjob.core.global.util.Ut;
-import com.goodjob.resume.dto.response.ResponsePredictionDto;
-import com.goodjob.resume.facade.PredictionFacade;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,11 +15,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -36,17 +32,15 @@ public class Rq {
     private final MemberService memberService;
     private final HttpServletRequest req;
     private final HttpServletResponse resp;
-    private final PredictionFacade predictionFacade;
     private final User user;
     private Member member = null;
 
-    public Rq(JwtProvider jwtProvider, CookieUt cookieUt, MemberService memberService, HttpServletRequest req, HttpServletResponse resp, PredictionFacade predictionFacade) {
+    public Rq(JwtProvider jwtProvider, CookieUt cookieUt, MemberService memberService, HttpServletRequest req, HttpServletResponse resp) {
         this.jwtProvider = jwtProvider;
         this.cookieUt = cookieUt;
         this.memberService = memberService;
         this.req = req;
         this.resp = resp;
-        this.predictionFacade = predictionFacade;
 
         SecurityContext context = SecurityContextHolder.getContext();
         Object principal = context.getAuthentication().getPrincipal();
@@ -173,13 +167,12 @@ public class Rq {
         return preUrl;
     }
 
-    public List<ResponsePredictionDto> getPredictions() {
-        try {
-            return predictionFacade.getPredictions(member.getId());
-        } catch (BusinessException e) {
-            log.info("BusinessException= {}", e.getMessage());
-        }
+    public void oath2logout() {
+        // logoutUrl로 온 요청인지 확인 -> 맞으면 SecurityContext에서 인증객체 꺼내서
+        SecurityContext context = SecurityContextHolder.getContext();
 
-        return null;
+        // SecurityContenxtLogoutHandler에 인증 객체 전달.
+        SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+        logoutHandler.logout(req, resp, context.getAuthentication());
     }
 }

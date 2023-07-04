@@ -1,0 +1,58 @@
+<html layout:decorate="~{layout/layout.html}">
+<head>
+    <title>멘토링 작성</title>
+
+    <style>
+        .image-upload > input
+        {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<main layout:fragment="main" class="container mx-auto">
+    <div class="container mx-auto py-8 w-1/3">
+        <h1 class="text-2xl font-bold">멘토링 수정</h1>
+
+        <form class="mt-4" method="post">
+            <div class="mb-4">
+                <p>제목(필수)</p>
+                <input type="text" name="title" th:value="*{mentoring.title}" class="form-input w-full border border-neutral rounded-md h-10 p-3" placeholder="제목을 입력하세요">
+            </div>
+            <div class="mb-4">
+                <p>직무(필수)</p>
+                <select class="select select-bordered w-full max-w-xs" id="job" name="job">
+                    <option value="백엔드 개발자" th:selected="${mentoring.job == '백엔드 개발자'}">백엔드 개발자</option>
+                    <option value="프론트엔드 개발자" th:selected="${mentoring.job == '프론트엔드 개발자'}">프론트엔드 개발자</option>
+                    <option value="풀스택 개발자" th:selected="${mentoring.job == '풀스택 개발자'}">풀스택 개발자</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <p>경력(필수)</p>
+                <select class="select select-bordered w-full max-w-xs" id="career" name="career">
+                    <option value="신입(1년 이하)" th:selected="${mentoring.career == '신입(1년 이하)'}">신입(1년 이하)</option>
+                    <option value="주니어(1~3년)" th:selected="${mentoring.career == '주니어(1~3년)'}">주니어(1~3년)</option>
+                    <option value="미들(4~8년)" th:selected="${mentoring.career == '미들(4~8년)'}">미들(4~8년)</option>
+                    <option value="시니어(9년 이상)" th:selected="${mentoring.career == '시니어(9년 이상)'}">시니어(9년 이상)</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <p>현직(선택)</p>
+                <input type="text" name="currentJob" th:value="*{mentoring.currentJob}" class="form-input w-full border border-neutral rounded-md h-10 p-3" placeholder="현재 근무 중인 곳을 입력하세요">
+            </div>
+            <div class="mb-4">
+                <p>멘토링 가능 시간(선택)</p>
+                <input type="text" name="preferredTime" th:value="*{mentoring.preferredTime}" class="form-input w-full border border-neutral rounded-md h-10 p-3" placeholder="멘토링이 가능한 시간을 입력하세요">
+            </div>
+            <div class="mb-4">
+                <p>내용(필수)</p>
+                <textarea name="content" th:text="*{mentoring.content}" class="form-textarea w-full h-64 resize-none border border-neutral rounded-md p-3" placeholder="본문을 입력하세요"></textarea>
+            </div>
+
+            <button type="submit" class="register bg-neutral hover:bg-black text-white font-bold px-4 py-2 rounded border-neutral" >저장하기</button>
+        </form>
+    </div>
+</main>
+
+</body>
+</html>

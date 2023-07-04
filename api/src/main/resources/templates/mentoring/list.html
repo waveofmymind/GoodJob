@@ -1,23 +1,59 @@
 <html layout:decorate="~{layout/layout.html}">
 <head>
     <title>전체 게시글</title>
+    <style>
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 180px;
+            position: relative;
+        }
+
+        .author {
+            position: absolute;
+            bottom: 5px;
+        }
+
+        .content {
+            font-size: 12px;
+        }
+
+    </style>
 </head>
 <body>
 <main layout:fragment="main" class="container my-3 mx-auto">
     <form th:action="@{/mentoring/list}" method="get" id="toListForm">
-        <div class="container mx-auto p-8 w-2/3">
+        <div class="container mx-auto p-8 mentor-list w-[1000px]">
             <div class="flex items-center justify-between h-16">
-                <a href="/mentoring/list" class="text-2xl font-bold">📌전체 멘토링</a>
-                <a th:href="@{/mentoring/create}" class="ml-2 my-3 bg-neutral text-white px-4 py-2 rounded-lg text-sm hover:bg-black">멘토링 작성</a>
+                <a href="/mentoring/list" class="text-2xl font-bold">👨‍🏫 전체 멘토링</a>
+                <a onclick="if(!checkMentor()) return false;" th:href="@{/mentoring/create}" class="ml-2 my-3 bg-neutral text-white px-4 py-2 rounded-lg text-sm hover:bg-black">멘토링 작성</a>
             </div>
-            <ul class="container">
-                <li class="bg-neutral text-white p-3 flex justify-between border-b h-11 rounded-md">
-                    <div class="text-sm flex-grow ">게시글 제목</div>
-                    <div class="text-sm w-16 text-center">글쓴이</div>
-                </li>
-                <li th:each="mentoring, loop : ${paging}" class="bg-white p-3 flex justify-between border-b h-11">
-                    <a th:href="@{|/mentoring/detail/${mentoring.id}|}" th:text="${mentoring.title}" class="text-sm flex-grow"></a>
-                    <p th:text="${mentoring.member.nickname}" class="text-xs  w-16 text-center truncate overflow-ellipsis"></p>
+            <ul class="grid-container">
+                <li th:each="mentoring, loop : ${paging}">
+                    <a class="card m-3 bg-gray-100 hover:bg-gray-200" th:href="@{|/mentoring/detail/${mentoring.id}|}" >
+                        <p th:text="${mentoring.title}" style="word-break: break-word;"></p>
+                        <div>
+                            <div class="flex content">
+                                <p class="text-gray-400 mr-2">직무</p>
+                                <p th:text="${mentoring.job}"></p>
+                            </div>
+                            <div class="flex content">
+                                <p class="text-gray-400 mr-2">경력</p>
+                                <p th:text="${mentoring.career}"></p>
+                            </div>
+                            <div class="flex content" th:if="${mentoring.currentJob != ''}">
+                                <p class="text-gray-400 mr-2">현직</p>
+                                <p th:text="${mentoring.currentJob}"></p>
+                            </div>
+                        </div>
+                        <p th:text="'멘토 : ' + ${mentoring.member.nickname}" class="author mt-3 content"></p>
+                    </a>
                 </li>
 
             </ul>
@@ -51,10 +87,9 @@
 
                 <select name="category" class="border-none py-2 px-3 rounded-l-md">
                     <option value="제목">제목</option>
-                    <option value="내용">내용</option>
-                    <option value="제목+내용">제목+내용</option>
-                    <option value="글쓴이">글쓴이</option>
-                    <option value="해시태그">해시태그</option>
+                    <option value="직무">직무</option>
+                    <option value="경력">경력</option>
+                    <option value="현직">현직</option>
                 </select>
                 <script>
                     if (params.category) {
@@ -78,6 +113,26 @@
             currentUrl.searchParams.delete('page');
             currentUrl.searchParams.set('page', page);
             window.location.href = currentUrl.href;
+        }
+        function checkMentor() {
+            // 멘토인지 확인하는 로직을 여기에 작성합니다.
+            var isMentor = [[${@rq.member.userRole == "mentor"}]];
+
+            if (isMentor) {
+                // 멘토인 경우, 원래 기능을 실행합니다.
+                return true;
+            } else {
+                // 멘토가 아닌 경우, 확인 창을 띄웁니다.
+                var confirmMessage = "멘토만 작성할 수 있습니다. 멘토 지원을 하시겠습니까?";
+                var confirmResult = confirm(confirmMessage);
+
+                if (confirmResult) {
+                    // 확인 버튼을 누른 경우, "/apply/mentor"로 이동합니다.
+                    window.location.href = "/member/applyMentor";
+                }
+
+                return false;
+            }
         }
     </script>
 

@@ -14,8 +14,6 @@ dependencies {
 
     //mapstruct
     implementation 'org.mapstruct:mapstruct:1.4.2.Final'
-//    testImplementation project(path: ':batch')
-    testImplementation project(path: ':api')
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 
     implementation 'com.h2database:h2'

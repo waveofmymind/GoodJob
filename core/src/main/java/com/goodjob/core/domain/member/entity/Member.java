@@ -44,7 +44,6 @@ public class Member extends BaseEntity {
 
     private String providerType; // 일반회원인지, 카카오로 가입한 회원인지, 구글로 가입한 회원인지
 
-    // TODO: 추후 지연로딩으로수정
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
     private List<Article> articles = new ArrayList<>();
@@ -61,6 +60,12 @@ public class Member extends BaseEntity {
         // userRole이 premium인 회원은 추가로 ROLE_PAYED 권한도 가진다.
         if (isPayed()) {
             authorities.add(new SimpleGrantedAuthority("ROLE_PAYED"));
+        }
+
+        // userRole이 mentor인 회원은 모든 권한을 부여한다.
+        if (isMentor()) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_PAYED"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_MENTOR"));
         }
 
         // TODO: 멘토권한
@@ -89,5 +94,13 @@ public class Member extends BaseEntity {
                 "username", getUsername(),
                 "nickname", getNickname()
         );
+    }
+
+    public boolean isMentor() {
+        if (userRole.equals("mentor")) {
+            return true;
+        }
+
+        return false;
     }
 }

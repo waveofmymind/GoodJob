@@ -10,6 +10,10 @@
         .normal {
             color: #2020a3;
         }
+
+        .mentor {
+            color: #3ADF00;
+        }
     </style>
 
     <script>
@@ -64,9 +68,9 @@
                     <div class="flex justify-between">
                         <div>
                             회원등급:
-                            <span th:text="${@rq.member.isPayed} ? '프리미엄 회원' : '일반 회원'"
-                                  th:class="${@rq.member.isPayed} ? 'premium' : 'normal'">
-                            </span>
+                            <span th:text="'프리미엄 회원'" class="premium" th:if="${@rq.member.userRole == 'premium'}"></span>
+                            <span th:text="'일반 회원'" class="normal" th:if="${@rq.member.userRole == 'free'}"></span>
+                            <span th:text="'멘토'" class="mentor" th:if="${@rq.member.userRole == 'mentor'}"></span>
                         </div>
                         <div>
                             <a href="/payment/showPage" th:if="${!@rq.member.isPayed()}"
@@ -84,7 +88,8 @@
                 <h3 class="text-2xl font-semibold mb-4 mt-4">내가 쓴 글</h3>
                 <div class="space-y-2">
                     <div th:each="article, loop: ${articles}">
-                        <a th:if="${loop.index} < 5" th:href="@{|/article/detail/${article.id}|}"
+                        <a th:if="${loop.index} < 5"
+                           th:href="@{|/article/detail/${article.id}|}"
                            th:text="${article.title}"
                            class="text-xs w-16 text-center ml-2" style="color: gray;">글 제목</a>
                     </div>
@@ -94,23 +99,25 @@
                 </div>
             </div>
 
-<!--            <div class="mb-4">-->
-<!--                <h3 class="text-2xl font-semibold mb-4 mt-4">내가 쓴 댓글</h3>-->
-<!--                <div class="space-y-2">-->
-<!--                    <div th:each="comment, loop : ${@rq.member.comments}">-->
-<!--                        <a th:if="${loop.index} < 5" th:text="${comment.content}"-->
-<!--                           class="text-xs w-16 text-center ml-2" style="color: gray;">댓글내용</a>-->
-<!--                    </div>-->
-<!--                    <div class="flex justify-content: flex-end">-->
-<!--                        <a href="/member/show/comments" class="text-xs  w-16 text-center" style="margin-left: auto; color: gray;">>전체보기</a>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
+            <div class="mb-4">
+                <h3 class="text-2xl font-semibold mb-4 mt-4">내가 쓴 댓글</h3>
+                <div class="space-y-2">
+                    <div th:each="comment, loop : ${comments}">
+                        <a th:if="${loop.index} < 5"
+                           th:href="@{|/article/detail/${comment.article.id}|}"
+                           th:text="${comment.content.length() > 25 ? comment.content.substring(0, 25) + '...' : comment.content}"
+                           class="text-xs w-16 text-center ml-2" style="color: gray;">댓글내용</a>
+                    </div>
+                    <div class="flex justify-content: flex-end">
+                        <a href="/comment/show/list" class="text-xs w-16 text-center" style="margin-left: auto; color: gray;">>전체보기</a>
+                    </div>
+                </div>
+            </div>
 
             <div class="mb-4">
                 <h3 class="text-2xl font-semibold mb-4 mt-4">이력서 검토 내용</h3>
                 <div class="space-y-2">
-                    <div th:each="prediction, loop : ${@rq.predictions}">
+                    <div th:each="prediction, loop : ${predictions}">
                         <a th:if="${loop.index} < 5" th:href="@{|/resumes/detail/${prediction.id}|}"
                            th:text="${#temporals.format(prediction.createdDate, 'yy.MM.dd HH:mm')}"
                            class="text-xs w-16 text-center ml-2" style="color: gray;">이력서 답변 생성일자</a>

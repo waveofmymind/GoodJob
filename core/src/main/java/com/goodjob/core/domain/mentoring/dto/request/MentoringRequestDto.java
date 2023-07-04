@@ -17,4 +17,8 @@ public class MentoringRequestDto {
     private String title;
     @NotBlank(message="내용을 작성해주셔야 합니다.")
     private String content;
+    private String currentJob;
+    private String job;
+    private String career;
+    private String preferredTime;
 }

@@ -22,15 +22,21 @@ public class QPrediction extends EntityPathBase<Prediction> {
 
     public static final QPrediction prediction = new QPrediction("prediction");
 
+    public final com.goodjob.resume.config.QBaseEntity _super = new com.goodjob.resume.config.QBaseEntity(this);
+
     public final QContents contents;
 
-    public final DateTimePath<java.time.LocalDateTime> createdDate = createDateTime("createdDate", java.time.LocalDateTime.class);
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = createDateTime("lastModifiedDate", java.time.LocalDateTime.class);
+    public final BooleanPath isDeleted = createBoolean("isDeleted");
 
     public final NumberPath<Long> memberId = createNumber("memberId", Long.class);
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
 
     public final EnumPath<ServiceType> serviceType = createEnum("serviceType", ServiceType.class);
 
