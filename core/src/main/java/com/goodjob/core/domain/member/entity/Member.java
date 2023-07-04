@@ -37,7 +37,6 @@ public class Member extends BaseEntity {
 
     private String email;
 
-    @Setter
     private String userRole; // free(ROLE_USER), premium(ROLE_PAYED), mentor(ROLE_MENTOR)(예정)
 
     private Integer coin;

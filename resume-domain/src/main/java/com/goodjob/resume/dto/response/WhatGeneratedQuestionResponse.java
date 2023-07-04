@@ -3,20 +3,22 @@ package com.goodjob.resume.dto.response;
 
 import com.goodjob.resume.domain.*;
 import com.goodjob.resume.dto.request.PredictionServiceRequest;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@AllArgsConstructor
-public class WhatGeneratedQuestionResponse {
-    private List<PredictionResponse> predictionResponse;
+public record WhatGeneratedQuestionResponse(
+        List<PredictionResponse> predictionResponse
 
-    public List<PredictionResponse> getPredictionResponse() {
-        return this.predictionResponse;
+) {
+    public WhatGeneratedQuestionResponse() {
+        this(new ArrayList<>());
     }
 
     public PredictionServiceRequest toServiceDto(Long memberId) {
@@ -49,4 +51,5 @@ public class WhatGeneratedQuestionResponse {
 
         return new WhatGeneratedQuestionResponse(predictionResponses);
     }
+
 }
