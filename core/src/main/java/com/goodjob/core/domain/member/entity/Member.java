@@ -40,6 +40,8 @@ public class Member extends BaseEntity {
     @Setter
     private String userRole; // free(ROLE_USER), premium(ROLE_PAYED), mentor(ROLE_MENTOR)(예정)
 
+    private Integer coin;
+
     private boolean isDeleted;
 
     private String providerType; // 일반회원인지, 카카오로 가입한 회원인지, 구글로 가입한 회원인지

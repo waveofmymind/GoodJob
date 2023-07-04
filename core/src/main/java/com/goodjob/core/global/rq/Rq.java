@@ -167,11 +167,9 @@ public class Rq {
         return preUrl;
     }
 
-    public void oath2logout() {
-        // logoutUrl로 온 요청인지 확인 -> 맞으면 SecurityContext에서 인증객체 꺼내서
+    public void logout() {
         SecurityContext context = SecurityContextHolder.getContext();
 
-        // SecurityContenxtLogoutHandler에 인증 객체 전달.
         SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
         logoutHandler.logout(req, resp, context.getAuthentication());
     }

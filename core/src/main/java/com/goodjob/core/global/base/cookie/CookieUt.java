@@ -1,6 +1,5 @@
 package com.goodjob.core.global.base.cookie;
 
-import com.goodjob.core.global.base.jwt.JwtProvider;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
@@ -9,10 +8,23 @@ import java.util.Arrays;
 
 @Service
 public class CookieUt {
+
+    private final static int COOKIE_MAX_AGE_SECOND = 60 * 30;
+    private final static int SUB_COOKIE_MAX_AGE_SECOND = 60 * 60 * 24 * 14;
+
     public Cookie createCookie(String cookieName, String value) {
         Cookie cookie = new Cookie(cookieName, value);
         cookie.setHttpOnly(true);
-        cookie.setMaxAge((int) (JwtProvider.TOKEN_VALIDATION_SECOND / 1000L));
+        cookie.setMaxAge(COOKIE_MAX_AGE_SECOND);
+        cookie.setPath("/");
+
+        return cookie;
+    }
+
+    public Cookie createSubCookie(String cookieName, String value) {
+        Cookie cookie = new Cookie(cookieName, value);
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(SUB_COOKIE_MAX_AGE_SECOND);
         cookie.setPath("/");
 
         return cookie;
@@ -29,6 +41,7 @@ public class CookieUt {
 
         return null;
     }
+
     public Cookie expireCookie(Cookie cookie) {
         cookie.setMaxAge(0);
         cookie.setPath("/");

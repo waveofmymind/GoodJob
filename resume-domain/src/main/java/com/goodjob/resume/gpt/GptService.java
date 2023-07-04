@@ -112,8 +112,8 @@ public class GptService {
         WhatGeneratedQuestionResponse result = new WhatGeneratedQuestionResponse(new ArrayList<>());
         futures.stream()
                 .map(CompletableFuture::join)
-                .filter(content -> content.getPredictionResponse().size() != 0)
-                .forEach(content -> result.getPredictionResponse().addAll(content.getPredictionResponse()));
+                .filter(content -> content.predictionResponse().size() != 0)
+                .forEach(content -> result.predictionResponse().addAll(content.predictionResponse()));
 
         return result;
     }
@@ -153,8 +153,8 @@ public class GptService {
         WhatGeneratedImproveResponse result = new WhatGeneratedImproveResponse(new ArrayList<>());
         futures.stream()
                 .map(CompletableFuture::join)
-                .filter(content -> content.getImprovementResponse().size() != 0)
-                .forEach(content -> result.getImprovementResponse().addAll(content.getImprovementResponse()));
+                .filter(content -> content.improvementResponse().size() != 0)
+                .forEach(content -> result.improvementResponse().addAll(content.improvementResponse()));
 
         return result;
     }

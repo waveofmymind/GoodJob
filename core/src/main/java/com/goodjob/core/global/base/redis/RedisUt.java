@@ -26,10 +26,15 @@ public class RedisUt {
         return redisTemplate.getExpire(key);
     }
 
-    public String getRefreshToken(String key) {
+    public boolean hasRefreshToken(String key) {
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        String refreshToken = valueOperations.get(key);
 
-        return valueOperations.get(key);
+        if (refreshToken == null) {
+            return false;
+        }
+
+        return true;
     }
 
     public void setRefreshToken(String key, String value, long timeout) {
