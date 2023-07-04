@@ -51,16 +51,13 @@
 - ~~Docker~~
 - ~~NginX ProxyManager~~
 
-- Naver Cloud PlatForm
-  - CentOS 7.8
-- Docker
-- Google Cloud PlatForm
+- Google Cloud Platform
 - Kubernetes
-- Confluence Kafka
-- NginX ProxyManager
+- Kafka 3.4.0 KRaft
+- Docker
 - Jenkins
 - AWS RDS
-- AWS Route 53
+- AWS Route53
 - AWS S3
 - AWS CloudWatch
 - Apache JMeter
