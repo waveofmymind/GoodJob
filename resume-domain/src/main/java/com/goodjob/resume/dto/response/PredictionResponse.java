@@ -1,9 +1,15 @@
 package com.goodjob.resume.dto.response;
 
-public record PredictionResponse(
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-        String question,
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class PredictionResponse{
+    public String question;
 
-        String bestAnswer
-) {
+    public String bestAnswer;
+
 }

@@ -14,6 +14,7 @@ import java.util.List;
 
 import static com.goodjob.core.domain.job.entity.QJobStatistic.jobStatistic;
 
+
 @RequiredArgsConstructor
 @Transactional
 @Repository

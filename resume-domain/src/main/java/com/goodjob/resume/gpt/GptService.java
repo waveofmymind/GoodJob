@@ -109,7 +109,7 @@ public class GptService {
         }
 
         // CompletableFuture에서 결과를 추출해서 WhatGeneratedResponse 객체에 저장
-        WhatGeneratedQuestionResponse result = new WhatGeneratedQuestionResponse();
+        WhatGeneratedQuestionResponse result = new WhatGeneratedQuestionResponse(new ArrayList<>());
         futures.stream()
                 .map(CompletableFuture::join)
                 .filter(content -> content.predictionResponse().size() != 0)
@@ -150,7 +150,7 @@ public class GptService {
             throw new BusinessException(ErrorCode.THREAD_MALFUNCTION);
         }
 
-        WhatGeneratedImproveResponse result = new WhatGeneratedImproveResponse();
+        WhatGeneratedImproveResponse result = new WhatGeneratedImproveResponse(new ArrayList<>());
         futures.stream()
                 .map(CompletableFuture::join)
                 .filter(content -> content.improvementResponse().size() != 0)

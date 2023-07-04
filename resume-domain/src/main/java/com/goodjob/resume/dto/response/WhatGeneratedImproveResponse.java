@@ -1,10 +1,10 @@
 package com.goodjob.resume.dto.response;
 
 
-import com.goodjob.resume.domain.Contents;
-import com.goodjob.resume.domain.ServiceType;
-import com.goodjob.resume.domain.Titles;
+import com.goodjob.resume.domain.*;
 import com.goodjob.resume.dto.request.PredictionServiceRequest;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 
 public record WhatGeneratedImproveResponse (
 
-    List<ImprovementResponse> improvementResponse
+        List<ImprovementResponse> improvementResponse
 
 ) {
     public WhatGeneratedImproveResponse() {
@@ -41,11 +41,11 @@ public record WhatGeneratedImproveResponse (
     }
 
     public static WhatGeneratedImproveResponse of(Titles titles, Contents contents) {
-        List<String> titleList = titles.getTitles();
-        List<String> contentList = contents.getContents();
+        List<Title> titleList = titles.getTitles();
+        List<Content> contentList = contents.getContents();
 
         List<ImprovementResponse> improvementResponses = IntStream.range(0, titleList.size())
-                .mapToObj(i -> new ImprovementResponse(titleList.get(i), contentList.get(i)))
+                .mapToObj(i -> new ImprovementResponse(titleList.get(i).getTitle(), contentList.get(i).getContent()))
                 .collect(Collectors.toList());
 
         return new WhatGeneratedImproveResponse(improvementResponses);

@@ -1,4 +1,4 @@
-package com.goodjob.core.domain.keyword.entity;
+package com.goodjob.resume.domain;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -10,29 +10,29 @@ import com.querydsl.core.types.Path;
 
 
 /**
- * QKeyword is a Querydsl query type for Keyword
+ * QContent is a Querydsl query type for Content
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QKeyword extends EntityPathBase<Keyword> {
+public class QContent extends EntityPathBase<Content> {
 
-    private static final long serialVersionUID = 828514585L;
+    private static final long serialVersionUID = 673539029L;
 
-    public static final QKeyword keyword = new QKeyword("keyword");
+    public static final QContent content1 = new QContent("content1");
 
     public final StringPath content = createString("content");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public QKeyword(String variable) {
-        super(Keyword.class, forVariable(variable));
+    public QContent(String variable) {
+        super(Content.class, forVariable(variable));
     }
 
-    public QKeyword(Path<? extends Keyword> path) {
+    public QContent(Path<? extends Content> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QKeyword(PathMetadata metadata) {
-        super(Keyword.class, metadata);
+    public QContent(PathMetadata metadata) {
+        super(Content.class, metadata);
     }
 
 }

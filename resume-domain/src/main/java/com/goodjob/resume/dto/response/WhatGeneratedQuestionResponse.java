@@ -1,10 +1,12 @@
 package com.goodjob.resume.dto.response;
 
 
-import com.goodjob.resume.domain.Contents;
-import com.goodjob.resume.domain.ServiceType;
-import com.goodjob.resume.domain.Titles;
+import com.goodjob.resume.domain.*;
 import com.goodjob.resume.dto.request.PredictionServiceRequest;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +23,11 @@ public record WhatGeneratedQuestionResponse(
 
     public PredictionServiceRequest toServiceDto(Long memberId) {
         List<String> titleList = predictionResponse.stream()
-                .map(PredictionResponse::question)
+                .map(PredictionResponse::getQuestion)
                 .toList();
 
         List<String> contentList = predictionResponse.stream()
-                .map(PredictionResponse::bestAnswer)
+                .map(PredictionResponse::getBestAnswer)
                 .toList();
 
         Titles titles = Titles.of(titleList);
@@ -40,11 +42,11 @@ public record WhatGeneratedQuestionResponse(
     }
 
     public static WhatGeneratedQuestionResponse of(Titles titles, Contents contents) {
-        List<String> titleList = titles.getTitles();
-        List<String> contentList = contents.getContents();
+        List<Title> titleList = titles.getTitles();
+        List<Content> contentList = contents.getContents();
 
         List<PredictionResponse> predictionResponses = IntStream.range(0, titleList.size())
-                .mapToObj(i -> new PredictionResponse(titleList.get(i), contentList.get(i)))
+                .mapToObj(i -> new PredictionResponse(titleList.get(i).getTitle(), contentList.get(i).getContent()))
                 .toList();
 
         return new WhatGeneratedQuestionResponse(predictionResponses);
