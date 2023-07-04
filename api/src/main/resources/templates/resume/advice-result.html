@@ -44,15 +44,15 @@
     <div class="w-full max-w-2xl mx-auto">
         <h1 class="text-2xl mb-6">📩 이런 점을 개선하면 더 좋아요</h1>
 
-        <div th:each="improveResponse, iterStat : ${improveResponses.getImprovementResponse()}">
+        <div th:each="improveResponse, iterStat : ${improveResponses.improvementResponse()}">
             <div th:if="${iterStat.index % 3 == 0}" class="mt-6">
                 <h2 class="text-xl mb-2" th:text="'요청 ' + (${iterStat.index/3} + 1)">요청 1</h2>
                 <hr class="mb-4"/>
             </div>
 
             <div class="border-t-2 py-6">
-                <h3 class="text-2xl mb-2 improvementPoint" th:text="${improveResponse.improvementPoint}">improvement</h3>
-                <p class="advice" th:text="${improveResponse.advice}">Best answer</p>
+                <h3 class="text-2xl mb-2 improvementPoint" th:text="${improveResponse.improvementPoint()}">improvement</h3>
+                <p class="advice" th:text="${improveResponse.advice()}">Best answer</p>
             </div>
         </div>
 
