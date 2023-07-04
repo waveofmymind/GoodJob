@@ -49,10 +49,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 boolean hasRefreshToken = redisUt.hasRefreshToken(subCookie.getValue());
 
                 if (hasRefreshToken) { // 리프레시 토큰 있는 경우
+                    opMember = memberService.findById(Long.parseLong(subCookie.getValue()));
                     createNewAccessToken(response);
-                    // 새로운 액세스 토큰 발급
-                    String newAccessToken = jwtProvider.genToken(opMember.get().toClaims());
-                    response.addCookie(cookieUt.createCookie("accessToken", newAccessToken));
                 }
             }
         } else {
