@@ -45,22 +45,12 @@
 
 **DevOps**
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 - ~~Naver Cloud PlatForm~~
   - ~~CentOS 7.8~~
 - ~~Docker~~
 - ~~NginX ProxyManager~~
-=======
->>>>>>> 34f4db80bfc7b7200ad226b70cb6e000d2c90b33
-- Google Cloud Platform
-- Kubernetes
-- Kafka 3.4.0 KRaft
-- Docker
-- Jenkins
-- AWS RDS
-- AWS Route53
-=======
+
 - Naver Cloud PlatForm
   - CentOS 7.8
 - Docker
@@ -71,7 +61,6 @@
 - Jenkins
 - AWS RDS
 - AWS Route 53
->>>>>>> 68460b18ecb62cb22878a30c0ac18fe49c231747
 - AWS S3
 - AWS CloudWatch
 - Apache JMeter
