@@ -44,7 +44,7 @@ class ResumeFacadeTest {
         String message = "테스트 메시지";
         CreatePromptRequest promptRequest = new CreatePromptRequest(1L, "Software backend Developer", "Newcomer", null);
         WhatGeneratedQuestionResponse mockResponse = new WhatGeneratedQuestionResponse(new ArrayList<>());
-        mockResponse.getPredictionResponse().add(new PredictionResponse("question", "answer"));
+        mockResponse.predictionResponse().add(new PredictionResponse("question", "answer"));
 
         when(objectMapper.readValue(message, CreatePromptRequest.class)).thenReturn(promptRequest);
 
@@ -65,7 +65,7 @@ class ResumeFacadeTest {
         String message = "테스트 메시지";
         CreatePromptRequest promptRequest = new CreatePromptRequest(1L, "Software backend Developer", "Newcomer", null);
         WhatGeneratedImproveResponse mockResponse = new WhatGeneratedImproveResponse(new ArrayList<>());
-        mockResponse.getImprovementResponse().add(new ImprovementResponse("improvementPoint", "advice"));
+        mockResponse.improvementResponse().add(new ImprovementResponse("improvementPoint", "advice"));
 
         when(objectMapper.readValue(message, CreatePromptRequest.class)).thenReturn(promptRequest);
 
