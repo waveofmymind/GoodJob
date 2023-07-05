@@ -68,7 +68,8 @@
                     <div class="flex justify-between">
                         <div>
                             회원등급:
-                            <span th:text="'프리미엄 회원'" class="premium" th:if="${@rq.member.userRole == 'premium'}"></span>
+                            <span th:text="'프리미엄 회원'" class="premium"
+                                  th:if="${@rq.member.userRole == 'premium'}"></span>
                             <span th:text="'일반 회원'" class="normal" th:if="${@rq.member.userRole == 'free'}"></span>
                             <span th:text="'멘토'" class="mentor" th:if="${@rq.member.userRole == 'mentor'}"></span>
                         </div>
@@ -94,7 +95,8 @@
                            class="text-xs w-16 text-center ml-2" style="color: gray;">글 제목</a>
                     </div>
                     <div class="flex justify-content: flex-end">
-                        <a href="/article/show/list" class="text-xs w-16 text-center" style="margin-left: auto; color: gray;">>전체보기</a>
+                        <a href="/article/show/list" class="text-xs w-16 text-center"
+                           style="margin-left: auto; color: gray;">>전체보기</a>
                     </div>
                 </div>
             </div>
@@ -109,7 +111,8 @@
                            class="text-xs w-16 text-center ml-2" style="color: gray;">댓글내용</a>
                     </div>
                     <div class="flex justify-content: flex-end">
-                        <a href="/comment/show/list" class="text-xs w-16 text-center" style="margin-left: auto; color: gray;">>전체보기</a>
+                        <a href="/article/show/list" class="text-xs w-16 text-center"
+                           style="margin-left: auto; color: gray;">>전체보기</a>
                     </div>
                 </div>
             </div>
@@ -118,12 +121,12 @@
                 <h3 class="text-2xl font-semibold mb-4 mt-4">이력서 검토 내용</h3>
                 <div class="space-y-2">
                     <div th:each="prediction, loop : ${predictions}">
-                        <a th:if="${loop.index} < 5" th:href="@{|/resumes/detail/${prediction.id}|}"
-                           th:text="${#temporals.format(prediction.createdDate, 'yy.MM.dd HH:mm')}"
-                           class="text-xs w-16 text-center ml-2" style="color: gray;">이력서 답변 생성일자</a>
-                    </div>
-                    <div class="flex justify-content: flex-end">
-                        <a href="" class="text-xs w-16 text-center" style="margin-left: auto; color: gray;">>전체보기</a>
+                        <div th:if="${prediction.serviceType == T(com.goodjob.resume.domain.ServiceType).EXPECTED_ADVICE}">
+                            <a th:if="${loop.index} < 3"
+                               th:href="@{|/resumes/detail/${prediction.id}|}"
+                               th:text="@{|이력서 검토 ${loop.index + 1}: ${#temporals.format(prediction.createdDate, 'yy.MM.dd HH:mm')}|}"
+                               class="text-xs w-16 text-center ml-2" style="color: gray;">이력서 답변 생성일자</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -131,11 +134,14 @@
             <div class="mb-4">
                 <h3 class="text-2xl font-semibold mb-4 mt-4">면접 예상 질문 내용</h3>
                 <div class="space-y-2">
-                    <ul class="list-disc ml-8">
-                        <li>댓글 1</li>
-                        <li>댓글 2</li>
-                        <li>댓글 3</li>
-                    </ul>
+                    <div th:each="prediction, loop : ${predictions}">
+                        <div th:if="${prediction.serviceType == T(com.goodjob.resume.domain.ServiceType).EXPECTED_QUESTION}">
+                            <a th:if="${loop.index < 3}"
+                               th:href="@{|/resumes/detail/${prediction.id}|}"
+                               th:text="@{|면접 예상 질문 ${loop.index + 1}: ${#temporals.format(prediction.createdDate, 'yy.MM.dd HH:mm')}|}"
+                               class="text-xs w-16 text-center ml-2" style="color: gray;">이력서 답변 생성일자</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

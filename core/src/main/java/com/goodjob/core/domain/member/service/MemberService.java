@@ -16,6 +16,8 @@ import org.springframework.util.StringUtils;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.goodjob.core.global.base.coin.CoinUt.MAX_COIN_COUNT;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -43,7 +45,7 @@ public class MemberService {
                 .isDeleted(false)
                 .providerType("GOODJOB")
                 .userRole("free")
-                .coin(0)
+                .coin(MAX_COIN_COUNT)
                 .build();
 
         memberRepository.save(member);
@@ -91,12 +93,12 @@ public class MemberService {
                 .isDeleted(false)
                 .providerType(providerType)
                 .userRole("free")
-                .coin(10)
+                .coin(MAX_COIN_COUNT)
                 .build();
 
         memberRepository.save(member);
 
-       return RsData.of("S-1", "%s님의 회원가입이 완료되었습니다.".formatted(nickname), member);
+        return RsData.of("S-1", "%s님의 회원가입이 완료되었습니다.".formatted(nickname), member);
     }
 
     public RsData login(String username, String password) {
@@ -191,6 +193,18 @@ public class MemberService {
         memberRepository.save(member);
 
         return RsData.of("S-1", "멘토 등급이 되었습니다.");
+    }
+
+    @Transactional
+    public void deductCoin(Member member) {
+        member.deductCoin();
+
+        memberRepository.save(member);
+    }
+
+    @Transactional
+    public void updateCoins() {
+        memberRepository.updateCoinForFreeMembers(MAX_COIN_COUNT);
     }
 }
 
