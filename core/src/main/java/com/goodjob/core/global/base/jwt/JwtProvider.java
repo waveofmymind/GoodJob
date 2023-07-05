@@ -54,7 +54,7 @@ public class JwtProvider {
         // 리프레시 토큰 생성
         String refreshToken = redisUt.genRefreshToken();
         // 유저 계정을 키값으로 리프레시 토큰을 redis 에 저장. 유효기간은 14일
-        redisUt.setRefreshToken(userId, refreshToken, now + REFRESH_TOKEN_VALIDATION_SECOND);
+        redisUt.setValue(userId, refreshToken, now + REFRESH_TOKEN_VALIDATION_SECOND);
 
         return Jwts.builder()
                 .claim("body", Ut.json.toStr(claims))
