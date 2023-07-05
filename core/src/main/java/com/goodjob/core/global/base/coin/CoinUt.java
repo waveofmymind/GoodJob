@@ -1,6 +1,7 @@
 package com.goodjob.core.global.base.coin;
 
 import com.goodjob.core.domain.member.entity.Member;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,4 +27,5 @@ public class CoinUt {
 
         return true;
     }
+
 }
