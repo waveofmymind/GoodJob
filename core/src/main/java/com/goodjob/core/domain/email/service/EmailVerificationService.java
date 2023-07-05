@@ -1,6 +1,7 @@
 package com.goodjob.core.domain.email.service;
 
 import com.goodjob.core.domain.email.entity.SendEmailLog;
+import com.goodjob.core.global.base.redis.RedisUt;
 import com.goodjob.core.global.base.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -14,6 +15,8 @@ import java.util.UUID;
 public class EmailVerificationService {
 
     private final EmailService emailService;
+    private final RedisUt redisUt;
+
     @Async
     public void send(String email) {
 
@@ -38,13 +41,40 @@ public class EmailVerificationService {
         emailService.sendEmail(email, title, body, verificationCode);
     }
 
-    public RsData verify(String verificationCode) {
-        Optional<SendEmailLog> opVerificationCode = emailService.findByVerificationCode(verificationCode);
+    public RsData verify(String email, String providedCode) {
+        // 이메일이 오류 없이 보내졌는지 확인
+        RsData emailResultCodeRsData = checkEmailResultCode(email);
 
-        if (opVerificationCode.isEmpty()) {
-            return RsData.of("F-1", "잘못된 인증 코드입니다.");
+        if (emailResultCodeRsData.isFail()) {
+            return emailResultCodeRsData;
         }
 
-        return RsData.of("S-1", "인증 코드가 확인되었습니다.");
+        // 레디스에서 이메일을 키값으로 검증코드 반환
+        try {
+            String originalCode = redisUt.getValue(email);
+
+            if (originalCode.equals(providedCode)) {
+                return RsData.of("S-1", "인증 코드가 확인되었습니다.");
+            }
+            return RsData.of("F-1", "잘못된 인증 코드입니다.");
+        } catch (NullPointerException e) {
+            return RsData.of("F-1", "이메일 정보가 잘못되었습니다. 올바른 이메일을 입력하여 다시 시도해주세요.");
+        }
+    }
+
+    private RsData checkEmailResultCode(String email) {
+        Optional<SendEmailLog> opSendEmailLog = emailService.findByEmail(email);
+        if (opSendEmailLog.isEmpty()) {
+            return RsData.of("F-2", "이메일 정보가 잘못되었습니다. 올바른 이메일을 입력하여 다시 시도해주세요.");
+        }
+
+        SendEmailLog sendEmailLog = opSendEmailLog.get();
+        String resultCode = sendEmailLog.getResultCode();
+
+        if (resultCode.startsWith("F-")) {
+            return RsData.of(resultCode, sendEmailLog.getMessage());
+        }
+
+        return RsData.of(resultCode, "메일이 성공적으로 발송되었습니다.");
     }
 }

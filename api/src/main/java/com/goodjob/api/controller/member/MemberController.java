@@ -104,7 +104,7 @@ public class MemberController {
     public String logout() {
         String userId = String.valueOf(rq.getMember().getId());
         // 레디스에서 리프레시토큰삭제
-        redisUt.deleteToken(userId);
+        redisUt.delete(userId);
         // 쿠키삭제
         rq.expireCookie("accessToken");
         rq.expireCookie("userId");

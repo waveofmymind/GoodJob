@@ -27,6 +27,4 @@ public class SendEmailLog extends BaseEntity {
     private String body;
     private LocalDateTime sendEndDate;
     private LocalDateTime failDate;
-
-    private String verificationCode;
 }
