@@ -1,5 +1,6 @@
-package com.goodjob.core.domain.email.mailSender;
+package com.goodjob.core.domain.email.service;
 
+import com.goodjob.core.domain.email.mailSender.EmailSenderService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
