@@ -95,7 +95,7 @@ public class MemberController {
             return rq.redirectWithMsg(previousUrl, loginRsData);
         }
 
-        log.debug("로그인 요청한 유저id ={}", rq.getMember().getId());
+        log.debug("로그인 요청한 유저 accessToken ={}", loginRsData.getData());
         return rq.redirectWithMsg("/", loginRsData);
     }
 

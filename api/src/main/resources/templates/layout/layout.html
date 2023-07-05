@@ -19,7 +19,8 @@
       <ul class="menu menu-horizontal px-1">
         <li><a href="/member/login" th:if="${@rq.logout}" class="btn btn-ghost normal-case text-xl">로그인</a></li>
         <li><a href="/member/join" th:if="${@rq.logout}" class="btn btn-ghost normal-case text-xl">회원가입</a></li>
-        <li><a href="/payment/showPage" th:if="${@rq.login}" class="btn btn-ghost normal-case text-xl" th:text="|남은 코인: ${@rq.member.coin}개|">남은 코인: 10개</a></li>
+        <li><a href="/member/applyMentor" th:if="${@rq.login and !@rq.member.isMentor()}" class="btn btn-ghost normal-case text-xl">멘토 등록</a></li>
+        <li><a href="/payment/showPage" th:if="${@rq.login and @rq.member.userRole == 'free'}" class="btn btn-ghost normal-case text-xl" th:text="|남은 코인: ${@rq.member.coin}개|">남은 코인: 10개</a></li>
         <li><a href="/member/me" th:if="${@rq.login}" class="btn btn-ghost normal-case text-xl" th:text="|${@rq.member.nickname}님 환영합니다.|"></a></li>
         <li>
           <a href="javascript:;" th:if="${@rq.login}" onclick="$(this).next().submit();" class="btn btn-ghost normal-case text-xl">로그아웃</a>
