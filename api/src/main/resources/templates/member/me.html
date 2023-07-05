@@ -111,7 +111,7 @@
                            class="text-xs w-16 text-center ml-2" style="color: gray;">댓글내용</a>
                     </div>
                     <div class="flex justify-content: flex-end">
-                        <a href="/comment/show/list" class="text-xs w-16 text-center"
+                        <a href="/article/show/list" class="text-xs w-16 text-center"
                            style="margin-left: auto; color: gray;">>전체보기</a>
                     </div>
                 </div>
@@ -121,10 +121,10 @@
                 <h3 class="text-2xl font-semibold mb-4 mt-4">이력서 검토 내용</h3>
                 <div class="space-y-2">
                     <div th:each="prediction, loop : ${predictions}">
-                        <div th:if="${prediction.serviceType == 'EXPECTED_ADVICE'}">
-                            <a th:if="${loop.index} < 3" th:href="@{|/resumes/detail/${prediction.id}|}"
-                               th:text="${#temporals.format(prediction.createdDate, 'yy.MM.dd HH:mm')}"
-                               th:text="@{|이력서 검토 ${loop.index}: ${temporals.format(prediction.createdDate, 'yy.MM.dd HH:mm')}|}"
+                        <div th:if="${prediction.serviceType == T(com.goodjob.resume.domain.ServiceType).EXPECTED_ADVICE}">
+                            <a th:if="${loop.index} < 3"
+                               th:href="@{|/resumes/detail/${prediction.id}|}"
+                               th:text="@{|이력서 검토 ${loop.index + 1}: ${#temporals.format(prediction.createdDate, 'yy.MM.dd HH:mm')}|}"
                                class="text-xs w-16 text-center ml-2" style="color: gray;">이력서 답변 생성일자</a>
                         </div>
                     </div>
@@ -135,10 +135,10 @@
                 <h3 class="text-2xl font-semibold mb-4 mt-4">면접 예상 질문 내용</h3>
                 <div class="space-y-2">
                     <div th:each="prediction, loop : ${predictions}">
-                        <div th:if="${prediction.serviceType == 'EXPECTED_QUESTION'}">
-                            <a th:if="${loop.index} < 3" th:href="@{|/resumes/detail/${prediction.id}|}"
-                               th:text="${#temporals.format(prediction.createdDate, 'yy.MM.dd HH:mm')}"
-                               th:text="@{|면접 예상 질문 ${loop.index}: ${temporals.format(prediction.createdDate, 'yy.MM.dd HH:mm')}|}"
+                        <div th:if="${prediction.serviceType == T(com.goodjob.resume.domain.ServiceType).EXPECTED_QUESTION}">
+                            <a th:if="${loop.index < 3}"
+                               th:href="@{|/resumes/detail/${prediction.id}|}"
+                               th:text="@{|면접 예상 질문 ${loop.index + 1}: ${#temporals.format(prediction.createdDate, 'yy.MM.dd HH:mm')}|}"
                                class="text-xs w-16 text-center ml-2" style="color: gray;">이력서 답변 생성일자</a>
                         </div>
                     </div>
