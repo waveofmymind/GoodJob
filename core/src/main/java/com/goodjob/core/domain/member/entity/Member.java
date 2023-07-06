@@ -39,7 +39,7 @@ public class Member extends BaseEntity {
 
     private String userRole; // free(ROLE_USER), premium(ROLE_PAYED), mentor(ROLE_MENTOR)(예정)
 
-    private Integer coin;
+    private int coin;
 
     private boolean isDeleted;
 
@@ -72,8 +72,24 @@ public class Member extends BaseEntity {
         return authorities;
     }
 
+    public Map<String, Object> toClaims() {
+        return Map.of(
+                "id", getId(),
+                "username", getUsername(),
+                "nickname", getNickname()
+        );
+    }
+
     public boolean isPayed() {
         if (userRole.equals("premium")) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean isMentor() {
+        if (userRole.equals("mentor")) {
             return true;
         }
 
@@ -86,22 +102,6 @@ public class Member extends BaseEntity {
         }
 
         return true;
-    }
-
-    public Map<String, Object> toClaims() {
-        return Map.of(
-                "id", getId(),
-                "username", getUsername(),
-                "nickname", getNickname()
-        );
-    }
-
-    public boolean isMentor() {
-        if (userRole.equals("mentor")) {
-            return true;
-        }
-
-        return false;
     }
 
     public void upgradeMembership(String targetMembership) {

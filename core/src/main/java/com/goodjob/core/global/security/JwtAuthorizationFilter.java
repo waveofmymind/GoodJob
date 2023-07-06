@@ -15,7 +15,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -46,7 +45,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         // 쿠키가 만료된 경우 리프레시토큰 확인
         if (accessToken == null) {
             if (subCookie != null) {
-                boolean hasRefreshToken = redisUt.hasRefreshToken(subCookie.getValue());
+                boolean hasRefreshToken = redisUt.hasValue(subCookie.getValue());
 
                 if (hasRefreshToken) { // 리프레시 토큰 있는 경우
                     opMember = memberService.findById(Long.parseLong(subCookie.getValue()));

@@ -95,7 +95,7 @@ public class MemberController {
             return rq.redirectWithMsg(previousUrl, loginRsData);
         }
 
-        log.debug("로그인 요청한 유저id ={}", rq.getMember().getId());
+        log.debug("로그인 요청한 유저 accessToken ={}", loginRsData.getData());
         return rq.redirectWithMsg("/", loginRsData);
     }
 
@@ -104,7 +104,7 @@ public class MemberController {
     public String logout() {
         String userId = String.valueOf(rq.getMember().getId());
         // 레디스에서 리프레시토큰삭제
-        redisUt.deleteToken(userId);
+        redisUt.delete(userId);
         // 쿠키삭제
         rq.expireCookie("accessToken");
         rq.expireCookie("userId");
