@@ -15,8 +15,10 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByUsername(String account);
     Optional<Member> findByNickname(String nickname);
+    Optional<Member> findByEmail(String email);
 
     @Modifying
     @Query("UPDATE Member m SET m.coin= :maxCoinCount WHERE m.coin BETWEEN 0 AND :maxCoinCount")
     void updateCoinForFreeMembers(@Param("maxCoinCount") int maxCoinCount);
+
 }

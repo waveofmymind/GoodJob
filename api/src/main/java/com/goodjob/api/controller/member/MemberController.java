@@ -25,6 +25,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -151,5 +152,22 @@ public class MemberController {
         }
 
         return "redirect:/mentoring/list";
+    }
+
+    @PostMapping("/recover/username")
+    @PreAuthorize("isAnonymous()")
+    public String recoverUsername(String email) {
+        Optional<Member> opMember = memberService.findByEmail(email);
+
+//        if (opMember.isPresent()) {
+//
+//        }
+        return null;
+    }
+
+    @PostMapping("/recover/password")
+    @PreAuthorize("isAnonymous()")
+    public String recoverPassword() {
+        return null;
     }
 }
