@@ -113,9 +113,9 @@ public class MentoringService {
             return RsData.of("F-4", "제목을 입력해야 합니다.");
         }
 
-        if(mentoringRequestDto.getContent().trim().equals("")) {
-            return RsData.of("F-5", "내용을 입력해야 합니다.");
-        }
+//        if(mentoringRequestDto.getContent().trim().equals("")) {
+//            return RsData.of("F-5", "내용을 입력해야 합니다.");
+//        }
 
         if(mentoringRequestDto.getTitle().trim().length() > 30) {
             return RsData.of("F-6", "제목은 30자 이내로 작성해야 합니다.");

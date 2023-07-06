@@ -27,13 +27,9 @@
 
         .toastui-editor-contents p {
             font-family: "GmarketSansMedium";
+            font-size: 16px;
         }
     </style>
-    <!--toastui-->
-    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
-    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
-    <!-- toast ui viewer js -->
-    <!-- <script src="https://uicdn.toast.com/editor/3.0.2/toastui-editor-viewer.min.js"></script> -->
 </head>
 <body>
 <main layout:fragment="main" class="container my-3 mx-auto">
@@ -66,9 +62,7 @@
         </div>
 
         <div class="min-h-[200px] mb-6">
-            <div style="word-wrap: break-word;">
-                <div class="toast-custom-viewer text-sm pl-3 min-h-[120px]"></div>
-            </div>
+            <div class="toast-custom-viewer text-sm pl-3 min-h-[120px]"></div>
         </div>
         <hr class="border-neutral my-6">
         <button type="button" class="apply ml-2 bg-neutral text-white px-4 py-2 rounded-lg text-sm hover:bg-black" onclick="openModal()">신청하기</button>
@@ -120,9 +114,7 @@
             viewer : true,
             initialValue : /*[[${mentoring.content}]]*/
         });
-        const content = document.getElementById("content");
 
-        content.innerHTML =  /*[[${mentoring.content}]]*/;
 
         var today = new Date();
 
