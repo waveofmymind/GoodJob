@@ -20,14 +20,41 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Article> findQslBySortCode(int sortCode, String category, String kw) {
+    public List<Article> findQslBySortCode(int id, int sortCode, String category, String kw) {
         List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
 
         BooleanBuilder builder = new BooleanBuilder();
 
-
-
         builder.and(article.isDeleted.eq(false));
+
+        switch(id) {
+            case 1:
+                builder.and(article.category.eq(1));
+                break;
+            case 2:
+                builder.and(article.category.eq(2));
+                break;
+            case 3:
+                builder.and(article.category.eq(3));
+                break;
+            case 4:
+                builder.and(article.category.eq(4));
+                break;
+            case 5:
+                builder.and(article.category.eq(5));
+                break;
+            case 6:
+                builder.and(article.category.eq(6));
+                break;
+            case 7:
+                builder.and(article.category.eq(7));
+                break;
+            case 8:
+                builder.and(article.category.eq(8));
+                break;
+            default:
+                break;
+        }
 
         switch(sortCode) {
             case 2:

@@ -1,13 +1,47 @@
 <html layout:decorate="~{layout/layout.html}">
 <head>
     <title>전체 게시글</title>
+    <style>
+        .category_btn {
+            width: 99px;
+        }
+    </style>
 </head>
 <body>
     <main layout:fragment="main" class="container my-3 mx-auto">
-        <form th:action="@{/article/list}" method="get" id="toListForm">
+        <form method="get" id="toListForm">
             <div class="container mx-auto p-8 w-2/3">
+                <ul class="flex">
+                    <li>
+                        <a href="/article/list/0" class="category_btn btn-sm border-1 btn btn-outline m-1">전체</a>
+                    </li>
+                    <li>
+                        <a href="/article/list/1" class="category_btn btn-sm border-1 btn btn-outline m-1">신입</a>
+                    </li>
+                    <li>
+                        <a href="/article/list/2" class="category_btn btn-sm border-1 btn btn-outline m-1">취준</a>
+                    </li>
+                    <li>
+                        <a href="/article/list/3" class="category_btn btn-sm border-1 btn btn-outline m-1">자소서</a>
+                    </li>
+                    <li>
+                        <a href="/article/list/4" class="category_btn btn-sm border-1 btn btn-outline m-1">면접</a>
+                    </li>
+                    <li>
+                        <a href="/article/list/5" class="category_btn btn-sm border-1 btn btn-outline m-1">Q&A</a>
+                    </li>
+                    <li>
+                        <a href="/article/list/6" class="category_btn btn-sm border-1 btn btn-outline m-1">이직</a>
+                    </li>
+                    <li>
+                        <a href="/article/list/7" class="category_btn btn-sm border-1 btn btn-outline m-1">퇴사</a>
+                    </li>
+                    <li>
+                        <a href="/article/list/8" class="category_btn btn-sm border-1 btn btn-outline m-1">잡담</a>
+                    </li>
+                </ul>
                 <div class="flex items-center justify-between h-16">
-                    <a href="/article/list" class="text-2xl font-bold">📌전체 게시글</a>
+                    <p class="text-2xl font-bold" id="pageNumberText"></p>
                     <div class="form-control flex-grow">
                         <select name="sortCode" class="ml-2 select w-40 select-ghost select-sm"
                                 onchange="$(this).closest('form').submit();">
@@ -86,17 +120,54 @@
                             $('input[name="query"]:last').val(params.query[0]);
                         }
                     </script>
-                    <button type="submit" class="text-black px-2 py-2">🔍</button>
+                    <button type="submit" class="text-black px-2 py-2" onclick="searchArticles()">🔍</button>
                 </div>
             </div>
         </form>
-        <script>
+        <script th:inline="javascript">
+            // URL에서 숫자 부분을 추출하여 변수에 저장합니다.
+            const currentPageNumber = window.location.pathname.match(/\/article\/list\/(\d+)/)[1];
+
+            // 숫자에 따라 표시할 문자열을 매핑합니다.
+            const pageNumberMap = {
+                '0': '📌전체 게시글',
+                '1': '📌신입 게시글',
+                '2': '📌취준 게시글',
+                '3': '📌자소서 게시글',
+                '4': '📌면접 게시글',
+                '5': '📌Q&A 게시글',
+                '6': '📌이직 게시글',
+                '7': '📌퇴사 게시글',
+                '8': '📌잡담 게시글',
+                // 다른 숫자에 대한 표시할 문자열을 추가할 수 있습니다.
+            };
+
+            // 현재 페이지 숫자에 해당하는 문자열을 가져옵니다.
+            const pageNumberText = pageNumberMap[currentPageNumber];
+
+            // 텍스트를 동적으로 변경합니다.
+            const pageNumberElement = document.getElementById('pageNumberText');
+            pageNumberElement.innerText = pageNumberText;
+            pageNumberText.innerText = '📌' + currentPageNumber + ' 게시글'
+
             function updatePageNumber() {
                 const page = event.target.getAttribute('page');
                 const currentUrl = new URL(window.location.href);
                 currentUrl.searchParams.delete('page');
                 currentUrl.searchParams.set('page', page);
                 window.location.href = currentUrl.href;
+            }
+
+            function searchArticles() {
+                const category = $('select[name="category"]').val();
+                const query = $('input[name="query"]').val();
+
+                // 현재 페이지의 URL에서 숫자 부분만 추출하여 동적으로 생성된 URL을 만듭니다.
+                const currentPageNumber = window.location.pathname.match(/\/article\/list\/(\d+)/)[1];
+                const url = '/article/list/' + currentPageNumber + '?category=' + category + '&query=' + query;
+
+                // 페이지 이동
+                window.location.href = url;
             }
         </script>
 
