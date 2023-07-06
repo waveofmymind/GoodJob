@@ -17,8 +17,8 @@ public class ArticleRequestDto {
     private String title;
     @NotBlank(message="내용을 작성해주셔야 합니다.")
     private String content;
-
     @Size(max=10)
     private String hashTagStr;
     private List<HashTagResponseDto> hashTags = new ArrayList<>();
+    private int category;
 }
