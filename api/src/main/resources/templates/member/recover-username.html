@@ -1,34 +1,68 @@
-ii
 <html layout:decorate="~{layout/layout.html}">
 <head>
     <title>아이디 찾기</title>
+    <script>
+        function recoverUsername() {
+            const emailValue = document.getElementById('email').value.trim();
+            const emailMessage = document.getElementById('emailMessage');
+            const emailContainer = document.getElementById('emailContainer');
+
+            const formData = new FormData();
+            formData.append("email", emailValue);
+
+            fetch("/member/recover/username", {
+                method: 'post',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.resultCode !== 'S-1') { // 요청실패
+                        emailMessage.innerText = data.msg;
+                        emailMessage.classList.add("text-red-500");
+                        emailMessage.classList.remove("text-green-500");
+                    } else { // 요청성공
+                        emailMessage.innerText = "아이디는 " + data.msg + "입니다.";
+                        emailMessage.classList.add("text-green-500");
+                        emailMessage.classList.remove("text-red-500");
+                    }
+
+                    emailContainer.style.display = "block";
+                });
+
+            event.preventDefault();
+        }
+    </script>
+
 </head>
 <body>
-<main layout:fragment="main" class="container my-3 mx-auto">
 
+<main layout:fragment="main" class="container my-3 mx-auto">
     <div class="flex justify-center items-center min-h-screen">
         <div class="w-96 bg-white p-8 rounded-lg mb-64">
             <h2 class="text-xl font-semibold mb-4">🔍 아이디 찾기</h2>
-            <form th:action method="post" th:object="${loginRequestDto}" class="flex flex-col gap-6">
-                <div class="form-control">
-                    <label class="block mb-2">회원가입시 입력했던 이메일</label>
-                    <input type="text" name="email"
-                           class="border-b border-neutral px-2 py-2 w-full focus:outline-none"
-                           placeholder="이메일을 입력하세요">
+            <div class="flex flex-col gap-6">
+                <label class="block">회원가입시 입력했던 이메일</label>
+                <input type="text" name="email" id="email"
+                       class="border-b border-neutral px-2 py-2 w-full focus:outline-none"
+                       placeholder="이메일을 입력하세요">
+
+                <div id="emailContainer" style="display: none;">
+                    <h2 id="emailMessage">전송결과</h2>
                 </div>
 
-                <div style="display: inline;" class="bg-neutral text-white px-4 py-2 rounded-lg hover:bg-black">
-                    <button type="submit">확인</button>
+                <div class="flex justify-end">
+                    <button onclick="recoverUsername();"
+                            class="bg-neutral text-white px-4 py-2 rounded-lg text-sm">
+                        확인
+                    </button>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </main>
 </body>
 
 </html>
-
-
 
 
 
