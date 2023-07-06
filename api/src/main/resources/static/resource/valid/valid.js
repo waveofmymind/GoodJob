@@ -1,4 +1,5 @@
 let isNoDuplication = false;
+let countdown; // 타이머 인터벌 ID
 
 // 가입하기 버튼클릭 시 실행
 function submitForm() {
@@ -30,8 +31,7 @@ function checkDuplication(event) {
 
 function checkDuplicateField(fieldName) {
     const url = '/member/join/valid/' + fieldName;
-    const fieldInput = document.getElementById(fieldName);
-    const fieldValue = fieldInput.value.trim();
+    const fieldValue = document.getElementById(fieldName).value.trim();
     const fieldMessage = document.getElementById(fieldName + "Message");
 
     const formData = new FormData();
@@ -58,8 +58,10 @@ function checkDuplicateField(fieldName) {
 }
 
 function sendEmail(event) {
-    const emailInput = document.getElementById("email");
-    const emailValue = emailInput.value.trim();
+    // 이전 타이머 중지
+    clearInterval(countdown);
+
+    const emailValue = document.getElementById("email").value.trim();
     const emailMessage = document.getElementById("emailMessage");
     const verificationCodeBlock = document.getElementById("verificationCodeBlock")
 
@@ -77,12 +79,14 @@ function sendEmail(event) {
     emailMessage.style.display = "block";
     verificationCodeBlock.style.display = "block";
 
+    // 타이머 시작
+    startTimer();
+
     event.preventDefault();
 }
 
 function verifyCode(event) {
-    const verificationCodeInput = document.getElementById("verificationCode")
-    const verificationCodeValue = verificationCodeInput.value.trim();
+    const verificationCodeValue = document.getElementById("verificationCode").value.trim();
     const verificationCodeMessage = document.getElementById("verificationCodeMessage");
 
     const formData = new FormData();
@@ -108,4 +112,29 @@ function verifyCode(event) {
         });
 
     event.preventDefault();
+}
+
+function startTimer() {
+    var minutes = 5; // 타이머 시간 (분)
+    var seconds = minutes * 60; // 초 단위로 변환
+    const timerMessage = document.getElementById('timer');
+
+    countdown = setInterval(function() {
+        var minutesRemaining = Math.floor(seconds / 60);
+        var secondsRemaining = seconds % 60;
+
+        // 타이머를 표시하는 HTML 엘리먼트의 ID를 지정하고 해당 엘리먼트에 시간을 표시
+        timerMessage.innerHTML = minutesRemaining + '분 ' + secondsRemaining + '초 남음';
+
+        seconds--;``
+
+        // 타이머 종료 시
+        if (seconds < 0) {
+            clearInterval(countdown);
+
+            timerMessage.innerText = "인증 시간이 초과되었습니다. 인증번호를 다시 발급해주세요."
+            timerMessage.classList.add("text-red-500");
+            timerMessage.classList.remove("text-green-500");
+        }
+    }, 1000);
 }

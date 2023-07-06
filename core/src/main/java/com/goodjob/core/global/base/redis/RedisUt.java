@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 public class RedisUt {
 
     @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+    private RedisTemplate redisTemplate;
 
     // 리프레시 토큰 생성
     public String genRefreshToken() {
@@ -26,7 +26,7 @@ public class RedisUt {
         return redisTemplate.getExpire(key);
     }
 
-    public boolean hasRefreshToken(String key) {
+    public boolean hasValue(String key) {
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         String refreshToken = valueOperations.get(key);
 
@@ -37,12 +37,17 @@ public class RedisUt {
         return true;
     }
 
-    public void setRefreshToken(String key, String value, long timeout) {
+    public String getValue(String key) {
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        return valueOperations.get(key);
+    }
+
+    public void setValue(String key, String value, long timeout) {
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         valueOperations.set(key, value, timeout, TimeUnit.MILLISECONDS);
     }
 
-    public void deleteToken(String key) {
+    public void delete(String key) {
         redisTemplate.delete(key);
     }
 }
