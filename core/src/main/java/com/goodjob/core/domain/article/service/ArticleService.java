@@ -118,9 +118,9 @@ public class ArticleService {
             return RsData.of("F-1", "제목을 입력해야 합니다.");
         }
 
-        if(articleRequestDto.getContent().trim().equals("")) {
-            return RsData.of("F-2", "내용을 입력해야 합니다.");
-        }
+//        if(articleRequestDto.getContent().trim().equals("")) {
+//            return RsData.of("F-2", "내용을 입력해야 합니다.");
+//        }
 
         if(articleRequestDto.getTitle().trim().length() > 30) {
             return RsData.of("F-3", "제목은 30자 이내로 작성해야 합니다.");
@@ -165,10 +165,10 @@ public class ArticleService {
         if(articleRequestDto.getTitle().trim().equals("")) {
             return RsData.of("F-4", "제목을 입력해야 합니다.");
         }
-
-        if(articleRequestDto.getContent().trim().equals("")) {
-            return RsData.of("F-5", "내용을 입력해야 합니다.");
-        }
+//
+//        if(articleRequestDto.getContent().trim().equals("")) {
+//            return RsData.of("F-5", "내용을 입력해야 합니다.");
+//        }
 
         if(articleRequestDto.getTitle().trim().length() > 30) {
             return RsData.of("F-6", "제목은 30자 이내로 작성해야 합니다.");

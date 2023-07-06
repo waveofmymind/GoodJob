@@ -62,7 +62,7 @@
 
         <!-- 페이징처리 시작 -->
         <div th:if="${!paging.isEmpty()}" class="flex justify-center mb-6">
-            <div class="flex w-1/2 justify-center">
+            <div class="flex w-[770px] justify-center">
                 <a class="page-link btn btn-sm btn-ghost grid-0 m-1" th:href="@{|?page=${paging.number-1}|}" th:classappend="${!paging.hasPrevious} ? 'invisible'">
                     <span>&lt; 이전</span>
                 </a>
