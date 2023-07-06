@@ -4,7 +4,6 @@ import com.goodjob.core.domain.article.entity.Article;
 import com.goodjob.core.domain.article.service.ArticleService;
 import com.goodjob.core.domain.comment.entity.Comment;
 import com.goodjob.core.domain.comment.service.CommentService;
-import com.goodjob.core.domain.member.dto.request.EditRequestDto;
 import com.goodjob.core.domain.member.dto.request.JoinRequestDto;
 import com.goodjob.core.domain.member.dto.request.LoginRequestDto;
 import com.goodjob.core.domain.member.entity.Member;
@@ -152,22 +151,5 @@ public class MemberController {
         }
 
         return "redirect:/mentoring/list";
-    }
-
-    @PostMapping("/recover/username")
-    @PreAuthorize("isAnonymous()")
-    public String recoverUsername(String email) {
-        Optional<Member> opMember = memberService.findByEmail(email);
-
-//        if (opMember.isPresent()) {
-//
-//        }
-        return null;
-    }
-
-    @PostMapping("/recover/password")
-    @PreAuthorize("isAnonymous()")
-    public String recoverPassword() {
-        return null;
     }
 }
