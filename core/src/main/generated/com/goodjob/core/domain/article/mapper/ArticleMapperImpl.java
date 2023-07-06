@@ -44,6 +44,7 @@ public class ArticleMapperImpl implements ArticleMapper {
         articleResponseDto.setCommentsCount( article.getCommentsCount() );
         articleResponseDto.setMember( article.getMember() );
         articleResponseDto.setHashTagList( hashTagListToHashTagResponseDtoList( article.getHashTagList() ) );
+        articleResponseDto.setCategory( article.getCategory() );
 
         return articleResponseDto;
     }

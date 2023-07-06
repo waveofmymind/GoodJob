@@ -12,9 +12,20 @@
 <body>
 <main layout:fragment="main" class="container mx-auto">
     <div class="container mx-auto py-8 w-1/2">
-        <h1 class="text-2xl font-bold">게시글 작성</h1>
-
         <form class="mt-4" th:object="${articleRequestDto}" method="post" enctype="multipart/form-data">
+            <div class="flex">
+                <p class="text-2xl font-bold mb-3">카테고리</p>
+                <select name="category" class="ml-2 select w-40 select-ghost select-sm">
+                    <option value="1">신입</option>
+                    <option value="2">취준</option>
+                    <option value="3">자소서</option>
+                    <option value="4">면접</option>
+                    <option value="5">Q&A</option>
+                    <option value="6">이직</option>
+                    <option value="7">퇴사</option>
+                    <option value="8">잡담</option>
+                </select>
+            </div>
             <div class="mb-4">
                 <input type="text" name="title" th:field="*{title}" class="form-input w-full border border-neutral rounded-md h-10 p-3" placeholder="제목을 입력하세요">
             </div>
@@ -62,11 +73,45 @@
 
 
     <script layout:fragment="script" type='text/javascript'>
+        const select = document.querySelector("select[name=category]"); // 카테고리 select 요소 가져오기
+        const hashTagInput = document.getElementById('hashTagInput'); // 해시태그 input 요소 가져오기
+        const hashTagList = document.getElementById('hashTagList'); // 해시태그 목록을 추가할 div 요소 가져오기
+
+        // 초기에 '신입' 카테고리로 설정되었을 때 해시태그 추가
+        if (select.value === '1') {
+            const listItem = document.createElement('div'); // 새로운 해시태그 div 요소 생성
+            const keyword = document.createElement('span'); // 해시태그 span 요소 생성
+            listItem.className = 'bg-gray-300 px-2 py-1 rounded-full m-1'
+            keyword.className = 'keyword';
+            keyword.textContent = '#신입';
+            keyword.id = 'hashTagItem_신입';
+            listItem.appendChild(keyword); // div에 해시태그 span 추가
+            hashTagList.appendChild(listItem); // hashTagList 요소에 새로운 div 추가
+        }
+
+        select.addEventListener('change', function() {
+            const selectedOption = select.options[select.selectedIndex]; // 선택된 option 요소 가져오기
+            const value = selectedOption.value; // 선택된 option의 value 가져오기
+            const text = selectedOption.text; // 선택된 option의 text 가져오기
+
+            hashTagList.innerHTML = '';
+
+            const listItem = document.createElement('div'); // 새로운 해시태그 div 요소 생성
+            const keyword = document.createElement('span'); // 해시태그 span 요소 생성
+            listItem.className = 'bg-gray-300 px-2 py-1 rounded-full m-1'
+            keyword.className = 'keyword';
+            keyword.textContent = '#' + text;
+            keyword.id = 'hashTagItem_' + text;
+            listItem.appendChild(keyword); // div에 해시태그 span 추가
+            hashTagList.appendChild(listItem); // hashTagList 요소에 새로운 div 추가
+
+            hashTagInput.value = ''; // 입력한 텍스트 초기화
+        });
         // 해시태그 추가를 위한 함수
         function addHashTag(event) {
             event.preventDefault();
-            var hashTagInput = document.getElementById('hashTagInput');
-            var hashTagText = hashTagInput.value.trim().replace(/\s+/g, '').toLowerCase(); // 띄어쓰기 제거 및 소문자로 변환
+            const hashTagText = hashTagInput.value.trim().replace(/\s+/g, '').toLowerCase(); // 띄어쓰기 제거 및 소문자로 변환
+
 
             if(hashTagText.length > 10) {
                 toastWarning('해시태그는 최대 10자까지 작성할 수 있습니다.');
@@ -75,13 +120,12 @@
             }
 
             if (hashTagText !== '') {
-                var hashTagList = document.getElementById('hashTagList');
-                var listItems = document.createElement('div');
-                var listItem = document.createElement('span');
-                listItems.className = 'bg-gray-300 px-2 py-1 rounded-full m-1'
-                listItem.className = 'keyword';
-                listItem.textContent = '#' + hashTagText;
-                listItem.id = 'hashTagItem_' + hashTagText;
+                const listItem = document.createElement('div');
+                const keyword = document.createElement('span');
+                listItem.className = 'bg-gray-300 px-2 py-1 rounded-full m-1';
+                keyword.className = 'keyword';
+                keyword.textContent = '#' + hashTagText;
+                keyword.id = 'hashTagItem_' + hashTagText;
 
                 var closeButton = document.createElement('span');
                 closeButton.className = 'ml-2 cursor-pointer';
@@ -90,9 +134,9 @@
                     listItems.remove();
                 });
 
-                listItems.appendChild(listItem);
-                listItems.appendChild(closeButton);
-                hashTagList.appendChild(listItems);
+                listItem.appendChild(keyword);
+                listItem.appendChild(closeButton);
+                hashTagList.appendChild(listItem);
                 hashTagInput.value = '';
             }
         }

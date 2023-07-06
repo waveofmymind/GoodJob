@@ -56,4 +56,7 @@ public class Article extends BaseEntity {
     @OneToMany(mappedBy = "article", cascade = {CascadeType.ALL})
     @Builder.Default
     private List<HashTag> hashTagList = new ArrayList<>();
+
+    @Setter
+    private int category;
 }
