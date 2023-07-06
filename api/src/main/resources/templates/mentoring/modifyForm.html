@@ -11,7 +11,7 @@
 </head>
 <body>
 <main layout:fragment="main" class="container mx-auto">
-    <div class="container mx-auto py-8 w-1/3">
+    <div class="container mx-auto py-8 w-[770px]">
         <h1 class="text-2xl font-bold">멘토링 수정</h1>
 
         <form class="mt-4" method="post">
@@ -46,12 +46,45 @@
             </div>
             <div class="mb-4">
                 <p>내용(필수)</p>
-                <textarea name="content" th:text="*{mentoring.content}" class="form-textarea w-full h-64 resize-none border border-neutral rounded-md p-3" placeholder="본문을 입력하세요"></textarea>
+                <textarea name="content" class="form-textarea hidden" id="hidden-content"></textarea>
+                <div class="form-textarea" id="editor"></div>
             </div>
 
-            <button type="submit" class="register bg-neutral hover:bg-black text-white font-bold px-4 py-2 rounded border-neutral" >저장하기</button>
+            <button onclick="submitForm()" class="register bg-neutral hover:bg-black text-white font-bold px-4 py-2 rounded border-neutral" onsubmit="CommentRequestForm__submit(this); return false;">저장하기</button>
         </form>
     </div>
+    <script th:inline="javascript">
+        const Editor = toastui.Editor;
+        const editor = new Editor({
+            el : document.querySelector('#editor'),
+            previewStyle: 'vertical',
+            height: '400px',
+            initialValue: /*[[${mentoring.content}]]*/
+        });
+        // 폼 제출 시 에디터의 내용을 숨겨진 textarea 필드에 할당
+
+        function submitForm() {
+            const hiddenContent = document.querySelector('#hidden-content');
+            hiddenContent.value = editor.getMarkdown();
+            const form = document.querySelector('form');
+            form.submit();
+        }
+
+        function CommentRequestForm__submit(form) {
+            var editorContent = document.getElementById('editor').innerText.trim();
+
+            if (editorContent === '') {
+                toastWarning('내용을 입력해야 합니다.');
+                return false; // 폼 제출 중지
+            }
+
+            // 에디터 내용을 숨겨진 textarea에 설정
+            document.getElementById('hidden-content').value = editorContent;
+
+            // 폼 제출
+            document.getElementById('createForm').submit();
+        }
+    </script>
 </main>
 
 </body>
