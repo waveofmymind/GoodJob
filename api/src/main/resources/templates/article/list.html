@@ -5,13 +5,35 @@
         .category_btn {
             width: 99px;
         }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 180px;
+            position: relative;
+        }
+
+        .author {
+            position: absolute;
+            bottom: 5px;
+        }
+
+        .content {
+            font-size: 12px;
+        }
+
     </style>
 </head>
 <body>
     <main layout:fragment="main" class="container my-3 mx-auto">
         <form method="get" id="toListForm">
             <div class="container mx-auto p-8 w-2/3">
-                <ul class="flex">
+                <ul class="flex mb-4">
                     <li>
                         <a href="/article/list/0" class="category_btn btn-sm border-1 btn btn-outline m-1">전체</a>
                     </li>
@@ -40,7 +62,7 @@
                         <a href="/article/list/8" class="category_btn btn-sm border-1 btn btn-outline m-1">잡담</a>
                     </li>
                 </ul>
-                <div class="flex items-center justify-between h-16">
+                <div class="flex items-center justify-between h-16 mt-4">
                     <p class="text-2xl font-bold" id="pageNumberText"></p>
                     <div class="form-control flex-grow">
                         <select name="sortCode" class="ml-2 select w-40 select-ghost select-sm"
@@ -57,29 +79,56 @@
                     </div>
                     <a th:href="@{/article/create}" class="ml-2 my-3 bg-neutral text-white px-4 py-2 rounded-lg text-sm hover:bg-black">게시글 작성</a>
                 </div>
-                <ul class="container">
-                    <li class="bg-neutral text-white p-3 flex justify-between border-b h-11 rounded-md">
-                        <div class="text-sm flex-grow ">게시글 제목</div>
-                        <div class="text-sm w-16 text-center">글쓴이</div>
-                        <div class="text-sm  w-16 text-center">추천수</div>
-                        <div class="text-sm  w-16 text-center">댓글수</div>
-                        <div class="text-sm  w-16 text-center">조회수</div>
-                    </li>
-                    <li th:each="article, loop : ${paging}" class="bg-white p-3 flex justify-between border-b h-11">
-                        <a th:href="@{|/article/detail/${article.id}|}" th:text="${article.title}" class="text-sm flex-grow"></a>
-                        <p th:text="${article.member.nickname}" class="text-xs  w-16 text-center truncate overflow-ellipsis"></p>
-                        <div th:text="${#lists.size(article.likesList)}" class="text-xs  w-16 text-center"></div>
-                        <p th:text="${article.commentsCount}" class="text-xs  w-16 text-center"></p>
-                        <p th:text="${article.viewCount}" class="text-xs  w-16 text-center"></p>
+                <hr class="border-neutral mb-4">
+                <ul class="grid-container">
+                    <li th:each="article, loop : ${paging}">
+                        <a class="card m-2 bg-gray-100 hover:bg-gray-200" th:href="@{|/article/detail/${article.id}|}" >
+                            <p th:text="${article.title}" style="word-break: break-word;" class="mb-3"></p>
+                            <div>
+                                <div class="flex content">
+                                    <p class="text-gray-400 mr-2">추천수</p>
+                                    <p th:text="${#lists.size(article.likesList)}"></p>
+                                </div>
+                                <div class="flex content">
+                                    <p class="text-gray-400 mr-2">댓글수</p>
+                                    <p th:text="${article.commentsCount}"></p>
+                                </div>
+                                <div class="flex content">
+                                    <p class="text-gray-400 mr-2">조회수</p>
+                                    <p th:text="${article.viewCount}"></p>
+                                </div>
+                            </div>
+                            <p th:text="'글쓴이 : ' + ${article.member.nickname}" class="author mt-3 content"></p>
+                        </a>
                     </li>
 
                 </ul>
+
+
+
+<!--                <ul class="container">-->
+<!--                    <li class="bg-neutral text-white p-3 flex justify-between border-b h-11 rounded-md">-->
+<!--                        <div class="text-sm flex-grow ">게시글 제목</div>-->
+<!--                        <div class="text-sm w-16 text-center">글쓴이</div>-->
+<!--                        <div class="text-sm  w-16 text-center">추천수</div>-->
+<!--                        <div class="text-sm  w-16 text-center">댓글수</div>-->
+<!--                        <div class="text-sm  w-16 text-center">조회수</div>-->
+<!--                    </li>-->
+<!--                    <li th:each="article, loop : ${paging}" class="bg-white p-3 flex justify-between border-b h-11">-->
+<!--                        <a th:href="@{|/article/detail/${article.id}|}" th:text="${article.title}" class="text-sm flex-grow"></a>-->
+<!--                        <p th:text="${article.member.nickname}" class="text-xs  w-16 text-center truncate overflow-ellipsis"></p>-->
+<!--                        <div th:text="${#lists.size(article.likesList)}" class="text-xs  w-16 text-center"></div>-->
+<!--                        <p th:text="${article.commentsCount}" class="text-xs  w-16 text-center"></p>-->
+<!--                        <p th:text="${article.viewCount}" class="text-xs  w-16 text-center"></p>-->
+<!--                    </li>-->
+
+<!--                </ul>-->
 
             </div>
 
             <!-- 페이징처리 시작 -->
             <div th:if="${!paging.isEmpty()}" class="flex justify-center mb-6">
-                <div class="flex w-1/2 justify-center">
+                <div class="flex w-[770px] justify-center">
                     <a class="page-link btn btn-sm btn-ghost grid-0 m-1" th:href="@{|?page=${paging.number-1}|}" th:classappend="${!paging.hasPrevious} ? 'invisible'">
                         <span>&lt; 이전</span>
                     </a>

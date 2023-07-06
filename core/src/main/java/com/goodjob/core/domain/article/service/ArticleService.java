@@ -34,7 +34,7 @@ public class ArticleService {
 
 
     public Page<ArticleResponseDto> findByCategory(int page, int id, int sortCode, String category, String query) {
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(page, 12);
 
         List<Article> articles = articleRepository.findQslBySortCode(id, sortCode, category, query);
 
