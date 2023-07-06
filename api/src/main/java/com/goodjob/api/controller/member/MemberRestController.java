@@ -1,13 +1,12 @@
 package com.goodjob.api.controller.member;
 
-import com.goodjob.core.domain.member.dto.request.EditRequestDto;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
 import com.goodjob.core.global.base.rsData.RsData;
-import com.goodjob.core.global.rq.Rq;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
@@ -38,7 +37,7 @@ public class MemberRestController {
             return RsData.of("F-1", "2자 이상 입력하세요.");
         }
 
-        Optional<Member> opMember = memberService.findByNickName(nickname);
+        Optional<Member> opMember = memberService.findByNickname(nickname);
         if (opMember.isPresent()) {
             return RsData.of("F-1", "이미 사용중인 닉네임입니다.");
         }

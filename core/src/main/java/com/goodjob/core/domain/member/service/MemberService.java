@@ -35,12 +35,13 @@ public class MemberService {
         }
 
         String password = passwordEncoder.encode(joinRequestDto.getPassword());
+        String nickname = joinRequestDto.getNickname().replaceAll("\\s+", "");
 
         Member member = Member
                 .builder()
                 .username(joinRequestDto.getUsername())
                 .password(password)
-                .nickname(joinRequestDto.getNickname())
+                .nickname(nickname)
                 .email(joinRequestDto.getEmail())
                 .isDeleted(false)
                 .providerType("GOODJOB")
@@ -132,10 +133,6 @@ public class MemberService {
         return memberRepository.findById(id);
     }
 
-    public Optional<Member> findByNickName(String nickname) {
-        return memberRepository.findByNickname(nickname);
-    }
-
     // 소셜 로그인할때마다 동작
     public RsData<Member> whenSocialLogin(String providerType, String username, String email) {
         Optional<Member> opMember = findByUsername(username);
@@ -157,8 +154,8 @@ public class MemberService {
 
     @Transactional
     public RsData update(Member member, EditRequestDto editRequestDto) {
-        String nickname = editRequestDto.getNickname();
-        Optional<Member> opNickName = findByNickName(nickname);
+        String nickname = editRequestDto.getNickname().replaceAll("\\s+", "");
+        Optional<Member> opNickName = findByNickname(nickname);
 
         if (nickname.length() < 2) {
             return RsData.of("F-1", "2자 이상 입력해주세요.");
@@ -205,6 +202,10 @@ public class MemberService {
     @Transactional
     public void updateCoins() {
         memberRepository.updateCoinForFreeMembers(MAX_COIN_COUNT);
+    }
+
+    public Optional<Member> findByEmail(String email) {
+        return memberRepository.findByEmail(email);
     }
 }
 

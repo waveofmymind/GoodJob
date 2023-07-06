@@ -17,12 +17,12 @@ public class MemberEditController {
     private final MemberService memberService;
     private final Rq rq;
 
-    @GetMapping("/")
+    @GetMapping("")
     public String showEdit(EditRequestDto editRequestDto) {
         return "member/edit";
     }
 
-    @PatchMapping("/")
+    @PatchMapping("")
     @PreAuthorize("isAuthenticated()")
     @ResponseBody
     public RsData<String> edit(EditRequestDto editRequestDto) {
