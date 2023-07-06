@@ -1,3 +1,4 @@
+ii
 <html layout:decorate="~{layout/layout.html}">
 <head>
     <title>로그인</title>
@@ -48,23 +49,34 @@
     <div class="flex justify-center items-center min-h-screen">
         <div class="w-96 bg-white p-8 rounded-lg mb-64">
             <h2 class="text-xl font-semibold mb-4">🔐 로그인</h2>
-            <form th:action method="post" th:object="${loginRequestDto}" class="flex flex-col gap-6" onsubmit="LoginForm__submit(this); return false;">
+            <form th:action method="post" th:object="${loginRequestDto}" class="flex flex-col gap-6"
+                  onsubmit="LoginForm__submit(this); return false;">
                 <div class="form-control">
                     <label class="block mb-2">아이디</label>
-                    <input type="text" name="username" class="border-b border-neutral px-2 py-2 w-full focus:outline-none"
+                    <input type="text" name="username"
+                           class="border-b border-neutral px-2 py-2 w-full focus:outline-none"
                            placeholder="아이디를 입력하세요">
                 </div>
                 <div class="form-control">
                     <label class="block mb-2 mt-4">비밀번호</label>
-                    <input type="password" name="password" class="border-b border-neutral px-2 py-2 w-full focus:outline-none"
+                    <input type="password" name="password"
+                           class="border-b border-neutral px-2 py-2 w-full focus:outline-none"
                            placeholder="비밀번호를 입력하세요">
                 </div>
-                <div>
-                    <button type="submit" class="mt-4 bg-neutral text-white px-4 py-2 rounded-lg hover:bg-black">로그인</button>
+                <div class="mt-2 mb-2 flex justify-between">
+                    <div style="display: inline;" class="bg-neutral text-white px-4 py-2 rounded-lg hover:bg-black">
+                        <button type="submit">로그인</button>
+                    </div>
+                    <div style="display: inline;" class="bg-neutral text-white px-4 py-2 rounded-lg hover:bg-black">
+                        <a href="" class="hover:text-primary">아이디찾기</a>
+                         /
+                        <a href="" class="hover:text-primary">비밀번호찾기</a>
+                    </div>
                 </div>
             </form>
             <div class="space-y-4">
-                <a class="btn btn-block btn-outline gap-1 border-[color:#ffe812]" style="border-color: #ffe812;" href="/oauth2/authorization/kakao">
+                <a class="btn btn-block btn-outline gap-1 border-[color:#ffe812]" style="border-color: #ffe812;"
+                   href="/oauth2/authorization/kakao">
                     <i class="fa-solid fa-comment text-[color:#ffe812]"></i>
                     <span class="normal-case"> 카카오 로그인</span>
                 </a>
@@ -72,7 +84,8 @@
                     <i class="fa-solid fab fa-github"></i>
                     <span class="normal-case"> 깃허브 로그인</span>
                 </a>
-                <a class="btn btn-block btn-outline gap-1 border-[color:#ffe812]" style="border-color: #ff0000;" href="/oauth2/authorization/google">
+                <a class="btn btn-block btn-outline gap-1 border-[color:#ffe812]" style="border-color: #ff0000;"
+                   href="/oauth2/authorization/google">
                     <i class="fa-brands fa-google text-[color:#ff4000]"></i>
                     <span class="normal-case"> 구글 로그인</span>
                 </a>
