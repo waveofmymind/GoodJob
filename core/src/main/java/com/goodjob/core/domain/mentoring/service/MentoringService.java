@@ -24,6 +24,10 @@ import java.util.Optional;
 public class MentoringService {
     private final MentoringRepository mentoringRepository;
 
+    public List<Mentoring> findAll() {
+        return mentoringRepository.findAll();
+    }
+
     public Page<Mentoring> findAll(int page, String category, String query) {
         Pageable pageable = PageRequest.of(page, 12);
 
@@ -42,13 +46,13 @@ public class MentoringService {
     }
 
     public RsData<Mentoring> getMentoring(Long id) {
-        Optional<Mentoring> mentoringOp = mentoringRepository.findById(id);
+        RsData<Mentoring> mentoringRsData = findById(id);
 
-        if(mentoringOp.isEmpty()) {
-            return RsData.of("F-1", "해당 멘토링이 존재하지 않습니다.");
+        if(mentoringRsData.isFail()) {
+            return mentoringRsData;
         }
 
-        Mentoring mentoring = mentoringOp.get();
+        Mentoring mentoring = mentoringRsData.getData();
 
         return RsData.of("S-1", "게시글에 대한 정보를 가져옵니다.", mentoring);
     }
@@ -58,9 +62,9 @@ public class MentoringService {
             return RsData.of("F-1", "제목을 입력해야 합니다.");
         }
 
-        if(mentoringRequestDto.getContent().trim().equals("")) {
-            return RsData.of("F-2", "내용을 입력해야 합니다.");
-        }
+//        if(mentoringRequestDto.getContent().trim().equals("")) {
+//            return RsData.of("F-2", "내용을 입력해야 합니다.");
+//        }
 
         if(mentoringRequestDto.getTitle().trim().length() > 30) {
             return RsData.of("F-3", "제목은 30자 이내로 작성해야 합니다.");
@@ -85,7 +89,7 @@ public class MentoringService {
     public RsData<Mentoring> findById(Long id) {
         Optional<Mentoring> mentoringOp = mentoringRepository.findById(id);
 
-        if(!mentoringOp.isPresent()) {
+        if(mentoringOp.isEmpty()) {
             return RsData.of("F-1", "해당 멘토링이 존재하지 않습니다.");
         }
 
@@ -101,7 +105,7 @@ public class MentoringService {
 
         Mentoring mentoring = mentoringRsData.getData();
 
-        if(mentoring.getMember().getId() != mentoring.getId()) {
+        if(mentoring.getMember().getId() != member.getId()) {
             return RsData.of("F-3", "수정 권한이 없습니다.");
         }
 
@@ -109,9 +113,9 @@ public class MentoringService {
             return RsData.of("F-4", "제목을 입력해야 합니다.");
         }
 
-        if(mentoringRequestDto.getContent().trim().equals("")) {
-            return RsData.of("F-5", "내용을 입력해야 합니다.");
-        }
+//        if(mentoringRequestDto.getContent().trim().equals("")) {
+//            return RsData.of("F-5", "내용을 입력해야 합니다.");
+//        }
 
         if(mentoringRequestDto.getTitle().trim().length() > 30) {
             return RsData.of("F-6", "제목은 30자 이내로 작성해야 합니다.");

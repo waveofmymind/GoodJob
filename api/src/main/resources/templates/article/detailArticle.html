@@ -1,12 +1,19 @@
 <html layout:decorate="~{layout/layout.html}">
 <head>
     <title>게시글 상세 페이지</title>
+    <style>
+        .toastui-editor-contents p {
+            font-family: "GmarketSansMedium";
+            font-size: 16px;
+        }
+    </style>
+
 </head>
 <body>
 <main layout:fragment="main" class="container my-3 mx-auto">
+    <div class="container mx-auto py-8 w-[770px]">
 
-    <div class="container mx-auto py-8 w-1/2">
-        <a href="/article/list" class="bg-white text-neutral px-1 py-1 mb-3 rounded-md flex-start hover:bg-gray-200">&lt; 전체 게시글</a>
+        <a href="/article/list/0" class="bg-white text-neutral px-1 py-1 mb-3 rounded-md flex-start hover:bg-gray-200">&lt; 전체 게시글</a>
         <h1 class="text-2xl font-bold flex-grow pl-3 mt-2 truncate overflow-ellipsis" th:text="${article.title}"></h1>
         <div class="flex justify-between mt-2 mb-1">
             <p class="text-xs mt-2 mr-2 w-80 ml-3" th:text="${article.member.nickname}"></p>
@@ -20,9 +27,7 @@
         <hr class="border-neutral mb-4">
 
         <div class="min-h-[200px]">
-            <div style="word-wrap: break-word;">
-                <div class="text-sm pl-3 min-h-[120px]" style="word-break: break-word; white-space: pre-wrap;"  th:text="${article.content}"></div>
-            </div>
+            <div class="toast-custom-viewer text-sm pl-3 min-h-[120px]"></div>
             <div class="flex flex-wrap ml-3">
                 <tr th:each="i : ${#numbers.sequence(1, 5)}" th:with="file=${article.extra.fileMap.get('file\_\_' + i)}" class="flex">
                     <th:block th:if="${file != null}">
@@ -33,9 +38,9 @@
                 </tr>
             </div>
         </div>
-        <div class="flex flex-wrap">
+        <div id="hashTag" class="flex flex-wrap">
             <th:block th:each="hashTag : ${article.hashTagList}">
-                <a th:href="@{${hashTag.keyword.listUrl}}" class="bg-gray-300 px-2 py-1 rounded-full m-2">
+                <a th:href="@{|/article/list/0?sortCode=1&category=해시태그&query=${hashTag.keyword.content}}" class="bg-gray-300 px-2 py-1 rounded-full m-2">
                     #[[${hashTag.keyword.content}]]
                 </a>
             </th:block>
@@ -166,7 +171,41 @@
         </ul>
     </div>
 
-    <script layout:fragment="script" type='text/javascript'>
+    <script th:inline="javascript">
+        const viewer = toastui.Editor.factory({
+            el : document.querySelector(".toast-custom-viewer"),
+            viewer : true,
+            initialValue : /*[[${article.content}]]*/
+        });
+        // 우선순위 해시태그 내용 배열
+        const priorityTags = ['신입', '취준', '자소서', '면접', 'q&a', '이직', '퇴사', '잡담'];
+
+        const hashTagList = document.querySelector('#hashTag');
+        const hashTags = Array.from(hashTagList.children);
+
+        // 해시태그 리스트 정렬
+        hashTags.sort((a, b) => {
+            const textA = a.textContent.trim().substring(1); // '#' 제거 후 내용만 추출
+            const textB = b.textContent.trim().substring(1);
+
+            // 우선순위 배열을 기준으로 정렬
+            const indexA = priorityTags.indexOf(textA);
+            const indexB = priorityTags.indexOf(textB);
+
+            if (indexA !== -1 && indexB !== -1) {
+                return indexA - indexB;
+            } else if (indexA !== -1) {
+                return -1;
+            } else if (indexB !== -1) {
+                return 1;
+            }
+
+            return 0;
+        });
+
+        // 정렬된 해시태그 순서대로 다시 추가
+        hashTags.forEach(tag => hashTagList.appendChild(tag));
+
         const delete_elements = document.getElementsByClassName("delete");
         Array.from(delete_elements).forEach(function(element) {
             element.addEventListener('click', function() {

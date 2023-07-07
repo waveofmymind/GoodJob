@@ -59,9 +59,9 @@
 </head>
 <body>
 <main layout:fragment="main" class="container my-3 mx-auto">
-    <div class="container mx-auto p-8 w-1/2">
+    <div class="container mx-auto p-8 w-[770px]">
         <div class="flex items-center justify-between h-16">
-            <a href="/article/list" class="text-2xl font-bold flex-grow">채팅방 목록</a>
+            <a href="/chat/rooms" class="text-2xl font-bold flex-grow">채팅방 목록</a>
         </div>
         <ul class="container">
             <li class="bg-neutral text-white p-3 flex justify-between border-b h-11 rounded-md">
@@ -107,7 +107,7 @@
                     </a>
                 </div>
             </li>
-            <li th:each="room : ${list}" class="bg-white p-3 flex justify-between border-b h-11" th:if="${room.receiver.nickname == @rq.member.nickname and room.visible}">
+            <li th:each="room : ${list}" class="bg-white p-3 flex justify-between border-b h-11" th:if="${room.receiver.nickname == @rq.member.nickname and !room.deleted}">
                 <div class="text-sm flex items-center w-1/4 justify-center" th:text="${#strings.equals(room.sender.nickname, myNickname) ? room.receiver.nickname : room.sender.nickname}"></div>
                 <div class="text-sm flex items-center w-1/4 justify-center" th:text="${#temporals.format(room.reservationTime, 'yy.MM.dd HH:00')} + ' ~ ' + ${#temporals.format(room.reservationTime.plusHours(1), 'HH:00')}"></div>
                 <div class="text-sm flex items-center w-1/4 justify-center pr-4">

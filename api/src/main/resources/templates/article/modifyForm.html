@@ -4,16 +4,28 @@
 </head>
 <body>
 <main layout:fragment="main" class="container mx-auto">
-    <div class="container mx-auto py-8 w-1/2">
-        <h1 class="text-2xl font-bold">게시글 작성</h1>
-
+    <div class="container mx-auto py-8 w-[770px]">
         <form class="mt-4" method="post" enctype="multipart/form-data">
+            <div class="flex">
+                <p class="text-2xl font-bold mb-3">카테고리</p>
+                <select name="category" class="ml-2 select w-40 select-ghost select-sm">
+                    <option value="1" th:selected="${article.category == 1}">신입</option>
+                    <option value="2" th:selected="${article.category == 2}">취준</option>
+                    <option value="3" th:selected="${article.category == 3}">자소서</option>
+                    <option value="4" th:selected="${article.category == 4}">면접</option>
+                    <option value="5" th:selected="${article.category == 5}">Q&A</option>
+                    <option value="6" th:selected="${article.category == 6}">이직</option>
+                    <option value="7" th:selected="${article.category == 7}">퇴사</option>
+                    <option value="8" th:selected="${article.category == 8}">잡담</option>
+                </select>
+            </div>
             <div class="mb-4">
                 <input type="text" name="title" th:value="${article.title}" class="form-input w-full border border-neutral rounded-md h-10 p-3" placeholder="제목을 입력하세요">
             </div>
 
             <div class="mb-4">
-                <textarea name="content" oninput="handleTextareaInput(event)" th:text="${article.content}" class="form-textarea w-full h-64 resize-none border border-neutral rounded-md p-3" placeholder="본문을 입력하세요"></textarea>
+                <textarea name="content" class="form-textarea hidden" id="hidden-content"></textarea>
+                <div class="form-textarea" id="editor"></div>
             </div>
 
             <div class="flex justify-between mb-4">
@@ -63,19 +75,88 @@
             </div>
             <input type="hidden" id="hashTagStr" name="hashTagStr"/>
 
-            <button type="submit" class="register bg-neutral hover:bg-black text-white font-bold px-4 py-2 rounded border-neutral" onclick="submitForm()">저장하기</button>
+            <button class="register bg-neutral hover:bg-black text-white font-bold px-4 py-2 rounded border-neutral" onclick="submitForm()">저장하기</button>
         </form>
     </div>
 
 
-    <script layout:fragment="script" type='text/javascript'>
+    <script th:inline="javascript">
+        const Editor = toastui.Editor;
+        const editor = new Editor({
+            el : document.querySelector('#editor'),
+            previewStyle: 'vertical',
+            height: '500px',
+            initialValue: /*[[${article.content}]]*/
+        });
 
+        var hashTagList = document.getElementById('hashTagList');
+        var hashTags = hashTagList.getElementsByClassName('keyword');
+        var removeKeywords = ["신입", "취준", "자소서", "면접", "q&a", "이직", "퇴사", "잡담"];
+
+        for (var i = hashTags.length - 1; i >= 0; i--) {
+            var keyword_remove = hashTags[i].textContent.trim().substring(1);
+            if (removeKeywords.includes(keyword_remove)) {
+                hashTags[i].parentNode.remove();
+            }
+        }
+
+        const select = document.querySelector("select[name=category]"); // 카테고리 select 요소 가져오기
+        const hashTagInput = document.getElementById('hashTagInput'); // 해시태그 input 요소 가져오기
+        var selectedOption = select.options[select.selectedIndex]; // 선택된 option 요소 가져오기
+        var text = selectedOption.text; // 선택된 option의 text 가져오기
+
+        // 초기에 '신입' 카테고리로 설정되었을 때 해시태그 추가
+        const listItem = document.createElement('div'); // 새로운 해시태그 div 요소 생성
+        const keyword = document.createElement('span'); // 해시태그 span 요소 생성
+        listItem.className = 'bg-gray-300 px-2 py-1 rounded-full m-1'
+        keyword.className = 'keyword';
+        keyword.textContent = '#' + text;
+        keyword.id = 'hashTagItem_' + text;
+        listItem.appendChild(keyword); // div에 해시태그 span 추가
+        if (hashTagList.firstChild) {
+            hashTagList.insertBefore(listItem, hashTagList.firstChild);
+        } else {
+            hashTagList.appendChild(listItem);
+        }
+
+        select.addEventListener('change', function() {
+            selectedOption = select.options[select.selectedIndex]; // 선택된 option 요소 가져오기
+            const value = selectedOption.value; // 선택된 option의 value 가져오기
+            text = selectedOption.text; // 선택된 option의 text 가져오기
+
+            // 가장 앞에 있는 해시태그 div 요소 삭제
+            const firstListItem = hashTagList.firstChild;
+            if (firstListItem) {
+                firstListItem.remove();
+            }
+
+            const listItem = document.createElement('div'); // 새로운 해시태그 div 요소 생성
+            const keyword = document.createElement('span'); // 해시태그 span 요소 생성
+            listItem.className = 'bg-gray-300 px-2 py-1 rounded-full m-1'
+            keyword.className = 'keyword';
+            keyword.textContent = '#' + text;
+            keyword.id = 'hashTagItem_' + text;
+            listItem.appendChild(keyword); // div에 해시태그 span 추가
+            if (hashTagList.firstChild) {
+                hashTagList.insertBefore(listItem, hashTagList.firstChild);
+            } else {
+                hashTagList.appendChild(listItem);
+            }
+
+            hashTagInput.value = ''; // 입력한 텍스트 초기화
+        });
 
         // 해시태그 추가를 위한 함수
         function addHashTag(event) {
             event.preventDefault();
             var hashTagInput = document.getElementById('hashTagInput');
             var hashTagText = hashTagInput.value.trim().replace(/\s+/g, '').toLowerCase(); // 띄어쓰기 제거 및 소문자로 변환
+
+            if(hashTagText.length > 10) {
+                toastWarning('해시태그는 최대 10자까지 작성할 수 있습니다.');
+                hashTagInput.focus();
+                return;
+            }
 
             if (hashTagText !== '') {
                 var hashTagList = document.getElementById('hashTagList');
@@ -110,7 +191,11 @@
                 hashTagValues.push(hashTagText);
             }
             document.getElementById('hashTagStr').value = hashTagValues.join(',');
-            document.forms[0].submit();
+
+            const hiddenContent = document.querySelector('#hidden-content');
+            hiddenContent.value = editor.getMarkdown();
+            const form = document.querySelector('form');
+            form.submit();
         }
 
         function previewImage(event) {

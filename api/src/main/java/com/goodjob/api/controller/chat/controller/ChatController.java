@@ -33,9 +33,8 @@ public class ChatController {
 
     //나의 채팅방 목록 조회
     @GetMapping("/rooms")
-    public String myRooms(@AuthenticationPrincipal User user, Model model) {
-        String username = user.getUsername();
-        List<ChatRoomDetailDTO> chatRooms = chatService.findByUsername(username);
+    public String myRooms(Model model) {
+        List<ChatRoomDetailDTO> chatRooms = chatService.findByUsername(rq.getMember());
         model.addAttribute("myNickname", rq.getMember().getNickname());
         model.addAttribute("list", chatRooms);
         return "chat/rooms";
@@ -43,10 +42,10 @@ public class ChatController {
 
     //채팅방 개설
     @PostMapping("/room/{id}")
-    public String create(@PathVariable Long id, @AuthenticationPrincipal User user, Model model,
+    public String create(@PathVariable Long id, Model model,
                          @RequestParam("date") String date, @RequestParam("time") String time){
 
-        Member member1 = memberService.findByUsername(user.getUsername()).orElse(null);
+        Member member1 = memberService.findByUsername(rq.getMember().getUsername()).orElse(null);
         RsData<Mentoring> mentoringRsData = mentoringService.findById(id);
         if(mentoringRsData.isFail()) {
             return rq.historyBack(mentoringRsData);
@@ -69,10 +68,10 @@ public class ChatController {
 
     //채팅방 상세
     @GetMapping("/room")
-    public String getRoom(String roomId, Model model, @AuthenticationPrincipal User user){
+    public String getRoom(String roomId, Model model){
 
         List<ChatMessage> messages = chatService.findByRoomId(roomId);
-        Member member = memberService.findByUsername(user.getUsername()).orElse(null);
+        Member member = memberService.findByUsername(rq.getMember().getUsername()).orElse(null);
 
         if (member == null) {
             return rq.redirectWithMsg("/user/member/login", "다시 로그인해주세요!");
@@ -89,9 +88,9 @@ public class ChatController {
 
     //채팅방 삭제
     @GetMapping("/delete/room")
-    public String deleteRoom(String roomId, @AuthenticationPrincipal User user){
+    public String deleteRoom(String roomId){
 
-        Member member = memberService.findByUsername(user.getUsername()).orElse(null);
+        Member member = memberService.findByUsername(rq.getMember().getUsername()).orElse(null);
         chatService.deleteRoom(roomId, member);
 
         return "redirect:/chat/rooms";

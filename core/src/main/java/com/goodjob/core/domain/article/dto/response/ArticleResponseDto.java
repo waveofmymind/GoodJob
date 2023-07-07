@@ -27,6 +27,7 @@ public class ArticleResponseDto {
     private Member member;
     private List<HashTagResponseDto> hashTagList;
     private Map<String, Object> extra = new LinkedHashMap<>();
+    private int category;
 
     public boolean isMemberLikesArticle(Member member) {
         for(LikesResponseDto likesResponseDto : likesList) {
@@ -36,5 +37,18 @@ public class ArticleResponseDto {
         }
 
         return false;
+    }
+
+    public String getCategoryDisplayName() {
+        return switch(category) {
+            case 2 -> "취준";
+            case 3 -> "자소서";
+            case 4 -> "면접";
+            case 5 -> "Q&A";
+            case 6 -> "이직";
+            case 7 -> "퇴사";
+            case 8 -> "잡담";
+            default -> "신입";
+        };
     }
 }

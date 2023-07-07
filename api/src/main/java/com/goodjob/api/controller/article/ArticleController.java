@@ -38,9 +38,9 @@ public class ArticleController {
     private final S3Service s3Service;
     private final FileService fileService;
 
-    @GetMapping("/list")
-    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page, ToListForm toListForm) {
-        Page<ArticleResponseDto> paging = articleService.findAll(page, toListForm.sortCode, toListForm.category, toListForm.query);
+    @GetMapping("/list/{id}")
+    public String list(Model model, @PathVariable("id") int id, @RequestParam(value="page", defaultValue="0") int page, ToListForm toListForm) {
+        Page<ArticleResponseDto> paging = articleService.findByCategory(page, id, toListForm.sortCode, toListForm.category, toListForm.query);
         model.addAttribute("paging", paging);
 
         return "article/list";
@@ -132,7 +132,7 @@ public class ArticleController {
         }
 
 
-        return rq.redirectWithMsg("/article/list", articleRsData);
+        return rq.redirectWithMsg("/article/list/0", articleRsData);
     }
 
     @Setter
@@ -145,7 +145,7 @@ public class ArticleController {
 
     @GetMapping("/show/list")
     public String showArticles(Model model, @RequestParam(value="page", defaultValue="0") int page) {
-        Page<ArticleResponseDto> paging = articleService.findAll(page, 1, "글쓴이", rq.getMember().getNickname());
+        Page<ArticleResponseDto> paging = articleService.findByCategory(page, 0, 1, "글쓴이", rq.getMember().getNickname());
         model.addAttribute("paging", paging);
 
         return "member/myArticles";

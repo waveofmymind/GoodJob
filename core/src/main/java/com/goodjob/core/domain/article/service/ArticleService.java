@@ -33,10 +33,10 @@ public class ArticleService {
     private final FileService fileService;
 
 
-    public Page<ArticleResponseDto> findAll(int page, int sortCode, String category, String query) {
-        Pageable pageable = PageRequest.of(page, 10);
+    public Page<ArticleResponseDto> findByCategory(int page, int id, int sortCode, String category, String query) {
+        Pageable pageable = PageRequest.of(page, 12);
 
-        List<Article> articles = articleRepository.findQslBySortCode(sortCode, category, query);
+        List<Article> articles = articleRepository.findQslBySortCode(id, sortCode, category, query);
 
         List<ArticleResponseDto> articleResponseDtos = articles
                 .stream()
@@ -118,9 +118,9 @@ public class ArticleService {
             return RsData.of("F-1", "제목을 입력해야 합니다.");
         }
 
-        if(articleRequestDto.getContent().trim().equals("")) {
-            return RsData.of("F-2", "내용을 입력해야 합니다.");
-        }
+//        if(articleRequestDto.getContent().trim().equals("")) {
+//            return RsData.of("F-2", "내용을 입력해야 합니다.");
+//        }
 
         if(articleRequestDto.getTitle().trim().length() > 30) {
             return RsData.of("F-3", "제목은 30자 이내로 작성해야 합니다.");
@@ -136,6 +136,7 @@ public class ArticleService {
                 .commentsCount(0L)
                 .isDeleted(false)
                 .likesList(null)
+                .category(articleRequestDto.getCategory())
                 .build();
 
         articleRepository.save(article);
@@ -164,10 +165,10 @@ public class ArticleService {
         if(articleRequestDto.getTitle().trim().equals("")) {
             return RsData.of("F-4", "제목을 입력해야 합니다.");
         }
-
-        if(articleRequestDto.getContent().trim().equals("")) {
-            return RsData.of("F-5", "내용을 입력해야 합니다.");
-        }
+//
+//        if(articleRequestDto.getContent().trim().equals("")) {
+//            return RsData.of("F-5", "내용을 입력해야 합니다.");
+//        }
 
         if(articleRequestDto.getTitle().trim().length() > 30) {
             return RsData.of("F-6", "제목은 30자 이내로 작성해야 합니다.");
@@ -175,6 +176,7 @@ public class ArticleService {
 
         article.setTitle(articleRequestDto.getTitle());
         article.setContent(articleRequestDto.getContent());
+        article.setCategory(articleRequestDto.getCategory());
         hashTagService.applyHashTags(article, articleRequestDto.getHashTagStr());
 
         articleRepository.save(article);
@@ -219,5 +221,4 @@ public class ArticleService {
     public List<Article> findAllByMemberId(Long memberId) {
         return articleRepository.findAllByMemberIdOrderByCreatedDateDesc(memberId);
     }
-
 }
