@@ -1,6 +1,6 @@
 spring:
   kafka:
-    bootstrap-servers: ENC(FOPXKkmokR4Ms+fA/Z1xUyn+bPC2MKAtnto16KEgZjzM1DSxTt8Yr44mWiCRARyVlmgjEz5rZP0OVI9uWgPWpQ==)
+    bootstrap-servers: ENC(Ye8D/K+6VCjeDv84YdExrcYV6cBySzV/hclr2AcjvVbA7ZPip4KYbjxbkxJIZH6m8p6Ssgd2uJm25UkethFn2g==)
     consumer:
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
