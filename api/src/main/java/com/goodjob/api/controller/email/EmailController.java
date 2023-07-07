@@ -22,7 +22,7 @@ public class EmailController {
         // 쿠키에 해당 유저의 email 저장
         rq.setCookie("email", email);
 
-        emailVerificationService.send(email);
+        emailVerificationService.sendVerificationCode(email);
     }
 
     @PostMapping("/verify")

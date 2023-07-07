@@ -4,9 +4,11 @@ import com.goodjob.core.domain.member.dto.request.EditRequestDto;
 import com.goodjob.core.domain.member.service.MemberService;
 import com.goodjob.core.global.base.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -22,11 +24,20 @@ public class MemberEditController {
         return "member/edit";
     }
 
-    @PatchMapping("")
+    @PostMapping("")
     @PreAuthorize("isAuthenticated()")
-    @ResponseBody
-    public RsData<String> edit(EditRequestDto editRequestDto) {
-        return memberService.update(rq.getMember(), editRequestDto);
+    public String edit(@Valid EditRequestDto editRequestDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "member/edit";
+        }
+
+        RsData updateRsData = memberService.update(rq.getMember(), editRequestDto);
+
+        if (updateRsData.isFail()) {
+            return rq.historyBack(updateRsData);
+        }
+
+        return rq.redirectWithMsg("/member/me", updateRsData);
     }
 
     @GetMapping("/confirm/password")
