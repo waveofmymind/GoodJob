@@ -8,7 +8,7 @@ import com.goodjob.resume.dto.response.PredictionResponse;
 import com.goodjob.resume.dto.response.WhatGeneratedImproveResponse;
 import com.goodjob.resume.dto.response.WhatGeneratedQuestionResponse;
 import com.goodjob.resume.gpt.GptService;
-import com.goodjob.resume.usecase.SavePredictionUseCase;
+import com.goodjob.resume.application.in.SavePredictionUseCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

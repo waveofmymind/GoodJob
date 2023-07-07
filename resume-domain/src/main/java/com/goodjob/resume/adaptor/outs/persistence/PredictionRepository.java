@@ -1,4 +1,4 @@
-package com.goodjob.resume.ports.outs;
+package com.goodjob.resume.adaptor.outs.persistence;
 
 import com.goodjob.resume.domain.Prediction;
 import org.springframework.data.jpa.repository.JpaRepository;
