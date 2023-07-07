@@ -1,4 +1,4 @@
-package com.goodjob.resume.usecase;
+package com.goodjob.resume.application.in;
 
 import com.goodjob.resume.dto.request.PredictionServiceRequest;
 
