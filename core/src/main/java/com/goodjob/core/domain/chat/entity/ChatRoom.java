@@ -48,7 +48,7 @@ public class ChatRoom extends BaseEntity {
     private LocalDateTime reservationTime;
 
     @Setter
-    private boolean visible;
+    private boolean isDeleted;
 
     @Setter
     @Column(columnDefinition = "text")
@@ -67,7 +67,7 @@ public class ChatRoom extends BaseEntity {
                 .chatList(new ArrayList<>())
                 .status(0)
                 .reservationTime(LocalDateTime.of(year, month, day, Integer.parseInt(time), 0, 0))
-                .visible(true)
+                .isDeleted(false)
                 .build();
     }
 

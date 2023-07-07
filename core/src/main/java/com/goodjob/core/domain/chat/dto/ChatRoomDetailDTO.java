@@ -24,7 +24,7 @@ public class ChatRoomDetailDTO {
     private String name;
     private int status;
     private LocalDateTime reservationTime;
-    private boolean visible;
+    private boolean isDeleted;
     private String rejectionReason;
 
     public static ChatRoomDetailDTO toChatRoomDetailDTO(ChatRoom chatRoom){
@@ -38,7 +38,7 @@ public class ChatRoomDetailDTO {
         chatRoomDetailDTO.setRoomId(chatRoom.getRoomId());
         chatRoomDetailDTO.setStatus(chatRoom.getStatus());
         chatRoomDetailDTO.setReservationTime(chatRoom.getReservationTime());
-        chatRoomDetailDTO.setVisible(chatRoom.isVisible());
+        chatRoomDetailDTO.setDeleted(chatRoom.isDeleted());
         chatRoomDetailDTO.setRejectionReason(chatRoom.getRejectionReason());
 
         return chatRoomDetailDTO;

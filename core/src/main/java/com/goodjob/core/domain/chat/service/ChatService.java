@@ -59,7 +59,10 @@ public class ChatService {
         return chatMessageRepository.findByChatRoom_RoomId(roomId);
     }
 
-    public List<ChatRoomDetailDTO> findByUsername(String username) {
+    public List<ChatRoomDetailDTO> findByUsername(Member member) {
+
+        String username = member.getUsername();
+
         List<ChatRoom> chatRooms = chatRoomRepository.findByChatRoom_Username(username);
 
         List<ChatRoomDetailDTO> chatRoomDetailDTOS = new ArrayList<>();
@@ -89,7 +92,7 @@ public class ChatService {
         if(member.getNickname().equals(chatRoom.getSender().getNickname())) {
             chatRoomRepository.delete(chatRoom);
         } else if(member.getNickname().equals((chatRoom.getReceiver().getNickname()))) {
-            chatRoom.setVisible(false);
+            chatRoom.setDeleted(true);
             chatRoomRepository.save(chatRoom);
         }
     }
