@@ -26,7 +26,7 @@ public class ResumeFacade {
     private final ObjectMapper objectMapper;
     private final SavePredictionUseCase savePredictionUseCase;
 
-    @KafkaListener(topics = "question-request-prod", groupId = "gptgroup")
+    @KafkaListener(topics = "${custom.kafka.topic.question}", groupId = "gptgroup")
     public void generatedQuestionResponseWithKafka(String message) {
         try {
             CreatePromptRequest request = objectMapper.readValue(message, CreatePromptRequest.class);
@@ -47,7 +47,7 @@ public class ResumeFacade {
 
     }
 
-    @KafkaListener(topics = "advice-request-prod", groupId = "gptgroup")
+    @KafkaListener(topics = "${custom.kafka.topic.advice}", groupId = "gptgroup")
     public void generateAdviceWithKafka(String message) {
         try {
             CreatePromptRequest request = objectMapper.readValue(message, CreatePromptRequest.class);
