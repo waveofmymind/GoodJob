@@ -8,10 +8,11 @@
             display: none;
         }
     </style>
+
 </head>
 <body>
 <main layout:fragment="main" class="container mx-auto">
-    <div class="container mx-auto py-8 w-1/2">
+    <div class="container mx-auto py-8 w-[770px]">
         <form class="mt-4" th:object="${articleRequestDto}" method="post" enctype="multipart/form-data">
             <div class="flex">
                 <p class="text-2xl font-bold mb-3">카테고리</p>
@@ -31,7 +32,9 @@
             </div>
 
             <div class="mb-4">
-                <textarea name="content" oninput="handleTextareaInput(event)" th:field="*{content}" class="form-textarea w-full h-64 resize-none border border-neutral rounded-md p-3" placeholder="본문을 입력하세요"></textarea>
+<!--                <textarea name="content" oninput="handleTextareaInput(event)" th:field="*{content}" class="form-textarea w-full h-64 resize-none border border-neutral rounded-md p-3" placeholder="본문을 입력하세요"></textarea>-->
+                <textarea name="content" th:field="*{content}" class="form-textarea hidden" id="hidden-content"></textarea>
+                <div id="editor"></div>
             </div>
 
             <div class="flex justify-between mb-4">
@@ -71,8 +74,16 @@
         </form>
     </div>
 
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 
     <script layout:fragment="script" type='text/javascript'>
+        const Editor = toastui.Editor;
+        const editor = new Editor({
+            el : document.querySelector('#editor'),
+            previewStyle: 'vertical',
+            height: '500px',
+        });
+
         const select = document.querySelector("select[name=category]"); // 카테고리 select 요소 가져오기
         const hashTagInput = document.getElementById('hashTagInput'); // 해시태그 input 요소 가져오기
         const hashTagList = document.getElementById('hashTagList'); // 해시태그 목록을 추가할 div 요소 가져오기
@@ -151,7 +162,11 @@
                 hashTagValues.push(hashTagText);
             }
             document.getElementById('hashTagStr').value = hashTagValues.join(',');
-            document.forms[0].submit();
+
+            const hiddenContent = document.querySelector('#hidden-content');
+            hiddenContent.value = editor.getMarkdown();
+            const form = document.querySelector('form');
+            form.submit();
         }
 
         function previewImage(event) {

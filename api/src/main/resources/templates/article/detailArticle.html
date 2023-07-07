@@ -1,6 +1,13 @@
 <html layout:decorate="~{layout/layout.html}">
 <head>
     <title>게시글 상세 페이지</title>
+    <style>
+        .toastui-editor-contents p {
+            font-family: "GmarketSansMedium";
+            font-size: 16px;
+        }
+    </style>
+
 </head>
 <body>
 <main layout:fragment="main" class="container my-3 mx-auto">
@@ -20,10 +27,7 @@
         <hr class="border-neutral mb-4">
 
         <div class="min-h-[200px]">
-            <div style="word-wrap: break-word;">
-<!--                <div class="card-text text-sm pl-3 min-h-[120px]" style="white-space: pre-wrap;" th:utext="${@commonUtil.markdown(article.content)}"></div>-->
-                <div class="text-sm pl-3 min-h-[120px]" style="word-break: break-word; white-space: pre-wrap;"  th:text="${article.content}"></div>
-            </div>
+            <div class="toast-custom-viewer text-sm pl-3 min-h-[120px]"></div>
             <div class="flex flex-wrap ml-3">
                 <tr th:each="i : ${#numbers.sequence(1, 5)}" th:with="file=${article.extra.fileMap.get('file\_\_' + i)}" class="flex">
                     <th:block th:if="${file != null}">
@@ -167,7 +171,12 @@
         </ul>
     </div>
 
-    <script layout:fragment="script" type='text/javascript'>
+    <script th:inline="javascript">
+        const viewer = toastui.Editor.factory({
+            el : document.querySelector(".toast-custom-viewer"),
+            viewer : true,
+            initialValue : /*[[${article.content}]]*/
+        });
         // 우선순위 해시태그 내용 배열
         const priorityTags = ['신입', '취준', '자소서', '면접', 'q&a', '이직', '퇴사', '잡담'];
 

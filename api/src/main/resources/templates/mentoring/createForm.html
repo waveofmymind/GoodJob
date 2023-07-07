@@ -10,14 +10,11 @@
         }
     </style>
 
-    <!--toastui-->
-    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
-    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 </head>
 <body>
 
 <main layout:fragment="main" class="container mx-auto">
-    <div class="container mx-auto py-8 w-1/3">
+    <div class="container mx-auto py-8 w-[770px]">
         <h1 class="text-2xl font-bold">멘토링 작성</h1>
 
         <form class="mt-4" th:object="${mentoringRequestDto}" method="post">
@@ -63,13 +60,9 @@
         const Editor = toastui.Editor;
         const editor = new Editor({
             el : document.querySelector('#editor'),
-            toolbarItems: [
-                ['heading', 'bold', 'italic', 'strike'],
-                ['hr', 'quote'],
-            ],
+            previewStyle: 'vertical',
+            height: '400px',
         });
-        // 폼 제출 시 에디터의 내용을 숨겨진 textarea 필드에 할당
-        const form = document.querySelector('form');
 
         function submitForm() {
             const hiddenContent = document.querySelector('#hidden-content');
