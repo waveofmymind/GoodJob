@@ -24,6 +24,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -77,14 +78,18 @@ public class MemberController {
     @PostMapping("/login")
     @PreAuthorize("isAnonymous()")
     public String login(@Valid LoginRequestDto loginRequestDto) {
-        RsData loginRsData = memberService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
+        RsData<Map<String, String>> loginRsData = memberService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
 
         if (loginRsData.isFail()) {
             return rq.historyBack(loginRsData);
         }
 
-        rq.setCookie("accessToken", (String) loginRsData.getData());
+        Map<String, String> tokens = loginRsData.getData();
 
+        rq.setCookie("accessToken", tokens.get("accessToken"));
+        rq.setRefreshCookie("refreshToken", tokens.get("refreshToken"));
+
+        // 로그인 후 이전페이지로 이동하기 위한 url
         Cookie previousUrlCookie = rq.getCookie("previousUrl");
 
         if (previousUrlCookie != null) {
@@ -101,11 +106,10 @@ public class MemberController {
     @PreAuthorize("isAuthenticated()")
     public String logout() {
         String userId = String.valueOf(rq.getMember().getId());
+
         // 레디스에서 리프레시토큰삭제
         redisUt.delete(userId);
-        // 쿠키삭제
-        rq.expireCookie("accessToken");
-        rq.expireCookie("userId");
+
         rq.logout();
 
         log.debug("로그아웃한 유저id ={}", userId);
