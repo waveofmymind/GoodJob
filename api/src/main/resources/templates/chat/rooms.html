@@ -107,7 +107,7 @@
                     </a>
                 </div>
             </li>
-            <li th:each="room : ${list}" class="bg-white p-3 flex justify-between border-b h-11" th:if="${room.receiver.nickname == @rq.member.nickname and room.visible}">
+            <li th:each="room : ${list}" class="bg-white p-3 flex justify-between border-b h-11" th:if="${room.receiver.nickname == @rq.member.nickname and !room.deleted}">
                 <div class="text-sm flex items-center w-1/4 justify-center" th:text="${#strings.equals(room.sender.nickname, myNickname) ? room.receiver.nickname : room.sender.nickname}"></div>
                 <div class="text-sm flex items-center w-1/4 justify-center" th:text="${#temporals.format(room.reservationTime, 'yy.MM.dd HH:00')} + ' ~ ' + ${#temporals.format(room.reservationTime.plusHours(1), 'HH:00')}"></div>
                 <div class="text-sm flex items-center w-1/4 justify-center pr-4">

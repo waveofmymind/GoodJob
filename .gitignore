@@ -347,6 +347,9 @@ gradle-app.setting
 
 ### main 폴더 내의 /generated 폴더 추가
 **/build/**
+/core/build/**
+/api/build/**
+/resume-domain/build/**
 
 /drivers/**
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,java,gradle,intellij,intellij+all,intellij+iml

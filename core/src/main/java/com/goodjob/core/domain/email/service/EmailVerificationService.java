@@ -18,11 +18,32 @@ public class EmailVerificationService {
     private final RedisUt redisUt;
 
     @Async
-    public void send(String email) {
+    public void sendPassword(String email, String password) {
+
+        String title = "[임시비밀번호발급] GoodJob 임시비밀번호 발급 메일입니다. 로그인 후 비밀번호를 변경해주세요.";
+
+        // HTML 형식의 이메일 본문
+        String body = "<html>"
+                + "<head>"
+                + "<title>임시비밀번호발급</title>"
+                + "</head>"
+                + "<body>"
+                + "<h2>임시비밀번호확인</h2>"
+                + "<p>회원님의 임시비밀번호입니다.</p>"
+                + "<p>임시비밀번호: <strong>" + password + "</strong></p>"
+                + "<p>확인 후 꼭 메일을 삭제해주세요.</p>"
+                + "</body>"
+                + "</html>";
+
+        emailService.sendPasswordEmail(email, title, body);
+    }
+
+    @Async
+    public void sendVerificationCode(String email) {
 
         String title = "[이메일인증] GoodJob 이메일 인증 코드입니다. 코드를 입력하여 회원가입을 완료해주세요.";
         String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-        String verificationCode = uuid.substring(0, 10);
+        String verificationCode = uuid.substring(0, 15);
 
         // HTML 형식의 이메일 본문
         String body = "<html>"
@@ -38,7 +59,7 @@ public class EmailVerificationService {
                 + "</body>"
                 + "</html>";
 
-        emailService.sendEmail(email, title, body, verificationCode);
+        emailService.sendJoinEmail(email, title, body, verificationCode);
     }
 
     public RsData verify(String email, String providedCode) {

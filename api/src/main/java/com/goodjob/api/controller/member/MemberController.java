@@ -4,7 +4,6 @@ import com.goodjob.core.domain.article.entity.Article;
 import com.goodjob.core.domain.article.service.ArticleService;
 import com.goodjob.core.domain.comment.entity.Comment;
 import com.goodjob.core.domain.comment.service.CommentService;
-import com.goodjob.core.domain.member.dto.request.EditRequestDto;
 import com.goodjob.core.domain.member.dto.request.JoinRequestDto;
 import com.goodjob.core.domain.member.dto.request.LoginRequestDto;
 import com.goodjob.core.domain.member.entity.Member;
@@ -25,7 +24,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -130,36 +128,6 @@ public class MemberController {
         return "member/me";
     }
 
-    @GetMapping("/edit")
-    @PreAuthorize("isAuthenticated()")
-    public String showEdit(EditRequestDto editRequestDto) {
-        return "member/edit";
-    }
-
-    @PatchMapping("/edit")
-    @PreAuthorize("isAuthenticated()")
-    @ResponseBody
-    public RsData<String> edit(EditRequestDto editRequestDto) {
-        return memberService.update(rq.getMember(), editRequestDto);
-    }
-
-    @GetMapping("/edit/confirm/password")
-    public String showConfirmPassword() {
-        return "member/confirm-password";
-    }
-
-    @PostMapping("/edit/confirm/password")
-    public String confirmPassword(String passwordToEdit) {
-        String memberPassword = rq.getMember().getPassword();
-        RsData<String> matchRsData = memberService.matchPassword(passwordToEdit, memberPassword);
-
-        if (matchRsData.isFail()) {
-            return rq.redirectWithMsg("/member/me", matchRsData);
-        }
-
-        return "redirect:/member/edit";
-    }
-
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("isAuthenticated()")
     public String delete(@PathVariable Long id) {
@@ -168,43 +136,8 @@ public class MemberController {
         return "member/join";
     }
 
-    @GetMapping("/show/comments")
-    public String showComments() {
-        return "member/myComments";
-    }
-
-    @PostMapping("/join/valid/username")
-    @ResponseBody
-    public RsData<String> checkDuplicateUsername(String username) {
-        if (username.length() < 4) {
-            return RsData.of("F-1", "4자 이상 입력하세요.");
-        }
-
-        Optional<Member> opMember = memberService.findByUsername(username);
-        if (opMember.isPresent()) {
-            return RsData.of("F-1", "이미 사용중인 아이디입니다.");
-        }
-
-        return RsData.of("S-1", "사용 가능한 아이디입니다.");
-    }
-
-    @PostMapping("/join/valid/nickname")
-    @ResponseBody
-    public RsData checkDuplicateNickname(String nickname) {
-        if (nickname.length() < 2) {
-            return RsData.of("F-1", "2자 이상 입력하세요.");
-        }
-
-        Optional<Member> opMember = memberService.findByNickName(nickname);
-        if (opMember.isPresent()) {
-            return RsData.of("F-1", "이미 사용중인 닉네임입니다.");
-        }
-
-        return RsData.of("S-1", "사용 가능한 닉네임입니다.");
-    }
-
     @GetMapping("/applyMentor")
-    public String applyMentor() {
+    public String showApplyMentor() {
         return "member/applyMentor";
     }
 
