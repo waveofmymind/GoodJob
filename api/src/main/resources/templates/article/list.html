@@ -14,7 +14,8 @@
         .card {
             border: 1px solid #ccc;
             padding: 10px;
-            height: 180px;
+            height: 190px;
+            width: 190px;
             position: relative;
         }
 
@@ -27,105 +28,103 @@
             font-size: 12px;
         }
 
+        .hash-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 6px;
+        }
+
+        .hash-tag {
+            font-size: 11px;
+            padding: 1px;
+        }
+
+        .title-custom {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
-    <main layout:fragment="main" class="container my-3 mx-auto">
-        <form method="get" id="toListForm">
-            <div class="container mx-auto p-8 w-[1024px]">
-                <ul class="flex mb-4">
-                    <li>
-                        <a href="/article/list/0" class="category_btn btn-sm border-1 btn btn-outline m-1">전체</a>
-                    </li>
-                    <li>
-                        <a href="/article/list/1" class="category_btn btn-sm border-1 btn btn-outline m-1">신입</a>
-                    </li>
-                    <li>
-                        <a href="/article/list/2" class="category_btn btn-sm border-1 btn btn-outline m-1">취준</a>
-                    </li>
-                    <li>
-                        <a href="/article/list/3" class="category_btn btn-sm border-1 btn btn-outline m-1">자소서</a>
-                    </li>
-                    <li>
-                        <a href="/article/list/4" class="category_btn btn-sm border-1 btn btn-outline m-1">면접</a>
-                    </li>
-                    <li>
-                        <a href="/article/list/5" class="category_btn btn-sm border-1 btn btn-outline m-1">Q&A</a>
-                    </li>
-                    <li>
-                        <a href="/article/list/6" class="category_btn btn-sm border-1 btn btn-outline m-1">이직</a>
-                    </li>
-                    <li>
-                        <a href="/article/list/7" class="category_btn btn-sm border-1 btn btn-outline m-1">퇴사</a>
-                    </li>
-                    <li>
-                        <a href="/article/list/8" class="category_btn btn-sm border-1 btn btn-outline m-1">잡담</a>
-                    </li>
-                </ul>
-                <div class="flex items-center justify-between h-16 mt-4">
-                    <p class="text-2xl font-bold" id="pageNumberText"></p>
-                    <div class="form-control flex-grow">
-                        <select name="sortCode" class="ml-2 select w-40 select-ghost select-sm"
-                                onchange="$(this).closest('form').submit();">
-                            <option value="1">최신순</option>
-                            <option value="2">조회순</option>
-                            <option value="3">좋아요 많은 순</option>
-                        </select>
-                        <script>
-                            if (params.sortCode) {
-                                $(`select[name="sortCode"]:last`).val(params.sortCode[0]);
-                            }
-                        </script>
-                    </div>
-                    <a th:href="@{/article/create}" class="ml-2 my-3 bg-neutral text-white px-4 py-2 rounded-lg text-sm hover:bg-black">게시글 작성</a>
+<main layout:fragment="main" class="container my-3 mx-auto">
+    <form method="get" id="toListForm">
+        <div class="container mx-auto p-8 w-[1024px]">
+            <ul class="flex mb-4">
+                <li>
+                    <a href="/article/list/0" class="category_btn btn-sm border-1 btn btn-outline m-1">전체</a>
+                </li>
+                <li>
+                    <a href="/article/list/1" class="category_btn btn-sm border-1 btn btn-outline m-1">신입</a>
+                </li>
+                <li>
+                    <a href="/article/list/2" class="category_btn btn-sm border-1 btn btn-outline m-1">취준</a>
+                </li>
+                <li>
+                    <a href="/article/list/3" class="category_btn btn-sm border-1 btn btn-outline m-1">자소서</a>
+                </li>
+                <li>
+                    <a href="/article/list/4" class="category_btn btn-sm border-1 btn btn-outline m-1">면접</a>
+                </li>
+                <li>
+                    <a href="/article/list/5" class="category_btn btn-sm border-1 btn btn-outline m-1">Q&A</a>
+                </li>
+                <li>
+                    <a href="/article/list/6" class="category_btn btn-sm border-1 btn btn-outline m-1">이직</a>
+                </li>
+                <li>
+                    <a href="/article/list/7" class="category_btn btn-sm border-1 btn btn-outline m-1">퇴사</a>
+                </li>
+                <li>
+                    <a href="/article/list/8" class="category_btn btn-sm border-1 btn btn-outline m-1">잡담</a>
+                </li>
+            </ul>
+            <div class="flex items-center justify-between h-16 mt-4">
+                <p class="text-2xl font-bold" id="pageNumberText"></p>
+                <div class="form-control flex-grow">
+                    <select name="sortCode" class="ml-2 select w-40 select-ghost select-sm"
+                            onchange="$(this).closest('form').submit();">
+                        <option value="1">최신순</option>
+                        <option value="2">조회순</option>
+                        <option value="3">좋아요 많은 순</option>
+                    </select>
+                    <script>
+                        if (params.sortCode) {
+                            $(`select[name="sortCode"]:last`).val(params.sortCode[0]);
+                        }
+                    </script>
                 </div>
-                <hr class="border-neutral mb-4">
-                <ul class="grid-container">
-                    <li th:each="article, loop : ${paging}">
-                        <a class="card m-2 bg-gray-100 hover:bg-gray-200" th:href="@{|/article/detail/${article.id}|}" >
-                            <p th:text="${article.title}" style="word-break: break-word;" class="mb-3"></p>
-                            <div>
-                                <div class="flex content">
-                                    <p class="text-gray-400 mr-2">추천수</p>
-                                    <p th:text="${#lists.size(article.likesList)}"></p>
-                                </div>
-                                <div class="flex content">
-                                    <p class="text-gray-400 mr-2">댓글수</p>
-                                    <p th:text="${article.commentsCount}"></p>
-                                </div>
-                                <div class="flex content">
-                                    <p class="text-gray-400 mr-2">조회수</p>
-                                    <p th:text="${article.viewCount}"></p>
-                                </div>
-                            </div>
-                            <p th:text="'글쓴이 : ' + ${article.member.nickname}" class="author mt-3 content"></p>
-                        </a>
-                    </li>
-
-                </ul>
-
-
-
-<!--                <ul class="container">-->
-<!--                    <li class="bg-neutral text-white p-3 flex justify-between border-b h-11 rounded-md">-->
-<!--                        <div class="text-sm flex-grow ">게시글 제목</div>-->
-<!--                        <div class="text-sm w-16 text-center">글쓴이</div>-->
-<!--                        <div class="text-sm  w-16 text-center">추천수</div>-->
-<!--                        <div class="text-sm  w-16 text-center">댓글수</div>-->
-<!--                        <div class="text-sm  w-16 text-center">조회수</div>-->
-<!--                    </li>-->
-<!--                    <li th:each="article, loop : ${paging}" class="bg-white p-3 flex justify-between border-b h-11">-->
-<!--                        <a th:href="@{|/article/detail/${article.id}|}" th:text="${article.title}" class="text-sm flex-grow"></a>-->
-<!--                        <p th:text="${article.member.nickname}" class="text-xs  w-16 text-center truncate overflow-ellipsis"></p>-->
-<!--                        <div th:text="${#lists.size(article.likesList)}" class="text-xs  w-16 text-center"></div>-->
-<!--                        <p th:text="${article.commentsCount}" class="text-xs  w-16 text-center"></p>-->
-<!--                        <p th:text="${article.viewCount}" class="text-xs  w-16 text-center"></p>-->
-<!--                    </li>-->
-
-<!--                </ul>-->
-
+                <a th:href="@{/article/create}" class="ml-2 my-3 bg-neutral text-white px-4 py-2 rounded-lg text-sm hover:bg-black">게시글 작성</a>
             </div>
-
+            <hr class="border-neutral mb-4">
+            <ul class="grid-container">
+                <li th:each="article, loop : ${paging}">
+                    <a class="card m-2 bg-gray-100 hover:bg-gray-200" th:href="@{|/article/detail/${article.id}|}" >
+                        <p th:text="${#strings.length(article.title) > 20 ? #strings.substring(article.title, 0, 19) + '...' : article.title}" style="word-break: break-word;"></p>
+                        <div class="flex">
+                            <div class="flex content mr-2">
+                                <p class="text-gray-400 mr-1">추천수</p>
+                                <p th:text="${#lists.size(article.likesList)}"></p>
+                            </div>
+                            <div class="flex content mr-2">
+                                <p class="text-gray-400 mr-1">댓글수</p>
+                                <p th:text="${article.commentsCount}"></p>
+                            </div>
+                            <div class="flex content mr-2">
+                                <p class="text-gray-400 mr-1">조회수</p>
+                                <p th:text="${article.viewCount}"></p>
+                            </div>
+                        </div>
+                        <div class="mt-2 hash-tags">
+                            <th:block th:each="hashTag : ${article.hashTagList}">
+                                <p class="hash-tag text-gray-400">#[[${hashTag.keyword.content}]]</p>
+                            </th:block>
+                        </div>
+                        <p th:text="'글쓴이 : ' + ${article.member.nickname}" class="author mt-3 content"></p>
+                    </a>
+                </li>
+            </ul>
             <!-- 페이징처리 시작 -->
             <div th:if="${!paging.isEmpty()}" class="flex justify-center mb-6">
                 <div class="flex w-[770px] justify-center">
@@ -137,20 +136,14 @@
                        th:if="${page >= paging.number / 10 * 10 and page <= paging.number/10*10 + 9}"
                        th:classappend="${page == paging.number} ? 'btn-outline pointer-events-none'"
                        onclick="updatePageNumber()" th:attr="page=${page}"></a>
-                    <a class="page-link btn btn-sm btn-ghost m-1" th:href="@{|?page=${paging.number+1}|}" th:classappend="${!paging.hasNext()} ? 'invisible'">
+                    <a class="page-link btn btn-sm btn-ghost m-1" th:href="@{|?page=${paging.number+ 1}|}" th:classappend="${!paging.hasNext()} ? 'invisible'">
                         <span>다음 &gt;</span>
                     </a>
                 </div>
             </div>
-
-
             <!-- 페이징처리 끝 -->
-
-
-
             <div class="flex justify-center">
                 <div class="border border-gray-300 rounded-md flex items-center">
-
                     <select name="category" class="border-none py-2 px-3 rounded-l-md">
                         <option value="제목">제목</option>
                         <option value="내용">내용</option>
@@ -172,54 +165,53 @@
                     <button type="submit" class="text-black px-2 py-2" onclick="searchArticles()">🔍</button>
                 </div>
             </div>
-        </form>
-        <script th:inline="javascript">
-            // URL에서 숫자 부분을 추출하여 변수에 저장합니다.
+        </div>
+    </form>
+    <script th:inline="javascript">
+        // URL에서 숫자 부분을 추출하여 변수에 저장합니다.
+        const currentPageNumber = window.location.pathname.match(/\/article\/list\/(\d+)/)[1];
+
+        // 숫자에 따라 표시할 문자열을 매핑합니다.
+        const pageNumberMap = {
+            '0': '📌전체 게시글',
+            '1': '📌신입 게시글',
+            '2': '📌취준 게시글',
+            '3': '📌자소서 게시글',
+            '4': '📌면접 게시글',
+            '5': '📌Q&A 게시글',
+            '6': '📌이직 게시글',
+            '7': '📌퇴사 게시글',
+            '8': '📌잡담 게시글',
+            // 다른 숫자에 대한 표시할 문자열을 추가할 수 있습니다.
+        };
+
+        // 현재 페이지 숫자에 해당하는 문자열을 가져옵니다.
+        const pageNumberText = pageNumberMap[currentPageNumber];
+
+        // 텍스트를 동적으로 변경합니다.
+        const pageNumberElement = document.getElementById('pageNumberText');
+        pageNumberElement.innerText = pageNumberText;
+
+        function updatePageNumber() {
+            const page = event.target.getAttribute('page');
+            const currentUrl = new URL(window.location.href);
+            currentUrl.searchParams.delete('page');
+            currentUrl.searchParams.set('page', page);
+            window.location.href = currentUrl.href;
+        }
+
+        function searchArticles() {
+            const category = $('select[name="category"]').val();
+            const query = $('input[name="query"]').val();
+
+            // 현재 페이지의 URL에서 숫자 부분만 추출하여 동적으로 생성된 URL을 만듭니다.
             const currentPageNumber = window.location.pathname.match(/\/article\/list\/(\d+)/)[1];
+            const url = '/article/list/' + currentPageNumber + '?category=' + category + '&query=' + query;
 
-            // 숫자에 따라 표시할 문자열을 매핑합니다.
-            const pageNumberMap = {
-                '0': '📌전체 게시글',
-                '1': '📌신입 게시글',
-                '2': '📌취준 게시글',
-                '3': '📌자소서 게시글',
-                '4': '📌면접 게시글',
-                '5': '📌Q&A 게시글',
-                '6': '📌이직 게시글',
-                '7': '📌퇴사 게시글',
-                '8': '📌잡담 게시글',
-                // 다른 숫자에 대한 표시할 문자열을 추가할 수 있습니다.
-            };
-
-            // 현재 페이지 숫자에 해당하는 문자열을 가져옵니다.
-            const pageNumberText = pageNumberMap[currentPageNumber];
-
-            // 텍스트를 동적으로 변경합니다.
-            const pageNumberElement = document.getElementById('pageNumberText');
-            pageNumberElement.innerText = pageNumberText;
-            pageNumberText.innerText = '📌' + currentPageNumber + ' 게시글'
-
-            function updatePageNumber() {
-                const page = event.target.getAttribute('page');
-                const currentUrl = new URL(window.location.href);
-                currentUrl.searchParams.delete('page');
-                currentUrl.searchParams.set('page', page);
-                window.location.href = currentUrl.href;
-            }
-
-            function searchArticles() {
-                const category = $('select[name="category"]').val();
-                const query = $('input[name="query"]').val();
-
-                // 현재 페이지의 URL에서 숫자 부분만 추출하여 동적으로 생성된 URL을 만듭니다.
-                const currentPageNumber = window.location.pathname.match(/\/article\/list\/(\d+)/)[1];
-                const url = '/article/list/' + currentPageNumber + '?category=' + category + '&query=' + query;
-
-                // 페이지 이동
-                window.location.href = url;
-            }
-        </script>
-
-    </main>
+            // 페이지 이동
+            window.location.href = url;
+        }
+    </script>
+</main>
 </body>
 </html>
