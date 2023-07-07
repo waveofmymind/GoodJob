@@ -29,6 +29,7 @@ public class Member extends BaseEntity {
     @Column(unique = true)
     private String username; // 로그인 계정
 
+    @Setter
     private String password;
 
     @Column(unique = true)

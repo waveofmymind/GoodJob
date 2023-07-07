@@ -88,6 +88,7 @@ function sendEmail(event) {
 function verifyCode(event) {
     const verificationCodeValue = document.getElementById("verificationCode").value.trim();
     const verificationCodeMessage = document.getElementById("verificationCodeMessage");
+    const verificationCodeBlock = document.getElementById("verificationCodeBlock")
 
     const formData = new FormData();
     formData.append("verificationCode", verificationCodeValue);
@@ -106,6 +107,9 @@ function verifyCode(event) {
                 verificationCodeMessage.innerText = data.msg;
                 verificationCodeMessage.classList.add("text-green-500");
                 verificationCodeMessage.classList.remove("text-red-500");
+
+                clearInterval(countdown); // 타이머 멈춤
+                verificationCodeBlock.style.display = "none"; // 블록 숨김
             }
 
             verificationCodeMessage.style.display = "block";

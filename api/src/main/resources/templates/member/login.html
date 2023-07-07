@@ -2,74 +2,7 @@
 <head>
     <title>로그인</title>
     <script src="/resource/valid/login.js"></script>
-    <script>
-        function openIdModal() {
-            const modalContainer = document.getElementById("modalContainer");
-
-            fetch("/member/recover/username", {
-                method: 'get'
-            })
-                .then(response => response.text())
-                .then(html => {
-                    modalContainer.innerHTML = html;
-                    const modal = modalContainer.querySelector("#modal");
-                    modal.style.display = "block";
-                });
-        }
-
-        function closeIdModal() {
-            const modalContainer = document.getElementById("modalContainer");
-            modalContainer.innerHTML = "";
-        }
-
-        function openPasswordModal() {
-            const modalContainer = document.getElementById("modalContainer");
-
-            fetch("/member/recover/password", {
-                method: 'get'
-            })
-                .then(response => response.text())
-                .then(html => {
-                    modalContainer.innerHTML = html;
-                    const modal = modalContainer.querySelector("#modal");
-                    modal.style.display = "block";
-                });
-        }
-
-        function closePasswordModal() {
-            const modalContainer = document.getElementById("modalContainer");
-            modalContainer.innerHTML = "";
-        }
-
-        function recoverUsername() {
-            const emailValue = document.getElementById('email').value.trim();
-            const emailMessage = document.getElementById('emailMessage');
-            const emailContainer = document.getElementById('emailContainer');
-
-            const formData = new FormData();
-            formData.append("email", emailValue);
-
-            fetch("/member/recover/username", {
-                method: 'post',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.resultCode !== 'S-1') { // 요청실패
-                        emailMessage.innerText = data.msg;
-                        emailMessage.classList.add("text-red-500");
-                        emailMessage.classList.remove("text-green-500");
-                    } else { // 요청성공
-                        emailMessage.innerText = "아이디는 " + data.msg + "입니다.";
-                        emailMessage.classList.add("text-green-500");
-                        emailMessage.classList.remove("text-red-500");
-                    }
-
-                    emailContainer.style.display = "block";
-                });
-        }
-
-    </script>
+    <script src="/resource/recover/recover.js"></script>
 </head>
 <body>
 <main layout:fragment="main" class="container my-3 mx-auto">
@@ -103,7 +36,9 @@
             </form>
 
             <!-- 모달 창을 인클루드 -->
-            <div id="modalContainer">
+            <div id="idModalContainer">
+            </div>
+            <div id="passwordModalContainer">
             </div>
 
             <div class="space-y-4">

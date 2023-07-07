@@ -155,20 +155,40 @@ public class MemberService {
     @Transactional
     public RsData update(Member member, EditRequestDto editRequestDto) {
         String nickname = editRequestDto.getNickname().replaceAll("\\s+", "");
-        Optional<Member> opNickName = findByNickname(nickname);
+        RsData nicknameVerificationRsData = verifyProvidedNickname(member.getNickname(), nickname);
 
-        if (nickname.length() < 2) {
-            return RsData.of("F-1", "2자 이상 입력해주세요.");
+        if (nicknameVerificationRsData.isFail()) {
+            return nicknameVerificationRsData;
         }
 
-        if (opNickName.isPresent()) {
-            return RsData.of("F-1", "이미 존재하는 닉네임 입니다.");
+        if (!member.isSocialMember()) {
+            boolean matches = passwordEncoder.matches(editRequestDto.getPassword(), member.getPassword());
+
+            // 기존 회원정보와 변화 없는 경우
+            if (member.getNickname().equals(nickname) && matches) {
+                return RsData.of("F-1", "수정된 정보가 없습니다!");
+            }
+
+            String password = passwordEncoder.encode(editRequestDto.getPassword());
+
+            member.setPassword(password);
         }
 
         member.setNickname(nickname);
         memberRepository.save(member);
 
         return RsData.of("S-1", "회원 정보가 수정되었습니다.");
+    }
+
+    private RsData verifyProvidedNickname(String originalNickname, String providedNickname) {
+        Optional<Member> opNickName = findByNickname(providedNickname);
+
+        // 바꾸려는 닉네임과 현재 회원의 닉네임이 같은 경우 변경없음
+        if (opNickName.isPresent() && !originalNickname.equals(providedNickname)) {
+            return RsData.of("F-1", "이미 존재하는 닉네임 입니다.");
+        }
+
+        return RsData.of("S-1", "수정 가능한 닉네임 입니다.");
     }
 
     @Transactional
@@ -207,5 +227,15 @@ public class MemberService {
     public Optional<Member> findByEmail(String email) {
         return memberRepository.findByEmail(email);
     }
-}
 
+    public EditRequestDto genEditRequestDtoWithTempPassword(Member member) {
+        // 임시비밀번호 생성 후 저장
+        String tempPassword = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 15);
+        EditRequestDto editRequestDto = EditRequestDto.builder()
+                .nickname(member.getNickname())
+                .password(tempPassword)
+                .build();
+
+        return editRequestDto;
+    }
+}
