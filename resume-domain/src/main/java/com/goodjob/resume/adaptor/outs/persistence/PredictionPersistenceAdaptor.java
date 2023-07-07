@@ -1,10 +1,10 @@
-package com.goodjob.resume.ports.outs;
+package com.goodjob.resume.adaptor.outs.persistence;
 
 
 
 import com.goodjob.resume.domain.Prediction;
-import com.goodjob.resume.ports.in.FindPredictionPort;
-import com.goodjob.resume.ports.in.SavePredictionPort;
+import com.goodjob.resume.application.outs.FindPredictionPort;
+import com.goodjob.resume.application.outs.SavePredictionPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

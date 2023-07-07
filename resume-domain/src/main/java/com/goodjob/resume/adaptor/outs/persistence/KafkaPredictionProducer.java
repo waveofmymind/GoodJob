@@ -1,4 +1,4 @@
-package com.goodjob.resume.adaptor;
+package com.goodjob.resume.adaptor.outs.persistence;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

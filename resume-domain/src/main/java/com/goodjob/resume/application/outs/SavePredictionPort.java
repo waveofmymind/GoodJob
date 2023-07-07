@@ -1,4 +1,4 @@
-package com.goodjob.resume.ports.in;
+package com.goodjob.resume.application.outs;
 
 
 import com.goodjob.resume.domain.Prediction;

@@ -9,7 +9,7 @@ import com.goodjob.resume.dto.request.ResumeRequest;
 import com.goodjob.resume.dto.response.WhatGeneratedImproveResponse;
 import com.goodjob.resume.dto.response.WhatGeneratedQuestionResponse;
 import com.goodjob.resume.gpt.GptService;
-import com.goodjob.resume.usecase.SavePredictionUseCase;
+import com.goodjob.resume.application.in.SavePredictionUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;

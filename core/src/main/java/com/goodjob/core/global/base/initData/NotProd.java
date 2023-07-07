@@ -12,7 +12,7 @@ import com.goodjob.resume.domain.Contents;
 import com.goodjob.resume.domain.Prediction;
 import com.goodjob.resume.domain.ServiceType;
 import com.goodjob.resume.domain.Titles;
-import com.goodjob.resume.ports.outs.PredictionRepository;
+import com.goodjob.resume.adaptor.outs.persistence.PredictionRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
