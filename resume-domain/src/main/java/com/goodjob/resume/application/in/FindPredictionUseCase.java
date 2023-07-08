@@ -1,4 +1,4 @@
-package com.goodjob.resume.usecase;
+package com.goodjob.resume.application.in;
 
 
 

@@ -13,10 +13,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 import static com.goodjob.core.global.base.coin.CoinUt.MAX_COIN_COUNT;
+import static com.goodjob.core.global.base.jwt.JwtProvider.ACCESS_TOKEN_VALIDATION_SECOND;
+import static com.goodjob.core.global.base.jwt.JwtProvider.REFRESH_TOKEN_VALIDATION_SECOND;
 
 @Service
 @RequiredArgsConstructor
@@ -35,18 +38,9 @@ public class MemberService {
         }
 
         String password = passwordEncoder.encode(joinRequestDto.getPassword());
+        String nickname = joinRequestDto.getNickname().replaceAll("\\s+", "");
 
-        Member member = Member
-                .builder()
-                .username(joinRequestDto.getUsername())
-                .password(password)
-                .nickname(joinRequestDto.getNickname())
-                .email(joinRequestDto.getEmail())
-                .isDeleted(false)
-                .providerType("GOODJOB")
-                .userRole("free")
-                .coin(MAX_COIN_COUNT)
-                .build();
+        Member member = genMember(joinRequestDto.getUsername(), password, nickname, joinRequestDto.getEmail(), "GOODJOB");
 
         memberRepository.save(member);
 
@@ -84,24 +78,14 @@ public class MemberService {
         String nickname = providerType + "__" + randomUUID.substring(0, 6); // 6자리까지만 사용
 
         // oauth2 로그인 이후 추가정보입력
-        Member member = Member
-                .builder()
-                .username(username)
-                .password(password)
-                .nickname(nickname)
-                .email(email)
-                .isDeleted(false)
-                .providerType(providerType)
-                .userRole("free")
-                .coin(MAX_COIN_COUNT)
-                .build();
+        Member member = genMember(username, password, nickname, email, providerType);
 
         memberRepository.save(member);
 
         return RsData.of("S-1", "%s님의 회원가입이 완료되었습니다.".formatted(nickname), member);
     }
 
-    public RsData login(String username, String password) {
+    public RsData<Map<String, String>> login(String username, String password) {
         Optional<Member> opMember = findByUsername(username);
 
         if (opMember.isEmpty()) {
@@ -115,9 +99,9 @@ public class MemberService {
             return RsData.of("F-1", "아이디 혹은 비밀번호가 틀립니다.");
         }
 
-        String accessToken = jwtProvider.genToken(member.toClaims());
+        Map<String, String> tokens = jwtProvider.genAccessTokenAndRefreshToken(member);
 
-        return RsData.of("S-1", "%s님 환영합니다!".formatted(member.getNickname()), accessToken);
+        return RsData.of("S-1", "%s님 환영합니다!".formatted(member.getNickname()), tokens);
     }
 
     public Optional<Member> findByNickname(String nickname) {
@@ -132,8 +116,8 @@ public class MemberService {
         return memberRepository.findById(id);
     }
 
-    public Optional<Member> findByNickName(String nickname) {
-        return memberRepository.findByNickname(nickname);
+    public Optional<Member> findByEmail(String email) {
+        return memberRepository.findByEmail(email);
     }
 
     // 소셜 로그인할때마다 동작
@@ -157,15 +141,24 @@ public class MemberService {
 
     @Transactional
     public RsData update(Member member, EditRequestDto editRequestDto) {
-        String nickname = editRequestDto.getNickname();
-        Optional<Member> opNickName = findByNickName(nickname);
+        String nickname = editRequestDto.getNickname().replaceAll("\\s+", "");
+        RsData nicknameVerificationRsData = verifyProvidedNickname(member.getNickname(), nickname);
 
-        if (nickname.length() < 2) {
-            return RsData.of("F-1", "2자 이상 입력해주세요.");
+        if (nicknameVerificationRsData.isFail()) {
+            return nicknameVerificationRsData;
         }
 
-        if (opNickName.isPresent()) {
-            return RsData.of("F-1", "이미 존재하는 닉네임 입니다.");
+        if (!member.isSocialMember()) {
+            boolean matches = passwordEncoder.matches(editRequestDto.getPassword(), member.getPassword());
+
+            // 기존 회원정보와 변화 없는 경우
+            if (member.getNickname().equals(nickname) && matches) {
+                return RsData.of("F-1", "수정된 정보가 없습니다!");
+            }
+
+            String password = passwordEncoder.encode(editRequestDto.getPassword());
+
+            member.setPassword(password);
         }
 
         member.setNickname(nickname);
@@ -206,5 +199,40 @@ public class MemberService {
     public void updateCoins() {
         memberRepository.updateCoinForFreeMembers(MAX_COIN_COUNT);
     }
-}
 
+    public EditRequestDto genEditRequestDtoWithTempPassword(Member member) {
+        // 임시비밀번호 생성 후 저장
+        String tempPassword = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 15);
+        EditRequestDto editRequestDto = EditRequestDto.builder()
+                .nickname(member.getNickname())
+                .password(tempPassword)
+                .build();
+
+        return editRequestDto;
+    }
+
+    private RsData verifyProvidedNickname(String originalNickname, String providedNickname) {
+        Optional<Member> opNickName = findByNickname(providedNickname);
+
+        // 바꾸려는 닉네임과 현재 회원의 닉네임이 같은 경우 변경없음
+        if (opNickName.isPresent() && !originalNickname.equals(providedNickname)) {
+            return RsData.of("F-1", "이미 존재하는 닉네임 입니다.");
+        }
+
+        return RsData.of("S-1", "수정 가능한 닉네임 입니다.");
+    }
+
+    private Member genMember (String username, String password, String nickname, String email, String providerType){
+        return Member
+                .builder()
+                .username(username)
+                .password(password)
+                .nickname(nickname)
+                .email(email)
+                .isDeleted(false)
+                .providerType(providerType)
+                .userRole("free")
+                .coin(MAX_COIN_COUNT)
+                .build();
+    }
+}

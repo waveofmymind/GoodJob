@@ -4,7 +4,6 @@ import com.goodjob.core.domain.article.entity.Article;
 import com.goodjob.core.domain.article.service.ArticleService;
 import com.goodjob.core.domain.comment.entity.Comment;
 import com.goodjob.core.domain.comment.service.CommentService;
-import com.goodjob.core.domain.member.dto.request.EditRequestDto;
 import com.goodjob.core.domain.member.dto.request.JoinRequestDto;
 import com.goodjob.core.domain.member.dto.request.LoginRequestDto;
 import com.goodjob.core.domain.member.entity.Member;
@@ -25,7 +24,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -79,14 +78,18 @@ public class MemberController {
     @PostMapping("/login")
     @PreAuthorize("isAnonymous()")
     public String login(@Valid LoginRequestDto loginRequestDto) {
-        RsData loginRsData = memberService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
+        RsData<Map<String, String>> loginRsData = memberService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
 
         if (loginRsData.isFail()) {
             return rq.historyBack(loginRsData);
         }
 
-        rq.setCookie("accessToken", (String) loginRsData.getData());
+        Map<String, String> tokens = loginRsData.getData();
 
+        rq.setCookie("accessToken", tokens.get("accessToken"));
+        rq.setRefreshCookie("refreshToken", tokens.get("refreshToken"));
+
+        // 로그인 후 이전페이지로 이동하기 위한 url
         Cookie previousUrlCookie = rq.getCookie("previousUrl");
 
         if (previousUrlCookie != null) {
@@ -103,11 +106,10 @@ public class MemberController {
     @PreAuthorize("isAuthenticated()")
     public String logout() {
         String userId = String.valueOf(rq.getMember().getId());
+
         // 레디스에서 리프레시토큰삭제
         redisUt.delete(userId);
-        // 쿠키삭제
-        rq.expireCookie("accessToken");
-        rq.expireCookie("userId");
+
         rq.logout();
 
         log.debug("로그아웃한 유저id ={}", userId);
@@ -130,36 +132,6 @@ public class MemberController {
         return "member/me";
     }
 
-    @GetMapping("/edit")
-    @PreAuthorize("isAuthenticated()")
-    public String showEdit(EditRequestDto editRequestDto) {
-        return "member/edit";
-    }
-
-    @PatchMapping("/edit")
-    @PreAuthorize("isAuthenticated()")
-    @ResponseBody
-    public RsData<String> edit(EditRequestDto editRequestDto) {
-        return memberService.update(rq.getMember(), editRequestDto);
-    }
-
-    @GetMapping("/edit/confirm/password")
-    public String showConfirmPassword() {
-        return "member/confirm-password";
-    }
-
-    @PostMapping("/edit/confirm/password")
-    public String confirmPassword(String passwordToEdit) {
-        String memberPassword = rq.getMember().getPassword();
-        RsData<String> matchRsData = memberService.matchPassword(passwordToEdit, memberPassword);
-
-        if (matchRsData.isFail()) {
-            return rq.redirectWithMsg("/member/me", matchRsData);
-        }
-
-        return "redirect:/member/edit";
-    }
-
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("isAuthenticated()")
     public String delete(@PathVariable Long id) {
@@ -168,43 +140,8 @@ public class MemberController {
         return "member/join";
     }
 
-    @GetMapping("/show/comments")
-    public String showComments() {
-        return "member/myComments";
-    }
-
-    @PostMapping("/join/valid/username")
-    @ResponseBody
-    public RsData<String> checkDuplicateUsername(String username) {
-        if (username.length() < 4) {
-            return RsData.of("F-1", "4자 이상 입력하세요.");
-        }
-
-        Optional<Member> opMember = memberService.findByUsername(username);
-        if (opMember.isPresent()) {
-            return RsData.of("F-1", "이미 사용중인 아이디입니다.");
-        }
-
-        return RsData.of("S-1", "사용 가능한 아이디입니다.");
-    }
-
-    @PostMapping("/join/valid/nickname")
-    @ResponseBody
-    public RsData checkDuplicateNickname(String nickname) {
-        if (nickname.length() < 2) {
-            return RsData.of("F-1", "2자 이상 입력하세요.");
-        }
-
-        Optional<Member> opMember = memberService.findByNickName(nickname);
-        if (opMember.isPresent()) {
-            return RsData.of("F-1", "이미 사용중인 닉네임입니다.");
-        }
-
-        return RsData.of("S-1", "사용 가능한 닉네임입니다.");
-    }
-
     @GetMapping("/applyMentor")
-    public String applyMentor() {
+    public String showApplyMentor() {
         return "member/applyMentor";
     }
 

@@ -26,7 +26,22 @@ public class EmailService {
     private static final long VERIFICATION_CODE_TTL = 1000L * 60 * 5;
 
     @Transactional
-    public void sendEmail(String email, String subject, String body, String verificationCode) {
+    public void sendPasswordEmail(String email, String subject, String body) {
+        SendEmailLog sendEmailLog = SendEmailLog
+                .builder()
+                .email(email)
+                .subject(subject)
+                .body(body)
+                .build();
+
+        emailLogRepository.save(sendEmailLog);
+
+        RsData trySendRs = trySend(email, subject, body);
+        setCompleted(sendEmailLog, trySendRs.getResultCode(), trySendRs.getMsg());
+    }
+
+    @Transactional
+    public void sendJoinEmail(String email, String subject, String body, String verificationCode) {
         SendEmailLog sendEmailLog = SendEmailLog
                 .builder()
                 .email(email)
@@ -36,7 +51,7 @@ public class EmailService {
 
         // 레디스에 verifyCode 저장
         redisUt.setValue(email, verificationCode, VERIFICATION_CODE_TTL);
-        SendEmailLog emailLog = emailLogRepository.save(sendEmailLog);
+        emailLogRepository.save(sendEmailLog);
 
         RsData trySendRs = trySend(email, subject, body);
         setCompleted(sendEmailLog, trySendRs.getResultCode(), trySendRs.getMsg());

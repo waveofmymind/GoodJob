@@ -21,7 +21,7 @@ public class CookieUt {
         return cookie;
     }
 
-    public Cookie createSubCookie(String cookieName, String value) {
+    public Cookie createRefreshCookie(String cookieName, String value) {
         Cookie cookie = new Cookie(cookieName, value);
         cookie.setHttpOnly(true);
         cookie.setMaxAge(SUB_COOKIE_MAX_AGE_SECOND);

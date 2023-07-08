@@ -7,11 +7,24 @@
 
     <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.6/dist/full.css" rel="stylesheet" type="text/css"/>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css"/>
+    <!-- toastr 라이브러리 추가 -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 </head>
 <body>
+
 <main layout:fragment="main" class="flex justify-center items-center h-auto mt-16">
     <h1 class="text-2xl mb-6">📝 답변을 성공적으로 제출했어요.</h1>
+    <hr>
     <h2 class="text-xl mb-6">결과는 제출 후 30초~1분 정도가 소요되며, 마이페이지에서 확인할 수 있습니다!</h2>
 </main>
+
+<!-- toastr 라이브러리와 JavaScript 코드 추가 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        toastr.success('진입했습니다', '알림');
+    });
+</script>
+
 </body>
 </html>

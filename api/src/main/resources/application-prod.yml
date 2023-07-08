@@ -28,6 +28,11 @@ custom:
     client-secret: ENC(JdURofDmvQR3TiWNh+VdqlazykNYaNutWoQ9p1hk332miNDiAHR7wyhKXSivCebe1kTZ+TIC8Ic=)
   site:
     baseUrl: https://waveofmymind.shop
+  kafka:
+    topic:
+      question: question-prod
+      advice: advice-prod
+      job: job-prod
 
 scheduler:
   cron:
