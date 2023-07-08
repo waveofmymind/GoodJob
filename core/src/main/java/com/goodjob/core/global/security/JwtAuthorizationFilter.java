@@ -25,6 +25,9 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.goodjob.core.global.base.jwt.JwtProvider.ACCESS_TOKEN_VALIDATION_SECOND;
+import static com.goodjob.core.global.base.jwt.JwtProvider.REFRESH_TOKEN_VALIDATION_SECOND;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -33,47 +36,28 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final MemberService memberService;
     private final CookieUt cookieUt;
     private final RedisUt redisUt;
-    private Optional<Member> opMember;
-
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // 쿠키에서 accessToken 값을 가져온다.
         Cookie accessToken = cookieUt.getCookie(request, "accessToken");
-        Cookie subCookie = cookieUt.getCookie(request, "userId");
 
-        // 쿠키가 만료된 경우 리프레시토큰 확인
+        // accessToken 만료된 경우
         if (accessToken == null) {
-            if (subCookie != null) {
-                boolean hasRefreshToken = redisUt.hasValue(subCookie.getValue());
-
-                if (hasRefreshToken) { // 리프레시 토큰 있는 경우
-                    opMember = memberService.findById(Long.parseLong(subCookie.getValue()));
-                    createNewAccessToken(response);
-                }
+            // 리프레시 토큰 확인
+            Cookie refreshToken = cookieUt.getCookie(request, "refreshToken");
+            if (refreshToken != null) {
+                createNewAccessToken(refreshToken, response);
             }
         } else {
             String token = accessToken.getValue();
 
-            try {
-                if (jwtProvider.verify(token)) {
-                    Map<String, Object> claims = jwtProvider.getClaims(token);
-                    long id = (int) claims.get("id");
+            if (jwtProvider.verify(token)) {
+                Map<String, Object> claims = jwtProvider.getClaims(token);
+                long id = (int) claims.get("id");
 
-                    opMember = memberService.findById(id);
+                Member member = memberService.findById(id).orElse(null);
 
-                    if (opMember.isPresent()) {
-                        forceAuthentication(opMember.get());
-                    }
-
-                    // accessToken 담은 쿠키 만료시 리프레시 토큰 사용을 위한 만료시간이 긴 쿠키설정
-                    if (subCookie == null) {
-                        response.addCookie(cookieUt.createSubCookie("userId", String.valueOf(opMember.get().getId())));
-                    }
-                }
-            } catch (ExpiredJwtException e) {
-                log.debug("토큰 만료");
-                createNewAccessToken(response);
+                forceAuthentication(member);
             }
         }
 
@@ -81,20 +65,26 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     // 새로운 액세스 토큰 발급하는 메서드
-    private void createNewAccessToken(HttpServletResponse response) throws IOException {
-        String userId = String.valueOf(opMember.get().getId());
-        Long ttl = redisUt.getExpire(userId);
+    private void createNewAccessToken(Cookie refreshToken, HttpServletResponse response) throws IOException {
+        log.debug("토큰 만료");
+        String token = refreshToken.getValue();
+        Map<String, Object> claims = jwtProvider.getClaims(token);
 
-        if (ttl < 0) { // 리프레시 토큰까지 만료되었거나 키가 존재하지 않는 경우
-            // 재로그인
+        long id = (int) claims.get("id");
+        Member member = memberService.findById(id).orElse(null);
+
+        Long ttl = redisUt.getExpire(id);
+
+        // 리프레시 토큰까지 만료되었거나 키가 존재하지 않는 경우
+        if (ttl < 0) {
             log.debug("재로그인");
             response.sendRedirect("/member/login");
         }
 
-        // 새로운 액세스 토큰 발급
-        String newAccessToken = jwtProvider.genToken(opMember.get().toClaims());
+        Map<String, String> tokens = jwtProvider.genAccessTokenAndRefreshToken(member);
 
-        response.addCookie(cookieUt.createCookie("accessToken", newAccessToken));
+        response.addCookie(cookieUt.createCookie("accessToken", tokens.get("accessToken")));
+        response.addCookie(cookieUt.createRefreshCookie("refreshToken", tokens.get("refreshToken")));
     }
 
     // 강제로 로그인 처리하는 메서드 (로그인한 사용자의 정보를 가져옴)
