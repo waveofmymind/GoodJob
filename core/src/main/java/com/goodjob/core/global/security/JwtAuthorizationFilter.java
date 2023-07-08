@@ -1,12 +1,11 @@
 package com.goodjob.core.global.security;
 
 
-import com.goodjob.core.global.base.cookie.CookieUt;
-import com.goodjob.core.global.base.redis.RedisUt;
-import com.goodjob.core.global.base.jwt.JwtProvider;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
-import io.jsonwebtoken.ExpiredJwtException;
+import com.goodjob.core.global.base.cookie.CookieUt;
+import com.goodjob.core.global.base.jwt.JwtProvider;
+import com.goodjob.core.global.base.redis.RedisUt;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -23,10 +22,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Optional;
 
 import static com.goodjob.core.global.base.jwt.JwtProvider.ACCESS_TOKEN_VALIDATION_SECOND;
-import static com.goodjob.core.global.base.jwt.JwtProvider.REFRESH_TOKEN_VALIDATION_SECOND;
 
 @Component
 @RequiredArgsConstructor
@@ -81,10 +78,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             response.sendRedirect("/member/login");
         }
 
-        Map<String, String> tokens = jwtProvider.genAccessTokenAndRefreshToken(member);
+        String newAccessToken = jwtProvider.genToken(member.toClaims(), ACCESS_TOKEN_VALIDATION_SECOND);
 
-        response.addCookie(cookieUt.createCookie("accessToken", tokens.get("accessToken")));
-        response.addCookie(cookieUt.createRefreshCookie("refreshToken", tokens.get("refreshToken")));
+        response.addCookie(cookieUt.createCookie("accessToken", newAccessToken));
     }
 
     // 강제로 로그인 처리하는 메서드 (로그인한 사용자의 정보를 가져옴)
