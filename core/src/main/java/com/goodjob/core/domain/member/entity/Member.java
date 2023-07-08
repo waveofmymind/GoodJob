@@ -24,7 +24,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+     private Long id;
 
     @Column(unique = true)
     private String username; // 로그인 계정

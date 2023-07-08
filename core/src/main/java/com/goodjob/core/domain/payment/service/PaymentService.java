@@ -46,7 +46,7 @@ public class PaymentService {
         return connection;
     }
 
-    public JSONObject getPaymentResponse(HttpURLConnection connection, boolean isSuccess) throws IOException, ParseException, ParseException {
+    public JSONObject getPaymentResponse(HttpURLConnection connection, boolean isSuccess) throws IOException, ParseException {
         InputStream responseStream = isSuccess ? connection.getInputStream() : connection.getErrorStream();
 
         Reader reader = new InputStreamReader(responseStream, StandardCharsets.UTF_8);

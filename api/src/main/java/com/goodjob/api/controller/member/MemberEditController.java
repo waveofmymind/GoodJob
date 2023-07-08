@@ -48,12 +48,12 @@ public class MemberEditController {
     @PostMapping("/confirm/password")
     public String confirmPassword(String passwordToEdit) {
         String memberPassword = rq.getMember().getPassword();
-        RsData<String> matchRsData = memberService.matchPassword(passwordToEdit, memberPassword);
+        RsData<String> verifyRsData = memberService.verifyPassword(passwordToEdit, memberPassword);
 
-        if (matchRsData.isFail()) {
-            return rq.redirectWithMsg("/member/me", matchRsData);
+        if (verifyRsData.isFail()) {
+            return rq.redirectWithMsg("/member/me", verifyRsData);
         }
 
-        return "redirect:/member/edit";
+        return rq.redirectWithMsg("/member/edit", verifyRsData);
     }
 }
