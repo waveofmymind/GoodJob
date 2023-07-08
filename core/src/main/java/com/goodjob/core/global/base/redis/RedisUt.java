@@ -18,7 +18,7 @@ public class RedisUt {
     }
 
     public <T> boolean hasValue(T key) {
-        ValueOperations<Object, String> valueOperations = redisTemplate.opsForValue();
+        ValueOperations<T, String> valueOperations = redisTemplate.opsForValue();
         String refreshToken = valueOperations.get(key);
 
         if (refreshToken == null) {
@@ -29,16 +29,16 @@ public class RedisUt {
     }
 
     public <T> String getValue(T key) {
-        ValueOperations<Object, String> valueOperations = redisTemplate.opsForValue();
+        ValueOperations<T, String> valueOperations = redisTemplate.opsForValue();
         return valueOperations.get(key);
     }
 
     public <T> void setValue(T key, String value, long timeout) {
-        ValueOperations<Object, String> valueOperations = redisTemplate.opsForValue();
+        ValueOperations<T, String> valueOperations = redisTemplate.opsForValue();
         valueOperations.set(key, value, timeout, TimeUnit.MILLISECONDS);
     }
 
-    public void delete(Object key) {
+    public <T> void delete(T key) {
         redisTemplate.delete(key);
     }
 }

@@ -43,7 +43,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         // accessToken 만료된 경우
         if (accessToken == null) {
-            createNewAccessToken(request, response);
+            // 리프레시 토큰 확인
+            Cookie refreshToken = cookieUt.getCookie(request, "refreshToken");
+            if (refreshToken != null) {
+                createNewAccessToken(refreshToken, response);
+            }
         } else {
             String token = accessToken.getValue();
 
@@ -61,9 +65,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     // 새로운 액세스 토큰 발급하는 메서드
-    private void createNewAccessToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void createNewAccessToken(Cookie refreshToken, HttpServletResponse response) throws IOException {
         log.debug("토큰 만료");
-        Cookie refreshToken = cookieUt.getCookie(request, "refreshToken");
         String token = refreshToken.getValue();
         Map<String, Object> claims = jwtProvider.getClaims(token);
 

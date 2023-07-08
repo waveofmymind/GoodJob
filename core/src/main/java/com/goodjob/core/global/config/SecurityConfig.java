@@ -30,9 +30,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-//                sessionManagement(sessionManagement -> sessionManagement
-//                        .sessionCreationPolicy(STATELESS)
-//                )
+                .sessionManagement(sessionManagement -> sessionManagement
+                        .sessionCreationPolicy(STATELESS)
+                )
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/article/create", "/article/detail/**", "/article/update/**", "/article/delete/**", "/comment/create/**", "/comment/update/**", "/comment/delete/**",
                                 "/subComment/create/**", "/subComment/update/**", "/subComment/delete/**", "/likes/like/article/**", "/likes/like/comment/**", "/likes/like/subComment/**",
