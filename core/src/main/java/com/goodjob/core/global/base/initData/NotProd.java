@@ -3,16 +3,17 @@ package com.goodjob.core.global.base.initData;
 import com.goodjob.core.domain.article.entity.Article;
 import com.goodjob.core.domain.article.repository.ArticleRepository;
 import com.goodjob.core.domain.comment.repository.CommentRepository;
+import com.goodjob.core.domain.job.entity.JobStatistic;
+import com.goodjob.core.domain.job.repository.JobStatisticRepository;
 import com.goodjob.core.domain.member.dto.request.JoinRequestDto;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
-
 import com.goodjob.core.domain.subComment.repository.SubCommentRepository;
+import com.goodjob.resume.adaptor.outs.persistence.PredictionRepository;
 import com.goodjob.resume.domain.Contents;
 import com.goodjob.resume.domain.Prediction;
 import com.goodjob.resume.domain.ServiceType;
 import com.goodjob.resume.domain.Titles;
-import com.goodjob.resume.adaptor.outs.persistence.PredictionRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +27,7 @@ import java.util.List;
 public class NotProd {
 
     @Bean
-    CommandLineRunner initData(MemberService memberService, ArticleRepository articleRepository, PredictionRepository predictionRepository, CommentRepository commentRepository, SubCommentRepository subCommentRepository) {
+    CommandLineRunner initData(MemberService memberService, ArticleRepository articleRepository, PredictionRepository predictionRepository, CommentRepository commentRepository, SubCommentRepository subCommentRepository, JobStatisticRepository jobStatisticRepository) {
         return new CommandLineRunner() {
             @Override
             @Transactional
@@ -59,6 +60,34 @@ public class NotProd {
                             .commentsCount(0L)
                             .build();
                     articleRepository.save(article);
+                }
+
+                for (int i = 1; i < 100; i++) {
+                    JobStatistic jobStatistic = JobStatistic.builder()
+                            .subject("제목%s".formatted(i))
+                            .place("서울")
+                            .company("회사명%s".formatted(i))
+                            .career(1)
+                            .sectorCode(84)
+                            .startDate("2021-01-01")
+                            .deadLine("2025-01-01")
+                            .url("url%s".formatted(i))
+                            .build();
+                    jobStatisticRepository.save(jobStatistic);
+                }
+
+                for (int i = 100; i < 200; i++) {
+                    JobStatistic jobStatistic = JobStatistic.builder()
+                            .subject("제목%s".formatted(i))
+                            .place("경기도")
+                            .company("회사명%s".formatted(i))
+                            .career(5)
+                            .startDate("2021-01-01")
+                            .sectorCode(2232)
+                            .deadLine("2025-01-01")
+                            .url("url%s".formatted(i))
+                            .build();
+                    jobStatisticRepository.save(jobStatistic);
                 }
             }
         };

@@ -52,7 +52,7 @@
     <div th:if="${!paging.isEmpty()}"
          class="pagination flex justify-center space-x-2">
 
-      <a th:href="@{/jobstatistic/search/all(page=${paging.number - 1},sector=${param.sector},career=${param.career})}"
+      <a th:href="@{/jobstatistic/search/all(page=${paging.number - 1},sector=${param.sector}, place=${param.place},career=${param.career})}"
          class="btn"
          th:classappend="${!paging.hasPrevious} ? 'sr-only'">
         이전
@@ -71,7 +71,7 @@
          th:classappend="${page == paging.number} ? 'btn-outline pointer-events-none'"
          onclick="updatePageNumber()" th:attr="page=${page}"></a>
 
-      <a th:href="@{/jobstatistic/search/all(page=${paging.number + 1},sector=${param.sector},career=${param.career})}"
+      <a th:href="@{/jobstatistic/search/all(page=${paging.number + 1},sector=${param.sector}, place=${param.place},career=${param.career})}"
          class="btn"
          th:classappend="${!paging.hasNext} ? 'sr-only'">
         다음

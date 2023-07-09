@@ -16,7 +16,7 @@ import java.util.List;
 @Repository
 public interface JobStatisticRepository extends JpaRepository<JobStatistic, Long> {
     Page<JobStatistic> findByCareerAndSectorCode(int career, int sectorCode, Pageable pageable);
-    Page<JobStatistic> findBySectorCode(int sectorCode, Pageable pageable);
+    Page<JobStatistic> findBySectorCode(int sectorCode, String place,Pageable pageable);
 
     List<JobStatistic> findByUrl(String url);
     @Modifying

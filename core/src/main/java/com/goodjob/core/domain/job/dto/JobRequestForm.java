@@ -14,4 +14,7 @@ public class JobRequestForm {
 
     @NotEmpty
     private String career;
+
+    @NotEmpty
+    private String place;
 }

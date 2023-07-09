@@ -24,18 +24,38 @@ public class JobStatisticController {
         return "jobstatistic/jobRequest";
     }
 
-    @GetMapping("/search/all")
-    public String SearchList(@RequestParam(value = "sector") String sector, @RequestParam(value = "career") String career
-                            , @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "keyword", defaultValue = "") String keyword,Model model) {
+//    @GetMapping("/search/all")
+//    public String SearchList(
+//            @RequestParam(value = "sector") String sector, @RequestParam(value = "career", defaultValue = "all") String career,
+//            @RequestParam(value = "place") String place, @RequestParam(value = "page", defaultValue = "0") int page,
+//            @RequestParam(value = "keyword", defaultValue = "") String keyword,Model model
+//    ) {
+//
+//        if (keyword == null) {
+//            Page<JobStatistic> paging = jobStatisticService.getList(sector, career, page);
+//            model.addAttribute("paging", paging);
+//        }else {
+////        Page<JobStatistic> paging = jobStatisticService.getList(sector, career, page);
+//            Page<JobStatistic> paging = jobStatisticService.getQueryList(keyword, sector, career, place, page);
+//            model.addAttribute("paging", paging);
+//        }
+//        return "jobstatistic/list";
+//    }
 
+    @GetMapping("/search/all")
+    public String SearchList(
+            @RequestParam(value = "sector") String sector, @RequestParam(value = "career", defaultValue = "all") String career,
+            @RequestParam(value = "place") String place, @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "keyword", defaultValue = "") String keyword,Model model
+    ) {
+        Page<JobStatistic> paging;
         if (keyword == null) {
-            Page<JobStatistic> paging = jobStatisticService.getList(sector, career, page);
-            model.addAttribute("paging", paging);
+            paging = jobStatisticService.getList(sector, place,career, page);
         }else {
 //        Page<JobStatistic> paging = jobStatisticService.getList(sector, career, page);
-            Page<JobStatistic> paging = jobStatisticService.getQueryList(keyword, sector, career, page);
-            model.addAttribute("paging", paging);
+            paging = jobStatisticService.getQueryList(keyword, sector, career, place, page);
         }
+        model.addAttribute("paging", paging);
         return "jobstatistic/list";
     }
 
