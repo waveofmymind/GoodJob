@@ -21,6 +21,9 @@ import org.springframework.web.context.annotation.RequestScope;
 import java.util.Date;
 import java.util.Map;
 
+import static com.goodjob.core.global.base.cookie.constant.CookieType.ACCESS_TOKEN;
+import static com.goodjob.core.global.base.cookie.constant.CookieType.REFRESH_TOKEN;
+
 @Component
 @RequestScope
 @Slf4j
@@ -159,8 +162,8 @@ public class Rq {
 
     // 쿠키삭제 및 로그아웃 처리
     public void logout() {
-        expireCookie("accessToken");
-        expireCookie("refreshToken");
+        expireCookie(ACCESS_TOKEN.value());
+        expireCookie(REFRESH_TOKEN.value());
 
         SecurityContext context = SecurityContextHolder.getContext();
 

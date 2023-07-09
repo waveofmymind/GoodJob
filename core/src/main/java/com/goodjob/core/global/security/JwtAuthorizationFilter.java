@@ -23,6 +23,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Map;
 
+import static com.goodjob.core.global.base.cookie.constant.CookieType.ACCESS_TOKEN;
+import static com.goodjob.core.global.base.cookie.constant.CookieType.REFRESH_TOKEN;
 import static com.goodjob.core.global.base.jwt.JwtProvider.ACCESS_TOKEN_VALIDATION_SECOND;
 
 @Component
@@ -36,12 +38,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        Cookie accessToken = cookieUt.getCookie(request, "accessToken");
+        Cookie accessToken = cookieUt.getCookie(request, ACCESS_TOKEN.value());
 
         // accessToken 만료된 경우
         if (accessToken == null) {
             // 리프레시 토큰 확인
-            Cookie refreshToken = cookieUt.getCookie(request, "refreshToken");
+            Cookie refreshToken = cookieUt.getCookie(request, REFRESH_TOKEN.value());
             if (refreshToken != null) {
                 createNewAccessToken(refreshToken, response);
             }
@@ -80,7 +82,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         String newAccessToken = jwtProvider.genToken(member.toClaims(), ACCESS_TOKEN_VALIDATION_SECOND);
 
-        response.addCookie(cookieUt.createCookie("accessToken", newAccessToken));
+        response.addCookie(cookieUt.createCookie(ACCESS_TOKEN.value(), newAccessToken));
     }
 
     // 강제로 로그인 처리하는 메서드 (로그인한 사용자의 정보를 가져옴)

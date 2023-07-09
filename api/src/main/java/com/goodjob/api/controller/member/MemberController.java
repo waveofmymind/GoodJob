@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+import static com.goodjob.core.global.base.cookie.constant.CookieType.*;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/member")
@@ -86,11 +88,11 @@ public class MemberController {
 
         Map<String, String> tokens = loginRsData.getData();
 
-        rq.setCookie("accessToken", tokens.get("accessToken"));
-        rq.setRefreshCookie("refreshToken", tokens.get("refreshToken"));
+        rq.setCookie(ACCESS_TOKEN.value(), tokens.get(ACCESS_TOKEN.value()));
+        rq.setRefreshCookie(REFRESH_TOKEN.value(), tokens.get(REFRESH_TOKEN.value()));
 
         // 로그인 후 이전페이지로 이동하기 위한 url
-        Cookie previousUrlCookie = rq.getCookie("previousUrl");
+        Cookie previousUrlCookie = rq.getCookie(PREVIOUS_URL.value());
 
         if (previousUrlCookie != null) {
             String previousUrl = rq.getPreviousUrl(previousUrlCookie);

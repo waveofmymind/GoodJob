@@ -18,6 +18,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.goodjob.core.global.base.cookie.constant.CookieType.ACCESS_TOKEN;
+import static com.goodjob.core.global.base.cookie.constant.CookieType.REFRESH_TOKEN;
+
 @Component
 public class JwtProvider {
 
@@ -93,8 +96,8 @@ public class JwtProvider {
         redisUt.setValue(member.getId(), refreshToken, REFRESH_TOKEN_VALIDATION_SECOND);
 
         Map<String, String> tokens = new HashMap<>();
-        tokens.put("accessToken", accessToken);
-        tokens.put("refreshToken", refreshToken);
+        tokens.put(ACCESS_TOKEN.value(), accessToken);
+        tokens.put(REFRESH_TOKEN.value(), refreshToken);
 
         return tokens;
     }
