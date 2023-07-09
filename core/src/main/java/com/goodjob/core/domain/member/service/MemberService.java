@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.goodjob.core.domain.member.constant.Membership.*;
 import static com.goodjob.core.global.base.coin.CoinUt.MAX_COIN_COUNT;
 
 @Service
@@ -177,14 +178,14 @@ public class MemberService {
 
     @Transactional
     public void upgradeMembership(Member member) {
-        member.upgradeMembership("premium");
+        member.upgradeMembership(PREMIUM);
 
         memberRepository.save(member);
     }
 
     @Transactional
     public RsData applyMentor(Member member) {
-        member.upgradeMembership("mentor");
+        member.upgradeMembership(MENTOR);
 
         memberRepository.save(member);
 
@@ -233,7 +234,7 @@ public class MemberService {
                 .email(email)
                 .isDeleted(false)
                 .providerType(providerType)
-                .userRole("free")
+                .membership(FREE)
                 .coin(MAX_COIN_COUNT)
                 .build();
     }

@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.goodjob.core.domain.member.constant.Membership.FREE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -58,7 +59,7 @@ class MemberServiceTest {
                 .password("1234")
                 .nickname("tester")
                 .email("test@naver.com")
-                .userRole("free")
+                .membership(FREE)
                 .coin(10)
                 .providerType("GOODJOB")
                 .build();
