@@ -8,10 +8,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class KafkaPredictionProducer {
-    @Value("${custom.kafka.topic.question}")
-    private static String TOPIC_QUESTION;
-    @Value("${custom.kafka.topic.advice}")
-    private static String TOPIC_ADVICE;
+    private static final String TOPIC_QUESTION = "question-prod";
+    private static final String TOPIC_ADVICE= "advice-prod";
 
     private final KafkaTemplate<String, String> kafkaTemplate;
     public void sendQuestionRequest(String message) {
