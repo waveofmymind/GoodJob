@@ -13,7 +13,7 @@
 <body>
 <main layout:fragment="main" class="container mx-auto">
     <div class="container mx-auto py-8 w-[770px]">
-        <form class="mt-4" th:object="${articleRequestDto}" method="post" enctype="multipart/form-data">
+        <form class="mt-4" th:object="${articleRequestDto}" method="post" enctype="multipart/form-data" th:action onsubmit="submitForm(this); return false;">
             <div class="flex">
                 <p class="text-2xl font-bold mb-3">카테고리</p>
                 <select name="category" class="ml-2 select w-40 select-ghost select-sm">
@@ -68,7 +68,7 @@
             </div>
             <input type="hidden" id="hashTagStr" name="hashTagStr" th:field="*{hashTagStr}" />
 
-            <button type="submit" class="register bg-neutral hover:bg-black text-white font-bold px-4 py-2 rounded border-neutral" onclick="submitForm()">저장하기</button>
+            <button class="register bg-neutral hover:bg-black text-white font-bold px-4 py-2 rounded border-neutral" >저장하기</button>
         </form>
     </div>
 
@@ -205,13 +205,29 @@
         }
 
         // 폼 전송을 위한 함수
-        function submitForm() {
+        function submitForm(form) {
+            if(form.title.value.trim() === '') {
+                toastWarning("제목을 입력해야 합니다.");
+                form.title.focus();
+                return;
+            }
+
+            if(form.title.value.length > 30) {
+                toastWarning("제목은 30자 이내로 작성해야 합니다.");
+                form.title.focus();
+                return;
+            }
+
             const hiddenContent = document.querySelector('#hidden-content');
             hiddenContent.value = editor.getMarkdown();
 
+            if(hiddenContent.value.trim() === '') {
+                toastWarning("내용을 입력해야 합니다.");
+                return;
+            }
+
             updateHashTagValues();
 
-            const form = document.querySelector('form');
             form.submit();
         }
 
