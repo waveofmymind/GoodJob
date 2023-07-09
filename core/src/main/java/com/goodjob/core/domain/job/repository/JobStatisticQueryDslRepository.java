@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface JobStatisticQueryDslRepository {
-    Page<JobStatistic> filterList(String subject, Pageable pageable);
+    Page<JobStatistic> filterList(int sectorNum, int careerCode, String place, String subject, Pageable pageable);
 
     List<JobStatistic> findDeadLine(String today, String aMonthAgo);
 }

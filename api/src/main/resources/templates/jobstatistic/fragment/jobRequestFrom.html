@@ -16,12 +16,36 @@
         </select>
     </div>
 
+    <div class="mt-2">
+        <label class="label">
+            <span class="label-text">희망하는 지역은 어딘가요?</span>
+        </label>
+        <select th:field="*{place}" class="select select-bordered w-full max-w-xs">
+            <option value="" disabled selected>지역을 선택해주세요</option>
+            <option value="all">전체</option>
+            <option value="서울">서울</option>
+            <option value="경기">경기도</option>
+            <option value="충청">충청도</option>
+            <option value="전라">전라도</option>
+            <option value="강원">강원도</option>
+            <option value="경상">경상도</option>
+            <option value="부산">부산</option>
+            <option value="인천">인천</option>
+            <option value="울산">울산</option>
+            <option value="대전">대전</option>
+            <option value="광주">광주</option>
+            <option value="대구">대구</option>
+            <!--            <option value="0">모두보기</option>-->
+        </select>
+    </div>
+
     <div class="form-control">
         <label class="label">
             <span class="label-text">경력을 작성해주세요(경력 상관없이는 -1 입력)</span>
         </label>
         <input type="text" th:field="*{career}" placeholder="숫자로 입력해주세요" class="input input-bordered caret-pink-500"/>
     </div>
+
 
 
     <button type="submit" class="btn mb-6">제출</button>

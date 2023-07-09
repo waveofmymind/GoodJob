@@ -23,10 +23,12 @@ public class JobStatisticQueryDslRepositoryImpl implements JobStatisticQueryDslR
 
 
     @Override
-    public Page<JobStatistic> filterList(String subject, Pageable pageable) {
+    public Page<JobStatistic> filterList(int sectorNum, int careerCode, String place, String subject, Pageable pageable) {
         JPAQuery<JobStatistic> query = jpaQueryFactory.select(jobStatistic)
                 .from(jobStatistic)
-                .where(jobStatistic.subject.contains(subject))
+                .where(
+                        jobStatistic.subject.contains(subject), jobStatistic.place.contains(place),
+                        jobStatistic.sectorCode.eq(sectorNum), jobStatistic.career.eq(careerCode))
                 .orderBy(jobStatistic.id.desc());
 
         List<JobStatistic> content = query
@@ -39,9 +41,10 @@ public class JobStatisticQueryDslRepositoryImpl implements JobStatisticQueryDslR
         return new PageImpl<>(content, pageable, total);
     }
 
+
+
     @Override
     public List<JobStatistic> findDeadLine(String today, String aMonthAgo) {
-
         return jpaQueryFactory.select(jobStatistic)
                 .from(jobStatistic)
                 .where(jobStatistic.deadLine.eq("상시").and(jobStatistic.startDate.eq(aMonthAgo)), jobStatistic.deadLine.eq(today))
