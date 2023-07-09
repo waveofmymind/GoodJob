@@ -40,7 +40,7 @@ public class MemberRecoverController {
         }
 
         String nickname = opMember.get().getNickname();
-        String filteredNickname = nickname.substring(0, nickname.length() - 4) + "****";
+        String filteredNickname = nickname.substring(0, nickname.length() - 2) + "**";
         String msg = "가입하신 아이디는 %s 입니다.".formatted(filteredNickname);
 
         return RsData.of("S-1", msg);

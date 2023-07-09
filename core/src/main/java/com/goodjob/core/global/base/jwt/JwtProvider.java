@@ -1,6 +1,7 @@
 package com.goodjob.core.global.base.jwt;
 
 
+import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.global.base.redis.RedisUt;
 import com.goodjob.core.global.util.Ut;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -14,17 +15,19 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
 public class JwtProvider {
+
     @Autowired
     private RedisUt redisUt;
     private SecretKey cachedSecretKey;
 
-    private final static long ACCESS_TOKEN_VALIDATION_SECOND = 1000L * 60 * 30; // 30분
+    public final static long ACCESS_TOKEN_VALIDATION_SECOND = 1000L * 60 * 30; // 30분
 
-    private final static long REFRESH_TOKEN_VALIDATION_SECOND = 1000L * 60 * 60 * 24 * 14; // 14일
+    public final static long REFRESH_TOKEN_VALIDATION_SECOND = 1000L * 60 * 60 * 24 * 14; // 14일
 
     @Value("${custom.jwt.secret-key}")
     private String secretKeyPlain;
@@ -43,18 +46,11 @@ public class JwtProvider {
         return cachedSecretKey;
     }
 
-    // 액세스토큰 생성
-    public String genToken(Map<String, Object> claims) {
+    // 지금으로부터 ttl 만큼의 유효기간 가지는 토큰 생성
+    public String genToken(Map<String, Object> claims, long ttl) {
         long now = new Date().getTime();
-        // 지금으로부터 30분의 유효기간 가지는 accessToken 생성
-        Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_VALIDATION_SECOND);
 
-        long id = (long) claims.get("id");
-        String userId = String.valueOf(id);
-        // 리프레시 토큰 생성
-        String refreshToken = redisUt.genRefreshToken();
-        // 유저 계정을 키값으로 리프레시 토큰을 redis 에 저장. 유효기간은 14일
-        redisUt.setValue(userId, refreshToken, now + REFRESH_TOKEN_VALIDATION_SECOND);
+        Date accessTokenExpiresIn = new Date(now + ttl);
 
         return Jwts.builder()
                 .claim("body", Ut.json.toStr(claims))
@@ -89,5 +85,17 @@ public class JwtProvider {
                 .get("body", String.class);
 
         return Ut.json.toMap(body);
+    }
+
+    public Map<String, String> genAccessTokenAndRefreshToken(Member member) {
+        String accessToken = genToken(member.toClaims(), ACCESS_TOKEN_VALIDATION_SECOND);
+        String refreshToken = genToken(member.toClaims(), REFRESH_TOKEN_VALIDATION_SECOND);
+        redisUt.setValue(member.getId(), refreshToken, REFRESH_TOKEN_VALIDATION_SECOND);
+
+        Map<String, String> tokens = new HashMap<>();
+        tokens.put("accessToken", accessToken);
+        tokens.put("refreshToken", refreshToken);
+
+        return tokens;
     }
 }
