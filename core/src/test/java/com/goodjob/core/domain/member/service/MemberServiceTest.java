@@ -23,7 +23,6 @@ import java.util.Optional;
 import static com.goodjob.core.domain.member.constant.Membership.*;
 import static com.goodjob.core.domain.member.constant.ProviderType.GOODJOB;
 import static com.goodjob.core.domain.member.constant.ProviderType.KAKAO;
-import static com.goodjob.core.global.base.coin.CoinUt.MAX_COIN_COUNT;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -31,14 +30,14 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
 
+    @Mock
+    private MemberRepository memberRepository;
+
     @Spy
     private PasswordEncoder passwordEncoder;
 
     @Spy
     private JwtProvider jwtProvider;
-
-    @Mock
-    private MemberRepository memberRepository;
 
     @InjectMocks
     private MemberService memberService;
