@@ -179,14 +179,14 @@ public class MemberService {
     }
 
     @Transactional
-    public void upgradeMembership(Member member) {
+    public void upgradeToPremiumMembership(Member member) {
         member.upgradeMembership(PREMIUM);
 
         memberRepository.save(member);
     }
 
     @Transactional
-    public RsData applyMentor(Member member) {
+    public RsData upgradeToMentorMembership(Member member) {
         member.upgradeMembership(MENTOR);
 
         memberRepository.save(member);

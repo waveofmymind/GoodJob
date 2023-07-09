@@ -57,7 +57,7 @@ public class PaymentController {
         JSONObject jsonObject = paymentService.getPaymentResponse(connection, isSuccess);
 
         paymentService.save(jsonObject);
-        memberService.upgradeMembership(rq.getMember());
+        memberService.upgradeToPremiumMembership(rq.getMember());
 
         return rq.redirectWithMsg("/", "결제 완료되었습니다.");
     }

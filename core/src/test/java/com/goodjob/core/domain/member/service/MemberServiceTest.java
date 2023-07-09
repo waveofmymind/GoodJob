@@ -20,9 +20,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.goodjob.core.domain.member.constant.Membership.FREE;
+import static com.goodjob.core.domain.member.constant.Membership.*;
 import static com.goodjob.core.domain.member.constant.ProviderType.GOODJOB;
 import static com.goodjob.core.domain.member.constant.ProviderType.KAKAO;
+import static com.goodjob.core.global.base.coin.CoinUt.MAX_COIN_COUNT;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -344,5 +345,47 @@ class MemberServiceTest {
         verify(memberRepository, times(1)).findByNickname(any(String.class));
         verify(passwordEncoder, times(0)).matches(any(String.class), any(String.class));
         verify(passwordEncoder, times(0)).encode(any(String.class));
+    }
+
+    @Test
+    @DisplayName("프리미엄 등급 업그레이드 성공")
+    void upgradeToPremiumMembershipSuccess() {
+        // GIVEN
+        Member member = getMember();
+
+        // WHEN
+        memberService.upgradeToPremiumMembership(member);
+
+        // THEN
+        assertThat(member.getMembership()).isEqualTo(PREMIUM);
+        verify(memberRepository, times(1)).save(any(Member.class));
+    }
+
+    @Test
+    @DisplayName("멘토 등급 업그레이드 성공")
+    void upgradeToMentorMembershipSuccess() {
+        // GIVEN
+        Member member = getMember();
+
+        // WHEN
+        memberService.upgradeToMentorMembership(member);
+
+        // THEN
+        assertThat(member.getMembership()).isEqualTo(MENTOR);
+        verify(memberRepository, times(1)).save(any(Member.class));
+    }
+
+    @Test
+    @DisplayName("코인 감소 성공")
+    void deductCoinSuccess() {
+        // GIVEN
+        Member member = getMember();
+
+        // WHEN
+        memberService.deductCoin(member);
+
+        // THEN
+        assertThat(member.getCoin()).isEqualTo(9);
+        verify(memberRepository, times(1)).save(any(Member.class));
     }
 }

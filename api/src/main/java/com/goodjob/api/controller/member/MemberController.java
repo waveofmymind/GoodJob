@@ -150,7 +150,7 @@ public class MemberController {
     @PostMapping("/applyMentor")
     public String applyMentor(@RequestParam(name = "isMentor", required = false) boolean isMentor) {
         if(isMentor) {
-            RsData<String> memberRsData = memberService.applyMentor(rq.getMember());
+            RsData<String> memberRsData = memberService.upgradeToMentorMembership(rq.getMember());
 
             return rq.redirectWithMsg("/mentoring/list", memberRsData);
         }
