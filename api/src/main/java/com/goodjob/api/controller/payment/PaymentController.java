@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,12 +40,12 @@ public class PaymentController {
     }
 
     @GetMapping("/success")
-    public String paymentResult(PaymentRequestDto paymentRequestDto, Model model) throws Exception {
+    public String paymentResult(PaymentRequestDto paymentRequestDto) throws Exception {
         if (!price.equals(paymentRequestDto.getAmount())) { // 상품가격 다른 경우
             return rq.historyBack("잘못된 접근입니다.");
         }
 
-        if (rq.getMember().isPayed()) { // 이미 구매한 경우
+        if (rq.getMember().isPremium()) { // 이미 구매한 경우
             return rq.historyBack("이미 프리미엄 회원입니다.");
         }
 
@@ -58,14 +57,13 @@ public class PaymentController {
         JSONObject jsonObject = paymentService.getPaymentResponse(connection, isSuccess);
 
         paymentService.save(jsonObject);
-        memberService.upgradeMembership(rq.getMember());
+        memberService.upgradeToPremiumMembership(rq.getMember());
 
         return rq.redirectWithMsg("/", "결제 완료되었습니다.");
     }
 
     @GetMapping("/fail")
     public String paymentResult(
-            Model model,
             @RequestParam(value = "message") String message,
             @RequestParam(value = "code") Integer code
     ) throws Exception {

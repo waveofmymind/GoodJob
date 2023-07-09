@@ -15,6 +15,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static com.goodjob.core.domain.member.constant.UserRole.ROLE_MENTOR;
+import static com.goodjob.core.domain.member.constant.UserRole.ROLE_USER;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -37,8 +39,8 @@ public class SecurityConfig {
                         .requestMatchers("/article/create", "/article/detail/**", "/article/update/**", "/article/delete/**", "/comment/create/**", "/comment/update/**", "/comment/delete/**",
                                 "/subComment/create/**", "/subComment/update/**", "/subComment/delete/**", "/likes/like/article/**", "/likes/like/comment/**", "/likes/like/subComment/**",
                                 "/mentoring/list", "/mentoring/detail/**", "/chat/**", "/payment/**",
-                                "/member/edit/**", "/member/applyMentor/**").hasAuthority("ROLE_USER")
-                        .requestMatchers("/mentoring/create").hasAuthority("ROLE_MENTOR")
+                                "/member/edit/**", "/member/applyMentor/**").hasAuthority(ROLE_USER.name())
+                        .requestMatchers("/mentoring/create").hasAuthority(ROLE_MENTOR.name())
                         .requestMatchers("/**", "/resumes/**", "/member/**", "/article/**", "/jobstatistic/**").permitAll()
                 )
                 .httpBasic(httpBasicConfigurer -> httpBasicConfigurer.disable())

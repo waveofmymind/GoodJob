@@ -20,46 +20,33 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 @Slf4j
 public class EmailService {
-    private final SendEmailLogRepository emailLogRepository;
+    private final SendEmailLogRepository sendEmailLogRepository;
     private final EmailSenderService emailSenderService;
     private final RedisUt redisUt;
     private static final long VERIFICATION_CODE_TTL = 1000L * 60 * 5;
 
     @Transactional
-    public void sendPasswordEmail(String email, String subject, String body) {
-        SendEmailLog sendEmailLog = SendEmailLog
-                .builder()
-                .email(email)
-                .subject(subject)
-                .body(body)
-                .build();
+    public void sendPasswordEmail(SendEmailLog sendEmailLog) {
+        sendEmailLogRepository.save(sendEmailLog);
 
-        emailLogRepository.save(sendEmailLog);
-
-        RsData trySendRs = trySend(email, subject, body);
+        RsData trySendRs = trySend(sendEmailLog);
         setCompleted(sendEmailLog, trySendRs.getResultCode(), trySendRs.getMsg());
     }
 
     @Transactional
-    public void sendJoinEmail(String email, String subject, String body, String verificationCode) {
-        SendEmailLog sendEmailLog = SendEmailLog
-                .builder()
-                .email(email)
-                .subject(subject)
-                .body(body)
-                .build();
-
+    public void sendJoinEmail(SendEmailLog sendEmailLog, String verificationCode) {
         // 레디스에 verifyCode 저장
-        redisUt.setValue(email, verificationCode, VERIFICATION_CODE_TTL);
-        emailLogRepository.save(sendEmailLog);
+        redisUt.setValue(sendEmailLog.getEmail(), verificationCode, VERIFICATION_CODE_TTL);
+        sendEmailLogRepository.save(sendEmailLog);
 
-        RsData trySendRs = trySend(email, subject, body);
+        RsData trySendRs = trySend(sendEmailLog);
         setCompleted(sendEmailLog, trySendRs.getResultCode(), trySendRs.getMsg());
     }
 
-    private RsData trySend(String email, String title, String body) {
+    private RsData trySend(SendEmailLog sendEmailLog) {
         try {
-            emailSenderService.send(email, "no-reply@no-reply.com", title, body);
+            emailSenderService.send(sendEmailLog.getEmail(), "no-reply@no-reply.com",
+                    sendEmailLog.getSubject(), sendEmailLog.getBody());
 
             return RsData.of("S-1", "메일이 발송되었습니다.");
         } catch (MailException e) {
@@ -81,10 +68,10 @@ public class EmailService {
         sendEmailLog.setResultCode(resultCode);
         sendEmailLog.setMessage(message);
 
-        emailLogRepository.save(sendEmailLog);
+        sendEmailLogRepository.save(sendEmailLog);
     }
 
     public Optional<SendEmailLog> findByEmail(String email) {
-        return emailLogRepository.findByEmail(email);
+        return sendEmailLogRepository.findByEmail(email);
     }
 }

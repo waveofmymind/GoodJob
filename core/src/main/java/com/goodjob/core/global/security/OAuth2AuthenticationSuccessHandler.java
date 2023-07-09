@@ -16,9 +16,9 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Optional;
 
-import static com.goodjob.core.global.base.jwt.JwtProvider.ACCESS_TOKEN_VALIDATION_SECOND;
+import static com.goodjob.core.global.base.cookie.constant.CookieType.*;
+
 
 @Component
 @RequiredArgsConstructor
@@ -37,10 +37,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         Map<String, String> tokens = jwtProvider.genAccessTokenAndRefreshToken(member);
 
-        rq.setCookie("accessToken", tokens.get("accessToken"));
-        rq.setRefreshCookie("refreshToken", tokens.get("refreshToken"));
+        rq.setCookie(ACCESS_TOKEN.value(), tokens.get(ACCESS_TOKEN.value()));
+        rq.setRefreshCookie(REFRESH_TOKEN.value(), tokens.get(REFRESH_TOKEN.value()));
 
-        Cookie previousUrlCookie = rq.getCookie("previousUrl");
+        Cookie previousUrlCookie = rq.getCookie(PREVIOUS_URL.value());
 
         if (previousUrlCookie != null) {
             String previousUrl = rq.getPreviousUrl(previousUrlCookie);

@@ -68,13 +68,12 @@
                     <div class="flex justify-between">
                         <div>
                             회원등급:
-                            <span th:text="'프리미엄 회원'" class="premium"
-                                  th:if="${@rq.member.userRole == 'premium'}"></span>
-                            <span th:text="'일반 회원'" class="normal" th:if="${@rq.member.userRole == 'free'}"></span>
-                            <span th:text="'멘토'" class="mentor" th:if="${@rq.member.userRole == 'mentor'}"></span>
+                            <span th:text="'일반 회원'" class="normal" th:if="${@rq.member.isFree()}"></span>
+                            <span th:text="'프리미엄 회원'" class="premium" th:if="${@rq.member.isPremium()}"></span>
+                            <span th:text="'멘토'" class="mentor" th:if="${@rq.member.isMentor()}"></span>
                         </div>
                         <div>
-                            <a href="/payment/showPage" th:if="${!@rq.member.isPayed() and !@rq.member.isMentor()}"
+                            <a href="/payment/showPage" th:if="${@rq.member.isFree()}"
                                class="bg-neutral text-white px-4 py-2 rounded-lg text-sm">결제하기
                             </a>
                         </div>
