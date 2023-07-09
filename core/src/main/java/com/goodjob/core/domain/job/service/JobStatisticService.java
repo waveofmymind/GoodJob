@@ -90,28 +90,25 @@ public class JobStatisticService {
      * select Logic
      */
 
-    public Page<JobStatistic> getList(String sectorCode, String career, int page){
+    public Page<JobStatistic> getList(String sectorCode, String place,String career, int page){
         int sectorNum = Integer.parseInt(sectorCode);
         int careerCode = Integer.parseInt(career);
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("startDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        if (careerCode == -1) {
-            return jobStatisticRepository.findBySectorCode(sectorNum, pageable);
-        }
-        return jobStatisticRepository.findByCareerAndSectorCode(careerCode, sectorNum, pageable);
+        return queryDslRepository.noKeyword(sectorNum, careerCode, place, pageable);
     }
 
 
 
-    public Page<JobStatistic> getQueryList(String keyword, String sectorCode, String career, int page) {
+    public Page<JobStatistic> getQueryList(String keyword, String sectorCode, String career, String place,int page) {
         int sectorNum = Integer.parseInt(sectorCode);
         int careerCode = Integer.parseInt(career);
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("startDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
 
-        return queryDslRepository.filterList(keyword, pageable);
+        return queryDslRepository.filterList(sectorNum, careerCode,place, keyword, pageable);
     }
 
     @Transactional
@@ -146,7 +143,7 @@ public class JobStatisticService {
     }
 
     @Transactional
-    public void regularlyDelete(List<JobStatistic> deadLine) {
+    protected void regularlyDelete(List<JobStatistic> deadLine) {
         jobStatisticRepository.deleteAllInBatch(deadLine);
     }
 }
