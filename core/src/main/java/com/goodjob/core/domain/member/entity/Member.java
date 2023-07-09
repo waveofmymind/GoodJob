@@ -5,6 +5,7 @@ import com.goodjob.core.domain.BaseEntity;
 import com.goodjob.core.domain.article.entity.Article;
 import com.goodjob.core.domain.comment.entity.Comment;
 import com.goodjob.core.domain.member.constant.Membership;
+import com.goodjob.core.domain.member.constant.ProviderType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.goodjob.core.domain.member.constant.Membership.*;
+import static com.goodjob.core.domain.member.constant.ProviderType.GOODJOB;
 import static com.goodjob.core.domain.member.constant.UserRole.*;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -47,7 +49,7 @@ public class Member extends BaseEntity {
 
     private boolean isDeleted;
 
-    private String providerType; // 일반회원인지, 카카오로 가입한 회원인지, 구글로 가입한 회원인지
+    private ProviderType providerType; // 일반회원인지, 카카오로 가입한 회원인지, 구글로 가입한 회원인지
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
@@ -97,11 +99,7 @@ public class Member extends BaseEntity {
     }
 
     public boolean isSocialMember() {
-        if (providerType.equals("GOODJOB")) {
-            return false;
-        }
-
-        return true;
+        return !providerType.equals(GOODJOB);
     }
 
     public void upgradeMembership(Membership targetMembership) {

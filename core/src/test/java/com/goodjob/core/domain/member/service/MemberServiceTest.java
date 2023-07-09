@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.goodjob.core.domain.member.constant.Membership.FREE;
+import static com.goodjob.core.domain.member.constant.ProviderType.GOODJOB;
+import static com.goodjob.core.domain.member.constant.ProviderType.KAKAO;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -61,7 +63,7 @@ class MemberServiceTest {
                 .email("test@naver.com")
                 .membership(FREE)
                 .coin(10)
-                .providerType("GOODJOB")
+                .providerType(GOODJOB)
                 .build();
     }
 
@@ -263,7 +265,7 @@ class MemberServiceTest {
         Member member = Member.builder()
                 .password("")
                 .nickname("tester")
-                .providerType("KAKAO")
+                .providerType(KAKAO)
                 .build();
 
         doReturn(Optional.empty()).when(memberRepository).findByNickname(any(String.class));
@@ -308,7 +310,7 @@ class MemberServiceTest {
         Member member = Member.builder()
                 .password("")
                 .nickname("tester")
-                .providerType("KAKAO")
+                .providerType(KAKAO)
                 .build();
 
         doReturn(Optional.of(member)).when(memberRepository).findByNickname(any(String.class));

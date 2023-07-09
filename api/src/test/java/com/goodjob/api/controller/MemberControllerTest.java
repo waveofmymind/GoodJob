@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static com.goodjob.core.domain.member.constant.Membership.FREE;
+import static com.goodjob.core.domain.member.constant.ProviderType.GOODJOB;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -61,7 +62,7 @@ class MemberControllerTest {
                 .nickname("tester")
                 .email("test@naver.com")
                 .membership(FREE)
-                .providerType("GOODJOB")
+                .providerType(GOODJOB)
                 .build();
 
         RsData<Member> joinRsData = new RsData<>("S-1", "%s님의 회원가입이 완료되었습니다.".formatted(joinRequestDto.getNickname()), member);

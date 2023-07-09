@@ -1,6 +1,7 @@
 package com.goodjob.core.domain.member.service;
 
 
+import com.goodjob.core.domain.member.constant.ProviderType;
 import com.goodjob.core.domain.member.dto.request.EditRequestDto;
 import com.goodjob.core.domain.member.dto.request.JoinRequestDto;
 import com.goodjob.core.domain.member.entity.Member;
@@ -18,6 +19,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.goodjob.core.domain.member.constant.Membership.*;
+import static com.goodjob.core.domain.member.constant.ProviderType.GOODJOB;
 import static com.goodjob.core.global.base.coin.CoinUt.MAX_COIN_COUNT;
 
 @Service
@@ -39,7 +41,7 @@ public class MemberService {
         String password = passwordEncoder.encode(joinRequestDto.getPassword());
         String nickname = joinRequestDto.getNickname().replaceAll("\\s+", "");
 
-        Member member = genMember(joinRequestDto.getUsername(), password, nickname, joinRequestDto.getEmail(), "GOODJOB");
+        Member member = genMember(joinRequestDto.getUsername(), password, nickname, joinRequestDto.getEmail(), GOODJOB);
 
         memberRepository.save(member);
 
@@ -77,7 +79,7 @@ public class MemberService {
         String nickname = providerType + "__" + randomUUID.substring(0, 6); // 6자리까지만 사용
 
         // oauth2 로그인 이후 추가정보입력
-        Member member = genMember(username, password, nickname, email, providerType);
+        Member member = genMember(username, password, nickname, email, ProviderType.of(providerType));
 
         memberRepository.save(member);
 
@@ -225,7 +227,7 @@ public class MemberService {
         return RsData.of("S-1", "수정 가능한 닉네임 입니다.");
     }
 
-    private Member genMember (String username, String password, String nickname, String email, String providerType){
+    private Member genMember(String username, String password, String nickname, String email, ProviderType providerType) {
         return Member
                 .builder()
                 .username(username)
