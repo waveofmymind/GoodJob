@@ -4,6 +4,7 @@
     <div class="input-group">
       <form th:action="@{/jobstatistic/search/all}" method="get" class="form-inline">
         <input type="hidden" name="sector" th:value="${param.sector}" />
+        <input type="hidden" name="place" th:value="${param.place}" />
         <input type="hidden" name="career" th:value="${param.career}" />
         <input type="text" name="keyword" placeholder="검색어를 입력해주세요" class="input input-bordered"/>
         <button class="btn btn-square align-content">

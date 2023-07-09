@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -45,20 +44,18 @@ public class JobStatisticController {
 
     @GetMapping("/search/all")
     public String SearchList(
-            @RequestBody JobRequestForm form, @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "keyword", defaultValue = "") String keyword, Model model
+            @RequestParam(value = "sector") String sector, @RequestParam(value = "career", defaultValue = "all") String career,
+            @RequestParam(value = "place") String place, @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "keyword", defaultValue = "") String keyword,Model model
     ) {
-        String sector = form.getSector();
-        String career = form.getCareer();
-        String place = form.getPlace();
+        Page<JobStatistic> paging;
         if (keyword == null) {
-            Page<JobStatistic> paging = jobStatisticService.getList(sector, career, page);
-            model.addAttribute("paging", paging);
+            paging = jobStatisticService.getList(sector, place,career, page);
         }else {
 //        Page<JobStatistic> paging = jobStatisticService.getList(sector, career, page);
-            Page<JobStatistic> paging = jobStatisticService.getQueryList(keyword, sector, career, place, page);
-            model.addAttribute("paging", paging);
+            paging = jobStatisticService.getQueryList(keyword, sector, career, place, page);
         }
+        model.addAttribute("paging", paging);
         return "jobstatistic/list";
     }
 
