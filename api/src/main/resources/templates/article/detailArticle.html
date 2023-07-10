@@ -16,13 +16,13 @@
         <a href="/article/list/0" class="bg-white text-neutral px-1 py-1 mb-3 rounded-md flex-start hover:bg-gray-200">&lt; 전체 게시글</a>
         <h1 class="text-2xl font-bold flex-grow pl-3 mt-2 truncate overflow-ellipsis" th:text="${article.title}"></h1>
         <div class="flex justify-between mt-2 mb-1">
-            <div th:if="${article.member.userRole == 'premium'}">
+            <div th:if="${article.member.membership.value == 'premium'}">
                 <div th:text="'😎' + ${article.member.nickname}" class="text-blue-500 text-xs mt-2 mr-2 w-80 ml-3"></div>
             </div>
-            <div th:if="${article.member.userRole == 'mentor'}">
+            <div th:if="${article.member.membership.value == 'mentor'}">
                 <div th:text="'👨‍🏫' + ${article.member.nickname}" class="text-green-500 text-xs mt-2 mr-2 w-80 ml-3"></div>
             </div>
-            <div th:if="${article.member.userRole == 'free'}">
+            <div th:if="${article.member.membership.value == 'free'}">
                 <div th:text="${article.member.nickname}" class="text-xs mt-2 mr-2 w-80 ml-3"></div>
             </div>
             <p class="flex-grow text-xs mt-2" th:text="${#temporals.format(article.createdDate, 'yyyy-MM-dd HH:mm')}"></p>
@@ -78,16 +78,16 @@
                 <li class="text-black p-1 justify-between">
                     <!--댓글 내용-->
                     <div id="commentContainer">
-                        <div class="comment" th:data-userrole="${comment.member.userRole}">
+                        <div class="comment" th:data-userrole="${comment.member.membership.value}">
                             <div class="flex justify-between items-center">
                                 <div class="flex items-end mb-3">
-                                    <div th:if="${comment.member.userRole == 'premium'}">
+                                    <div th:if="${comment.member.membership.value == 'premium'}">
                                         <div th:text="'😎' + ${comment.member.nickname}" class="text-blue-500 text-sm pl-3 mr-2"></div>
                                     </div>
-                                    <div th:if="${comment.member.userRole == 'mentor'}">
+                                    <div th:if="${comment.member.membership.value == 'mentor'}">
                                         <div th:text="'👨‍🏫' + ${comment.member.nickname}" class="text-green-500 text-sm pl-3 mr-2"></div>
                                     </div>
-                                    <div th:if="${comment.member.userRole == 'free'}">
+                                    <div th:if="${comment.member.membership.value == 'free'}">
                                         <div th:text="${comment.member.nickname}" class="text-sm pl-3 mr-2"></div>
                                     </div>
                                     <div class="text-xs" th:text="${#temporals.format(comment.createdDate, '(yyyy-MM-dd HH:mm)')}"></div>
@@ -135,17 +135,17 @@
                             </div>
                             <li class="text-black p-1 justify-between flex-grow border-t border-gray-300 bg-gray-100">
                                 <div id="subCommentContainer">
-                                    <div class="subComment" th:data-userrole="${subComment.member.userRole}">
+                                    <div class="subComment" th:data-userrole="${subComment.member.membership.value}">
                                         <!--답글 내용-->
                                         <div class="flex justify-between items-center">
                                             <div class="flex items-end mb-3 mt-3">
-                                                <div th:if="${subComment.member.userRole == 'premium'}">
+                                                <div th:if="${subComment.member.membership.value == 'premium'}">
                                                     <div th:text="'😎' + ${subComment.member.nickname}" class="text-blue-500 text-sm  mr-2"></div>
                                                 </div>
-                                                <div th:if="${subComment.member.userRole == 'mentor'}">
+                                                <div th:if="${subComment.member.membership.value == 'mentor'}">
                                                     <div th:text="'👨‍🏫' + ${subComment.member.nickname}" class="text-green-500 text-sm  mr-2"></div>
                                                 </div>
-                                                <div th:if="${subComment.member.userRole == 'free'}">
+                                                <div th:if="${subComment.member.membership.value == 'free'}">
                                                     <div th:text="${subComment.member.nickname}" class="text-sm  mr-2"></div>
                                                 </div>
                                                 <div class="text-xs" th:text="${#temporals.format(subComment.createdDate, '(yyyy-MM-dd HH:mm)')}"></div>
