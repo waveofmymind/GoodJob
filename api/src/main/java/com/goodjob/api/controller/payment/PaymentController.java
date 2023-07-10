@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,8 +26,8 @@ public class PaymentController {
     @Value("${payment.url}")
     private String tossUrl;
 
-    @Value("${payment.price}")
-    private Long price;
+    @Value("${payment.amount}")
+    private long amount;
 
     private final PaymentService paymentService;
 
@@ -35,13 +36,15 @@ public class PaymentController {
     private final Rq rq;
 
     @GetMapping("/showPage")
-    public String showPaymentPage() {
+    public String showPaymentPage(Model model) {
+
+        model.addAttribute("amount", amount);
         return "payment/payment-page";
     }
 
     @GetMapping("/success")
     public String paymentResult(PaymentRequestDto paymentRequestDto) throws Exception {
-        if (!price.equals(paymentRequestDto.getAmount())) { // 상품가격 다른 경우
+        if (amount != paymentRequestDto.getAmount()) { // 상품가격 다른 경우
             return rq.historyBack("잘못된 접근입니다.");
         }
 
