@@ -66,7 +66,7 @@ class EmailVerificationServiceTest {
 
     @Test
     @DisplayName("회원가입 시 인증코드 검증 실패 - 이메일 전송 오류")
-    void verifyFailDueToEmailSendError() {
+    void verifyFail_EmailSendError() {
         // GIVEN
         SendEmailLog sendEmailLog = getSendEmailLog("F-1");
 
@@ -85,7 +85,7 @@ class EmailVerificationServiceTest {
 
     @Test
     @DisplayName("회원가입 시 인증코드 검증 실패 - 잘못된 검증 코드")
-    void verifyFailDueToInvalidVerificationCode() {
+    void verifyFail_InvalidVerificationCode() {
         // GIVEN
         SendEmailLog sendEmailLog = getSendEmailLog("S-1");
 
@@ -106,7 +106,7 @@ class EmailVerificationServiceTest {
 
     @Test
     @DisplayName("회원가입 시 인증코드 검증 실패 - 레디스에 인증코드 없음")
-    void verifyFailDueToMissingVerificationCodeInRedis() {
+    void verifyFail_MissingVerificationCodeInRedis() {
         // GIVEN
         SendEmailLog sendEmailLog = getSendEmailLog("S-1");
 

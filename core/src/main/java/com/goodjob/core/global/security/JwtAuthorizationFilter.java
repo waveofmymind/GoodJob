@@ -85,16 +85,15 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         response.addCookie(cookieUt.createCookie(ACCESS_TOKEN.value(), newAccessToken));
     }
 
-    // 강제로 로그인 처리하는 메서드 (로그인한 사용자의 정보를 가져옴)
+    // 로그인한 사용자 정보 가져와서 시큐리티에 등록
     private void forceAuthentication(Member member) {
         User user = new User(member.getUsername(), member.getPassword(), member.getAuthorities());
-        // 스프링 시큐리티 객체에 저장할 authentication 객체를 생성
+        // 스프링 시큐리티 객체에 저장할 authentication 객체 생성
         UsernamePasswordAuthenticationToken authentication = UsernamePasswordAuthenticationToken.authenticated(user, null, member.getAuthorities());
 
-        // 스프링 시큐리티 내에 authentication 객체를 저장할 context 생성
         SecurityContext context = SecurityContextHolder.createEmptyContext();
-        // context 에 유저정보 저장
         context.setAuthentication(authentication);
+
         // 스프링 시큐리티에 context 등록
         SecurityContextHolder.setContext(context);
     }
