@@ -37,9 +37,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/article/create", "/article/detail/**", "/article/update/**", "/article/delete/**", "/comment/create/**", "/comment/update/**", "/comment/delete/**",
                                 "/subComment/create/**", "/subComment/update/**", "/subComment/delete/**", "/likes/like/article/**", "/likes/like/comment/**", "/likes/like/subComment/**",
-                                "/chat/**", "/payment/**", "/member/edit/**", "/member/applyMentor/**").hasAuthority(ROLE_USER.name())
+                                "/mentoring/list", "/mentoring/detail/**", "/payment/**",
+                                "/member/edit/**", "/member/applyMentor/**").hasAuthority(ROLE_USER.name())
                         .requestMatchers("/mentoring/create").hasAuthority(ROLE_MENTOR.name())
-                        .requestMatchers("/mentoring/list", "/mentoring/detail/**").hasAuthority(ROLE_PAYED.name())
+                        .requestMatchers("/chat/**").hasAuthority(ROLE_PAYED.name())
                         .requestMatchers("/**", "/resumes/**", "/member/**", "/article/**", "/jobstatistic/**").permitAll()
                 )
                 .httpBasic(httpBasicConfigurer -> httpBasicConfigurer.disable())

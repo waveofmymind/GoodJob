@@ -71,7 +71,7 @@
         <div id="modal" class="modal-overlay">
             <div class="modal-content">
                 <!-- 모달 내용 -->
-                <form class="mr-3" th:action="@{/chat/room/{id}(id=${mentoring.id})}" method="post">
+                <form class="mr-3" th:action="@{/chat/room/{id}(id=${mentoring.id})}" method="post" onsubmit="submitForm(this); return false;">
                     <div class="flex">
                         <p>날짜 : </p>
                         <input type="date" name="date" id="date-input" class="mb-2 mx-2">
@@ -152,6 +152,22 @@
             dateInput.value = currentDate;
             timeInput.value = currentTime;
         };
+
+        function submitForm(form) {
+            var isWriter = [[${@rq.member.username == mentoring.member.username}]];
+            if(isWriter) {
+                toastWarning('본인이 올린 글에 커피챗을 신청할 수 없습니다.');
+                return false;
+            }
+
+            var isPremium = [[${@rq.member.isPremium()}]];
+
+            if (!isPremium) {
+                toastWarning('프리미엄 회워만 신청 가능합니다.');
+                return false;
+            }
+            form.submit();
+        }
     </script>
 </main>
 

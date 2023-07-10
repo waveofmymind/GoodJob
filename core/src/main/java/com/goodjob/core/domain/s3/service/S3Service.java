@@ -74,10 +74,6 @@ public class S3Service {
             ListObjectsV2Result listObjectsV2Result = amazonS3.listObjectsV2(bucket);
             List<S3ObjectSummary> objectSummaries = listObjectsV2Result.getObjectSummaries();
 
-            for (S3ObjectSummary object: objectSummaries) {
-                System.out.println("object = " + object.toString());
-            }
-
             String url = amazonS3.getUrl(bucket, fileName).toString();
 
             imgUrlList.add(url);
