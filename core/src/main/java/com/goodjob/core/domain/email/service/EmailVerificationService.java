@@ -35,7 +35,8 @@ public class EmailVerificationService {
                 + "</body>"
                 + "</html>";
 
-        emailService.sendPasswordEmail(email, title, body);
+        SendEmailLog sendEmailLog = getSendEmailLog(email, title, body);
+        emailService.sendPasswordEmail(sendEmailLog);
     }
 
     @Async
@@ -59,7 +60,8 @@ public class EmailVerificationService {
                 + "</body>"
                 + "</html>";
 
-        emailService.sendJoinEmail(email, title, body, verificationCode);
+        SendEmailLog sendEmailLog = getSendEmailLog(email, title, body);
+        emailService.sendJoinEmail(sendEmailLog, verificationCode);
     }
 
     public RsData verify(String email, String providedCode) {
@@ -77,6 +79,7 @@ public class EmailVerificationService {
             if (originalCode.equals(providedCode)) {
                 return RsData.of("S-1", "인증 코드가 확인되었습니다.");
             }
+
             return RsData.of("F-1", "잘못된 인증 코드입니다.");
         } catch (NullPointerException e) {
             return RsData.of("F-1", "이메일 정보가 잘못되었습니다. 올바른 이메일을 입력하여 다시 시도해주세요.");
@@ -97,5 +100,15 @@ public class EmailVerificationService {
         }
 
         return RsData.of(resultCode, "메일이 성공적으로 발송되었습니다.");
+    }
+
+    private SendEmailLog getSendEmailLog(String email, String subject, String body) {
+        SendEmailLog sendEmailLog = SendEmailLog
+                .builder()
+                .email(email)
+                .subject(subject)
+                .body(body)
+                .build();
+        return sendEmailLog;
     }
 }

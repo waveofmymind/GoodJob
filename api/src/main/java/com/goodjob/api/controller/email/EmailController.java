@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.goodjob.core.global.base.cookie.constant.CookieType.EMAIL;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/email")
@@ -20,7 +22,7 @@ public class EmailController {
     @PostMapping("/send")
     public void sendEmail(String email) {
         // 쿠키에 해당 유저의 email 저장
-        rq.setCookie("email", email);
+        rq.setCookie(EMAIL.value(), email);
 
         emailVerificationService.sendVerificationCode(email);
     }
@@ -29,7 +31,7 @@ public class EmailController {
     public RsData verifyEmail(String verificationCode) {
         try {
             // 유저의 쿠키에서 이메일 값 가져옴
-            Cookie emailCookie = rq.getCookie("email");
+            Cookie emailCookie = rq.getCookie(EMAIL.value());
 
             return emailVerificationService.verify(emailCookie.getValue(), verificationCode);
         } catch (NullPointerException e) {

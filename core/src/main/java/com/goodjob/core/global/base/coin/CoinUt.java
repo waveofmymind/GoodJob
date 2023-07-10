@@ -19,7 +19,7 @@ public class CoinUt {
 
     public boolean isServiceAvailable(Member member) {
         // 유료 회원인 경우 코인 없이 이용 가능
-        if (!member.getUserRole().equals("free")) {
+        if (!member.isFree()) {
             return true;
         }
 
