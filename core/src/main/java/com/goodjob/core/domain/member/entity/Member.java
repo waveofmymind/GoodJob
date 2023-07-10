@@ -43,12 +43,14 @@ public class Member extends BaseEntity {
 
     private String email;
 
+    @Enumerated(EnumType.STRING)
     private Membership membership; // FREE, PREMIUM, MENTOR
 
     private int coin;
 
     private boolean isDeleted;
 
+    @Enumerated(EnumType.STRING)
     private ProviderType providerType; // 일반회원인지, 카카오로 가입한 회원인지, 구글로 가입한 회원인지
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

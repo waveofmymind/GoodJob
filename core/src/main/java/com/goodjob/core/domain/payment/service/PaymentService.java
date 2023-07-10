@@ -32,6 +32,7 @@ public class PaymentService {
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestProperty("Authorization", authorizations);
+        connection.setRequestProperty("Authorizations", authorizations);
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);
