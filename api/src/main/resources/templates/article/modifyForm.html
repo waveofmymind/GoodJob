@@ -5,7 +5,7 @@
 <body>
 <main layout:fragment="main" class="container mx-auto">
     <div class="container mx-auto py-8 w-[770px]">
-        <form class="mt-4" method="post" enctype="multipart/form-data">
+        <form class="mt-4" method="post" enctype="multipart/form-data" th:action onsubmit="submitForm(this); return false;">
             <div class="flex">
                 <p class="text-2xl font-bold mb-3">카테고리</p>
                 <select name="category" class="ml-2 select w-40 select-ghost select-sm">
@@ -61,7 +61,7 @@
 
             <div class="mb-4 border border-neutral flex items-center rounded-md">
                 <p class="pl-3">#</p>
-                <input type="text" id="hashTagInput" class="form-input w-full border-0 border-neutral rounded-md h-10" placeholder="태그를 입력하세요" onkeydown="if(event.keyCode===13) addHashTag(event)">
+                <input type="text" id="hashTagInput" class="form-input w-full border-0 border-neutral rounded-md h-10" placeholder="태그를 입력하세요" onkeydown="handleHashTagInput(event)">
             </div>
 
             <div id="hashTagList" class="flex flex-wrap mb-4">
@@ -75,7 +75,7 @@
             </div>
             <input type="hidden" id="hashTagStr" name="hashTagStr"/>
 
-            <button class="register bg-neutral hover:bg-black text-white font-bold px-4 py-2 rounded border-neutral" onclick="submitForm()">저장하기</button>
+            <button class="register bg-neutral hover:bg-black text-white font-bold px-4 py-2 rounded border-neutral" >저장하기</button>
         </form>
     </div>
 
@@ -147,42 +147,106 @@
         });
 
         // 해시태그 추가를 위한 함수
-        function addHashTag(event) {
-            event.preventDefault();
-            var hashTagInput = document.getElementById('hashTagInput');
-            var hashTagText = hashTagInput.value.trim().replace(/\s+/g, '').toLowerCase(); // 띄어쓰기 제거 및 소문자로 변환
+        // 해시태그 추가를 위한 함수
+        function addHashTag(hashTag) {
+            const hashTagItems = hashTagList.getElementsByClassName('keyword');
+            const hashTagValues = [];
 
-            if(hashTagText.length > 10) {
-                toastWarning('해시태그는 최대 10자까지 작성할 수 있습니다.');
+            for (let i = 0; i < hashTagItems.length; i++) {
+                const hashTagText = hashTagItems[i].textContent.trim().substring(1);
+                hashTagValues.push(hashTagText);
+            }
+
+            document.getElementById('hashTagStr').value = hashTagValues.join(',');
+
+            // 최대 개수를 초과하는 경우 Toast 경고 메시지 출력
+            if (hashTagValues.length > 4) {
+                toastWarning('해시태그는 최대 5개까지 작성할 수 있습니다.');
                 hashTagInput.focus();
                 return;
             }
 
-            if (hashTagText !== '') {
-                var hashTagList = document.getElementById('hashTagList');
-                var listItems = document.createElement('div');
-                var listItem = document.createElement('span');
-                listItems.className = 'bg-gray-300 px-2 py-1 rounded-full m-1'
-                listItem.className = 'keyword';
-                listItem.textContent = '#' + hashTagText;
-                listItem.id = 'hashTagItem_' + hashTagText;
+            const listItem = document.createElement('div');
+            const keyword = document.createElement('span');
+            listItem.className = 'bg-gray-300 px-2 py-1 rounded-full m-1';
+            keyword.className = 'keyword';
+            keyword.textContent = hashTag;
 
-                var closeButton = document.createElement('span');
-                closeButton.className = 'ml-2 cursor-pointer';
-                closeButton.innerHTML = '&times;';
-                closeButton.addEventListener('click', function () {
-                    listItems.remove();
-                });
+            const closeButton = document.createElement('span');
+            closeButton.className = 'ml-2 cursor-pointer';
+            closeButton.innerHTML = '&times;';
+            closeButton.addEventListener('click', function (event) {
+                removeHashTag(event);
+            });
 
-                listItems.appendChild(listItem);
-                listItems.appendChild(closeButton);
-                hashTagList.appendChild(listItems);
-                hashTagInput.value = '';
+            listItem.appendChild(keyword);
+            listItem.appendChild(closeButton);
+            hashTagList.appendChild(listItem);
+        }
+
+        // 해시태그 삭제를 위한 함수
+        function removeHashTag(event) {
+            const listItem = event.target.parentNode;
+            listItem.remove();
+
+            // 해시태그 목록에서 삭제된 해시태그 값을 업데이트
+            updateHashTagValues();
+        }
+
+        // 해시태그 값을 업데이트하는 함수
+        function updateHashTagValues() {
+            const hashTagItems = hashTagList.getElementsByClassName('keyword');
+            const hashTagValues = [];
+
+            for (let i = 0; i < hashTagItems.length; i++) {
+                const hashTagText = hashTagItems[i].textContent.trim().substring(1);
+                hashTagValues.push(hashTagText);
+            }
+
+            document.getElementById('hashTagStr').value = hashTagValues.join(',');
+
+            // 최대 개수를 초과하는 경우 Toast 경고 메시지 출력
+            if (hashTagValues.length > 4) {
+                toastWarning('해시태그는 최대 5개까지 작성할 수 있습니다.');
+                hashTagInput.focus();
+                return;
+            }
+        }
+
+        // 해시태그 입력을 처리하는 함수
+        function handleHashTagInput(event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+
+                const hashTagText = hashTagInput.value.trim().replace(/\s+/g, '').toLowerCase(); // 띄어쓰기 제거 및 소문자로 변환
+
+                if (hashTagText.length > 10) {
+                    toastWarning('해시태그는 최대 10자까지 작성할 수 있습니다.');
+                    hashTagInput.focus();
+                    return;
+                }
+
+                if (hashTagText !== '') {
+                    addHashTag('#' + hashTagText);
+                    hashTagInput.value = ''; // 입력한 텍스트 초기화
+                }
             }
         }
 
         // 폼 전송을 위한 함수
-        function submitForm() {
+        function submitForm(form) {
+            if(form.title.value.trim() === '') {
+                toastWarning("제목을 입력해야 합니다.");
+                form.title.focus();
+                return;
+            }
+
+            if(form.title.value.length > 30) {
+                toastWarning("제목은 30자 이내로 작성해야 합니다.");
+                form.title.focus();
+                return;
+            }
+
             var hashTagList = document.getElementById('hashTagList');
             var hashTagItems = hashTagList.getElementsByClassName('keyword');
             var hashTagValues = [];
@@ -194,7 +258,12 @@
 
             const hiddenContent = document.querySelector('#hidden-content');
             hiddenContent.value = editor.getMarkdown();
-            const form = document.querySelector('form');
+
+            if(hiddenContent.value.trim() === '') {
+                toastWarning("내용을 입력해야 합니다.");
+                return;
+            }
+            updateHashTagValues();
             form.submit();
         }
 

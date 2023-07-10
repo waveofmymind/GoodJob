@@ -16,7 +16,15 @@
         <a href="/article/list/0" class="bg-white text-neutral px-1 py-1 mb-3 rounded-md flex-start hover:bg-gray-200">&lt; 전체 게시글</a>
         <h1 class="text-2xl font-bold flex-grow pl-3 mt-2 truncate overflow-ellipsis" th:text="${article.title}"></h1>
         <div class="flex justify-between mt-2 mb-1">
-            <p class="text-xs mt-2 mr-2 w-80 ml-3" th:text="${article.member.nickname}"></p>
+            <div th:if="${article.member.membership.value == 'premium'}">
+                <div th:text="'😎' + ${article.member.nickname}" class="text-blue-500 text-xs mt-2 mr-2 w-80 ml-3"></div>
+            </div>
+            <div th:if="${article.member.membership.value == 'mentor'}">
+                <div th:text="'👨‍🏫' + ${article.member.nickname}" class="text-green-500 text-xs mt-2 mr-2 w-80 ml-3"></div>
+            </div>
+            <div th:if="${article.member.membership.value == 'free'}">
+                <div th:text="${article.member.nickname}" class="text-xs mt-2 mr-2 w-80 ml-3"></div>
+            </div>
             <p class="flex-grow text-xs mt-2" th:text="${#temporals.format(article.createdDate, 'yyyy-MM-dd HH:mm')}"></p>
             <a th:href="@{|/article/update/${article.id}|}" th:if="${@rq.login  and @rq.member.id == article.member.id}" class="text-xs text-black mt-2 underline text-gray-400">수정</a>
             <a href="javascript:void(0);" th:if="${@rq.login and @rq.member.id == article.member.id}" th:data-uri="@{|/article/delete/${article.id}|}" class="delete text-xs text-black mt-2 mx-2 underline text-gray-400">삭제</a>
@@ -69,38 +77,52 @@
             <div th:if="${!comment.deleted}">
                 <li class="text-black p-1 justify-between">
                     <!--댓글 내용-->
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-end mb-3">
-                            <div th:text="${comment.member.nickname}" class="text-sm pl-3 mr-2">글쓴이</div>
-                            <div class="text-xs" th:text="${#temporals.format(comment.createdDate, '(yyyy-MM-dd HH:mm)')}"></div>
-                        </div>
-                        <div class="flex items-center justify-center">
-                            <button class="text-xs text-black underline modify-button pb-3  text-gray-400" th:if="${@rq.login  and @rq.member.id == comment.member.id}" onclick="editComment()" th:attr="data-id=${comment.id}">수정</button>
-                            <a href="javascript:void(0);" th:if="${@rq.login  and @rq.member.id == comment.member.id}" th:data-uri="@{|/comment/delete/${comment.id}|}" class="delete text-xs text-black mx-2 underline pb-3 text-gray-400">삭제</a>
-                            <form th:action="@{|/likes/like/comment/${comment.id}|}" method="post">
+                    <div id="commentContainer">
+                        <div class="comment" th:data-userrole="${comment.member.membership.value}">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-end mb-3">
+                                    <div th:if="${comment.member.membership.value == 'premium'}">
+                                        <div th:text="'😎' + ${comment.member.nickname}" class="text-blue-500 text-sm pl-3 mr-2"></div>
+                                    </div>
+                                    <div th:if="${comment.member.membership.value == 'mentor'}">
+                                        <div th:text="'👨‍🏫' + ${comment.member.nickname}" class="text-green-500 text-sm pl-3 mr-2"></div>
+                                    </div>
+                                    <div th:if="${comment.member.membership.value == 'free'}">
+                                        <div th:text="${comment.member.nickname}" class="text-sm pl-3 mr-2"></div>
+                                    </div>
+                                    <div class="text-xs" th:text="${#temporals.format(comment.createdDate, '(yyyy-MM-dd HH:mm)')}"></div>
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <button class="text-xs text-black underline modify-button pb-3  text-gray-400" th:if="${@rq.login  and @rq.member.id == comment.member.id}" onclick="editComment()" th:attr="data-id=${comment.id}">수정</button>
+                                    <a href="javascript:void(0);" th:if="${@rq.login  and @rq.member.id == comment.member.id}" th:data-uri="@{|/comment/delete/${comment.id}|}" class="delete text-xs text-black mx-2 underline pb-3 text-gray-400">삭제</a>
+                                    <form th:action="@{|/likes/like/comment/${comment.id}|}" method="post">
+                                        <!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+                                        <button type="submit" class="flex bg-white border-gray-300 text-neutral px-3 py-1 rounded-md mr-2 hover:bg-gray-200">
+                                            <i class="fa-regular fa-heart text-xs" th:if="${!comment.isMemberLikesComment(@rq.member)}"></i>
+                                            <i class="fa-solid fa-heart text-xs" th:if="${comment.isMemberLikesComment(@rq.member)}"></i>
+                                            <p th:text="${#lists.size(comment.likesList)}" class="ml-1 text-xs"></p>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <p th:id="|text-${comment.id}|" style="word-break: break-word;" class="text-sm min-h-[30px] modify-comment pl-3"th:text="${comment.content}"></p>
+
+                        <!--댓글 내용 끝-->
+
+                            <!--댓글 수정-->
+                            <form th:action="@{|/comment/update/${comment.id}|}" th:object="${commentRequestDto}" method="post" class="mb-4 justify-between items-start" onsubmit="CommentRequestForm__submit(this); return false;">
                                 <!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
-                                <button type="submit" class="flex bg-white border-gray-300 text-neutral px-3 py-1 rounded-md mr-2 hover:bg-gray-200">
-                                    <i class="fa-regular fa-heart text-xs" th:if="${!comment.isMemberLikesComment(@rq.member)}"></i>
-                                    <i class="fa-solid fa-heart text-xs" th:if="${comment.isMemberLikesComment(@rq.member)}"></i>
-                                    <p th:text="${#lists.size(comment.likesList)}" class="ml-1 text-xs"></p>
-                                </button>
+                                <textarea th:id="|textarea-${comment.id}|" name="content" th:field="*{content}" class="hidden modify-textarea form-textarea w-full p-3 resize-none overflow-y-auto border border-neutral rounded-md mb-2 text-sm" placeholder="댓글을 작성하세요"></textarea>
+                                <div class="flex">
+                                    <input th:id="|button-${comment.id}|" type="submit" value="수정완료" class="hidden modify-save-button bg-neutral text-white px-4 py-2 rounded-md ml-2 flex-start text-xs hover:bg-black ml-auto" onclick="saveComment()" th:attr="data-id=${comment.id}">
+                                </div>
                             </form>
                         </div>
                     </div>
-                    <p th:id="|text-${comment.id}|" style="word-break: break-word;" class="text-sm min-h-[30px] modify-comment pl-3"th:text="${comment.content}"></p>
-                    <!--댓글 내용 끝-->
+                            <div class="flex justify-end">
+                                <button class="text-xs text-black underline create-subComment-button pb-3" onclick="createSubCommentForm()" th:attr="data-id=${comment.id}">답글</button>
+                            </div>
 
-                    <!--댓글 수정-->
-                    <form th:action="@{|/comment/update/${comment.id}|}" th:object="${commentRequestDto}" method="post" class="mb-4 justify-between items-start" onsubmit="CommentRequestForm__submit(this); return false;">
-                        <!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
-                        <textarea th:id="|textarea-${comment.id}|" name="content" th:field="*{content}" class="hidden modify-textarea form-textarea w-full p-3 resize-none overflow-y-auto border border-neutral rounded-md mb-2 text-sm" placeholder="댓글을 작성하세요"></textarea>
-                        <div class="flex">
-                            <input th:id="|button-${comment.id}|" type="submit" value="수정완료" class="hidden modify-save-button bg-neutral text-white px-4 py-2 rounded-md ml-2 flex-start text-xs hover:bg-black ml-auto" onclick="saveComment()" th:attr="data-id=${comment.id}">
-                        </div>
-                    </form>
-                    <div class="flex justify-end">
-                        <button class="text-xs text-black underline create-subComment-button pb-3" onclick="createSubCommentForm()" th:attr="data-id=${comment.id}">답글</button>
-                    </div>
                     <!--댓글 수정 완료-->
 
 
@@ -112,35 +134,47 @@
                                 <div class="mt-3 fa-solid fa-arrow-turn-up fa-rotate-90 text-xl text-neutral"></div>
                             </div>
                             <li class="text-black p-1 justify-between flex-grow border-t border-gray-300 bg-gray-100">
-                                <!--답글 내용-->
-                                <div class="flex justify-between items-center">
-                                    <div class="flex items-end mb-3 mt-3">
-                                        <div th:text="${subComment.member.nickname}" class="text-sm mr-2"></div>
-                                        <div class="text-xs" th:text="${#temporals.format(subComment.createdDate, '(yyyy-MM-dd HH:mm)')}"></div>
-                                    </div>
-                                    <div class="flex items-center justify-center">
-                                        <button class="text-xs text-black underline modify-button pb-3 text-gray-400" th:if="${@rq.login  and @rq.member.id == subComment.member.id}" onclick="editSubComment()" th:attr="data-id=${subComment.id}">수정</button>
-                                        <a href="javascript:void(0);" th:if="${@rq.login and @rq.member.id == subComment.member.id}" th:data-uri="@{|/subComment/delete/${subComment.id}|}" class="delete text-xs text-black mx-2 underline pb-3  text-gray-400">삭제</a>
-                                        <form th:action="@{|/likes/like/subComment/${subComment.id}|}" method="post">
-                                            <button type="submit" class="flex bg-white border-gray-300 text-neutral px-3 py-1 rounded-md mr-2 hover:bg-gray-200">
-                                                <i class="fa-regular fa-heart text-xs" th:if="${!subComment.isMemberLikesSubComment(@rq.member)}"></i>
-                                                <i class="fa-solid fa-heart text-xs" th:if="${subComment.isMemberLikesSubComment(@rq.member)}"></i>
-                                                <p th:text="${#lists.size(subComment.likesList)}" class="ml-1 text-xs"></p>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                                <!--답글 내용 끝-->
-
-                                <!--답글 수정-->
-                                <p th:id="|text-subComment-${subComment.id}|" style="word-break: break-word;" class="text-sm min-h-[25px] modify-comment"th:text="${subComment.content}"></p>
-                                <div th:id="|update-subComment-${subComment.id}|" class="hidden">
-                                    <form th:action="@{|/subComment/update/${subComment.id}|}" th:object="${subCommentRequestDto}" method="post" class="mb-4 justify-between items-start" onsubmit="SubCommentRequestForm__submit(this); return false;">
-                                        <textarea name="content" th:id="|textarea-subComment-${subComment.id}|" th:field="*{content}" class="form-textarea2 modify-textarea w-full p-3 resize-none overflow-y-auto border border-neutral rounded-md mb-2 text-sm" placeholder="답글을 작성하세요"></textarea>
-                                        <div class="flex">
-                                            <button type="submit" class="register2 modify-save-button bg-neutral text-white px-4 py-2 rounded-md ml-2 flex-start text-xs hover:bg-black ml-auto" onclick="saveSubComment()" th:attr="data-id=${subComment.id}">수정완료</button>
+                                <div id="subCommentContainer">
+                                    <div class="subComment" th:data-userrole="${subComment.member.membership.value}">
+                                        <!--답글 내용-->
+                                        <div class="flex justify-between items-center">
+                                            <div class="flex items-end mb-3 mt-3">
+                                                <div th:if="${subComment.member.membership.value == 'premium'}">
+                                                    <div th:text="'😎' + ${subComment.member.nickname}" class="text-blue-500 text-sm  mr-2"></div>
+                                                </div>
+                                                <div th:if="${subComment.member.membership.value == 'mentor'}">
+                                                    <div th:text="'👨‍🏫' + ${subComment.member.nickname}" class="text-green-500 text-sm  mr-2"></div>
+                                                </div>
+                                                <div th:if="${subComment.member.membership.value == 'free'}">
+                                                    <div th:text="${subComment.member.nickname}" class="text-sm  mr-2"></div>
+                                                </div>
+                                                <div class="text-xs" th:text="${#temporals.format(subComment.createdDate, '(yyyy-MM-dd HH:mm)')}"></div>
+                                            </div>
+                                            <div class="flex items-center justify-center">
+                                                <button class="text-xs text-black underline modify-button pb-3 text-gray-400" th:if="${@rq.login  and @rq.member.id == subComment.member.id}" onclick="editSubComment()" th:attr="data-id=${subComment.id}">수정</button>
+                                                <a href="javascript:void(0);" th:if="${@rq.login and @rq.member.id == subComment.member.id}" th:data-uri="@{|/subComment/delete/${subComment.id}|}" class="delete text-xs text-black mx-2 underline pb-3  text-gray-400">삭제</a>
+                                                <form th:action="@{|/likes/like/subComment/${subComment.id}|}" method="post">
+                                                    <button type="submit" class="flex bg-white border-gray-300 text-neutral px-3 py-1 rounded-md mr-2 hover:bg-gray-200">
+                                                        <i class="fa-regular fa-heart text-xs" th:if="${!subComment.isMemberLikesSubComment(@rq.member)}"></i>
+                                                        <i class="fa-solid fa-heart text-xs" th:if="${subComment.isMemberLikesSubComment(@rq.member)}"></i>
+                                                        <p th:text="${#lists.size(subComment.likesList)}" class="ml-1 text-xs"></p>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </div>
-                                    </form>
+                                        <!--답글 내용 끝-->
+
+                                        <!--답글 수정-->
+                                        <p th:id="|text-subComment-${subComment.id}|" style="word-break: break-word;" class="text-sm min-h-[25px] modify-comment"th:text="${subComment.content}"></p>
+                                        <div th:id="|update-subComment-${subComment.id}|" class="hidden">
+                                            <form th:action="@{|/subComment/update/${subComment.id}|}" th:object="${subCommentRequestDto}" method="post" class="mb-4 justify-between items-start" onsubmit="SubCommentRequestForm__submit(this); return false;">
+                                                <textarea name="content" th:id="|textarea-subComment-${subComment.id}|" th:field="*{content}" class="form-textarea2 modify-textarea w-full p-3 resize-none overflow-y-auto border border-neutral rounded-md mb-2 text-sm" placeholder="답글을 작성하세요"></textarea>
+                                                <div class="flex">
+                                                    <button type="submit" class="register2 modify-save-button bg-neutral text-white px-4 py-2 rounded-md ml-2 flex-start text-xs hover:bg-black ml-auto" onclick="saveSubComment()" th:attr="data-id=${subComment.id}">수정완료</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!--답글 수정 완료-->
                             </li>
@@ -165,13 +199,31 @@
                         </div>
                     </div>
                     <!--답글 등록 완료-->
-                    <hr class=" border-gray-300 mb-4">
+                    <hr class=" border-gray-300">
                 </li>
             </div>
         </ul>
     </div>
 
     <script th:inline="javascript">
+        const comments = document.querySelectorAll('#commentContainer .comment');
+
+        comments.forEach(comment => {
+            const userRole = comment.getAttribute('data-userrole');
+            if (userRole === 'premium') {
+                comment.style.backgroundImage = "url('https://mblogthumb-phinf.pstatic.net/20160519_257/jango53_14636670858410H0Bn_GIF/jango_p4.gif?type=w420')";
+            }
+        });
+
+        const subComments = document.querySelectorAll('#subCommentContainer .subComment');
+
+        subComments.forEach(subComment => {
+            const userRole = subComment.getAttribute('data-userrole');
+            if (userRole === 'premium') {
+                subComment.style.backgroundImage = "url('https://mblogthumb-phinf.pstatic.net/20160519_208/jango53_1463667087648GbIiT_GIF/jango_p11.gif?type=w2')";
+            }
+        });
+
         const viewer = toastui.Editor.factory({
             el : document.querySelector(".toast-custom-viewer"),
             viewer : true,

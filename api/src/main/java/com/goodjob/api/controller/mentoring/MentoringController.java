@@ -47,7 +47,7 @@ public class MentoringController {
     }
 
     @GetMapping("/detail/{id}")
-    public String detailArticle (Model model, @PathVariable("id") Long id) {
+    public String detailMentoring (Model model, @PathVariable("id") Long id) {
         RsData<Mentoring> mentoringRsData = mentoringService.getMentoring(id);
         if(mentoringRsData.isFail()) {
             return rq.historyBack(mentoringRsData);

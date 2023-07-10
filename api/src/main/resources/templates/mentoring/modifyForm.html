@@ -14,7 +14,7 @@
     <div class="container mx-auto py-8 w-[770px]">
         <h1 class="text-2xl font-bold">멘토링 수정</h1>
 
-        <form class="mt-4" method="post">
+        <form class="mt-4" method="post" th:action onsubmit="submitForm(this); return false;">
             <div class="mb-4">
                 <p>제목(필수)</p>
                 <input type="text" name="title" th:value="*{mentoring.title}" class="form-input w-full border border-neutral rounded-md h-10 p-3" placeholder="제목을 입력하세요">
@@ -63,10 +63,25 @@
         });
         // 폼 제출 시 에디터의 내용을 숨겨진 textarea 필드에 할당
 
-        function submitForm() {
+        function submitForm(form) {
+            if(form.title.value.trim() === '') {
+                toastWarning("제목을 입력해야 합니다.");
+                form.title.focus();
+                return;
+            }
+
+            if(form.title.value.length > 30) {
+                toastWarning("제목은 30자 이내로 작성해야 합니다.");
+                form.title.focus();
+                return;
+            }
+
             const hiddenContent = document.querySelector('#hidden-content');
             hiddenContent.value = editor.getMarkdown();
-            const form = document.querySelector('form');
+            if(hiddenContent.value.trim() === '') {
+                toastWarning("내용을 입력해야 합니다.");
+                return;
+            }
             form.submit();
         }
 
