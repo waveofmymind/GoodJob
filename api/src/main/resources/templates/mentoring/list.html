@@ -116,7 +116,7 @@
         }
         function checkMentor() {
             // 멘토인지 확인하는 로직을 여기에 작성합니다.
-            var isMentor = [[${@rq.member.membership.value == "mentor"}]];
+            var isMentor = [[${@rq.member.isMentor()}]];
 
             if (isMentor) {
                 // 멘토인 경우, 원래 기능을 실행합니다.
