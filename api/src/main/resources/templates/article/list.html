@@ -100,7 +100,7 @@
             <ul class="grid-container">
                 <li th:each="article, loop : ${paging}">
                     <div id="cardContainer">
-                        <a class="card m-2 hover:bg-gray-200" th:href="@{|/article/detail/${article.id}|}" th:data-userrole="${article.member.userRole}">
+                        <a class="card m-2 hover:bg-gray-200" th:href="@{|/article/detail/${article.id}|}" th:data-userrole="${article.member.membership.value}">
                             <p th:text="${#strings.length(article.title) > 20 ? #strings.substring(article.title, 0, 19) + '...' : article.title}" style="word-break: break-word;"></p>
                             <div class="flex">
                                 <div class="flex content mr-2">
@@ -172,15 +172,15 @@
         const cards = document.querySelectorAll('#cardContainer .card');
 
         cards.forEach(card => {
-            const userRole = card.getAttribute('data-userrole');
-            if(userRole === 'premium') {
+            const membership = card.getAttribute('data-userrole');
+            if(membership === 'premium') {
                 card.style.border = "1px solid #2E2EFE";
                 card.style.backgroundColor = "#CEE3F6";
                 card.style.backgroundImage = "url('https://mblogthumb-phinf.pstatic.net/20160519_47/jango53_1463667092361tjBiX_GIF/jango_p33.gif?type=w2')"
-            } else if (userRole === 'free') {
+            } else if (membership === 'free') {
                 card.style.border = "1px solid #BDBDBD";
                 card.style.backgroundColor = "#f1f2f5";
-            } else if (userRole === 'mentor') {
+            } else if (membership === 'mentor') {
                 card.style.border = "1px solid #04B404";
                 card.style.backgroundColor = "#D0F5A9";
             }
