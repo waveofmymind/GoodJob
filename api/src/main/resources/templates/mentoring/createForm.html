@@ -17,7 +17,7 @@
     <div class="container mx-auto py-8 w-[770px]">
         <h1 class="text-2xl font-bold">멘토링 작성</h1>
 
-        <form class="mt-4" th:object="${mentoringRequestDto}" method="post">
+        <form class="mt-4" th:object="${mentoringRequestDto}" method="post" th:action onsubmit="submitForm(this); return false;">
             <div class="mb-4">
                 <p>제목(필수)</p>
                 <input type="text" name="title" th:field="*{title}" class="form-input w-full border border-neutral rounded-md h-10 p-3" placeholder="제목을 입력하세요">
@@ -53,7 +53,7 @@
                 <div class="form-textarea" id="editor"></div>
             </div>
 
-            <button onclick="submitForm()" class="register bg-neutral hover:bg-black text-white font-bold px-4 py-2 rounded border-neutral" >저장하기</button>
+            <button class="register bg-neutral hover:bg-black text-white font-bold px-4 py-2 rounded border-neutral" >저장하기</button>
         </form>
     </div>
     <script>
@@ -64,10 +64,25 @@
             height: '400px',
         });
 
-        function submitForm() {
+        function submitForm(form) {
+            if(form.title.value.trim() === '') {
+                toastWarning("제목을 입력해야 합니다.");
+                form.title.focus();
+                return;
+            }
+
+            if(form.title.value.length > 30) {
+                toastWarning("제목은 30자 이내로 작성해야 합니다.");
+                form.title.focus();
+                return;
+            }
+
             const hiddenContent = document.querySelector('#hidden-content');
             hiddenContent.value = editor.getMarkdown();
-            const form = document.querySelector('form');
+            if(hiddenContent.value.trim() === '') {
+                toastWarning("내용을 입력해야 합니다.");
+                return;
+            }
             form.submit();
         }
     </script>
