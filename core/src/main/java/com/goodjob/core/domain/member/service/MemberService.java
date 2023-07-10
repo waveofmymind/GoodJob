@@ -101,22 +101,6 @@ public class MemberService {
         return RsData.of("S-1", "%s님 환영합니다!".formatted(member.getNickname()), tokens);
     }
 
-    public Optional<Member> findByNickname(String nickname) {
-        return memberRepository.findByNickname(nickname);
-    }
-
-    public Optional<Member> findByUsername(String username) {
-        return memberRepository.findByUsername(username);
-    }
-
-    public Optional<Member> findById(Long id) {
-        return memberRepository.findById(id);
-    }
-
-    public Optional<Member> findByEmail(String email) {
-        return memberRepository.findByEmail(email);
-    }
-
     // 소셜 로그인할때마다 동작
     public RsData<Member> whenSocialLogin(String providerType, String username, String email) {
         Optional<Member> opMember = findByUsername(username);
@@ -210,6 +194,22 @@ public class MemberService {
                 .build();
 
         return editRequestDto;
+    }
+
+    public Optional<Member> findByNickname(String nickname) {
+        return memberRepository.findByNickname(nickname);
+    }
+
+    public Optional<Member> findByUsername(String username) {
+        return memberRepository.findByUsername(username);
+    }
+
+    public Optional<Member> findById(Long id) {
+        return memberRepository.findById(id);
+    }
+
+    public Optional<Member> findByEmail(String email) {
+        return memberRepository.findByEmail(email);
     }
 
     private RsData verifyProvidedNickname(String originalNickname, String providedNickname) {

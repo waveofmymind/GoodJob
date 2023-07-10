@@ -61,7 +61,7 @@ class EmailVerificationServiceTest {
         assertThat(rsData.getResultCode()).isEqualTo("S-1");
         assertThat(rsData.getMsg()).isEqualTo("인증 코드가 확인되었습니다.");
         verify(emailService, times(1)).findByEmail(any(String.class));
-        verify(redisUt, times(1)).getValue(any(Object.class));
+        verify(redisUt, times(1)).getValue(any(String.class));
     }
 
     @Test
@@ -101,7 +101,7 @@ class EmailVerificationServiceTest {
         assertThat(rsData.getResultCode()).isEqualTo("F-1");
         assertThat(rsData.getMsg()).isEqualTo("잘못된 인증 코드입니다.");
         verify(emailService, times(1)).findByEmail(any(String.class));
-        verify(redisUt, times(1)).getValue(any(Object.class));
+        verify(redisUt, times(1)).getValue(any(String.class));
     }
 
     @Test
@@ -122,7 +122,7 @@ class EmailVerificationServiceTest {
         assertThat(rsData.getResultCode()).isEqualTo("F-1");
         assertThat(rsData.getMsg()).isEqualTo("이메일 정보가 잘못되었습니다. 올바른 이메일을 입력하여 다시 시도해주세요.");
         verify(emailService, times(1)).findByEmail(any(String.class));
-        verify(redisUt, times(1)).getValue(any(Object.class));
+        verify(redisUt, times(1)).getValue(any(String.class));
     }
 }
 

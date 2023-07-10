@@ -72,7 +72,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         long id = (int) claims.get("id");
         Member member = memberService.findById(id).orElse(null);
 
-        Long ttl = redisUt.getExpire(id);
+        Long ttl = redisUt.getExpire(String.valueOf(id));
 
         // 리프레시 토큰까지 만료되었거나 키가 존재하지 않는 경우
         if (ttl < 0) {
