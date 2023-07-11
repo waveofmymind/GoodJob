@@ -33,7 +33,7 @@ class EmailServiceTest {
     @Mock
     private EmailSenderService emailSenderService;
 
-    @Spy
+    @Mock
     private RedisUt redisUt;
 
     private static SendEmailLog getSendEmailLog() {
@@ -81,6 +81,7 @@ class EmailServiceTest {
 
         doNothing().when(emailSenderService)
                 .send(any(String.class), any(String.class), any(String.class), any(String.class));
+//        doNothing().when()
 
         // WHEN
         emailService.sendJoinEmail(sendEmailLog, verificationCode);
@@ -96,7 +97,7 @@ class EmailServiceTest {
 
     @Test
     @DisplayName("이메일 전송 실패 - MailException")
-    void sendPasswordEmailFailWithMailException() throws MailException, MessagingException {
+    void sendPasswordEmailFail_MailException() throws MailException, MessagingException {
         // GIVEN
         SendEmailLog sendEmailLog = getSendEmailLog();
 
@@ -116,7 +117,7 @@ class EmailServiceTest {
 
     @Test
     @DisplayName("이메일 전송 실패 - MessagingException")
-    void sendPasswordEmailFailWithMessagingException() throws MessagingException {
+    void sendPasswordEmailFail_MessagingException() throws MessagingException {
         // GIVEN
         SendEmailLog sendEmailLog = getSendEmailLog();
 

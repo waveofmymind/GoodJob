@@ -100,8 +100,8 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("일반 회원가입 실패 - 중복검증")
-    void joinFailDueToDuplicateUsername() {
+    @DisplayName("일반 회원가입 실패 - 유저아이디 중복검증")
+    void joinFail_DuplicateUsername() {
         // GIVEN
         JoinRequestDto joinRequestDto = getJoinRequestDto();
         Member member = getMember();
@@ -114,6 +114,25 @@ class MemberServiceTest {
         // THEN
         assertThat(rsData.getResultCode()).isEqualTo("F-1");
         assertThat(rsData.getMsg()).isEqualTo("이미 존재하는 계정입니다.");
+        verify(passwordEncoder, times(0)).encode(any(String.class));
+    }
+
+    @Test
+    @DisplayName("일반 회원가입 실패 - 유저닉네임 중복검증")
+    void joinFail_DuplicateNickname() {
+        // GIVEN
+        JoinRequestDto joinRequestDto = getJoinRequestDto();
+        joinRequestDto.setUsername("notDuplication");
+        Member member = getMember();
+
+        doReturn(Optional.of(member)).when(memberRepository).findByNickname(joinRequestDto.getNickname());
+
+        // WHEN
+        RsData<Member> rsData = memberService.join(joinRequestDto);
+
+        // THEN
+        assertThat(rsData.getResultCode()).isEqualTo("F-1");
+        assertThat(rsData.getMsg()).isEqualTo("이미 존재하는 닉네임입니다.");
         verify(passwordEncoder, times(0)).encode(any(String.class));
     }
 
@@ -135,7 +154,6 @@ class MemberServiceTest {
     void loginSuccess() {
         // GIVEN
         LoginRequestDto loginRequestDto = getLoginRequestDto();
-        JoinRequestDto joinRequestDto = getJoinRequestDto();
         Member member = getMember();
 
         String jwtToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6InRlc3QiLCJuaWNrbmFtZSI6InRlc3RlciJ9.wqj9OeajmoLQrByZbBbMffPfJOzQgDOjzmzdbaYrZoE";
@@ -144,7 +162,7 @@ class MemberServiceTest {
             put("refreshToken", jwtToken);
         }};
 
-        doReturn(Optional.of(member)).when(memberRepository).findByUsername(joinRequestDto.getUsername());
+        doReturn(Optional.of(member)).when(memberRepository).findByUsername(loginRequestDto.getUsername());
         doReturn(true).when(passwordEncoder).matches(any(String.class), any(String.class));
         doReturn(tokens).when(jwtProvider).genAccessTokenAndRefreshToken(any(Member.class));
 
@@ -155,6 +173,41 @@ class MemberServiceTest {
         assertThat(rsData.getResultCode()).isEqualTo("S-1");
         assertThat(rsData.getMsg()).isEqualTo("%s님 환영합니다!".formatted(member.getNickname()));
         verify(passwordEncoder, times(1)).matches(any(String.class), any(String.class));
+    }
+
+    @Test
+    @DisplayName("로그인 실패 - 아이디 틀림")
+    void loginFail_InvalidUsername() {
+        // GIVEN
+        LoginRequestDto loginRequestDto = getLoginRequestDto();
+        Member member = getMember();
+
+        doReturn(Optional.empty()).when(memberRepository).findByUsername(loginRequestDto.getUsername());
+
+        // WHEN
+        RsData<Map<String, String>> rsData = memberService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
+
+        // THEN
+        assertThat(rsData.getResultCode()).isEqualTo("F-1");
+        assertThat(rsData.getMsg()).isEqualTo("아이디 혹은 비밀번호가 틀립니다.");
+    }
+
+    @Test
+    @DisplayName("로그인 실패 - 비밀번호 틀림")
+    void loginFail_InvalidPassword() {
+        // GIVEN
+        LoginRequestDto loginRequestDto = getLoginRequestDto();
+        Member member = getMember();
+
+        doReturn(Optional.of(member)).when(memberRepository).findByUsername(loginRequestDto.getUsername());
+        doReturn(false).when(passwordEncoder).matches(any(String.class), any(String.class));
+
+        // WHEN
+        RsData<Map<String, String>> rsData = memberService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
+
+        // THEN
+        assertThat(rsData.getResultCode()).isEqualTo("F-1");
+        assertThat(rsData.getMsg()).isEqualTo("아이디 혹은 비밀번호가 틀립니다.");
     }
 
     @Test
@@ -283,7 +336,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("회원정보 수정 실패 - 일반회원 - 수정된 값 없음")
-    void updateFailDueToNoChanges() {
+    void updateFail_NoChanges() {
         // GIVEN
         EditRequestDto editRequestDto = getEditRequestDto("tester", "1234");
         Member member = getMember();
@@ -304,7 +357,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("회원정보 수정 실패 - 소셜회원 - 수정된 값 없음")
-    void updateSocialFailDueToNoChanges() {
+    void updateSocialFail_NoChanges() {
         // GIVEN
         EditRequestDto editRequestDto = getEditRequestDto("tester", "");
         Member member = Member.builder()
@@ -328,7 +381,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("회원정보 수정 실패 - 전체회원 - 중복된 닉네임")
-    void updateFailDueToDuplicateNickname() {
+    void updateFail_DuplicateNickname() {
         // GIVEN
         EditRequestDto editRequestDto = getEditRequestDto("test", "1234");
         Member member = getMember();

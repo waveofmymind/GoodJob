@@ -11,14 +11,14 @@ import java.util.concurrent.TimeUnit;
 public class RedisUt {
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
 
-    public <T> long getExpire(T key) {
+    public long getExpire(String key) {
         return redisTemplate.getExpire(key);
     }
 
-    public <T> boolean hasValue(T key) {
-        ValueOperations<T, String> valueOperations = redisTemplate.opsForValue();
+    public boolean hasValue(String key) {
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         String refreshToken = valueOperations.get(key);
 
         if (refreshToken == null) {
@@ -28,17 +28,17 @@ public class RedisUt {
         return true;
     }
 
-    public <T> String getValue(T key) {
-        ValueOperations<T, String> valueOperations = redisTemplate.opsForValue();
+    public String getValue(String key) {
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         return valueOperations.get(key);
     }
 
-    public <T> void setValue(T key, String value, long timeout) {
-        ValueOperations<T, String> valueOperations = redisTemplate.opsForValue();
+    public void setValue(String key, String value, long timeout) {
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         valueOperations.set(key, value, timeout, TimeUnit.MILLISECONDS);
     }
 
-    public <T> void delete(T key) {
+    public void delete(String key) {
         redisTemplate.delete(key);
     }
 }

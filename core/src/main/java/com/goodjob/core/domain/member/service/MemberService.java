@@ -66,10 +66,6 @@ public class MemberService {
     // 일반회원가입, 소셜로그인 회원가입 나눠 처리
     @Transactional
     public RsData<Member> socialJoin(String providerType, String username, String password, String email) {
-        if (findByUsername(username).isPresent()) {
-            return RsData.of("F-1", "해당 아이디(%s)는 이미 사용중입니다.".formatted(username));
-        }
-
         if (StringUtils.hasText(password)) {
             password = passwordEncoder.encode(password);
         }
@@ -103,22 +99,6 @@ public class MemberService {
         Map<String, String> tokens = jwtProvider.genAccessTokenAndRefreshToken(member);
 
         return RsData.of("S-1", "%s님 환영합니다!".formatted(member.getNickname()), tokens);
-    }
-
-    public Optional<Member> findByNickname(String nickname) {
-        return memberRepository.findByNickname(nickname);
-    }
-
-    public Optional<Member> findByUsername(String username) {
-        return memberRepository.findByUsername(username);
-    }
-
-    public Optional<Member> findById(Long id) {
-        return memberRepository.findById(id);
-    }
-
-    public Optional<Member> findByEmail(String email) {
-        return memberRepository.findByEmail(email);
     }
 
     // 소셜 로그인할때마다 동작
@@ -214,6 +194,22 @@ public class MemberService {
                 .build();
 
         return editRequestDto;
+    }
+
+    public Optional<Member> findByNickname(String nickname) {
+        return memberRepository.findByNickname(nickname);
+    }
+
+    public Optional<Member> findByUsername(String username) {
+        return memberRepository.findByUsername(username);
+    }
+
+    public Optional<Member> findById(Long id) {
+        return memberRepository.findById(id);
+    }
+
+    public Optional<Member> findByEmail(String email) {
+        return memberRepository.findByEmail(email);
     }
 
     private RsData verifyProvidedNickname(String originalNickname, String providedNickname) {

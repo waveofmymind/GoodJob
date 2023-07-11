@@ -16,7 +16,6 @@ import com.goodjob.resume.facade.PredictionFacade;
 import jakarta.servlet.http.Cookie;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +30,6 @@ import static com.goodjob.core.global.base.cookie.constant.CookieType.*;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/member")
-@Slf4j
 public class MemberController {
 
     private final Rq rq;
@@ -57,6 +55,7 @@ public class MemberController {
 
         if (!joinRequestDto.getPassword().equals(joinRequestDto.getConfirmPassword())) {
             bindingResult.rejectValue("confirmPassword", "", "패스워드가 일치하지 않습니다.");
+
             return "member/join";
         }
 
@@ -100,21 +99,18 @@ public class MemberController {
             return rq.redirectWithMsg(previousUrl, loginRsData);
         }
 
-        log.debug("로그인 요청한 유저 accessToken ={}", loginRsData.getData());
         return rq.redirectWithMsg("/", loginRsData);
     }
 
     @PostMapping("/logout")
     @PreAuthorize("isAuthenticated()")
     public String logout() {
-        String userId = String.valueOf(rq.getMember().getId());
+        Long id = rq.getMember().getId();
 
         // 레디스에서 리프레시토큰삭제
-        redisUt.delete(userId);
-
+        redisUt.delete(String.valueOf(id));
         rq.logout();
 
-        log.debug("로그아웃한 유저id ={}", userId);
         return rq.redirectWithMsg("/", "로그아웃 되었습니다.");
     }
 
@@ -149,7 +145,7 @@ public class MemberController {
 
     @PostMapping("/applyMentor")
     public String applyMentor(@RequestParam(name = "isMentor", required = false) boolean isMentor) {
-        if(isMentor) {
+        if (isMentor) {
             RsData<String> memberRsData = memberService.upgradeToMentorMembership(rq.getMember());
 
             return rq.redirectWithMsg("/mentoring/list", memberRsData);
