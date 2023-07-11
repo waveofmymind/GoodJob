@@ -60,8 +60,8 @@ class MemberEditServiceTest {
     }
 
     @Test
-    @DisplayName("회원정보 수정 성공 요청 시 비밀번호 일치")
-    void verifyPasswordSuccess() {
+    @DisplayName("회원정보 수정 성공 요청 시 현재 비밀번호 확인 성공")
+    void editSuccess_CurrentPasswordMatch() {
         // GIVEN
         Member member = getMember();
 
@@ -77,8 +77,8 @@ class MemberEditServiceTest {
     }
 
     @Test
-    @DisplayName("회원정보 수정 요청 시 비밀번호 불일치")
-    void verifyPasswordFail() {
+    @DisplayName("회원정보 수정 요청 시 현재 비밀번호 확인 실패")
+    void editFail_CurrentPasswordMismatch() {
         // GIVEN
         Member member = getMember();
 
@@ -95,7 +95,7 @@ class MemberEditServiceTest {
 
     @Test
     @DisplayName("회원정보 수정 성공 - 일반회원 - 닉네임, 비밀번호 변경")
-    void updateSuccess_NicknameAndPassword() {
+    void editSuccess_NicknameAndPassword() {
         // GIVEN
         EditRequestDto editRequestDto = getEditRequestDto("edit Tester", "12345");
         Member member = getMember();
@@ -117,7 +117,7 @@ class MemberEditServiceTest {
 
     @Test
     @DisplayName("회원정보 수정 성공 - 일반회원 - 비밀번호변경")
-    void updateSuccess_Password() {
+    void editSuccess_Password() {
         // GIVEN
         EditRequestDto editRequestDto = getEditRequestDto("tester", "12345");
         Member member = getMember();
@@ -139,7 +139,7 @@ class MemberEditServiceTest {
 
     @Test
     @DisplayName("회원정보 수정 성공 - 일반회원 - 닉네임변경")
-    void updateSuccess_Nickname() {
+    void editSuccess_Nickname() {
         // GIVEN
         EditRequestDto editRequestDto = getEditRequestDto("edit Tester", "1234");
         Member member = getMember();
@@ -161,7 +161,7 @@ class MemberEditServiceTest {
 
     @Test
     @DisplayName("회원정보 수정 성공 - 소셜회원 - 닉네임변경")
-    void updateSuccess_SocialNickname() {
+    void editSuccess_SocialNickname() {
         // GIVEN
         EditRequestDto editRequestDto = getEditRequestDto("edit Tester", "");
         Member member = Member.builder()
@@ -185,7 +185,7 @@ class MemberEditServiceTest {
 
     @Test
     @DisplayName("회원정보 수정 실패 - 일반회원 - 수정된 값 없음")
-    void updateFail_NoChanges() {
+    void editFail_NoChanges() {
         // GIVEN
         EditRequestDto editRequestDto = getEditRequestDto("tester", "1234");
         Member member = getMember();
@@ -206,7 +206,7 @@ class MemberEditServiceTest {
 
     @Test
     @DisplayName("회원정보 수정 실패 - 소셜회원 - 수정된 값 없음")
-    void updateSocialFail_NoChanges() {
+    void editSocialFail_NoChanges() {
         // GIVEN
         EditRequestDto editRequestDto = getEditRequestDto("tester", "");
         Member member = Member.builder()
@@ -230,7 +230,7 @@ class MemberEditServiceTest {
 
     @Test
     @DisplayName("회원정보 수정 실패 - 전체회원 - 중복된 닉네임")
-    void updateFail_DuplicateNickname() {
+    void editFail_DuplicateNickname() {
         // GIVEN
         EditRequestDto editRequestDto = getEditRequestDto("test", "1234");
         Member member = getMember();

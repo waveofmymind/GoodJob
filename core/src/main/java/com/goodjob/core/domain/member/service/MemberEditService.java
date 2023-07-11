@@ -30,7 +30,7 @@ public class MemberEditService {
         return RsData.of("S-1", "비밀번호가 일치합니다. 회원정보수정 페이지로 이동합니다.");
     }
 
-    // 닉네임, 비밀번호 하나 이상 바꿔야 회원정보 수정 가능
+    // 닉네임, 비밀번호 중 하나 이상 바꿔야 회원정보 수정 가능
     @Transactional
     public RsData update(Member member, EditRequestDto editRequestDto) {
         String nickname = editRequestDto.getNickname().replaceAll("\\s+", "");
@@ -43,7 +43,7 @@ public class MemberEditService {
         if (!member.isSocialMember()) {
             boolean matches = passwordEncoder.matches(editRequestDto.getPassword(), member.getPassword());
 
-            // 기존 회원정보와 변화 없는 경우
+            // 수정값 없는 경우
             if (member.getNickname().equals(nickname) && matches) {
                 return RsData.of("F-1", "수정된 정보가 없습니다!");
             }
