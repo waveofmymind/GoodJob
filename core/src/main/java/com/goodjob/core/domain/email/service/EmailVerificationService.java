@@ -89,7 +89,7 @@ public class EmailVerificationService {
     private RsData checkEmailResultCode(String email) {
         Optional<SendEmailLog> opSendEmailLog = emailService.findByEmail(email);
         if (opSendEmailLog.isEmpty()) {
-            return RsData.of("F-2", "이메일 정보가 잘못되었습니다. 올바른 이메일을 입력하여 다시 시도해주세요.");
+            return RsData.of("F-1", "이메일 정보가 잘못되었습니다. 올바른 이메일을 입력하여 다시 시도해주세요.");
         }
 
         SendEmailLog sendEmailLog = opSendEmailLog.get();
