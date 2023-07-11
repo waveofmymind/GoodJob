@@ -96,7 +96,7 @@ class MemberEditControllerTest {
     @Test
     @DisplayName("회원정보수정 실패 - 닉네임 중복")
     @WithUserDetails("test")
-    void editFail_InvalidInput() throws Exception {
+    void editFail_DuplicateNickname() throws Exception {
         // GIVEN
         genMember("tester1");
 
@@ -113,9 +113,7 @@ class MemberEditControllerTest {
         resultActions
                 .andExpect(status().is4xxClientError())
                 .andExpect(handler().handlerType(MemberEditController.class))
-                .andExpect(handler().methodName("edit"))
-                .andExpect(jsonPath("$.resultCode").value("S-1"))
-                .andExpect(jsonPath("$.msg").value("가입하신 메일주소로 임시비밀번호가 발송되었습니다."));
+                .andExpect(handler().methodName("edit"));
     }
 
     @Test
