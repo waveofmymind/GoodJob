@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
+@Profile("local")
 class MemberControllerTest {
 
     @Autowired
@@ -189,7 +191,7 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("로그아웃")
+    @DisplayName("로그아웃 성공")
     void logoutSuccess() throws Exception {
         // GIVEN
         // 쿠키, 레디스 설정을 위해 로그인처리 및 시큐리티에 User 객체 저장

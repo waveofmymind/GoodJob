@@ -1,6 +1,7 @@
 package com.goodjob.api.controller.member;
 
 import com.goodjob.core.domain.member.dto.request.EditRequestDto;
+import com.goodjob.core.domain.member.service.MemberEditService;
 import com.goodjob.core.domain.member.service.MemberService;
 import com.goodjob.core.global.base.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/member/edit")
 public class MemberEditController {
 
-    private final MemberService memberService;
+    private final MemberEditService memberEditService;
     private final Rq rq;
 
     @GetMapping("")
@@ -31,7 +32,7 @@ public class MemberEditController {
             return "member/edit";
         }
 
-        RsData updateRsData = memberService.update(rq.getMember(), editRequestDto);
+        RsData updateRsData = memberEditService.update(rq.getMember(), editRequestDto);
 
         if (updateRsData.isFail()) {
             return rq.historyBack(updateRsData);
@@ -48,7 +49,7 @@ public class MemberEditController {
     @PostMapping("/confirm/password")
     public String confirmPassword(String passwordToEdit) {
         String memberPassword = rq.getMember().getPassword();
-        RsData<String> verifyRsData = memberService.verifyPassword(passwordToEdit, memberPassword);
+        RsData<String> verifyRsData = memberEditService.verifyPassword(passwordToEdit, memberPassword);
 
         if (verifyRsData.isFail()) {
             return rq.redirectWithMsg("/member/me", verifyRsData);
