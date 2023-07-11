@@ -85,14 +85,16 @@ public class ChatService {
     }
 
     @Transactional
-    public void deleteRoom(String roomId, Member member) {
+    public RsData deleteRoom(String roomId, Member member) {
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId).orElse(null);
         if(member.getNickname().equals(chatRoom.getSender().getNickname())) {
             chatRoomRepository.delete(chatRoom);
         } else if(member.getNickname().equals((chatRoom.getReceiver().getNickname()))) {
             chatRoom.setDeleted(true);
             chatRoomRepository.save(chatRoom);
+            return RsData.of("S-2", "채팅방이 삭제되었습니다.", chatRoom);
         }
+        return RsData.of("S-1", "채팅방이 삭제되었습니다.");
     }
 
     @Transactional
