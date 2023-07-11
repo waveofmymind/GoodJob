@@ -47,7 +47,6 @@ public class ResumeController {
     public String generateQuestion(@ModelAttribute CreatePromptRequest request) throws JsonProcessingException {
         if (rq.getMember() == null) {
             request.setMemberId(null);
-            //TODO: 비로그인시 별도 페이지 생성
         } else {
             request.setMemberId(rq.getMember().getId());
             boolean isServiceAvailable = coinUt.isServiceAvailable(rq.getMember());
@@ -71,7 +70,6 @@ public class ResumeController {
     public String generateAdvice(@ModelAttribute CreatePromptRequest request) throws JsonProcessingException {
         if (rq.getMember() == null) {
             request.setMemberId(null);
-            //TODO: 비로그인시 별도 페이지 생성
         } else {
             request.setMemberId(rq.getMember().getId());
             request.setMemberId(rq.getMember().getId());
