@@ -16,8 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -116,7 +114,8 @@ class MemberEditControllerTest {
                 .andExpect(status().is4xxClientError())
                 .andExpect(handler().handlerType(MemberEditController.class))
                 .andExpect(handler().methodName("edit"))
-                .andExpect(view().name("common/js"));
+                .andExpect(jsonPath("$.resultCode").value("S-1"))
+                .andExpect(jsonPath("$.msg").value("가입하신 메일주소로 임시비밀번호가 발송되었습니다."));
     }
 
     @Test
