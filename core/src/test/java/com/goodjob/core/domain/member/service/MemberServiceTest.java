@@ -1,6 +1,5 @@
 package com.goodjob.core.domain.member.service;
 
-import com.goodjob.core.domain.member.dto.request.EditRequestDto;
 import com.goodjob.core.domain.member.dto.request.JoinRequestDto;
 import com.goodjob.core.domain.member.dto.request.LoginRequestDto;
 import com.goodjob.core.domain.member.entity.Member;
@@ -22,7 +21,6 @@ import java.util.Optional;
 
 import static com.goodjob.core.domain.member.constant.Membership.*;
 import static com.goodjob.core.domain.member.constant.ProviderType.GOODJOB;
-import static com.goodjob.core.domain.member.constant.ProviderType.KAKAO;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -75,14 +73,6 @@ class MemberServiceTest {
         return loginRequestDto;
     }
 
-    private static EditRequestDto getEditRequestDto(String tester, String password) {
-        EditRequestDto editRequestDto = EditRequestDto.builder()
-                .nickname(tester)
-                .password(password)
-                .build();
-        return editRequestDto;
-    }
-
     @Test
     @DisplayName("일반 회원가입 성공")
     void joinSuccess() {
@@ -100,8 +90,8 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("일반 회원가입 실패 - 중복검증")
-    void joinFailDueToDuplicateUsername() {
+    @DisplayName("일반 회원가입 실패 - 아이디 중복")
+    void joinFail_DuplicateUsername() {
         // GIVEN
         JoinRequestDto joinRequestDto = getJoinRequestDto();
         Member member = getMember();
@@ -114,6 +104,25 @@ class MemberServiceTest {
         // THEN
         assertThat(rsData.getResultCode()).isEqualTo("F-1");
         assertThat(rsData.getMsg()).isEqualTo("이미 존재하는 계정입니다.");
+        verify(passwordEncoder, times(0)).encode(any(String.class));
+    }
+
+    @Test
+    @DisplayName("일반 회원가입 실패 - 닉네임 중복")
+    void joinFail_DuplicateNickname() {
+        // GIVEN
+        JoinRequestDto joinRequestDto = getJoinRequestDto();
+        joinRequestDto.setUsername("notDuplication");
+        Member member = getMember();
+
+        doReturn(Optional.of(member)).when(memberRepository).findByNickname(joinRequestDto.getNickname());
+
+        // WHEN
+        RsData<Member> rsData = memberService.join(joinRequestDto);
+
+        // THEN
+        assertThat(rsData.getResultCode()).isEqualTo("F-1");
+        assertThat(rsData.getMsg()).isEqualTo("이미 존재하는 닉네임입니다.");
         verify(passwordEncoder, times(0)).encode(any(String.class));
     }
 
@@ -135,7 +144,6 @@ class MemberServiceTest {
     void loginSuccess() {
         // GIVEN
         LoginRequestDto loginRequestDto = getLoginRequestDto();
-        JoinRequestDto joinRequestDto = getJoinRequestDto();
         Member member = getMember();
 
         String jwtToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6InRlc3QiLCJuaWNrbmFtZSI6InRlc3RlciJ9.wqj9OeajmoLQrByZbBbMffPfJOzQgDOjzmzdbaYrZoE";
@@ -144,7 +152,7 @@ class MemberServiceTest {
             put("refreshToken", jwtToken);
         }};
 
-        doReturn(Optional.of(member)).when(memberRepository).findByUsername(joinRequestDto.getUsername());
+        doReturn(Optional.of(member)).when(memberRepository).findByUsername(loginRequestDto.getUsername());
         doReturn(true).when(passwordEncoder).matches(any(String.class), any(String.class));
         doReturn(tokens).when(jwtProvider).genAccessTokenAndRefreshToken(any(Member.class));
 
@@ -158,197 +166,43 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("회원정보 수정 요청 시 비밀번호 일치")
-    void verifyPasswordSuccess() {
+    @DisplayName("로그인 실패 - 아이디 틀림")
+    void loginFail_InvalidUsername() {
         // GIVEN
+        LoginRequestDto loginRequestDto = getLoginRequestDto();
         Member member = getMember();
 
-        doReturn(true).when(passwordEncoder).matches(any(String.class), any(String.class));
+        doReturn(Optional.empty()).when(memberRepository).findByUsername(loginRequestDto.getUsername());
 
         // WHEN
-        RsData<String> rsData = memberService.verifyPassword("1234", member.getPassword());
+        RsData<Map<String, String>> rsData = memberService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
 
         // THEN
-        assertThat(rsData.getResultCode()).isEqualTo("S-1");
-        assertThat(rsData.getMsg()).isEqualTo("비밀번호가 일치합니다. 회원정보수정 페이지로 이동합니다.");
-        verify(passwordEncoder, times(1)).matches(any(String.class), any(String.class));
+        assertThat(rsData.getResultCode()).isEqualTo("F-1");
+        assertThat(rsData.getMsg()).isEqualTo("아이디 혹은 비밀번호가 틀립니다.");
     }
 
     @Test
-    @DisplayName("회원정보 수정 요청 시 비밀번호 불일치")
-    void verifyPasswordFail() {
+    @DisplayName("로그인 실패 - 비밀번호 틀림")
+    void loginFail_InvalidPassword() {
         // GIVEN
+        LoginRequestDto loginRequestDto = getLoginRequestDto();
         Member member = getMember();
 
+        doReturn(Optional.of(member)).when(memberRepository).findByUsername(loginRequestDto.getUsername());
         doReturn(false).when(passwordEncoder).matches(any(String.class), any(String.class));
 
         // WHEN
-        RsData<String> rsData = memberService.verifyPassword("1234", member.getPassword());
+        RsData<Map<String, String>> rsData = memberService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
 
         // THEN
         assertThat(rsData.getResultCode()).isEqualTo("F-1");
-        assertThat(rsData.getMsg()).isEqualTo("비밀번호가 일치하지않습니다.");
-        verify(passwordEncoder, times(1)).matches(any(String.class), any(String.class));
-    }
-
-    @Test
-    @DisplayName("회원정보 수정 성공 - 일반회원 - 닉네임, 비밀번호 변경")
-    void updateNicknameAndPasswordSuccess() {
-        // GIVEN
-        EditRequestDto editRequestDto = getEditRequestDto("edit Tester", "12345");
-        Member member = getMember();
-
-        doReturn(Optional.empty()).when(memberRepository).findByNickname(any(String.class));
-        doReturn(false).when(passwordEncoder).matches(any(String.class), any(String.class));
-        doReturn("12345").when(passwordEncoder).encode(any(String.class));
-
-        // WHEN
-        RsData rsData = memberService.update(member, editRequestDto);
-
-        // THEN
-        assertThat(rsData.getResultCode()).isEqualTo("S-1");
-        assertThat(rsData.getMsg()).isEqualTo("회원 정보가 수정되었습니다.");
-        verify(memberRepository, times(1)).findByNickname(any(String.class));
-        verify(passwordEncoder, times(1)).matches(any(String.class), any(String.class));
-        verify(passwordEncoder, times(1)).encode(any(String.class));
-    }
-
-    @Test
-    @DisplayName("회원정보 수정 성공 - 일반회원 - 비밀번호변경")
-    void updatePasswordSuccess() {
-        // GIVEN
-        EditRequestDto editRequestDto = getEditRequestDto("tester", "12345");
-        Member member = getMember();
-
-        doReturn(Optional.of(member)).when(memberRepository).findByNickname(any(String.class));
-        doReturn(false).when(passwordEncoder).matches(any(String.class), any(String.class));
-        doReturn("12345").when(passwordEncoder).encode(any(String.class));
-
-        // WHEN
-        RsData rsData = memberService.update(member, editRequestDto);
-
-        // THEN
-        assertThat(rsData.getResultCode()).isEqualTo("S-1");
-        assertThat(rsData.getMsg()).isEqualTo("회원 정보가 수정되었습니다.");
-        verify(memberRepository, times(1)).findByNickname(any(String.class));
-        verify(passwordEncoder, times(1)).matches(any(String.class), any(String.class));
-        verify(passwordEncoder, times(1)).encode(any(String.class));
-    }
-
-    @Test
-    @DisplayName("회원정보 수정 성공 - 일반회원 - 닉네임변경")
-    void updateNicknameSuccess() {
-        // GIVEN
-        EditRequestDto editRequestDto = getEditRequestDto("edit Tester", "1234");
-        Member member = getMember();
-
-        doReturn(Optional.empty()).when(memberRepository).findByNickname(any(String.class));
-        doReturn(true).when(passwordEncoder).matches(any(String.class), any(String.class));
-        doReturn("1234").when(passwordEncoder).encode(any(String.class));
-
-        // WHEN
-        RsData rsData = memberService.update(member, editRequestDto);
-
-        // THEN
-        assertThat(rsData.getResultCode()).isEqualTo("S-1");
-        assertThat(rsData.getMsg()).isEqualTo("회원 정보가 수정되었습니다.");
-        verify(memberRepository, times(1)).findByNickname(any(String.class));
-        verify(passwordEncoder, times(1)).matches(any(String.class), any(String.class));
-        verify(passwordEncoder, times(1)).encode(any(String.class));
-    }
-
-    @Test
-    @DisplayName("회원정보 수정 성공 - 소셜회원 - 닉네임변경")
-    void updateSocialNicknameSuccess() {
-        // GIVEN
-        EditRequestDto editRequestDto = getEditRequestDto("edit Tester", "");
-        Member member = Member.builder()
-                .password("")
-                .nickname("tester")
-                .providerType(KAKAO)
-                .build();
-
-        doReturn(Optional.empty()).when(memberRepository).findByNickname(any(String.class));
-
-        // WHEN
-        RsData rsData = memberService.update(member, editRequestDto);
-
-        // THEN
-        assertThat(rsData.getResultCode()).isEqualTo("S-1");
-        assertThat(rsData.getMsg()).isEqualTo("회원 정보가 수정되었습니다.");
-        verify(memberRepository, times(1)).findByNickname(any(String.class));
-        verify(passwordEncoder, times(0)).matches(any(String.class), any(String.class));
-        verify(passwordEncoder, times(0)).encode(any(String.class));
-    }
-
-    @Test
-    @DisplayName("회원정보 수정 실패 - 일반회원 - 수정된 값 없음")
-    void updateFailDueToNoChanges() {
-        // GIVEN
-        EditRequestDto editRequestDto = getEditRequestDto("tester", "1234");
-        Member member = getMember();
-
-        doReturn(Optional.of(member)).when(memberRepository).findByNickname(any(String.class));
-        doReturn(true).when(passwordEncoder).matches(any(String.class), any(String.class));
-
-        // WHEN
-        RsData rsData = memberService.update(member, editRequestDto);
-
-        // THEN
-        assertThat(rsData.getResultCode()).isEqualTo("F-1");
-        assertThat(rsData.getMsg()).isEqualTo("수정된 정보가 없습니다!");
-        verify(memberRepository, times(1)).findByNickname(any(String.class));
-        verify(passwordEncoder, times(1)).matches(any(String.class), any(String.class));
-        verify(passwordEncoder, times(0)).encode(any(String.class));
-    }
-
-    @Test
-    @DisplayName("회원정보 수정 실패 - 소셜회원 - 수정된 값 없음")
-    void updateSocialFailDueToNoChanges() {
-        // GIVEN
-        EditRequestDto editRequestDto = getEditRequestDto("tester", "");
-        Member member = Member.builder()
-                .password("")
-                .nickname("tester")
-                .providerType(KAKAO)
-                .build();
-
-        doReturn(Optional.of(member)).when(memberRepository).findByNickname(any(String.class));
-
-        // WHEN
-        RsData rsData = memberService.update(member, editRequestDto);
-
-        // THEN
-        assertThat(rsData.getResultCode()).isEqualTo("F-1");
-        assertThat(rsData.getMsg()).isEqualTo("수정된 정보가 없습니다!");
-        verify(memberRepository, times(1)).findByNickname(any(String.class));
-        verify(passwordEncoder, times(0)).matches(any(String.class), any(String.class));
-        verify(passwordEncoder, times(0)).encode(any(String.class));
-    }
-
-    @Test
-    @DisplayName("회원정보 수정 실패 - 전체회원 - 중복된 닉네임")
-    void updateFailDueToDuplicateNickname() {
-        // GIVEN
-        EditRequestDto editRequestDto = getEditRequestDto("test", "1234");
-        Member member = getMember();
-
-        doReturn(Optional.of(member)).when(memberRepository).findByNickname(any(String.class));
-
-        // WHEN
-        RsData rsData = memberService.update(member, editRequestDto);
-
-        // THEN
-        assertThat(rsData.getResultCode()).isEqualTo("F-1");
-        assertThat(rsData.getMsg()).isEqualTo("이미 존재하는 닉네임 입니다.");
-        verify(memberRepository, times(1)).findByNickname(any(String.class));
-        verify(passwordEncoder, times(0)).matches(any(String.class), any(String.class));
-        verify(passwordEncoder, times(0)).encode(any(String.class));
+        assertThat(rsData.getMsg()).isEqualTo("아이디 혹은 비밀번호가 틀립니다.");
     }
 
     @Test
     @DisplayName("프리미엄 등급 업그레이드 성공")
-    void upgradeToPremiumMembershipSuccess() {
+    void upgradeSuccess_PremiumMembership() {
         // GIVEN
         Member member = getMember();
 
@@ -362,7 +216,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("멘토 등급 업그레이드 성공")
-    void upgradeToMentorMembershipSuccess() {
+    void upgradeSuccess_MentorMembership() {
         // GIVEN
         Member member = getMember();
 

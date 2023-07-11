@@ -61,12 +61,12 @@ class EmailVerificationServiceTest {
         assertThat(rsData.getResultCode()).isEqualTo("S-1");
         assertThat(rsData.getMsg()).isEqualTo("인증 코드가 확인되었습니다.");
         verify(emailService, times(1)).findByEmail(any(String.class));
-        verify(redisUt, times(1)).getValue(any(Object.class));
+        verify(redisUt, times(1)).getValue(any(String.class));
     }
 
     @Test
     @DisplayName("회원가입 시 인증코드 검증 실패 - 이메일 전송 오류")
-    void verifyFailDueToEmailSendError() {
+    void verifyFail_EmailSendError() {
         // GIVEN
         SendEmailLog sendEmailLog = getSendEmailLog("F-1");
 
@@ -85,7 +85,7 @@ class EmailVerificationServiceTest {
 
     @Test
     @DisplayName("회원가입 시 인증코드 검증 실패 - 잘못된 검증 코드")
-    void verifyFailDueToInvalidVerificationCode() {
+    void verifyFail_InvalidVerificationCode() {
         // GIVEN
         SendEmailLog sendEmailLog = getSendEmailLog("S-1");
 
@@ -101,12 +101,12 @@ class EmailVerificationServiceTest {
         assertThat(rsData.getResultCode()).isEqualTo("F-1");
         assertThat(rsData.getMsg()).isEqualTo("잘못된 인증 코드입니다.");
         verify(emailService, times(1)).findByEmail(any(String.class));
-        verify(redisUt, times(1)).getValue(any(Object.class));
+        verify(redisUt, times(1)).getValue(any(String.class));
     }
 
     @Test
     @DisplayName("회원가입 시 인증코드 검증 실패 - 레디스에 인증코드 없음")
-    void verifyFailDueToMissingVerificationCodeInRedis() {
+    void verifyFail_MissingVerificationCodeInRedis() {
         // GIVEN
         SendEmailLog sendEmailLog = getSendEmailLog("S-1");
 
@@ -122,7 +122,7 @@ class EmailVerificationServiceTest {
         assertThat(rsData.getResultCode()).isEqualTo("F-1");
         assertThat(rsData.getMsg()).isEqualTo("이메일 정보가 잘못되었습니다. 올바른 이메일을 입력하여 다시 시도해주세요.");
         verify(emailService, times(1)).findByEmail(any(String.class));
-        verify(redisUt, times(1)).getValue(any(Object.class));
+        verify(redisUt, times(1)).getValue(any(String.class));
     }
 }
 

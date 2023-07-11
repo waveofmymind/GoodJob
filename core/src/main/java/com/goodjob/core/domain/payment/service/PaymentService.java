@@ -4,6 +4,7 @@ import com.goodjob.core.domain.payment.dto.request.PaymentRequestDto;
 import com.goodjob.core.domain.payment.entitiy.Payment;
 import com.goodjob.core.domain.payment.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -28,14 +29,7 @@ public class PaymentService {
         byte[] encodedBytes = encoder.encode(clientSecret.getBytes("UTF-8"));
         String authorizations = "Basic " + new String(encodedBytes, 0, encodedBytes.length);
 
-        URL url = new URL(tossUrl + paymentRequestDto.getPaymentKey());
-
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestProperty("Authorization", authorizations);
-        connection.setRequestProperty("Authorizations", authorizations);
-        connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestMethod("POST");
-        connection.setDoOutput(true);
+        HttpURLConnection connection = getConnection(tossUrl, paymentRequestDto, authorizations);
 
         JSONObject obj = new JSONObject();
         obj.put("orderId", paymentRequestDto.getOrderId());
@@ -70,5 +64,17 @@ public class PaymentService {
                 .build();
 
         paymentRepository.save(payment);
+    }
+
+    private HttpURLConnection getConnection(String tossUrl, PaymentRequestDto paymentRequestDto, String authorizations) throws IOException {
+        URL url = new URL(tossUrl + paymentRequestDto.getPaymentKey());
+
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestProperty("Authorization", authorizations);
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestMethod("POST");
+        connection.setDoOutput(true);
+
+        return connection;
     }
 }
