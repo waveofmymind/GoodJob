@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSendException;
@@ -81,7 +80,6 @@ class EmailServiceTest {
 
         doNothing().when(emailSenderService)
                 .send(any(String.class), any(String.class), any(String.class), any(String.class));
-//        doNothing().when()
 
         // WHEN
         emailService.sendJoinEmail(sendEmailLog, verificationCode);

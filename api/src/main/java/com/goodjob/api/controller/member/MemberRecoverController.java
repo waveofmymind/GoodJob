@@ -41,9 +41,9 @@ public class MemberRecoverController {
             return RsData.of("F-1", "해당 이메일을 가진 회원이 없습니다.");
         }
 
-        String nickname = opMember.get().getNickname();
-        String filteredNickname = nickname.substring(0, nickname.length() - 2) + "**";
-        String msg = "가입하신 아이디는 %s 입니다.".formatted(filteredNickname);
+        String username = opMember.get().getUsername();
+        String filteredUsername = username.substring(0, username.length() - 2) + "**";
+        String msg = "가입하신 아이디는 %s 입니다.".formatted(filteredUsername);
 
         return RsData.of("S-1", msg);
     }
@@ -76,7 +76,7 @@ public class MemberRecoverController {
         }
 
         // 메일 전송
-        emailVerificationService.sendPassword(member.getEmail(), editRequestDto.getPassword());
+        emailVerificationService.sendPassword(username, member.getEmail(), editRequestDto.getPassword());
 
         return RsData.of("S-1", "가입하신 메일주소로 임시비밀번호가 발송되었습니다.");
     }

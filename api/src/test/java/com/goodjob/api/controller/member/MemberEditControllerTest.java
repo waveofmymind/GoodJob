@@ -10,10 +10,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -31,6 +34,9 @@ class MemberEditControllerTest {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private void genMember(String nickname) {
         JoinRequestDto joinRequestDto = new JoinRequestDto();
@@ -62,7 +68,9 @@ class MemberEditControllerTest {
                 .andExpect(redirectedUrlPattern("/member/me**"))
                 .andExpect(model().hasNoErrors());
 
-        assertThat(memberService.findByNickname("tester2")).isPresent();
+        Member member = memberService.findByUsername("test").orElse(null);
+        assertThat(member.getNickname()).isEqualTo("tester2");
+        assertThat(passwordEncoder.matches("12345", member.getPassword())).isTrue();
     }
 
     @Test
@@ -85,8 +93,6 @@ class MemberEditControllerTest {
                 .andExpect(handler().methodName("edit"))
                 .andExpect(view().name("member/edit"))
                 .andExpect(model().hasErrors());
-
-        assertThat(memberService.findByUsername("edit tester2")).isEmpty();
     }
 
     @Test
