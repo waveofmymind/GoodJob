@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
+@Profile("local")
 class MemberControllerTest {
 
     @Autowired
@@ -106,8 +108,32 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("일반 회원가입 실패 - 실패")
-    void joinFail_joinError() throws Exception {
+    @DisplayName("일반 회원가입 실패 - 비밀번호확인 불일치")
+    void joinFail_PasswordConfirmMismatch() throws Exception {
+        // WHEN
+        ResultActions resultActions = mockMvc
+                .perform(post("/member/join")
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .param("username", "test")
+                        .param("password", "1234")
+                        .param("confirmPassword", "12345")
+                        .param("nickname", "tester1")
+                        .param("email", "tester1@naver.com")
+                )
+                .andDo(print());
+
+        // Then
+        resultActions
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(handler().handlerType(MemberController.class))
+                .andExpect(handler().methodName("join"))
+                .andExpect(view().name("member/join"))
+                .andExpect(model().hasErrors());
+    }
+
+    @Test
+    @DisplayName("일반 회원가입 실패 - 아이디 중복")
+    void joinFail_DuplicateUsername() throws Exception {
         // WHEN
         ResultActions resultActions = mockMvc
                 .perform(post("/member/join")
@@ -116,6 +142,30 @@ class MemberControllerTest {
                         .param("password", "1234")
                         .param("confirmPassword", "1234")
                         .param("nickname", "tester1")
+                        .param("email", "tester1@naver.com")
+                )
+                .andDo(print());
+
+        // Then
+        resultActions
+                .andExpect(status().is4xxClientError())
+                .andExpect(handler().handlerType(MemberController.class))
+                .andExpect(handler().methodName("join"))
+                .andExpect(view().name("common/js"))
+                .andExpect(model().hasNoErrors());
+    }
+
+    @Test
+    @DisplayName("일반 회원가입 실패 - 닉네임 중복")
+    void joinFail_DuplicateNickname() throws Exception {
+        // WHEN
+        ResultActions resultActions = mockMvc
+                .perform(post("/member/join")
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .param("username", "tester")
+                        .param("password", "1234")
+                        .param("confirmPassword", "1234")
+                        .param("nickname", "tester")
                         .param("email", "tester1@naver.com")
                 )
                 .andDo(print());
@@ -170,8 +220,8 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("로그인 실패 - 아이디 틀림")
-    void loginFail_InvalidUsername() throws Exception {
+    @DisplayName("로그인 실패 - 아이디 불일치")
+    void loginFail_UsernameMismatch() throws Exception {
         // WHEN
         ResultActions resultActions = mockMvc
                 .perform(post("/member/login")
@@ -189,7 +239,26 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("로그아웃")
+    @DisplayName("로그인 실패 - 비밀번호 불일치")
+    void loginFail_passwordMismatch() throws Exception {
+        // WHEN
+        ResultActions resultActions = mockMvc
+                .perform(post("/member/login")
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .param("username", "test")
+                        .param("password", "12345")
+                )
+                .andDo(print());
+
+        // THEN
+        resultActions
+                .andExpect(status().is4xxClientError())
+                .andExpect(handler().handlerType(MemberController.class))
+                .andExpect(handler().methodName("login"));
+    }
+
+    @Test
+    @DisplayName("로그아웃 성공")
     void logoutSuccess() throws Exception {
         // GIVEN
         // 쿠키, 레디스 설정을 위해 로그인처리 및 시큐리티에 User 객체 저장

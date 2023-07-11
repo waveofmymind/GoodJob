@@ -3,6 +3,7 @@ package com.goodjob.api.controller.member;
 import com.goodjob.core.domain.email.service.EmailVerificationService;
 import com.goodjob.core.domain.member.dto.request.EditRequestDto;
 import com.goodjob.core.domain.member.entity.Member;
+import com.goodjob.core.domain.member.service.MemberEditService;
 import com.goodjob.core.domain.member.service.MemberService;
 import com.goodjob.core.global.base.rsData.RsData;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.Optional;
 public class MemberRecoverController {
 
     private final MemberService memberService;
+    private final MemberEditService memberEditService;
     private final EmailVerificationService emailVerificationService;
 
     @GetMapping("/username")
@@ -66,8 +68,8 @@ public class MemberRecoverController {
         Member member = opMember.get();
 
         // 임시비밀번호 생성 후 회원 비밀번호 변경
-        EditRequestDto editRequestDto = memberService.genEditRequestDtoWithTempPassword(member);
-        RsData updateRsData = memberService.update(member, editRequestDto);
+        EditRequestDto editRequestDto = memberEditService.genEditRequestDtoWithTempPassword(member);
+        RsData updateRsData = memberEditService.update(member, editRequestDto);
 
         if (updateRsData.isFail()) {
             return updateRsData;
