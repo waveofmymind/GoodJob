@@ -89,8 +89,6 @@ public class ArticleController {
         }
 
         ArticleResponseDto articleResponseDto = articleResponseDtoRsData.getData();
-        Map<String, File> fileMap = fileService.getFileMap(articleResponseDto.getId());
-        articleResponseDto.getExtra().put("fileMap", fileMap);
 
         model.addAttribute("article", articleResponseDto);
 
