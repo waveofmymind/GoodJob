@@ -143,8 +143,24 @@
                     </div>
                 </div>
             </div>
+            <div class="mb-2 text-right mr-2">
+                <form id="deleteForm" th:action="@{|/member/delete/${@rq.member.id}|}" method="POST" style="display: inline;">
+                    <a class="text-xs w-16 text-center ml-2"
+                       onclick="return confirmDelete();"
+                       style="color: gray; cursor: pointer;">회원 탈퇴</a>
+                </form>
+            </div>
         </div>
     </div>
+    <script>
+        function confirmDelete() {
+            if (confirm("정말로 삭제하시겠습니까? 7일 이내에 복구가 가능합니다.")) {
+                document.getElementById('deleteForm').submit();
+                return true;
+            }
+            return false;
+        }
+    </script>
 </main>
 
 </body>

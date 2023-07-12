@@ -114,6 +114,11 @@ public class MemberService {
         }
 
         Member member = opMember.get();
+
+        if (member.isDeleted()) {
+            return RsData.of("F-1", "탈퇴 처리중인 회원입니다.");
+        }
+
         boolean matches = passwordEncoder.matches(password, member.getPassword());
 
         if (!matches) {

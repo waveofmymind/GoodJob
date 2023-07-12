@@ -1,18 +1,14 @@
 package com.goodjob.api.controller.member;
 
-import com.goodjob.core.domain.article.entity.Article;
 import com.goodjob.core.domain.article.service.ArticleService;
-import com.goodjob.core.domain.comment.entity.Comment;
 import com.goodjob.core.domain.comment.service.CommentService;
 import com.goodjob.core.domain.member.dto.request.JoinRequestDto;
 import com.goodjob.core.domain.member.dto.request.LoginRequestDto;
 import com.goodjob.core.domain.member.dto.response.MemberContentDto;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
-import com.goodjob.core.global.base.redis.RedisUt;
 import com.goodjob.core.global.base.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
-import com.goodjob.resume.dto.response.ResponsePredictionDto;
 import com.goodjob.resume.facade.PredictionFacade;
 import jakarta.servlet.http.Cookie;
 import jakarta.validation.Valid;
@@ -23,7 +19,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 import static com.goodjob.core.global.base.cookie.constant.CookieType.*;
@@ -122,12 +117,13 @@ public class MemberController {
         return "member/me";
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/delete/{id}")
     @PreAuthorize("isAuthenticated()")
     public String delete(@PathVariable Long id) {
         memberService.softDelete(id);
+        rq.logout(id);
 
-        return "member/join";
+        return rq.redirectWithMsg("/", "회원탈퇴 요청이 완료되었습니다.");
     }
 
     @GetMapping("/applyMentor")
