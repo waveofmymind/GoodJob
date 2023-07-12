@@ -6,6 +6,7 @@ import com.goodjob.core.domain.comment.entity.Comment;
 import com.goodjob.core.domain.comment.service.CommentService;
 import com.goodjob.core.domain.member.dto.request.JoinRequestDto;
 import com.goodjob.core.domain.member.dto.request.LoginRequestDto;
+import com.goodjob.core.domain.member.dto.response.MemberContentDto;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
 import com.goodjob.core.global.base.redis.RedisUt;
@@ -37,7 +38,6 @@ public class MemberController {
     private final ArticleService articleService;
     private final CommentService commentService;
     private final PredictionFacade predictionFacade;
-    private final RedisUt redisUt;
 
     @GetMapping("/join")
     @PreAuthorize("isAnonymous()")
@@ -105,11 +105,7 @@ public class MemberController {
     @PostMapping("/logout")
     @PreAuthorize("isAuthenticated()")
     public String logout() {
-        Long id = rq.getMember().getId();
-
-        // 레디스에서 리프레시토큰삭제
-        redisUt.delete(String.valueOf(id));
-        rq.logout();
+        rq.logout(rq.getMember().getId());
 
         return rq.redirectWithMsg("/", "로그아웃 되었습니다.");
     }
@@ -119,21 +115,17 @@ public class MemberController {
     public String showMe(Model model) {
         Long id = rq.getMember().getId();
 
-        List<Article> articles = articleService.findAllByMemberId(id);
-        List<Comment> comments = commentService.findAllByMemberId(id);
-        List<ResponsePredictionDto> predictions = predictionFacade.getPredictions(id);
+        MemberContentDto memberContent = memberService.getMemberContent(id);
 
-        model.addAttribute("articles", articles);
-        model.addAttribute("comments", comments);
-        model.addAttribute("predictions", predictions);
+        model.addAttribute("memberContent", memberContent);
 
         return "member/me";
     }
 
-    @DeleteMapping("/delete/{id}")
+    @PostMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
     public String delete(@PathVariable Long id) {
-        memberService.delete(id);
+        memberService.softDelete(id);
 
         return "member/join";
     }

@@ -115,4 +115,8 @@ public class Member extends BaseEntity {
     public void recoverCoin() {
         this.coin++;
     }
+
+    public void softDelete() {
+        this.isDeleted = true;
+    }
 }

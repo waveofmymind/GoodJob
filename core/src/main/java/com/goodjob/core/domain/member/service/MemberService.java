@@ -1,18 +1,26 @@
 package com.goodjob.core.domain.member.service;
 
 
+import com.goodjob.core.domain.article.entity.Article;
+import com.goodjob.core.domain.article.service.ArticleService;
+import com.goodjob.core.domain.comment.entity.Comment;
+import com.goodjob.core.domain.comment.service.CommentService;
 import com.goodjob.core.domain.member.constant.ProviderType;
 import com.goodjob.core.domain.member.dto.request.JoinRequestDto;
+import com.goodjob.core.domain.member.dto.response.MemberContentDto;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.repository.MemberRepository;
 import com.goodjob.core.global.base.jwt.JwtProvider;
 import com.goodjob.core.global.base.rsData.RsData;
+import com.goodjob.resume.dto.response.ResponsePredictionDto;
+import com.goodjob.resume.facade.PredictionFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,6 +36,9 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
     private final JwtProvider jwtProvider;
+    private final ArticleService articleService;
+    private final CommentService commentService;
+    private final PredictionFacade predictionFacade;
 
     @Transactional
     public RsData<Member> join(JoinRequestDto joinRequestDto) {
@@ -81,6 +92,20 @@ public class MemberService {
         return RsData.of("S-1", "%s님의 회원가입이 완료되었습니다.".formatted(nickname), member);
     }
 
+    private Member genMember(String username, String password, String nickname, String email, ProviderType providerType) {
+        return Member
+                .builder()
+                .username(username)
+                .password(password)
+                .nickname(nickname)
+                .email(email)
+                .isDeleted(false)
+                .providerType(providerType)
+                .membership(FREE)
+                .coin(MAX_COIN_COUNT)
+                .build();
+    }
+
     public RsData<Map<String, String>> login(String username, String password) {
         Optional<Member> opMember = findByUsername(username);
 
@@ -109,11 +134,6 @@ public class MemberService {
         }
 
         return socialJoin(providerType, username, "", email); // 최초 1회 실행
-    }
-
-    @Transactional
-    public void delete(Long id) {
-        memberRepository.deleteById(id);
     }
 
     @Transactional
@@ -168,17 +188,19 @@ public class MemberService {
         return memberRepository.findByEmail(email);
     }
 
-    private Member genMember(String username, String password, String nickname, String email, ProviderType providerType) {
-        return Member
-                .builder()
-                .username(username)
-                .password(password)
-                .nickname(nickname)
-                .email(email)
-                .isDeleted(false)
-                .providerType(providerType)
-                .membership(FREE)
-                .coin(MAX_COIN_COUNT)
-                .build();
+    @Transactional
+    public void softDelete(Long id) {
+        Member member = findById(id).orElse(null);
+        member.softDelete();
+
+        memberRepository.save(member);
+    }
+
+    public MemberContentDto getMemberContent(Long id) {
+        List<Article> articles = articleService.findAllByMemberId(id);
+        List<Comment> comments = commentService.findAllByMemberId(id);
+        List<ResponsePredictionDto> predictions = predictionFacade.getPredictions(id);
+
+        return new MemberContentDto(id, articles, comments, predictions);
     }
 }

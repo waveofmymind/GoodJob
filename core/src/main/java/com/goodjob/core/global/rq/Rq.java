@@ -4,7 +4,7 @@ package com.goodjob.core.global.rq;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
 import com.goodjob.core.global.base.cookie.CookieUt;
-import com.goodjob.core.global.base.jwt.JwtProvider;
+import com.goodjob.core.global.base.redis.RedisUt;
 import com.goodjob.core.global.base.rsData.RsData;
 import com.goodjob.core.global.util.Ut;
 import jakarta.servlet.http.Cookie;
@@ -28,7 +28,8 @@ import static com.goodjob.core.global.base.cookie.constant.CookieType.REFRESH_TO
 @RequestScope
 @Slf4j
 public class Rq {
-    private final JwtProvider jwtProvider;
+
+    private final RedisUt redisUt;
     private final CookieUt cookieUt;
     private final MemberService memberService;
     private final HttpServletRequest req;
@@ -36,8 +37,8 @@ public class Rq {
     private final User user;
     private Member member = null;
 
-    public Rq(JwtProvider jwtProvider, CookieUt cookieUt, MemberService memberService, HttpServletRequest req, HttpServletResponse resp) {
-        this.jwtProvider = jwtProvider;
+    public Rq(RedisUt redisUt, CookieUt cookieUt, MemberService memberService, HttpServletRequest req, HttpServletResponse resp) {
+        this.redisUt = redisUt;
         this.cookieUt = cookieUt;
         this.memberService = memberService;
         this.req = req;
@@ -161,7 +162,9 @@ public class Rq {
     }
 
     // 쿠키삭제 및 로그아웃 처리
-    public void logout() {
+    public void logout(long id) {
+        redisUt.delete(String.valueOf(id));
+
         expireCookie(ACCESS_TOKEN.value());
         expireCookie(REFRESH_TOKEN.value());
 

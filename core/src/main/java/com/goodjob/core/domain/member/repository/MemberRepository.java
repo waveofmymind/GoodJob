@@ -3,6 +3,7 @@ package com.goodjob.core.domain.member.repository;
 
 
 import com.goodjob.core.domain.article.entity.Article;
+import com.goodjob.core.domain.member.dto.response.MemberContentDto;
 import com.goodjob.core.domain.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -20,5 +21,4 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Modifying
     @Query("UPDATE Member m SET m.coin= :maxCoinCount WHERE m.coin BETWEEN 0 AND :maxCoinCount")
     void updateCoinForFreeMembers(@Param("maxCoinCount") int maxCoinCount);
-
 }
