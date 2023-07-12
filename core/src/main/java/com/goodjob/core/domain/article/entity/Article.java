@@ -3,6 +3,7 @@ package com.goodjob.core.domain.article.entity;
 
 import com.goodjob.common.BaseEntity;
 import com.goodjob.core.domain.comment.entity.Comment;
+import com.goodjob.core.domain.file.entity.File;
 import com.goodjob.core.domain.hashTag.entity.HashTag;
 import com.goodjob.core.domain.likes.entity.Likes;
 import com.goodjob.core.domain.member.entity.Member;
@@ -59,4 +60,12 @@ public class Article extends BaseEntity {
 
     @Setter
     private int category;
+
+    @OneToMany(mappedBy = "article", cascade = {CascadeType.ALL})
+    private List<File> fileList;
+
+    public Long updateViewCount() {
+        this.viewCount += 1;
+        return this.viewCount;
+    }
 }
