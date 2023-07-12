@@ -1,6 +1,6 @@
 # GoodJob 🤖
-`2023.05.16` ~ `2023.06.16` ~ `2023.07.14`
-> 생성 AI 기반 채용관련 커뮤니티 서비스
+`2023.05.16` ~ `2023.07.14`
+> 생성 AI 기반 채용관련 서비스
 
 - [서비스 링크](https://waveofmymind.shop)
 
@@ -11,6 +11,7 @@
 그래서 챗 GPT 서비스를 이용해서 혼자서 이력서를 기반으로 검토를 받고, 면접 예상 질문을 받아볼 수 있다면 취업 준비에 도움이 되지 않을까에서 기획한 서비스입니다.
 
 더 나아가 여러 사이트의 채용 공고를 한눈에 볼 수 있는 채용 공고 서비스를 지원하며, 다른 구직자들과 커뮤니티 서비스를 이용 할 수 있습니다.
+또한,누구나 멘토링 서비스를 통해 멘토에게 실시간 채팅을 기반으로 한 커피챗 서비스를 이용할 수 있습니다.
 
 ## 기능 구현 목록
 
@@ -36,6 +37,8 @@
 - 챗 GPT 라이브러리 https://github.com/TheoKanning/openai-java
 - 사람인 API
 - 채용 공고 사이트 웹 크롤링
+- 토스 페이먼트 결제 모듈
+- Web Socket + STOMP
 
 **View**
 
@@ -45,42 +48,41 @@
 
 **DevOps**
 
-
-- ~~Naver Cloud PlatForm~~
-  - ~~CentOS 7.8~~
-- ~~Docker~~
-- ~~NginX ProxyManager~~
-
 - Google Cloud Platform
 - Kubernetes
-- Kafka 3.4.0 KRaft
+- Istio Service Mesh
+- Kiali
+- Kafka 3.5.0V2 KRaft(without Zookeeper)
 - Docker
 - Jenkins
 - AWS RDS
 - AWS Route53
 - AWS S3
-- AWS CloudWatch
+- AWS CloudWatch(SNS + Lambda를 통한 슬랙 알림)
 - Apache JMeter
 - Grafana + Prometheus
 
-## 시스템 아키텍처(2023.07.03)
+## 시스템 아키텍처(2023.07.12)
 
-![스크린샷 2023-07-03 오전 12 42 39](https://github.com/waveofmymind/GoodJob/assets/93868431/8c8047a3-25f7-439f-a84b-70af4cf07b68)
+![스크린샷 2023-07-12 오후 4 01 39](https://github.com/waveofmymind/GoodJob/assets/93868431/bafa3176-ad15-4fdf-bd7d-6c1896be9a5e)
 
 ## ERD
 
-![goodjob06302](https://github.com/waveofmymind/GoodJob/assets/93868431/e698c43f-6f7d-40ab-bf2c-8b793be66194)
+![erderd](https://github.com/waveofmymind/GoodJob/assets/93868431/0779a712-7c06-405a-ab26-a504f2cf2783)
 
 ## 프로젝트 멤버
 
-- 전상준 - CI/CD 구축 및 모니터링 환경 구성, 생성 AI 서비스 구현
-- 박우영 - Spring Batch 사용 동기방식 채용사이트들의 정보 받아와서 정리하는 워크플로우
-- 박찬규 - 스프링 시큐리티와 jwt토큰을 이용한 회원 인증 서비스
-- 정회성 - 커뮤니티 서비스
+- 전상준 - 인프라 구축, 생성 AI 서비스 구현
+- 박우영 - Spring Batch 사용 비동기방식 채용사이트들의 정보 받아와서 정리하는 워크플로우
+- 박찬규 - 스프링 시큐리티와 jwt토큰을 이용한 회원 인증 서비스, 마이페이지 및 결제 모듈
+- 정회성 - 커뮤니티 서비스, 채팅 및 멘토링 서비스
 
 
 ## 기술적 도전 및 트러블 슈팅
-
+- [쿠버네티스 서비스 로드밸런싱 적용기입니다. 그런데 이제 Istio를 곁들인](https://waveofmymind.github.io/posts/k8s-with-istio/)
+- [서킷 브레이커 패턴을 적용한 쿠버네티스 트래픽 대응기](https://waveofmymind.github.io/posts/huge-traffic/)
+- [이벤트 기반의 생성 AI 비동기 처리로 사용성 개선하기](https://waveofmymind.github.io/posts/kafka-processing/)
+- [멀티 브로커 카프카, 주키퍼가 없는 KRaft 모드](https://waveofmymind.github.io/posts/kafka-kraft/)
 - [로그 수집을 위한 AWS CloudWatch 적용기 - 전상준](https://waveofmymind.github.io/posts/aws-cloudwatch/)
 - [효과적인 비즈니스 로직 모니터링 - 전상준](https://waveofmymind.github.io/posts/effective-monitoring/)
 - [챗 GPT API 사용기 - 전상준](https://waveofmymind.github.io/posts/springboot+chatgpt/)
