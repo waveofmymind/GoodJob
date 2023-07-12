@@ -167,6 +167,7 @@ class MentoringServiceTest {
 
         // THEN
         assertThat(mentoringRsData.getResultCode()).isEqualTo("S-1");
+        assertThat(mentoringRsData.getData().isDeleted()).isEqualTo(true);
     }
 
     @Test

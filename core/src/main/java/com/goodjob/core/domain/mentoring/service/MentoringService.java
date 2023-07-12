@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -84,6 +85,7 @@ public class MentoringService {
         return RsData.of("S-1", "멘토링을 성공적으로 가져왔습니다.", mentoringOp.get());
     }
 
+    @Transactional
     public RsData<Mentoring> updateMentoring(Member member, Long id, MentoringRequestDto mentoringRequestDto) {
         RsData<Mentoring> mentoringRsData = getMentoring(id);
 
@@ -96,20 +98,12 @@ public class MentoringService {
         if(mentoring.getMember().getId() != member.getId()) {
             return RsData.of("F-3", "수정 권한이 없습니다.");
         }
-
-        mentoring.setTitle(mentoringRequestDto.getTitle());
-        mentoring.setContent(mentoringRequestDto.getContent());
-        mentoring.setJob(mentoringRequestDto.getJob());
-        mentoring.setCareer(mentoringRequestDto.getCareer());
-        mentoring.setCurrentJob(mentoringRequestDto.getCurrentJob());
-        mentoring.setPreferredTime(mentoringRequestDto.getPreferredTime());
-
-        mentoringRepository.save(mentoring);
-
+        mentoring.update(mentoringRequestDto);
 
         return RsData.of("S-1", "멘토링이 수정되었습니다.", mentoring);
     }
 
+    @Transactional
     public RsData<Mentoring> deleteMentoring(Member member, Long id) {
         RsData<Mentoring> mentoringRsData = getMentoring(id);
 
@@ -123,8 +117,8 @@ public class MentoringService {
             return RsData.of("F-3", "삭제 권한이 없습니다.");
         }
 
-        mentoringRepository.delete(mentoring);
+        mentoring.setDeleted(true);
 
-        return RsData.of("S-1", "멘토링이 삭제되었습니다.");
+        return RsData.of("S-1", "멘토링이 삭제되었습니다.", mentoring);
     }
 }

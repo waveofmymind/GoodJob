@@ -160,7 +160,7 @@
                 return false;
             }
 
-            var isPremium = [[${@rq.member.isPremium()}]];
+            var isPremium = [[${@rq.member.isPremium() or @rq.member.isMentor()}]];
 
             if (!isPremium) {
                 toastWarning('프리미엄 회워만 신청 가능합니다.');
