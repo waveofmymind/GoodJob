@@ -144,6 +144,14 @@ public class MemberService {
         memberRepository.updateCoinForFreeMembers(MAX_COIN_COUNT);
     }
 
+    @Transactional
+    public void recoverCoins(long memberId) {
+        Member member = findById(memberId).orElse(null);
+        member.recoverCoin();
+
+        memberRepository.save(member);
+    }
+
     public Optional<Member> findByNickname(String nickname) {
         return memberRepository.findByNickname(nickname);
     }
