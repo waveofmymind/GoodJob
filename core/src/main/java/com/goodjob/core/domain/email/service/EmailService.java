@@ -52,7 +52,7 @@ public class EmailService {
 
     private RsData trySend(SendEmailLog sendEmailLog) {
         try {
-            emailSenderService.send(sendEmailLog.getEmail(), "no-reply@no-reply.com",
+            emailSenderService.send(sendEmailLog.getEmail(), "no-reply@goodjob.com",
                     sendEmailLog.getSubject(), sendEmailLog.getBody());
 
             return RsData.of("S-1", "메일이 발송되었습니다.");
