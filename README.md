@@ -79,7 +79,7 @@
 
 
 ## 기술적 도전 및 트러블 슈팅
-- [쿠버네티스 서비스 로드밸런싱 적용기입니다. 그런데 Istio를 곁들인](https://waveofmymind.github.io/posts/k8s-with-istio/)
+- [쿠버네티스 서비스 로드밸런싱 적용기입니다. 그런데 이제 Istio를 곁들인](https://waveofmymind.github.io/posts/k8s-with-istio/)
 - [서킷 브레이커 패턴을 적용한 쿠버네티스 트래픽 대응기](https://waveofmymind.github.io/posts/huge-traffic/)
 - [이벤트 기반의 생성 AI 비동기 처리로 사용성 개선하기](https://waveofmymind.github.io/posts/kafka-processing/)
 - [멀티 브로커 카프카, 주키퍼가 없는 KRaft 모드](https://waveofmymind.github.io/posts/kafka-kraft/)
