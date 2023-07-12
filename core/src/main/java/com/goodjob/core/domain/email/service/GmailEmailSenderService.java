@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 public class GmailEmailSenderService implements EmailSenderService {
 
     private final JavaMailSender javaMailSender;
+    private static final String SENDER_ADDRESS = "no-reply@goodjob.com";
 
     @Override
     public void send(String to, String from, String title, String body) throws MessagingException {
@@ -21,9 +22,12 @@ public class GmailEmailSenderService implements EmailSenderService {
 
         helper.setTo(to);
         helper.setFrom(from);
+        helper.setReplyTo(SENDER_ADDRESS);
         helper.setSubject(title);
         helper.setText(body, true);
 
         javaMailSender.send(message);
     }
 }
+
+

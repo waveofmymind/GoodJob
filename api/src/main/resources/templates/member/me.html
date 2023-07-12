@@ -87,7 +87,7 @@
             <div class="mb-4">
                 <h3 class="text-2xl font-semibold mb-4 mt-4">내가 쓴 글</h3>
                 <div class="space-y-2">
-                    <div th:each="article, loop: ${articles}">
+                    <div th:each="article, loop: ${memberContent.articles}">
                         <a th:if="${loop.index} < 5"
                            th:href="@{|/article/detail/${article.id}|}"
                            th:text="${article.title}"
@@ -103,7 +103,7 @@
             <div class="mb-4">
                 <h3 class="text-2xl font-semibold mb-4 mt-4">내가 쓴 댓글</h3>
                 <div class="space-y-2">
-                    <div th:each="comment, loop : ${comments}">
+                    <div th:each="comment, loop : ${memberContent.comments}">
                         <a th:if="${loop.index} < 5"
                            th:href="@{|/article/detail/${comment.article.id}|}"
                            th:text="${comment.content.length() > 25 ? comment.content.substring(0, 25) + '...' : comment.content}"
@@ -119,7 +119,7 @@
             <div class="mb-4">
                 <h3 class="text-2xl font-semibold mb-4 mt-4">이력서 검토 내용</h3>
                 <div class="space-y-2">
-                    <div th:each="prediction, loop : ${predictions}">
+                    <div th:each="prediction, loop : ${memberContent.predictions}">
                         <div th:if="${prediction.serviceType == T(com.goodjob.resume.domain.ServiceType).EXPECTED_ADVICE}">
                             <a th:if="${loop.index} < 3"
                                th:href="@{|/resumes/detail/${prediction.id}|}"
@@ -133,7 +133,7 @@
             <div class="mb-4">
                 <h3 class="text-2xl font-semibold mb-4 mt-4">면접 예상 질문 내용</h3>
                 <div class="space-y-2">
-                    <div th:each="prediction, loop : ${predictions}">
+                    <div th:each="prediction, loop : ${memberContent.predictions}">
                         <div th:if="${prediction.serviceType == T(com.goodjob.resume.domain.ServiceType).EXPECTED_QUESTION}">
                             <a th:if="${loop.index < 3}"
                                th:href="@{|/resumes/detail/${prediction.id}|}"
@@ -143,8 +143,24 @@
                     </div>
                 </div>
             </div>
+            <div class="mb-2 text-right mr-2">
+                <form id="deleteForm" th:action="@{|/member/delete/${@rq.member.id}|}" method="POST" style="display: inline;">
+                    <a class="text-xs w-16 text-center ml-2"
+                       onclick="return confirmDelete();"
+                       style="color: gray; cursor: pointer;">회원 탈퇴</a>
+                </form>
+            </div>
         </div>
     </div>
+    <script>
+        function confirmDelete() {
+            if (confirm("정말로 삭제하시겠습니까? 7일 이내에 복구가 가능합니다.")) {
+                document.getElementById('deleteForm').submit();
+                return true;
+            }
+            return false;
+        }
+    </script>
 </main>
 
 </body>

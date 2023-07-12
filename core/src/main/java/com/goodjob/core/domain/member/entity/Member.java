@@ -108,8 +108,15 @@ public class Member extends BaseEntity {
         this.membership = targetMembership;
         this.coin = -1;
     }
-
     public void deductCoin() {
         this.coin--;
+    }
+
+    public void recoverCoin() {
+        this.coin++;
+    }
+
+    public void softDelete() {
+        this.isDeleted = true;
     }
 }
