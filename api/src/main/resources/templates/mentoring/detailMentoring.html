@@ -163,7 +163,7 @@
             var isPremium = [[${@rq.member.isPremium() or @rq.member.isMentor()}]];
 
             if (!isPremium) {
-                toastWarning('프리미엄 회워만 신청 가능합니다.');
+                toastWarning('프리미엄 회원만 신청 가능합니다.');
                 return false;
             }
             form.submit();
