@@ -36,7 +36,7 @@
             </div>
             <ul class="grid-container">
                 <li th:each="mentoring, loop : ${paging}">
-                    <a class="card m-3 bg-gray-100 hover:bg-gray-200" th:href="@{|/mentoring/detail/${mentoring.id}|}" >
+                    <a class="card m-3 bg-gray-100 hover:bg-gray-200" th:href="@{|/mentoring/detail/${mentoring.id}|}" th:if="${!mentoring.deleted}">
                         <p th:text="${mentoring.title}" style="word-break: break-word;"></p>
                         <div>
                             <div class="flex content">

@@ -120,4 +120,5 @@ public class MentoringController {
 
 
         return rq.redirectWithMsg("/mentoring/list", mentoringRsData);
-    }}
+    }
+}

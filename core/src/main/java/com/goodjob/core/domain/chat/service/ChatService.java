@@ -41,12 +41,10 @@ public class ChatService {
 
     @Transactional
     public void createChatMessage(ChatMessageDTO chatMessageDTO) {
-
         String message = chatMessageDTO.getMessage();
         String roomId = chatMessageDTO.getRoomId();
         String writer = chatMessageDTO.getWriter();
-        //필요한거 : message, Member sender, ChatRoom 객체
-        //임시로 repository에 해놧음 service 구현되면 수정할 것
+
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId).orElse(null);
         Member sender = memberService.findByNickname(writer).orElse(null);
 
@@ -87,14 +85,16 @@ public class ChatService {
     }
 
     @Transactional
-    public void deleteRoom(String roomId, Member member) {
+    public RsData deleteRoom(String roomId, Member member) {
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId).orElse(null);
         if(member.getNickname().equals(chatRoom.getSender().getNickname())) {
             chatRoomRepository.delete(chatRoom);
         } else if(member.getNickname().equals((chatRoom.getReceiver().getNickname()))) {
             chatRoom.setDeleted(true);
             chatRoomRepository.save(chatRoom);
+            return RsData.of("S-2", "채팅방이 삭제되었습니다.", chatRoom);
         }
+        return RsData.of("S-1", "채팅방이 삭제되었습니다.");
     }
 
     @Transactional
