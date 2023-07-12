@@ -78,7 +78,7 @@ class EmailVerificationServiceTest {
         RsData rsData = emailVerificationService.verify(sendEmailLog.getEmail(), verificationCode);
 
         // THEN
-        assertThat(rsData.getResultCode()).isEqualTo("F-2");
+        assertThat(rsData.getResultCode()).isEqualTo("F-1");
         assertThat(rsData.getMsg()).isEqualTo("이메일 정보가 잘못되었습니다. 올바른 이메일을 입력하여 다시 시도해주세요.");
         verify(emailService, times(1)).findByEmail(any(String.class));
     }

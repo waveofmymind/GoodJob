@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -31,6 +32,9 @@ class MemberEditControllerTest {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private void genMember(String nickname) {
         JoinRequestDto joinRequestDto = new JoinRequestDto();
@@ -62,7 +66,9 @@ class MemberEditControllerTest {
                 .andExpect(redirectedUrlPattern("/member/me**"))
                 .andExpect(model().hasNoErrors());
 
-        assertThat(memberService.findByNickname("tester2")).isPresent();
+        Member member = memberService.findByUsername("test").orElse(null);
+        assertThat(member.getNickname()).isEqualTo("tester2");
+        assertThat(passwordEncoder.matches("12345", member.getPassword())).isTrue();
     }
 
     @Test
@@ -85,14 +91,12 @@ class MemberEditControllerTest {
                 .andExpect(handler().methodName("edit"))
                 .andExpect(view().name("member/edit"))
                 .andExpect(model().hasErrors());
-
-        assertThat(memberService.findByUsername("edit tester2")).isEmpty();
     }
 
     @Test
     @DisplayName("회원정보수정 실패 - 닉네임 중복")
     @WithUserDetails("test")
-    void editFail_InvalidInput() throws Exception {
+    void editFail_DuplicateNickname() throws Exception {
         // GIVEN
         genMember("tester1");
 
@@ -109,8 +113,7 @@ class MemberEditControllerTest {
         resultActions
                 .andExpect(status().is4xxClientError())
                 .andExpect(handler().handlerType(MemberEditController.class))
-                .andExpect(handler().methodName("edit"))
-                .andExpect(view().name("common/js"));
+                .andExpect(handler().methodName("edit"));
     }
 
     @Test

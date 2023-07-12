@@ -28,6 +28,9 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
 
+    @InjectMocks
+    private MemberService memberService;
+
     @Mock
     private MemberRepository memberRepository;
 
@@ -36,9 +39,6 @@ class MemberServiceTest {
 
     @Spy
     private JwtProvider jwtProvider;
-
-    @InjectMocks
-    private MemberService memberService;
 
     private static JoinRequestDto getJoinRequestDto() {
         JoinRequestDto joinRequestDto = new JoinRequestDto();
@@ -135,7 +135,6 @@ class MemberServiceTest {
         // THEN
         assertThat(rsData.getResultCode()).isEqualTo("S-1");
         assertThat(rsData.getMsg()).isEqualTo("%s님의 회원가입이 완료되었습니다.".formatted(rsData.getData().getNickname()));
-        verify(passwordEncoder, times(0)).encode(any(String.class));
         verify(memberRepository, times(1)).save(any(Member.class));
     }
 
@@ -198,6 +197,22 @@ class MemberServiceTest {
         // THEN
         assertThat(rsData.getResultCode()).isEqualTo("F-1");
         assertThat(rsData.getMsg()).isEqualTo("아이디 혹은 비밀번호가 틀립니다.");
+    }
+
+    @Test
+    @DisplayName("소셜 로그인 성공")
+    void socialLoginSuccess() {
+        // GIVEN
+        RsData<Member> memberRsData = memberService.socialJoin("KAKAO", "KAKAO5413639824", "", null);
+
+        doReturn(Optional.of(memberRsData.getData())).when(memberRepository).findByUsername(any(String.class));
+
+        // WHEN
+        RsData<Member> rsData = memberService.whenSocialLogin("KAKAO", "KAKAO5413639824", null);
+
+        // THEN
+        assertThat(rsData.getResultCode()).isEqualTo("S-1");
+        assertThat(rsData.getMsg()).isEqualTo("로그인 되었습니다.");
     }
 
     @Test

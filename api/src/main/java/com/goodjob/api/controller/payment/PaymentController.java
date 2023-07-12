@@ -5,6 +5,7 @@ import com.goodjob.core.domain.payment.dto.request.PaymentRequestDto;
 import com.goodjob.core.domain.payment.service.PaymentService;
 import com.goodjob.core.global.rq.Rq;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -43,7 +44,7 @@ public class PaymentController {
     }
 
     @GetMapping("/success")
-    public String paymentResult(PaymentRequestDto paymentRequestDto) throws Exception {
+    public String processPaymentSuccess(PaymentRequestDto paymentRequestDto) throws Exception {
         if (amount != paymentRequestDto.getAmount()) { // 상품가격 다른 경우
             return rq.historyBack("잘못된 접근입니다.");
         }
@@ -58,7 +59,6 @@ public class PaymentController {
         boolean isSuccess = code == 200 ? true : false;
 
         JSONObject jsonObject = paymentService.getPaymentResponse(connection, isSuccess);
-
         paymentService.save(jsonObject);
         memberService.upgradeToPremiumMembership(rq.getMember());
 
@@ -66,7 +66,7 @@ public class PaymentController {
     }
 
     @GetMapping("/fail")
-    public String paymentResult(
+    public String processPaymentFail(
             @RequestParam(value = "message") String message,
             @RequestParam(value = "code") Integer code
     ) throws Exception {

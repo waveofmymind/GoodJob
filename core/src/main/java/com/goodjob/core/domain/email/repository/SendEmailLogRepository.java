@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface SendEmailLogRepository extends JpaRepository<SendEmailLog, Long> {
     Optional<SendEmailLog> findByEmail(String email);
+
+    Optional<SendEmailLog> findByUsername(String username);
 }

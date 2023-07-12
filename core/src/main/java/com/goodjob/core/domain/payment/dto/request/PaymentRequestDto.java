@@ -7,8 +7,6 @@ import lombok.Setter;
 @Setter
 public class PaymentRequestDto {
     String orderId;
-
     String paymentKey;
-
     long amount;
 }
