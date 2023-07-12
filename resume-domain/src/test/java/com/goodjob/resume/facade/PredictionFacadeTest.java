@@ -1,6 +1,6 @@
 package com.goodjob.resume.facade;
 
-import com.goodjob.resume.config.error.exception.BusinessException;
+import com.goodjob.common.error.exception.BusinessException;
 import com.goodjob.resume.domain.Contents;
 import com.goodjob.resume.domain.Prediction;
 import com.goodjob.resume.domain.ServiceType;

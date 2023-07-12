@@ -1,7 +1,7 @@
 package com.goodjob.core.domain.article.service;
 
 
-import com.goodjob.core.global.base.rsData.RsData;
+import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.domain.article.dto.request.ArticleRequestDto;
 import com.goodjob.core.domain.article.dto.response.ArticleResponseDto;
 import com.goodjob.core.domain.article.entity.Article;

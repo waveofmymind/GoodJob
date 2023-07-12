@@ -1,13 +1,11 @@
 package com.goodjob.api.controller.comment;
 
 
-import com.goodjob.core.domain.article.dto.response.ArticleResponseDto;
 import com.goodjob.core.domain.article.service.ArticleService;
 import com.goodjob.core.domain.comment.dto.request.CommentRequestDto;
-import com.goodjob.core.domain.comment.dto.response.CommentResponseDto;
 import com.goodjob.core.domain.comment.entity.Comment;
 import com.goodjob.core.domain.comment.service.CommentService;
-import com.goodjob.core.global.base.rsData.RsData;
+import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor

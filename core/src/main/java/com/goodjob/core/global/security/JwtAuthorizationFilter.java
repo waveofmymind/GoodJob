@@ -3,9 +3,9 @@ package com.goodjob.core.global.security;
 
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
-import com.goodjob.core.global.base.cookie.CookieUt;
+import com.goodjob.common.cookie.CookieUt;
 import com.goodjob.core.global.base.jwt.JwtProvider;
-import com.goodjob.core.global.base.redis.RedisUt;
+import com.goodjob.common.redis.RedisUt;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -23,8 +23,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Map;
 
-import static com.goodjob.core.global.base.cookie.constant.CookieType.ACCESS_TOKEN;
-import static com.goodjob.core.global.base.cookie.constant.CookieType.REFRESH_TOKEN;
+import static com.goodjob.common.cookie.constant.CookieType.ACCESS_TOKEN;
+import static com.goodjob.common.cookie.constant.CookieType.REFRESH_TOKEN;
 import static com.goodjob.core.global.base.jwt.JwtProvider.ACCESS_TOKEN_VALIDATION_SECOND;
 
 @Component

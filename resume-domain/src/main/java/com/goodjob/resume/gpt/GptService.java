@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.goodjob.resume.config.GptConfig;
-import com.goodjob.resume.config.error.ErrorCode;
-import com.goodjob.resume.config.error.exception.BusinessException;
+import com.goodjob.common.error.ErrorCode;
+import com.goodjob.common.error.exception.BusinessException;
 import com.goodjob.resume.dto.request.ResumeRequest;
 import com.goodjob.resume.dto.response.WhatGeneratedImproveResponse;
 import com.goodjob.resume.dto.response.WhatGeneratedQuestionResponse;

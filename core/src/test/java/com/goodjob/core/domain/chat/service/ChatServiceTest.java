@@ -6,7 +6,7 @@ import com.goodjob.core.domain.chat.repository.ChatMessageRepository;
 import com.goodjob.core.domain.chat.repository.ChatRoomRepository;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
-import com.goodjob.core.global.base.rsData.RsData;
+import com.goodjob.common.rsData.RsData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,6 @@ import static com.goodjob.core.domain.member.constant.ProviderType.GOODJOB;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)

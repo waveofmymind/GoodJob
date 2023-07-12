@@ -1,7 +1,7 @@
 package com.goodjob.resume.facade;
 
-import com.goodjob.resume.config.error.ErrorCode;
-import com.goodjob.resume.config.error.exception.BusinessException;
+import com.goodjob.common.error.ErrorCode;
+import com.goodjob.common.error.exception.BusinessException;
 import com.goodjob.resume.domain.Prediction;
 import com.goodjob.resume.dto.response.ResponsePredictionDto;
 import com.goodjob.resume.application.outs.FindPredictionPort;

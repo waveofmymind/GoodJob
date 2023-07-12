@@ -10,7 +10,7 @@ import com.goodjob.core.domain.likes.repository.LikesRepository;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.subComment.entity.SubComment;
 import com.goodjob.core.domain.subComment.service.SubCommentService;
-import com.goodjob.core.global.base.rsData.RsData;
+import com.goodjob.common.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
