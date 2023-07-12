@@ -1,9 +1,9 @@
 package com.goodjob.api.controller.job;
 
-import com.goodjob.core.domain.job.dto.JobRequestForm;
-import com.goodjob.core.domain.job.entity.JobStatistic;
-import com.goodjob.core.domain.job.service.JobStatisticService;
 import com.goodjob.core.global.rq.Rq;
+import com.goodjob.job.dto.JobRequestForm;
+import com.goodjob.job.entity.JobStatistic;
+import com.goodjob.job.service.JobStatisticService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -24,23 +24,6 @@ public class JobStatisticController {
         return "jobstatistic/jobRequest";
     }
 
-//    @GetMapping("/search/all")
-//    public String SearchList(
-//            @RequestParam(value = "sector") String sector, @RequestParam(value = "career", defaultValue = "all") String career,
-//            @RequestParam(value = "place") String place, @RequestParam(value = "page", defaultValue = "0") int page,
-//            @RequestParam(value = "keyword", defaultValue = "") String keyword,Model model
-//    ) {
-//
-//        if (keyword == null) {
-//            Page<JobStatistic> paging = jobStatisticService.getList(sector, career, page);
-//            model.addAttribute("paging", paging);
-//        }else {
-////        Page<JobStatistic> paging = jobStatisticService.getList(sector, career, page);
-//            Page<JobStatistic> paging = jobStatisticService.getQueryList(keyword, sector, career, place, page);
-//            model.addAttribute("paging", paging);
-//        }
-//        return "jobstatistic/list";
-//    }
 
     @GetMapping("/search/all")
     public String SearchList(

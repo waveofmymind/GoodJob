@@ -11,7 +11,7 @@ import com.goodjob.core.domain.file.entity.File;
 import com.goodjob.core.domain.file.service.FileService;
 import com.goodjob.core.domain.s3.service.S3Service;
 import com.goodjob.core.domain.subComment.dto.request.SubCommentRequestDto;
-import com.goodjob.core.global.base.rsData.RsData;
+import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

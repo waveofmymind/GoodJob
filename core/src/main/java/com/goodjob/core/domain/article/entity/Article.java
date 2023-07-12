@@ -1,7 +1,7 @@
 package com.goodjob.core.domain.article.entity;
 
 
-import com.goodjob.core.domain.BaseEntity;
+import com.goodjob.common.BaseEntity;
 import com.goodjob.core.domain.comment.entity.Comment;
 import com.goodjob.core.domain.file.entity.File;
 import com.goodjob.core.domain.hashTag.entity.HashTag;

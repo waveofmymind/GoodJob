@@ -1,17 +1,12 @@
 package com.goodjob.api.controller.mentoring;
 
 
-import com.goodjob.core.domain.article.dto.request.ArticleRequestDto;
-import com.goodjob.core.domain.article.dto.response.ArticleResponseDto;
-import com.goodjob.core.domain.article.entity.Article;
-import com.goodjob.core.domain.file.dto.request.FileRequest;
-import com.goodjob.core.domain.file.entity.File;
 import com.goodjob.core.domain.file.service.FileService;
 import com.goodjob.core.domain.mentoring.dto.request.MentoringRequestDto;
 import com.goodjob.core.domain.mentoring.entity.Mentoring;
 import com.goodjob.core.domain.mentoring.service.MentoringService;
 import com.goodjob.core.domain.s3.service.S3Service;
-import com.goodjob.core.global.base.rsData.RsData;
+import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +17,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartRequest;
 
 import java.io.IOException;
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor

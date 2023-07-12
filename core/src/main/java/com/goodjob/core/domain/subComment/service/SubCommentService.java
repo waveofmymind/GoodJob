@@ -7,7 +7,7 @@ import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.subComment.dto.request.SubCommentRequestDto;
 import com.goodjob.core.domain.subComment.entity.SubComment;
 import com.goodjob.core.domain.subComment.repository.SubCommentRepository;
-import com.goodjob.core.global.base.rsData.RsData;
+import com.goodjob.common.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

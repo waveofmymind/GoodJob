@@ -1,6 +1,6 @@
 package com.goodjob.core.domain.subComment.entity;
 
-import com.goodjob.core.domain.BaseEntity;
+import com.goodjob.common.BaseEntity;
 import com.goodjob.core.domain.comment.entity.Comment;
 import com.goodjob.core.domain.likes.entity.Likes;
 import com.goodjob.core.domain.member.entity.Member;

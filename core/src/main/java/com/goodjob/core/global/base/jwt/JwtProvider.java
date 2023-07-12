@@ -2,7 +2,7 @@ package com.goodjob.core.global.base.jwt;
 
 
 import com.goodjob.core.domain.member.entity.Member;
-import com.goodjob.core.global.base.redis.RedisUt;
+import com.goodjob.common.redis.RedisUt;
 import com.goodjob.core.global.util.Ut;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -18,8 +18,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.goodjob.core.global.base.cookie.constant.CookieType.ACCESS_TOKEN;
-import static com.goodjob.core.global.base.cookie.constant.CookieType.REFRESH_TOKEN;
+import static com.goodjob.common.cookie.constant.CookieType.ACCESS_TOKEN;
+import static com.goodjob.common.cookie.constant.CookieType.REFRESH_TOKEN;
 
 @Component
 public class JwtProvider {

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.Map;
 
-import static com.goodjob.core.global.base.cookie.constant.CookieType.*;
+import static com.goodjob.common.cookie.constant.CookieType.*;
 
 
 @Component

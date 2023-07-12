@@ -1,6 +1,6 @@
 package com.goodjob.core.domain.likes.entity;
 
-import com.goodjob.core.domain.BaseEntity;
+import com.goodjob.common.BaseEntity;
 import com.goodjob.core.domain.article.entity.Article;
 import com.goodjob.core.domain.comment.entity.Comment;
 import com.goodjob.core.domain.member.entity.Member;

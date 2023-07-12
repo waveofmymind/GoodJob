@@ -11,7 +11,7 @@ import com.goodjob.core.domain.member.dto.response.MemberContentDto;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.repository.MemberRepository;
 import com.goodjob.core.global.base.jwt.JwtProvider;
-import com.goodjob.core.global.base.rsData.RsData;
+import com.goodjob.common.rsData.RsData;
 import com.goodjob.resume.dto.response.ResponsePredictionDto;
 import com.goodjob.resume.facade.PredictionFacade;
 import lombok.RequiredArgsConstructor;

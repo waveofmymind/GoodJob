@@ -1,15 +1,13 @@
 package com.goodjob.api.controller.chat;
 
 import com.goodjob.api.controller.chat.controller.ChatController;
-import com.goodjob.api.controller.mentoring.MentoringController;
+import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.domain.chat.entity.ChatRoom;
 import com.goodjob.core.domain.chat.service.ChatService;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
-import com.goodjob.core.domain.mentoring.dto.request.MentoringRequestDto;
 import com.goodjob.core.domain.mentoring.entity.Mentoring;
 import com.goodjob.core.domain.mentoring.service.MentoringService;
-import com.goodjob.core.global.base.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

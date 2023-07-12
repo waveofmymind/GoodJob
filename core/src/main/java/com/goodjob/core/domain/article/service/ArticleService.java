@@ -1,8 +1,7 @@
 package com.goodjob.core.domain.article.service;
 
 
-import com.goodjob.core.domain.file.entity.File;
-import com.goodjob.core.global.base.rsData.RsData;
+import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.domain.article.dto.request.ArticleRequestDto;
 import com.goodjob.core.domain.article.dto.response.ArticleResponseDto;
 import com.goodjob.core.domain.article.entity.Article;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -77,7 +75,6 @@ public class ArticleService {
 
     }
 
-    @Transactional
     public RsData getArticleResponseDto(Long id) {
         RsData<Article> articleRsData = getArticle(id);
 
@@ -86,34 +83,17 @@ public class ArticleService {
         }
 
         Article article = articleRsData.getData();
-        ArticleResponseDto articleResponseDto = increaseViewCount(article);
 
-        return RsData.of("S-1", "게시글에 대한 정보를 가져옵니다.", articleResponseDto);
+        return RsData.of("S-1", "게시글에 대한 정보를 가져옵니다.", articleMapper.toDto(article));
     }
 
-    private ArticleResponseDto increaseViewCount(Article article) {
-        Long viewCount = article.updateViewCount();
+    @Transactional
+    public ArticleResponseDto increaseViewCount(Article article) {
+        Long viewCount = article.getViewCount();
+        article.setViewCount(viewCount + 1);
         countCommentsAndSubComments(article);
-        Map<String, File> fileMap = getFileMap(article);
         ArticleResponseDto articleResponseDto = articleMapper.toDto(article);
-        articleResponseDto.getExtra().put("fileMap", fileMap);
-
         return articleResponseDto;
-    }
-
-    private Map<String, File> getFileMap(Article article) {
-        List<File> files = article.getFileList();
-
-        for(File file : files) {
-            file.getFileName();
-        }
-
-        return files
-                .stream()
-                .collect(Collectors.toMap(
-                        file -> "file__" + file.getFileNo(),
-                        file -> file
-                ));
     }
 
     public RsData getArticle(Long id) {
