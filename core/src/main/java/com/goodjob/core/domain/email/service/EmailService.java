@@ -43,6 +43,13 @@ public class EmailService {
         setCompleted(sendEmailLog, trySendRs.getResultCode(), trySendRs.getMsg());
     }
 
+    public Optional<SendEmailLog> findByEmail(String email) {
+        return sendEmailLogRepository.findByEmail(email);
+    }
+    public Optional<SendEmailLog> findByUsername(String username) {
+        return sendEmailLogRepository.findByUsername(username);
+    }
+
     private RsData trySend(SendEmailLog sendEmailLog) {
         try {
             emailSenderService.send(sendEmailLog.getEmail(), "no-reply@no-reply.com",
@@ -69,9 +76,5 @@ public class EmailService {
         sendEmailLog.setMessage(message);
 
         sendEmailLogRepository.save(sendEmailLog);
-    }
-
-    public Optional<SendEmailLog> findByEmail(String email) {
-        return sendEmailLogRepository.findByEmail(email);
     }
 }

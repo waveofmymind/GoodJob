@@ -16,6 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -64,6 +65,10 @@ public class PaymentService {
                 .build();
 
         paymentRepository.save(payment);
+    }
+
+    public Optional<Payment> findByOrderId(String orderId) {
+        return paymentRepository.findByOrderId(orderId);
     }
 
     private HttpURLConnection getConnection(String tossUrl, PaymentRequestDto paymentRequestDto, String authorizations) throws IOException {
