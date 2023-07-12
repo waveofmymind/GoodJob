@@ -31,7 +31,7 @@ public class Article extends BaseEntity {
     private Member member;
 
     //ResponseDto 매핑 과정에서 오류가 발생해서 즉시 로딩으로 변경
-    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private List<Comment> commentList;
 
     @Setter
@@ -47,7 +47,7 @@ public class Article extends BaseEntity {
     @Setter
     private boolean isDeleted;
 
-    @OneToMany(mappedBy = "article", cascade = {CascadeType.ALL}, fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "article", cascade = {CascadeType.ALL})
     @Builder.Default
     private List<Likes> likesList = new ArrayList<>();
 

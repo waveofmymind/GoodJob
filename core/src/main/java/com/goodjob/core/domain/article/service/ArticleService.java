@@ -35,6 +35,7 @@ public class ArticleService {
     private final FileService fileService;
 
 
+    @Transactional
     public Page<ArticleResponseDto> findByCategory(int page, int id, int sortCode, String category, String query) {
         Pageable pageable = PageRequest.of(page, 12);
 
@@ -73,8 +74,6 @@ public class ArticleService {
         }
 
         article.setCommentsCount(sum);
-        articleRepository.save(article);
-
     }
 
     @Transactional
@@ -117,6 +116,7 @@ public class ArticleService {
     }
 
 
+    @Transactional
     public RsData getArticle(Long id) {
         Optional<Article> articleOp = articleRepository.findQslById(id);
 
@@ -176,9 +176,6 @@ public class ArticleService {
         article.setCategory(articleRequestDto.getCategory());
         hashTagService.applyHashTags(article, articleRequestDto.getHashTagStr());
 
-        articleRepository.save(article);
-
-
         return RsData.of("S-1", "게시글이 수정되었습니다.", article);
     }
 
@@ -209,8 +206,6 @@ public class ArticleService {
         }
 
         article.setDeleted(true);
-
-        articleRepository.save(article);
 
         return RsData.of("S-1", "게시글이 삭제되었습니다.", article);
     }
