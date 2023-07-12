@@ -1,6 +1,6 @@
-package com.goodjob.core.domain.job.entity;
+package com.goodjob.job.entity;
 
-import com.goodjob.core.domain.job.dto.JobResponseDto;
+import com.goodjob.job.dto.JobResponseDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

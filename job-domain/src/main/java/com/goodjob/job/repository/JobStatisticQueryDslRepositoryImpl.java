@@ -1,6 +1,6 @@
-package com.goodjob.core.domain.job.repository;
+package com.goodjob.job.repository;
 
-import com.goodjob.core.domain.job.entity.JobStatistic;
+import com.goodjob.job.entity.JobStatistic;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.goodjob.core.domain.job.entity.QJobStatistic.jobStatistic;
+import static com.goodjob.job.entity.QJobStatistic.jobStatistic;
 
 
 @RequiredArgsConstructor

@@ -1,11 +1,11 @@
-package com.goodjob.core.domain.job.service;
+package com.goodjob.job.service;
 
 
 
-import com.goodjob.core.domain.job.dto.JobResponseDto;
-import com.goodjob.core.domain.job.entity.JobStatistic;
-import com.goodjob.core.domain.job.repository.JobStatisticQueryDslRepositoryImpl;
-import com.goodjob.core.domain.job.repository.JobStatisticRepository;
+import com.goodjob.job.dto.JobResponseDto;
+import com.goodjob.job.entity.JobStatistic;
+import com.goodjob.job.repository.JobStatisticQueryDslRepositoryImpl;
+import com.goodjob.job.repository.JobStatisticRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;

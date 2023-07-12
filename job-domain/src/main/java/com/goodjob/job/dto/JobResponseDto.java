@@ -1,4 +1,4 @@
-package com.goodjob.core.domain.job.dto;
+package com.goodjob.job.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

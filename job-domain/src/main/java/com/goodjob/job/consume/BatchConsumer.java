@@ -1,13 +1,10 @@
-package com.goodjob.core.domain.job.consume;
+package com.goodjob.job.consume;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.goodjob.core.domain.job.dto.JobResponseDto;
-import com.goodjob.core.domain.job.service.JobStatisticService;
+import com.goodjob.job.dto.JobResponseDto;
+import com.goodjob.job.service.JobStatisticService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 

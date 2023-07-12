@@ -1,8 +1,7 @@
-package com.goodjob.core.domain.job.repository;
+package com.goodjob.job.repository;
 
-import com.goodjob.core.domain.job.dto.JobResponseDto;
-import com.goodjob.core.domain.job.entity.JobStatistic;
-import org.springframework.context.annotation.ComponentScan;
+import com.goodjob.job.dto.JobResponseDto;
+import com.goodjob.job.entity.JobStatistic;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
