@@ -32,11 +32,11 @@
 - JPA(Hibernate)
 - Querydsl
 - Validation
-- MySQL
-- Redis
+- AWS RDS(MySQL)
+- Spring Data Redis
 - 챗 GPT 라이브러리 https://github.com/TheoKanning/openai-java
 - 사람인 API
-- 채용 공고 사이트 웹 크롤링
+- 채용 공고 사이트 웹 크롤링(Selenium + Chrome Driver)
 - 토스 페이먼트 결제 모듈
 - Web Socket + STOMP
 
@@ -47,14 +47,17 @@
 - Thymeleaf
 
 **DevOps**
-
 - Google Cloud Platform
-- Kubernetes
+- Ubuntu 20.04 LTS
+- Kubernetes 1.26
+- Nginx Ingress Controller
 - Istio Service Mesh
+- Envoy Proxy
 - Kiali
 - Kafka 3.5.0V2 KRaft(without Zookeeper)
 - Docker
 - Jenkins
+- GCP CloudBuild
 - AWS RDS
 - AWS Route53
 - AWS S3
