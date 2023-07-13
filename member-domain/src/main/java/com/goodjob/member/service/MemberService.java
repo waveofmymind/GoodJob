@@ -1,6 +1,7 @@
 package com.goodjob.member.service;
 
 
+import com.goodjob.common.nickname.service.NicknameGenerator;
 import com.goodjob.member.coin.CoinUt;
 import com.goodjob.member.constant.ProviderType;
 import com.goodjob.member.dto.request.JoinRequestDto;
@@ -29,6 +30,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final JwtProvider jwtProvider;
 
+    private final NicknameGenerator nicknameGenerator;
 
     @Transactional
     public RsData<Member> join(JoinRequestDto joinRequestDto) {
@@ -71,8 +73,7 @@ public class MemberService {
         }
 
         // 닉네임을 랜덤으로 생성
-        String randomUUID = UUID.randomUUID().toString().replaceAll("-", "");
-        String nickname = providerType + "__" + randomUUID.substring(0, 6); // 6자리까지만 사용
+        String nickname = nicknameGenerator.getRandomNickname();
 
         // oauth2 로그인 이후 추가정보입력
         Member member = genMember(username, password, nickname, email, ProviderType.of(providerType));

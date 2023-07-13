@@ -352,6 +352,9 @@ gradle-app.setting
 /resume-domain/build/**
 /job-domain/build/**
 /common/build/**
+/article-domain/build/**
+/member-domain/build/**
+/mentoring-domain/build/**
 
 /drivers/**
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,java,gradle,intellij,intellij+all,intellij+iml
