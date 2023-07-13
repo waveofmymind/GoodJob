@@ -1,11 +1,8 @@
 package com.goodjob.api.controller.mentoring;
 
-
-import com.goodjob.core.domain.file.service.FileService;
 import com.goodjob.mentoring.domain.mentoring.dto.request.MentoringRequestDto;
 import com.goodjob.mentoring.domain.mentoring.entity.Mentoring;
 import com.goodjob.mentoring.domain.mentoring.service.MentoringService;
-import com.goodjob.core.domain.s3.service.S3Service;
 import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
 import jakarta.validation.Valid;
@@ -27,8 +24,6 @@ import java.io.IOException;
 public class MentoringController {
     private final Rq rq;
     private final MentoringService mentoringService;
-    private final S3Service s3Service;
-    private final FileService fileService;
 
     @GetMapping("/list")
     public String list(Model model, @RequestParam(value="page", defaultValue="0") int page, ToListForm toListForm) {

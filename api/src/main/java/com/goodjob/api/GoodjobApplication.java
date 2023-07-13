@@ -1,5 +1,6 @@
 package com.goodjob.api;
 
+import com.goodjob.article.ArticleConfigurationLoader;
 import com.goodjob.mentoring.MentoringConfigurationLoader;
 import com.goodjob.common.CommonConfigurationLoader;
 import com.goodjob.core.CoreConfigurationLoader;
@@ -16,7 +17,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling
 @Import({CoreConfigurationLoader.class, CommonConfigurationLoader.class, ResumeConfigurationLoader.class, JobConfigurationLoader.class
-, MemberConfigurationLoader.class, MentoringConfigurationLoader.class})
+        , MemberConfigurationLoader.class, ArticleConfigurationLoader.class, MentoringConfigurationLoader.class})
 public class GoodjobApplication {
     public static void main(String[] args) {
         SpringApplication.run(GoodjobApplication.class, args);

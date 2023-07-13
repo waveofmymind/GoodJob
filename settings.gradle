@@ -6,4 +6,5 @@ include 'common'
 include 'job-domain'
 include 'member-domain'
 include 'mentoring-domain'
+include 'article-domain'
 

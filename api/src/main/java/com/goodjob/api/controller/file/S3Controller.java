@@ -1,12 +1,9 @@
 package com.goodjob.api.controller.file;
 
+import com.goodjob.article.domain.file.entity.File;
+import com.goodjob.article.domain.file.service.FileService;
+import com.goodjob.article.domain.s3.service.S3Service;
 
-
-
-
-import com.goodjob.core.domain.file.entity.File;
-import com.goodjob.core.domain.file.service.FileService;
-import com.goodjob.core.domain.s3.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

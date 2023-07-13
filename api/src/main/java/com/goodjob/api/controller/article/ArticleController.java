@@ -1,16 +1,15 @@
 package com.goodjob.api.controller.article;
 
 
-import com.goodjob.core.domain.article.dto.request.ArticleRequestDto;
-import com.goodjob.core.domain.article.dto.response.ArticleResponseDto;
-import com.goodjob.core.domain.article.entity.Article;
-import com.goodjob.core.domain.article.service.ArticleService;
-import com.goodjob.core.domain.comment.dto.request.CommentRequestDto;
-import com.goodjob.core.domain.file.dto.request.FileRequest;
-import com.goodjob.core.domain.file.entity.File;
-import com.goodjob.core.domain.file.service.FileService;
-import com.goodjob.core.domain.s3.service.S3Service;
-import com.goodjob.core.domain.subComment.dto.request.SubCommentRequestDto;
+import com.goodjob.article.domain.article.dto.request.ArticleRequestDto;
+import com.goodjob.article.domain.article.dto.response.ArticleResponseDto;
+import com.goodjob.article.domain.article.entity.Article;
+import com.goodjob.article.domain.article.service.ArticleService;
+import com.goodjob.article.domain.comment.dto.request.CommentRequestDto;
+import com.goodjob.article.domain.file.dto.request.FileRequest;
+import com.goodjob.article.domain.file.service.FileService;
+import com.goodjob.article.domain.s3.service.S3Service;
+import com.goodjob.article.domain.subComment.dto.request.SubCommentRequestDto;
 import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
 import jakarta.validation.Valid;

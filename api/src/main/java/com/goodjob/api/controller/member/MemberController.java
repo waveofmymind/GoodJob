@@ -1,7 +1,5 @@
 package com.goodjob.api.controller.member;
 
-import com.goodjob.core.domain.article.service.ArticleService;
-import com.goodjob.core.domain.comment.service.CommentService;
 import com.goodjob.core.domain.mypage.MyPageService;
 import com.goodjob.member.dto.request.JoinRequestDto;
 import com.goodjob.member.dto.request.LoginRequestDto;
@@ -10,7 +8,6 @@ import com.goodjob.member.entity.Member;
 import com.goodjob.member.service.MemberService;
 import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
-import com.goodjob.resume.facade.PredictionFacade;
 import jakarta.servlet.http.Cookie;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
