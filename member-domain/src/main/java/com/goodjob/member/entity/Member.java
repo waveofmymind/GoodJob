@@ -7,6 +7,7 @@ import com.goodjob.member.constant.ProviderType;
 import com.goodjob.member.constant.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -22,6 +23,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor
+@Where(clause = "is_deleted = false")
 public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
