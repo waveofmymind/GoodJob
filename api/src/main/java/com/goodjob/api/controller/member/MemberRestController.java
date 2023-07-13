@@ -1,7 +1,7 @@
 package com.goodjob.api.controller.member;
 
-import com.goodjob.core.domain.member.entity.Member;
-import com.goodjob.core.domain.member.service.MemberService;
+import com.goodjob.member.entity.Member;
+import com.goodjob.member.service.MemberService;
 import com.goodjob.common.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -2,7 +2,7 @@ package com.goodjob.core.domain.chat.entity;
 
 
 import com.goodjob.common.BaseEntity;
-import com.goodjob.core.domain.member.entity.Member;
+import com.goodjob.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 

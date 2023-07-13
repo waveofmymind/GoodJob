@@ -1,0 +1,12 @@
+dependencies {
+    implementation project(':common')
+    implementation project(':resume-domain')
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}

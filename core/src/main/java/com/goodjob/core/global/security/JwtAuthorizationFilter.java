@@ -1,11 +1,12 @@
 package com.goodjob.core.global.security;
 
 
-import com.goodjob.core.domain.member.entity.Member;
-import com.goodjob.core.domain.member.service.MemberService;
+
 import com.goodjob.common.cookie.CookieUt;
-import com.goodjob.core.global.base.jwt.JwtProvider;
+import com.goodjob.member.entity.Member;
+import com.goodjob.member.jwt.JwtProvider;
 import com.goodjob.common.redis.RedisUt;
+import com.goodjob.member.service.MemberService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -25,7 +26,7 @@ import java.util.Map;
 
 import static com.goodjob.common.cookie.constant.CookieType.ACCESS_TOKEN;
 import static com.goodjob.common.cookie.constant.CookieType.REFRESH_TOKEN;
-import static com.goodjob.core.global.base.jwt.JwtProvider.ACCESS_TOKEN_VALIDATION_SECOND;
+import static com.goodjob.member.jwt.JwtProvider.ACCESS_TOKEN_VALIDATION_SECOND;
 
 @Component
 @RequiredArgsConstructor

@@ -3,8 +3,8 @@ package com.goodjob.api.controller.member;
 
 import com.goodjob.common.email.entity.SendEmailLog;
 import com.goodjob.common.email.service.EmailService;
-import com.goodjob.core.domain.member.entity.Member;
-import com.goodjob.core.domain.member.service.MemberService;
+import com.goodjob.member.entity.Member;
+import com.goodjob.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

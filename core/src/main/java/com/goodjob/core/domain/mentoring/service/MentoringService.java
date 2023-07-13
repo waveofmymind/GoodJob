@@ -1,11 +1,11 @@
 package com.goodjob.core.domain.mentoring.service;
 
 
-import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.mentoring.dto.request.MentoringRequestDto;
 import com.goodjob.core.domain.mentoring.entity.Mentoring;
 import com.goodjob.core.domain.mentoring.repository.MentoringRepository;
 import com.goodjob.common.rsData.RsData;
+import com.goodjob.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
