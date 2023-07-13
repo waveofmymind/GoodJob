@@ -1,0 +1,19 @@
+dependencies {
+    implementation project(':member-domain')
+    implementation project(':common')
+
+    //mapstruct
+    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+
+    // AWS S3
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}

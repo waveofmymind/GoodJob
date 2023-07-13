@@ -5,6 +5,8 @@ dependencies {
     implementation project(':common')
     implementation project(':job-domain')
     implementation project(':member-domain')
+    implementation project(':mentoring-domain')
+    implementation project(':article-domain')
 }
 
 bootJar {

@@ -1,7 +1,7 @@
 package com.goodjob.core.domain.mypage;
 
-import com.goodjob.core.domain.article.entity.Article;
-import com.goodjob.core.domain.comment.entity.Comment;
+import com.goodjob.article.domain.article.entity.Article;
+import com.goodjob.article.domain.comment.entity.Comment;
 import com.goodjob.resume.dto.response.ResponsePredictionDto;
 import lombok.Getter;
 import lombok.Setter;
