@@ -1,10 +1,10 @@
 package com.goodjob.api.controller.comment;
 
 
-import com.goodjob.core.domain.article.service.ArticleService;
-import com.goodjob.core.domain.comment.dto.request.CommentRequestDto;
-import com.goodjob.core.domain.comment.entity.Comment;
-import com.goodjob.core.domain.comment.service.CommentService;
+import com.goodjob.article.domain.article.service.ArticleService;
+import com.goodjob.article.domain.comment.dto.request.CommentRequestDto;
+import com.goodjob.article.domain.comment.entity.Comment;
+import com.goodjob.article.domain.comment.service.CommentService;
 import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
 import jakarta.validation.Valid;

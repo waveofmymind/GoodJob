@@ -1,0 +1,17 @@
+
+dependencies {
+
+    implementation project(':member-domain')
+    implementation project(':common')
+    // WebSocket
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
