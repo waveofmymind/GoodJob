@@ -1,9 +1,9 @@
 package com.goodjob.api.controller.resume;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.goodjob.common.error.ErrorCode;
+import com.goodjob.common.error.exception.BusinessException;
 import com.goodjob.resume.dto.request.ResumeRequest;
-import com.goodjob.core.global.error.ErrorCode;
-import com.goodjob.core.global.error.exception.BusinessException;
 
 
 import java.beans.PropertyEditorSupport;

@@ -2,8 +2,7 @@ package com.goodjob.api.controller.member;
 
 import com.goodjob.core.domain.member.dto.request.EditRequestDto;
 import com.goodjob.core.domain.member.service.MemberEditService;
-import com.goodjob.core.domain.member.service.MemberService;
-import com.goodjob.core.global.base.rsData.RsData;
+import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

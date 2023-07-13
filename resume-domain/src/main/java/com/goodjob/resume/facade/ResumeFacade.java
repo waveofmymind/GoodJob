@@ -4,8 +4,8 @@ package com.goodjob.resume.facade;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goodjob.resume.adaptor.outs.persistence.KafkaPredictionProducer;
-import com.goodjob.resume.config.error.ErrorCode;
-import com.goodjob.resume.config.error.exception.BusinessException;
+import com.goodjob.common.error.ErrorCode;
+import com.goodjob.common.error.exception.BusinessException;
 import com.goodjob.resume.dto.request.CreatePromptRequest;
 import com.goodjob.resume.dto.request.ResumeRequest;
 import com.goodjob.resume.dto.response.WhatGeneratedImproveResponse;
@@ -23,13 +23,13 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ResumeFacade {
-
+    
     private final GptService gptService;
     private final ObjectMapper objectMapper;
     private final SavePredictionUseCase savePredictionUseCase;
     private final KafkaPredictionProducer kafkaPredictionProducer;
 
-    @KafkaListener(topics = "question-local", groupId = "gptgroup")
+    @KafkaListener(topics = "question-prod", groupId = "gptgroup")
     public void generatedQuestionResponseWithKafka(String message) throws JsonProcessingException {
         try {
             CreatePromptRequest request = objectMapper.readValue(message, CreatePromptRequest.class);
@@ -42,7 +42,7 @@ public class ResumeFacade {
                 savePredictionUseCase.savePrediction(response.toServiceDto(request.getMemberId()));
 
             } else {
-                log.debug("비 로그인 유저이므로 데이터가 남지 않습니다.");
+                log.info("비 로그인 유저이므로 데이터가 남지 않습니다.");
             }
 
         } catch (Exception e) {
@@ -53,7 +53,7 @@ public class ResumeFacade {
 
     }
 
-    @KafkaListener(topics = "advice-local", groupId = "gptgroup")
+    @KafkaListener(topics = "advice-prod", groupId = "gptgroup")
     public void generateAdviceWithKafka(String message) {
         try {
             CreatePromptRequest request = objectMapper.readValue(message, CreatePromptRequest.class);

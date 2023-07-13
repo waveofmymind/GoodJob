@@ -46,7 +46,7 @@ public class CoinUt {
         memberService.updateCoins();
     }
 
-    @KafkaListener(topics = "error_prod", groupId = "errorgroup")
+    @KafkaListener(topics = "error-prod", groupId = "errorgroup")
     public void recoverCoin(String memberId) throws JsonProcessingException {
         Long id = Long.parseLong(objectMapper.readValue(memberId, String.class));
         memberService.recoverCoins(id);

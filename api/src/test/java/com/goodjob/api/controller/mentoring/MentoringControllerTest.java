@@ -1,11 +1,10 @@
 package com.goodjob.api.controller.mentoring;
 
-import com.goodjob.api.controller.mentoring.MentoringController;
+import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.mentoring.dto.request.MentoringRequestDto;
 import com.goodjob.core.domain.mentoring.entity.Mentoring;
 import com.goodjob.core.domain.mentoring.service.MentoringService;
-import com.goodjob.core.global.base.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,21 +13,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
 
 import static com.goodjob.core.domain.member.constant.Membership.FREE;
 import static com.goodjob.core.domain.member.constant.ProviderType.GOODJOB;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

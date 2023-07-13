@@ -1,6 +1,6 @@
 package com.goodjob.resume.domain;
 
-import com.goodjob.resume.config.BaseEntity;
+import com.goodjob.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Where;

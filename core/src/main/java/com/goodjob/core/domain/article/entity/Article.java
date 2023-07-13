@@ -1,8 +1,9 @@
 package com.goodjob.core.domain.article.entity;
 
 
-import com.goodjob.core.domain.BaseEntity;
+import com.goodjob.common.BaseEntity;
 import com.goodjob.core.domain.comment.entity.Comment;
+import com.goodjob.core.domain.file.entity.File;
 import com.goodjob.core.domain.hashTag.entity.HashTag;
 import com.goodjob.core.domain.likes.entity.Likes;
 import com.goodjob.core.domain.member.entity.Member;
@@ -30,7 +31,7 @@ public class Article extends BaseEntity {
     private Member member;
 
     //ResponseDto 매핑 과정에서 오류가 발생해서 즉시 로딩으로 변경
-    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "article", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     private List<Comment> commentList;
 
     @Setter
@@ -46,17 +47,25 @@ public class Article extends BaseEntity {
     @Setter
     private boolean isDeleted;
 
-    @OneToMany(mappedBy = "article", cascade = {CascadeType.ALL}, fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "article", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @Builder.Default
     private List<Likes> likesList = new ArrayList<>();
 
     @Setter
     private Long commentsCount;
 
-    @OneToMany(mappedBy = "article", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "article", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @Builder.Default
     private List<HashTag> hashTagList = new ArrayList<>();
 
     @Setter
     private int category;
+
+    @OneToMany(mappedBy = "article", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+    private List<File> fileList;
+
+    public Long updateViewCount() {
+        this.viewCount += 1;
+        return this.viewCount;
+    }
 }

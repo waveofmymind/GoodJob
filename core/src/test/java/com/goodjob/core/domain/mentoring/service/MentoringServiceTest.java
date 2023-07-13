@@ -1,14 +1,10 @@
 package com.goodjob.core.domain.mentoring.service;
 
-import com.goodjob.core.domain.member.dto.request.JoinRequestDto;
 import com.goodjob.core.domain.member.entity.Member;
-import com.goodjob.core.domain.member.repository.MemberRepository;
 import com.goodjob.core.domain.mentoring.dto.request.MentoringRequestDto;
 import com.goodjob.core.domain.mentoring.entity.Mentoring;
 import com.goodjob.core.domain.mentoring.repository.MentoringRepository;
-import com.goodjob.core.global.base.jwt.JwtProvider;
-import com.goodjob.core.global.base.rsData.RsData;
-import org.apache.zookeeper.Op;
+import com.goodjob.common.rsData.RsData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,17 +13,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.annotation.Rollback;
 
-import java.util.Collections;
 import java.util.Optional;
 
 import static com.goodjob.core.domain.member.constant.Membership.FREE;
 import static com.goodjob.core.domain.member.constant.ProviderType.GOODJOB;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

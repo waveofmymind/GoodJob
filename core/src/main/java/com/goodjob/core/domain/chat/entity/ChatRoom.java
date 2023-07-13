@@ -1,7 +1,7 @@
 package com.goodjob.core.domain.chat.entity;
 
 
-import com.goodjob.core.domain.BaseEntity;
+import com.goodjob.common.BaseEntity;
 import com.goodjob.core.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,7 +26,7 @@ public class ChatRoom extends BaseEntity {
 
     private String roomId;
 
-    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
     private List<ChatMessage> chatList = new ArrayList<>();
 //

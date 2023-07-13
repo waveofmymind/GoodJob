@@ -1,7 +1,7 @@
 package com.goodjob.core.domain.comment.entity;
 
 
-import com.goodjob.core.domain.BaseEntity;
+import com.goodjob.common.BaseEntity;
 import com.goodjob.core.domain.article.entity.Article;
 import com.goodjob.core.domain.likes.entity.Likes;
 import com.goodjob.core.domain.member.entity.Member;
@@ -36,14 +36,14 @@ public class Comment extends BaseEntity {
     @Column(columnDefinition = "text")
     private String content;
 
-    @OneToMany(mappedBy = "comment", cascade = {CascadeType.ALL}, fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "comment", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @Builder.Default
     private List<Likes> likesList = new ArrayList<>();
 
     @Setter
     private boolean isDeleted;
 
-    @OneToMany(mappedBy = "comment", cascade = {CascadeType.ALL}, fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "comment", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @Builder.Default
     private List<SubComment> subCommentList = new ArrayList<>();
 

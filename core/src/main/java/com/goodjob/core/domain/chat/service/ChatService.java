@@ -8,7 +8,7 @@ import com.goodjob.core.domain.chat.repository.ChatMessageRepository;
 import com.goodjob.core.domain.chat.repository.ChatRoomRepository;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
-import com.goodjob.core.global.base.rsData.RsData;
+import com.goodjob.common.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

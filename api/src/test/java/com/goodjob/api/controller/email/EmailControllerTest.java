@@ -1,8 +1,9 @@
 package com.goodjob.api.controller.email;
 
-import com.goodjob.core.domain.email.entity.SendEmailLog;
-import com.goodjob.core.domain.email.service.EmailService;
-import com.goodjob.core.global.base.redis.RedisUt;
+
+import com.goodjob.common.email.entity.SendEmailLog;
+import com.goodjob.common.email.service.EmailService;
+import com.goodjob.common.redis.RedisUt;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

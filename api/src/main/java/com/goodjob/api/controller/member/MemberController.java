@@ -7,7 +7,7 @@ import com.goodjob.core.domain.member.dto.request.LoginRequestDto;
 import com.goodjob.core.domain.member.dto.response.MemberContentDto;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
-import com.goodjob.core.global.base.rsData.RsData;
+import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
 import com.goodjob.resume.facade.PredictionFacade;
 import jakarta.servlet.http.Cookie;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-import static com.goodjob.core.global.base.cookie.constant.CookieType.*;
+import static com.goodjob.common.cookie.constant.CookieType.*;
 
 @Controller
 @RequiredArgsConstructor

@@ -1,13 +1,14 @@
 package com.goodjob.core.domain.article.service;
 
 
-import com.goodjob.core.global.base.rsData.RsData;
+import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.domain.article.dto.request.ArticleRequestDto;
 import com.goodjob.core.domain.article.dto.response.ArticleResponseDto;
 import com.goodjob.core.domain.article.entity.Article;
 import com.goodjob.core.domain.article.mapper.ArticleMapper;
 import com.goodjob.core.domain.article.repository.ArticleRepository;
 import com.goodjob.core.domain.comment.entity.Comment;
+import com.goodjob.core.domain.file.entity.File;
 import com.goodjob.core.domain.file.service.FileService;
 import com.goodjob.core.domain.hashTag.service.HashTagService;
 import com.goodjob.core.domain.subComment.entity.SubComment;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -33,6 +35,7 @@ public class ArticleService {
     private final FileService fileService;
 
 
+    @Transactional
     public Page<ArticleResponseDto> findByCategory(int page, int id, int sortCode, String category, String query) {
         Pageable pageable = PageRequest.of(page, 12);
 
@@ -71,10 +74,9 @@ public class ArticleService {
         }
 
         article.setCommentsCount(sum);
-        articleRepository.save(article);
-
     }
 
+    @Transactional
     public RsData getArticleResponseDto(Long id) {
         RsData<Article> articleRsData = getArticle(id);
 
@@ -83,19 +85,38 @@ public class ArticleService {
         }
 
         Article article = articleRsData.getData();
+        ArticleResponseDto articleResponseDto = increaseViewCount(article);
 
-        return RsData.of("S-1", "게시글에 대한 정보를 가져옵니다.", articleMapper.toDto(article));
+        return RsData.of("S-1", "게시글에 대한 정보를 가져옵니다.", articleResponseDto);
     }
 
-    @Transactional
-    public ArticleResponseDto increaseViewCount(Article article) {
-        Long viewCount = article.getViewCount();
-        article.setViewCount(viewCount + 1);
+    private ArticleResponseDto increaseViewCount(Article article) {
+        Long viewCount = article.updateViewCount();
         countCommentsAndSubComments(article);
+        Map<String, File> fileMap = getFileMap(article);
         ArticleResponseDto articleResponseDto = articleMapper.toDto(article);
+        articleResponseDto.getExtra().put("fileMap", fileMap);
+
         return articleResponseDto;
     }
 
+    private Map<String, File> getFileMap(Article article) {
+        List<File> files = article.getFileList();
+
+        for(File file : files) {
+            file.getFileName();
+        }
+
+        return files
+                .stream()
+                .collect(Collectors.toMap(
+                        file -> "file__" + file.getFileNo(),
+                        file -> file
+                ));
+    }
+
+
+    @Transactional
     public RsData getArticle(Long id) {
         Optional<Article> articleOp = articleRepository.findQslById(id);
 
@@ -155,9 +176,6 @@ public class ArticleService {
         article.setCategory(articleRequestDto.getCategory());
         hashTagService.applyHashTags(article, articleRequestDto.getHashTagStr());
 
-        articleRepository.save(article);
-
-
         return RsData.of("S-1", "게시글이 수정되었습니다.", article);
     }
 
@@ -188,8 +206,6 @@ public class ArticleService {
         }
 
         article.setDeleted(true);
-
-        articleRepository.save(article);
 
         return RsData.of("S-1", "게시글이 삭제되었습니다.", article);
     }

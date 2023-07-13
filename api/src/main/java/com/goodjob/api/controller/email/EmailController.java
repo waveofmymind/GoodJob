@@ -1,7 +1,7 @@
 package com.goodjob.api.controller.email;
 
-import com.goodjob.core.domain.email.service.EmailVerificationService;
-import com.goodjob.core.global.base.rsData.RsData;
+import com.goodjob.common.email.service.EmailVerificationService;
+import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.goodjob.core.global.base.cookie.constant.CookieType.EMAIL;
+import static com.goodjob.common.cookie.constant.CookieType.EMAIL;
 
 @RestController
 @RequiredArgsConstructor

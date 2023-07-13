@@ -11,7 +11,7 @@ import com.goodjob.core.domain.file.entity.File;
 import com.goodjob.core.domain.file.service.FileService;
 import com.goodjob.core.domain.s3.service.S3Service;
 import com.goodjob.core.domain.subComment.dto.request.SubCommentRequestDto;
-import com.goodjob.core.global.base.rsData.RsData;
+import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -48,15 +48,12 @@ public class ArticleController {
 
     @GetMapping("/detail/{id}")
     public String detailArticle (Model model, @PathVariable("id") Long id, CommentRequestDto commentRequestDto, SubCommentRequestDto subCommentRequestDto) {
-        RsData<Article> articleRsData = articleService.getArticle(id);
-        if(articleRsData.isFail()) {
-            return rq.historyBack(articleRsData);
+        RsData<ArticleResponseDto> articleResponseDto = articleService.getArticleResponseDto(id);
+        if(articleResponseDto.isFail()) {
+            return rq.historyBack(articleResponseDto);
         }
-        ArticleResponseDto articleResponseDto = articleService.increaseViewCount(articleRsData.getData());
-        Map<String, File> fileMap = fileService.getFileMap(articleResponseDto.getId());
-        articleResponseDto.getExtra().put("fileMap", fileMap);
 
-        model.addAttribute("article", articleResponseDto);
+        model.addAttribute("article", articleResponseDto.getData());
         return "article/detailArticle";
 
     }
@@ -92,8 +89,6 @@ public class ArticleController {
         }
 
         ArticleResponseDto articleResponseDto = articleResponseDtoRsData.getData();
-        Map<String, File> fileMap = fileService.getFileMap(articleResponseDto.getId());
-        articleResponseDto.getExtra().put("fileMap", fileMap);
 
         model.addAttribute("article", articleResponseDto);
 

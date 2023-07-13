@@ -4,7 +4,7 @@ package com.goodjob.api.controller.likes;
 import com.goodjob.core.domain.likes.dto.request.LikesRequestDto;
 import com.goodjob.core.domain.likes.entity.Likes;
 import com.goodjob.core.domain.likes.service.LikesService;
-import com.goodjob.core.global.base.rsData.RsData;
+import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

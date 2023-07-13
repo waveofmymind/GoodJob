@@ -2,21 +2,14 @@ package com.goodjob.api.controller.chat.controller;
 
 
 import com.goodjob.core.domain.chat.dto.ChatMessageDTO;
-import com.goodjob.core.domain.chat.entity.ChatMessage;
 import com.goodjob.core.domain.chat.entity.ChatRoom;
 import com.goodjob.core.domain.chat.service.ChatService;
-import com.goodjob.core.global.base.rsData.RsData;
+import com.goodjob.common.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor

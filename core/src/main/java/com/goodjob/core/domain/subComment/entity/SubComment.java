@@ -1,6 +1,6 @@
 package com.goodjob.core.domain.subComment.entity;
 
-import com.goodjob.core.domain.BaseEntity;
+import com.goodjob.common.BaseEntity;
 import com.goodjob.core.domain.comment.entity.Comment;
 import com.goodjob.core.domain.likes.entity.Likes;
 import com.goodjob.core.domain.member.entity.Member;
@@ -35,7 +35,7 @@ public class SubComment extends BaseEntity {
     @Column(columnDefinition = "text")
     private String content;
 
-    @OneToMany(mappedBy = "subComment", cascade = {CascadeType.ALL}, fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "subComment", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @Builder.Default
     private List<Likes> likesList = new ArrayList<>();
 

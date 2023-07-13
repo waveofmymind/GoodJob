@@ -22,7 +22,7 @@ public class QPrediction extends EntityPathBase<Prediction> {
 
     public static final QPrediction prediction = new QPrediction("prediction");
 
-    public final com.goodjob.resume.config.QBaseEntity _super = new com.goodjob.resume.config.QBaseEntity(this);
+    public final com.goodjob.common.QBaseEntity _super = new com.goodjob.common.QBaseEntity(this);
 
     public final QContents contents;
 

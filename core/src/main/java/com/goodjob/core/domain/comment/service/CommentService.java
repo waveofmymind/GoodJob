@@ -1,6 +1,5 @@
 package com.goodjob.core.domain.comment.service;
 
-import com.goodjob.core.domain.article.dto.response.ArticleResponseDto;
 import com.goodjob.core.domain.article.entity.Article;
 import com.goodjob.core.domain.article.service.ArticleService;
 import com.goodjob.core.domain.comment.dto.request.CommentRequestDto;
@@ -9,7 +8,7 @@ import com.goodjob.core.domain.comment.mapper.CommentMapper;
 import com.goodjob.core.domain.comment.repository.CommentRepository;
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.subComment.entity.SubComment;
-import com.goodjob.core.global.base.rsData.RsData;
+import com.goodjob.common.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -20,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +48,7 @@ public class CommentService {
         return RsData.of("S-1", "댓글이 작성되었습니다.");
     }
 
+    @Transactional
     public RsData getComment(Long id) {
         Optional<Comment> commentOp = commentRepository.findById(id);
 
@@ -70,6 +69,7 @@ public class CommentService {
         return RsData.of("S-1", "댓글에 대한 정보를 가져옵니다.", comment);
     }
 
+    @Transactional
     public RsData updateComment(Member author, Long id, CommentRequestDto commentRequestDto) {
         RsData<Comment> commentRsData = getComment(id);
 
@@ -84,8 +84,6 @@ public class CommentService {
         }
 
         comment.setContent(commentRequestDto.getContent());
-
-        commentRepository.save(comment);
 
         return RsData.of("S-1", "댓글이 수정되었습니다.", comment);
     }
@@ -111,7 +109,6 @@ public class CommentService {
         }
 
         comment.setDeleted(true);
-        commentRepository.save(comment);
 
         return RsData.of("S-1", "댓글이 삭제되었습니다.", comment);
     }

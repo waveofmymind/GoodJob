@@ -3,9 +3,9 @@ package com.goodjob.core.global.rq;
 
 import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.member.service.MemberService;
-import com.goodjob.core.global.base.cookie.CookieUt;
-import com.goodjob.core.global.base.redis.RedisUt;
-import com.goodjob.core.global.base.rsData.RsData;
+import com.goodjob.common.cookie.CookieUt;
+import com.goodjob.common.redis.RedisUt;
+import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.global.util.Ut;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,8 +21,8 @@ import org.springframework.web.context.annotation.RequestScope;
 import java.util.Date;
 import java.util.Map;
 
-import static com.goodjob.core.global.base.cookie.constant.CookieType.ACCESS_TOKEN;
-import static com.goodjob.core.global.base.cookie.constant.CookieType.REFRESH_TOKEN;
+import static com.goodjob.common.cookie.constant.CookieType.ACCESS_TOKEN;
+import static com.goodjob.common.cookie.constant.CookieType.REFRESH_TOKEN;
 
 @Component
 @RequestScope
