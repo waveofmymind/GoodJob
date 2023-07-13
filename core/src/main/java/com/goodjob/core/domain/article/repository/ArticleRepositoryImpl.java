@@ -12,7 +12,7 @@ import java.util.Optional;
 
 import static com.goodjob.core.domain.article.entity.QArticle.article;
 import static com.goodjob.core.domain.hashTag.entity.QHashTag.hashTag;
-import static com.goodjob.core.domain.member.entity.QMember.member;
+import static com.goodjob.member.entity.QMember.member;
 
 
 @RequiredArgsConstructor
@@ -89,7 +89,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
         }
         return jpaQueryFactory
                 .selectFrom(article)
-                .innerJoin(article.member, member)
+                .leftJoin(article.member,member)
                 .leftJoin(article.hashTagList, hashTag).fetchJoin()
                 .where(builder)
                 .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))

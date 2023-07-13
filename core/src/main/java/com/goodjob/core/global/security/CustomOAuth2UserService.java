@@ -1,7 +1,8 @@
 package com.goodjob.core.global.security;
 
-import com.goodjob.core.domain.member.entity.Member;
-import com.goodjob.core.domain.member.service.MemberService;
+
+import com.goodjob.member.entity.Member;
+import com.goodjob.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;

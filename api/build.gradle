@@ -4,6 +4,7 @@ dependencies {
     implementation project(':resume-domain')
     implementation project(':common')
     implementation project(':job-domain')
+    implementation project(':member-domain')
 }
 
 bootJar {

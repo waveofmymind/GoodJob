@@ -3,11 +3,11 @@ package com.goodjob.core.domain.subComment.service;
 
 import com.goodjob.core.domain.comment.entity.Comment;
 import com.goodjob.core.domain.comment.service.CommentService;
-import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.subComment.dto.request.SubCommentRequestDto;
 import com.goodjob.core.domain.subComment.entity.SubComment;
 import com.goodjob.core.domain.subComment.repository.SubCommentRepository;
 import com.goodjob.common.rsData.RsData;
+import com.goodjob.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

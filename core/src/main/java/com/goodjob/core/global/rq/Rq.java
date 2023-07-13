@@ -1,12 +1,13 @@
 package com.goodjob.core.global.rq;
 
 
-import com.goodjob.core.domain.member.entity.Member;
-import com.goodjob.core.domain.member.service.MemberService;
+
 import com.goodjob.common.cookie.CookieUt;
 import com.goodjob.common.redis.RedisUt;
 import com.goodjob.common.rsData.RsData;
-import com.goodjob.core.global.util.Ut;
+import com.goodjob.common.util.Ut;
+import com.goodjob.member.entity.Member;
+import com.goodjob.member.service.MemberService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

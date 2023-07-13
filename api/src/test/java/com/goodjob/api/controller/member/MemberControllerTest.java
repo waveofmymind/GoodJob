@@ -1,8 +1,8 @@
 package com.goodjob.api.controller.member;
 
 import com.goodjob.common.redis.RedisUt;
-import com.goodjob.core.domain.member.entity.Member;
-import com.goodjob.core.domain.member.service.MemberService;
+import com.goodjob.member.entity.Member;
+import com.goodjob.member.service.MemberService;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 
-import static com.goodjob.core.domain.member.constant.Membership.MENTOR;
+import static com.goodjob.member.constant.Membership.MENTOR;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

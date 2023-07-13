@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.goodjob.core.domain.article.entity.QArticle.article;
-import static com.goodjob.core.domain.member.entity.QMember.member;
 import static com.goodjob.core.domain.mentoring.entity.QMentoring.mentoring;
+import static com.goodjob.member.entity.QMember.member;
 
 
 @RequiredArgsConstructor

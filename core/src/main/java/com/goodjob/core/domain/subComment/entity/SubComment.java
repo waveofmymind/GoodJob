@@ -3,7 +3,7 @@ package com.goodjob.core.domain.subComment.entity;
 import com.goodjob.common.BaseEntity;
 import com.goodjob.core.domain.comment.entity.Comment;
 import com.goodjob.core.domain.likes.entity.Likes;
-import com.goodjob.core.domain.member.entity.Member;
+import com.goodjob.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

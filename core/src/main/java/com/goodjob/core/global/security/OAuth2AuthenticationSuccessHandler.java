@@ -1,10 +1,11 @@
 package com.goodjob.core.global.security;
 
 
-import com.goodjob.core.domain.member.entity.Member;
-import com.goodjob.core.domain.member.service.MemberService;
-import com.goodjob.core.global.base.jwt.JwtProvider;
+
+import com.goodjob.member.entity.Member;
+import com.goodjob.member.jwt.JwtProvider;
 import com.goodjob.core.global.rq.Rq;
+import com.goodjob.member.service.MemberService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

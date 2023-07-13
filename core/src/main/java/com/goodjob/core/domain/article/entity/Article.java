@@ -6,7 +6,7 @@ import com.goodjob.core.domain.comment.entity.Comment;
 import com.goodjob.core.domain.file.entity.File;
 import com.goodjob.core.domain.hashTag.entity.HashTag;
 import com.goodjob.core.domain.likes.entity.Likes;
-import com.goodjob.core.domain.member.entity.Member;
+import com.goodjob.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -28,6 +28,7 @@ public class Article extends BaseEntity {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "member_id")
     private Member member;
 
     //ResponseDto 매핑 과정에서 오류가 발생해서 즉시 로딩으로 변경

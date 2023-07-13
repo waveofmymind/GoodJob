@@ -1,7 +1,7 @@
 package com.goodjob.core.global.config;
 
-import com.goodjob.core.global.base.jwt.JwtAccessDeniedHandler;
-import com.goodjob.core.global.base.jwt.JwtAuthenticationEntryPoint;
+import com.goodjob.member.jwt.JwtAccessDeniedHandler;
+import com.goodjob.member.jwt.JwtAuthenticationEntryPoint;
 import com.goodjob.core.global.security.JwtAuthorizationFilter;
 import com.goodjob.core.global.security.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static com.goodjob.core.domain.member.constant.UserRole.*;
+import static com.goodjob.member.constant.UserRole.ROLE_MENTOR;
+import static com.goodjob.member.constant.UserRole.ROLE_USER;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration

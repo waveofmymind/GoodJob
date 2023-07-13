@@ -1,8 +1,8 @@
 package com.goodjob.core.domain.mentoring.entity;
 
 import com.goodjob.common.BaseEntity;
-import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.mentoring.dto.request.MentoringRequestDto;
+import com.goodjob.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

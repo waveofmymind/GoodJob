@@ -12,7 +12,7 @@ import com.goodjob.core.domain.file.entity.File;
 import com.goodjob.core.domain.file.service.FileService;
 import com.goodjob.core.domain.hashTag.service.HashTagService;
 import com.goodjob.core.domain.subComment.entity.SubComment;
-import com.goodjob.core.domain.member.entity.Member;
+import com.goodjob.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

@@ -4,8 +4,8 @@ import com.goodjob.api.controller.chat.controller.ChatController;
 import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.domain.chat.entity.ChatRoom;
 import com.goodjob.core.domain.chat.service.ChatService;
-import com.goodjob.core.domain.member.entity.Member;
-import com.goodjob.core.domain.member.service.MemberService;
+import com.goodjob.member.entity.Member;
+import com.goodjob.member.service.MemberService;
 import com.goodjob.core.domain.mentoring.entity.Mentoring;
 import com.goodjob.core.domain.mentoring.service.MentoringService;
 import com.goodjob.core.global.rq.Rq;
@@ -24,8 +24,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Optional;
 
-import static com.goodjob.core.domain.member.constant.Membership.*;
-import static com.goodjob.core.domain.member.constant.ProviderType.GOODJOB;
+import static com.goodjob.member.constant.Membership.*;
+import static com.goodjob.member.constant.ProviderType.GOODJOB;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

@@ -1,8 +1,8 @@
 package com.goodjob.api.controller.payment;
 
-import com.goodjob.core.domain.member.constant.Membership;
-import com.goodjob.core.domain.member.entity.Member;
-import com.goodjob.core.domain.member.service.MemberService;
+import com.goodjob.member.constant.Membership;
+import com.goodjob.member.entity.Member;
+import com.goodjob.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
