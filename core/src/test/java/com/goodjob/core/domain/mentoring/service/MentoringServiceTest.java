@@ -125,7 +125,7 @@ class MentoringServiceTest {
         // GIVEN
         MentoringRequestDto mentoringRequestDto = createMentoringRequestDto();
         Mentoring mentoring = createMentoring();
-        Member member = Member.builder()    // 멘토링을 작성한 사람과 다른 멤버
+        Member member = Member.builder()
                 .id(2L)
                 .username("test2")
                 .password("1234")
@@ -167,7 +167,7 @@ class MentoringServiceTest {
     void t005() {
         // GIVEN
         Mentoring mentoring = createMentoring();
-        Member member = Member.builder()    // 멘토링을 작성한 사람과 다른 멤버
+        Member member = Member.builder()
                 .id(2L)
                 .username("test2")
                 .password("1234")
