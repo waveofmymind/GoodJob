@@ -26,13 +26,13 @@ public class Likes extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    private Member member;  //한 명의 회원이 여러 게시물 또는 댓글에 좋아요를 할 수 있다.
+    private Member member;
 
     @ManyToOne
-    private Article article;    //한 게시글에 여러 개의 좋아요가 생길 수 있다.
+    private Article article;
 
     @ManyToOne
-    private Comment comment;    //한 댓글에 여러 개의 좋아요가 생길 수 있다.
+    private Comment comment;
 
     @ManyToOne
     private SubComment subComment;

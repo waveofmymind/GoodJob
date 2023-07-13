@@ -29,7 +29,6 @@ public class ChatController {
     private final MentoringService mentoringService;
     private final Rq rq;
 
-    //나의 채팅방 목록 조회
     @GetMapping("/rooms")
     public String myRooms(Model model) {
         List<ChatRoomDetailDTO> chatRooms = chatService.findByUsername(rq.getMember());
@@ -38,7 +37,6 @@ public class ChatController {
         return "chat/rooms";
     }
 
-    //채팅방 개설
     @PostMapping("/room/{id}")
     public String create(@PathVariable Long id, Model model,
                          @RequestParam("date") String date, @RequestParam("time") String time){
@@ -64,7 +62,6 @@ public class ChatController {
         return rq.redirectWithMsg("/chat/rooms", "커피챗이 신청되었습니다.");
     }
 
-    //채팅방 상세
     @GetMapping("/room")
     public String getRoom(String roomId, Model model){
 
@@ -84,7 +81,6 @@ public class ChatController {
         return "chat/room";
     }
 
-    //채팅방 삭제
     @GetMapping("/delete/room")
     public String deleteRoom(String roomId){
 
