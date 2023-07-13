@@ -26,7 +26,7 @@ public class ChatRoom extends BaseEntity {
 
     private String roomId;
 
-    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
     private List<ChatMessage> chatList = new ArrayList<>();
 //

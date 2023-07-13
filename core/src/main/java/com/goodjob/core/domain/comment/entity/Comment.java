@@ -36,14 +36,14 @@ public class Comment extends BaseEntity {
     @Column(columnDefinition = "text")
     private String content;
 
-    @OneToMany(mappedBy = "comment", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "comment", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @Builder.Default
     private List<Likes> likesList = new ArrayList<>();
 
     @Setter
     private boolean isDeleted;
 
-    @OneToMany(mappedBy = "comment", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "comment", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @Builder.Default
     private List<SubComment> subCommentList = new ArrayList<>();
 
