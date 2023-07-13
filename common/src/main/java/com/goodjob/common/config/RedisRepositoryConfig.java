@@ -24,8 +24,8 @@ public class RedisRepositoryConfig {
     }
 
     @Bean
-    public <T> RedisTemplate<T, String> redisTemplate() {
-        RedisTemplate<T, String> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, String> redisTemplate() {
+        RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setEnableTransactionSupport(true);
 
