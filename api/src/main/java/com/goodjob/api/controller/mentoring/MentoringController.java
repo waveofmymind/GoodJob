@@ -2,9 +2,9 @@ package com.goodjob.api.controller.mentoring;
 
 
 import com.goodjob.core.domain.file.service.FileService;
-import com.goodjob.core.domain.mentoring.dto.request.MentoringRequestDto;
-import com.goodjob.core.domain.mentoring.entity.Mentoring;
-import com.goodjob.core.domain.mentoring.service.MentoringService;
+import com.goodjob.mentoring.domain.mentoring.dto.request.MentoringRequestDto;
+import com.goodjob.mentoring.domain.mentoring.entity.Mentoring;
+import com.goodjob.mentoring.domain.mentoring.service.MentoringService;
 import com.goodjob.core.domain.s3.service.S3Service;
 import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;

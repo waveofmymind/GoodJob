@@ -1,10 +1,11 @@
 package com.goodjob.api.controller.chat.controller;
 
 
-import com.goodjob.core.domain.chat.dto.ChatMessageDTO;
-import com.goodjob.core.domain.chat.entity.ChatRoom;
-import com.goodjob.core.domain.chat.service.ChatService;
+
 import com.goodjob.common.rsData.RsData;
+import com.goodjob.mentoring.domain.chat.dto.ChatMessageDTO;
+import com.goodjob.mentoring.domain.chat.entity.ChatRoom;
+import com.goodjob.mentoring.domain.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;

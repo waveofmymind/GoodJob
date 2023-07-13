@@ -4,7 +4,6 @@ import com.goodjob.core.domain.article.entity.Article;
 import com.goodjob.core.domain.article.service.ArticleService;
 import com.goodjob.core.domain.comment.entity.Comment;
 import com.goodjob.core.domain.comment.service.CommentService;
-import com.goodjob.member.service.MemberService;
 import com.goodjob.resume.dto.response.ResponsePredictionDto;
 import com.goodjob.resume.facade.PredictionFacade;
 import lombok.RequiredArgsConstructor;

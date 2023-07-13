@@ -5,4 +5,5 @@ include 'resume-domain'
 include 'common'
 include 'job-domain'
 include 'member-domain'
+include 'mentoring-domain'
 
