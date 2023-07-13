@@ -2,9 +2,9 @@ package com.goodjob.api.controller.mentoring;
 
 import com.goodjob.common.rsData.RsData;
 import com.goodjob.member.entity.Member;
-import com.goodjob.core.domain.mentoring.dto.request.MentoringRequestDto;
-import com.goodjob.core.domain.mentoring.entity.Mentoring;
-import com.goodjob.core.domain.mentoring.service.MentoringService;
+import com.goodjob.mentoring.domain.mentoring.dto.request.MentoringRequestDto;
+import com.goodjob.mentoring.domain.mentoring.entity.Mentoring;
+import com.goodjob.mentoring.domain.mentoring.service.MentoringService;
 import com.goodjob.core.global.rq.Rq;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

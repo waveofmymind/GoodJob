@@ -1,9 +1,10 @@
 package com.goodjob.api.controller.subComment;
 
 
-import com.goodjob.core.domain.subComment.dto.request.SubCommentRequestDto;
-import com.goodjob.core.domain.subComment.entity.SubComment;
-import com.goodjob.core.domain.subComment.service.SubCommentService;
+
+import com.goodjob.article.domain.subComment.dto.request.SubCommentRequestDto;
+import com.goodjob.article.domain.subComment.entity.SubComment;
+import com.goodjob.article.domain.subComment.service.SubCommentService;
 import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
 import jakarta.validation.Valid;

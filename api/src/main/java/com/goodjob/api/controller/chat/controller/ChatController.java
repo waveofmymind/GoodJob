@@ -1,13 +1,13 @@
 package com.goodjob.api.controller.chat.controller;
 
 
-import com.goodjob.core.domain.chat.dto.ChatRoomDetailDTO;
-import com.goodjob.core.domain.chat.entity.ChatMessage;
-import com.goodjob.core.domain.chat.service.ChatService;
+import com.goodjob.mentoring.domain.chat.dto.ChatRoomDetailDTO;
+import com.goodjob.mentoring.domain.chat.entity.ChatMessage;
+import com.goodjob.mentoring.domain.chat.service.ChatService;
 import com.goodjob.member.entity.Member;
 import com.goodjob.member.service.MemberService;
-import com.goodjob.core.domain.mentoring.entity.Mentoring;
-import com.goodjob.core.domain.mentoring.service.MentoringService;
+import com.goodjob.mentoring.domain.mentoring.entity.Mentoring;
+import com.goodjob.mentoring.domain.mentoring.service.MentoringService;
 import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,6 @@ public class ChatController {
     private final MentoringService mentoringService;
     private final Rq rq;
 
-    //나의 채팅방 목록 조회
     @GetMapping("/rooms")
     public String myRooms(Model model) {
         List<ChatRoomDetailDTO> chatRooms = chatService.findByUsername(rq.getMember());
@@ -38,7 +37,6 @@ public class ChatController {
         return "chat/rooms";
     }
 
-    //채팅방 개설
     @PostMapping("/room/{id}")
     public String create(@PathVariable Long id, Model model,
                          @RequestParam("date") String date, @RequestParam("time") String time){
@@ -64,7 +62,6 @@ public class ChatController {
         return rq.redirectWithMsg("/chat/rooms", "커피챗이 신청되었습니다.");
     }
 
-    //채팅방 상세
     @GetMapping("/room")
     public String getRoom(String roomId, Model model){
 
@@ -84,7 +81,6 @@ public class ChatController {
         return "chat/room";
     }
 
-    //채팅방 삭제
     @GetMapping("/delete/room")
     public String deleteRoom(String roomId){
 
