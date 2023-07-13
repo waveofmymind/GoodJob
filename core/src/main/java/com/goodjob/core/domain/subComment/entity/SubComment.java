@@ -35,7 +35,7 @@ public class SubComment extends BaseEntity {
     @Column(columnDefinition = "text")
     private String content;
 
-    @OneToMany(mappedBy = "subComment", cascade = {CascadeType.ALL}, fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "subComment", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @Builder.Default
     private List<Likes> likesList = new ArrayList<>();
 

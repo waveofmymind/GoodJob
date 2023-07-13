@@ -48,6 +48,7 @@ public class CommentService {
         return RsData.of("S-1", "댓글이 작성되었습니다.");
     }
 
+    @Transactional
     public RsData getComment(Long id) {
         Optional<Comment> commentOp = commentRepository.findById(id);
 
@@ -68,6 +69,7 @@ public class CommentService {
         return RsData.of("S-1", "댓글에 대한 정보를 가져옵니다.", comment);
     }
 
+    @Transactional
     public RsData updateComment(Member author, Long id, CommentRequestDto commentRequestDto) {
         RsData<Comment> commentRsData = getComment(id);
 
@@ -82,8 +84,6 @@ public class CommentService {
         }
 
         comment.setContent(commentRequestDto.getContent());
-
-        commentRepository.save(comment);
 
         return RsData.of("S-1", "댓글이 수정되었습니다.", comment);
     }
@@ -109,7 +109,6 @@ public class CommentService {
         }
 
         comment.setDeleted(true);
-        commentRepository.save(comment);
 
         return RsData.of("S-1", "댓글이 삭제되었습니다.", comment);
     }
