@@ -23,7 +23,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Builder
 @Getter
 @EntityListeners(AuditingEntityListener.class)
-@Where(clause = "isDeleted = false")
+@Where(clause = "is_deleted = false")
 public class Article extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)

@@ -37,7 +37,6 @@ public class ChatController {
         return "chat/rooms";
     }
 
-    //채팅방 개
     @PostMapping("/room/{id}")
     public String create(@PathVariable Long id, Model model,
                          @RequestParam("date") String date, @RequestParam("time") String time){
@@ -82,7 +81,6 @@ public class ChatController {
         return "chat/room";
     }
 
-    //채팅방 삭제
     @GetMapping("/delete/room")
     public String deleteRoom(String roomId){
 
