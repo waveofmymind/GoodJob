@@ -91,7 +91,7 @@
 - [배치 비동기처리 성능개선 - 박우영](https://velog.io/@wy9295/DB-Spring-Batch-%ED%99%9C%EC%9A%A9%ED%95%98%EC%97%AC-%EB%B3%91%EB%A0%AC%EC%B2%98%EB%A6%AC)
 - [Redis - 깃허브 로그인 과정에서 직렬화 오류 - 박찬규](https://velog.io/@qmrma987/SpringBoot-JWT-Redis-%EC%82%AC%EC%9A%A9%EC%A4%91-%EA%B9%83%ED%97%88%EB%B8%8C-%EB%A1%9C%EA%B7%B8%EC%9D%B8-API-serializationfailedexception-%EC%B2%98%EB%A6%AC)
 - [로그인 후 이전 페이지로 sendRedirect 요청시 NullPointerException 오류 - 박찬규](https://velog.io/@qmrma987/SpringBoot-Thymeleaf-JWT-Redis-%EC%82%AC%EC%9A%A9%EC%A4%91-sendRedirect-%EB%AC%B8%EC%A0%9C)
-
+- [Reids - 로그인 통합 테스트 중 NullpointerException 오류 - 박찬규](https://velog.io/@qmrma987/SpringBoot-Redis-%ED%82%A4-%EC%84%A4%EC%A0%95)
 
 
 
