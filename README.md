@@ -55,6 +55,7 @@
 - Envoy Proxy
 - Kiali
 - Kafka 3.5.0V2 KRaft(without Zookeeper)
+- UI for Kakfa
 - Docker
 - Jenkins
 - GCP CloudBuild
@@ -67,7 +68,7 @@
 
 ## 시스템 아키텍처(2023.07.12)
 
-![스크린샷 2023-07-12 오후 4 01 39](https://github.com/waveofmymind/GoodJob/assets/93868431/bafa3176-ad15-4fdf-bd7d-6c1896be9a5e)
+![스크린샷 2023-07-14 오전 12 35 41 2](https://github.com/waveofmymind/GoodJob/assets/93868431/c9efb774-67d3-4bf0-9746-2d240f260205)
 
 ## ERD
 
