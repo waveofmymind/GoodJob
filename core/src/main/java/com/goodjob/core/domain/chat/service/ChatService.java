@@ -6,9 +6,10 @@ import com.goodjob.core.domain.chat.entity.ChatMessage;
 import com.goodjob.core.domain.chat.entity.ChatRoom;
 import com.goodjob.core.domain.chat.repository.ChatMessageRepository;
 import com.goodjob.core.domain.chat.repository.ChatRoomRepository;
-import com.goodjob.core.domain.member.entity.Member;
-import com.goodjob.core.domain.member.service.MemberService;
+
 import com.goodjob.common.rsData.RsData;
+import com.goodjob.member.entity.Member;
+import com.goodjob.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

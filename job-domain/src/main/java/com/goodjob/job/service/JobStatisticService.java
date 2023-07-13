@@ -46,8 +46,6 @@ public class JobStatisticService {
         } catch (IllegalStateException | DataIntegrityViolationException e) {
             log.info("중복데이터");
         }
-
-
     }
 
     private void validateDuplicateCompany(JobResponseDto jobResponseDto) {
@@ -66,25 +64,6 @@ public class JobStatisticService {
                         md.getCompany().equals(fd.getCompany()) &&
                         md.getCareer() == fd.getCareer())).toList();
     }
-
-    public List<JobResponseDto> sameDtoFilter(List<JobResponseDto> firstDto, List<JobResponseDto> secondDto) {
-        List<JobResponseDto> returnDto = new ArrayList<>();
-        for (int i = 0; i < firstDto.size(); i++) {
-            int error = 0;
-            for (int j = i + 1; j < firstDto.size(); j++) {
-                JobResponseDto first = firstDto.get(i);
-                JobResponseDto second = secondDto.get(j);
-                if (first.getSubject().equals(second.getSubject()) && first.getCareer() == second.getCareer() && first.getCompany().equals(second.getCompany())) {
-                    error++;
-                }
-            }
-            if (error == 0) {
-                returnDto.add(firstDto.get(i));
-            }
-        }
-        return returnDto;
-    }
-
 
     /**
      * select Logic

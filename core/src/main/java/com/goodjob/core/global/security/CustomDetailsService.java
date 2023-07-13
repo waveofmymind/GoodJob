@@ -1,10 +1,10 @@
 package com.goodjob.core.global.security;
 
 
-import com.goodjob.core.domain.member.entity.Member;
-import com.goodjob.core.domain.member.repository.MemberRepository;
+
+import com.goodjob.member.entity.Member;
+import com.goodjob.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

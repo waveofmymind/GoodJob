@@ -1,8 +1,8 @@
 package com.goodjob.core.domain.comment.dto.response;
 
 import com.goodjob.core.domain.likes.dto.response.LikesResponseDto;
-import com.goodjob.core.domain.member.entity.Member;
 import com.goodjob.core.domain.subComment.dto.response.SubCommentResponseDto;
+import com.goodjob.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 

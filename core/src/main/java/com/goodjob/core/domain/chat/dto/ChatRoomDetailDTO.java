@@ -3,11 +3,10 @@ package com.goodjob.core.domain.chat.dto;
 
 import com.goodjob.core.domain.chat.entity.ChatMessage;
 import com.goodjob.core.domain.chat.entity.ChatRoom;
-import com.goodjob.core.domain.member.entity.Member;
+import com.goodjob.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.util.List;

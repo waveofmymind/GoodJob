@@ -3,7 +3,7 @@ package com.goodjob.api.controller.resume;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.goodjob.core.global.base.coin.CoinUt;
+import com.goodjob.member.coin.CoinUt;
 import com.goodjob.resume.domain.ServiceType;
 import com.goodjob.resume.dto.request.CreatePromptRequest;
 import com.goodjob.resume.dto.request.ResumeRequest;

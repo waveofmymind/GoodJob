@@ -1,10 +1,10 @@
 package com.goodjob.api.controller.member;
 
 import com.goodjob.common.email.service.EmailVerificationService;
-import com.goodjob.core.domain.member.dto.request.EditRequestDto;
-import com.goodjob.core.domain.member.entity.Member;
-import com.goodjob.core.domain.member.service.MemberEditService;
-import com.goodjob.core.domain.member.service.MemberService;
+import com.goodjob.member.dto.request.EditRequestDto;
+import com.goodjob.member.entity.Member;
+import com.goodjob.member.service.MemberEditService;
+import com.goodjob.member.service.MemberService;
 import com.goodjob.common.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -1,7 +1,7 @@
 package com.goodjob.api.controller.mentoring;
 
 import com.goodjob.common.rsData.RsData;
-import com.goodjob.core.domain.member.entity.Member;
+import com.goodjob.member.entity.Member;
 import com.goodjob.core.domain.mentoring.dto.request.MentoringRequestDto;
 import com.goodjob.core.domain.mentoring.entity.Mentoring;
 import com.goodjob.core.domain.mentoring.service.MentoringService;
@@ -20,8 +20,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static com.goodjob.core.domain.member.constant.Membership.FREE;
-import static com.goodjob.core.domain.member.constant.ProviderType.GOODJOB;
+import static com.goodjob.member.constant.Membership.FREE;
+import static com.goodjob.member.constant.ProviderType.GOODJOB;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

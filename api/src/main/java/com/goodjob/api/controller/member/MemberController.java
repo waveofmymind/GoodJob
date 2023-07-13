@@ -2,11 +2,12 @@ package com.goodjob.api.controller.member;
 
 import com.goodjob.core.domain.article.service.ArticleService;
 import com.goodjob.core.domain.comment.service.CommentService;
-import com.goodjob.core.domain.member.dto.request.JoinRequestDto;
-import com.goodjob.core.domain.member.dto.request.LoginRequestDto;
-import com.goodjob.core.domain.member.dto.response.MemberContentDto;
-import com.goodjob.core.domain.member.entity.Member;
-import com.goodjob.core.domain.member.service.MemberService;
+import com.goodjob.core.domain.mypage.MyPageService;
+import com.goodjob.member.dto.request.JoinRequestDto;
+import com.goodjob.member.dto.request.LoginRequestDto;
+import com.goodjob.core.domain.mypage.MemberContentDto;
+import com.goodjob.member.entity.Member;
+import com.goodjob.member.service.MemberService;
 import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
 import com.goodjob.resume.facade.PredictionFacade;
@@ -30,9 +31,7 @@ public class MemberController {
 
     private final Rq rq;
     private final MemberService memberService;
-    private final ArticleService articleService;
-    private final CommentService commentService;
-    private final PredictionFacade predictionFacade;
+    private final MyPageService myPageService;
 
     @GetMapping("/join")
     @PreAuthorize("isAnonymous()")
@@ -110,7 +109,7 @@ public class MemberController {
     public String showMe(Model model) {
         Long id = rq.getMember().getId();
 
-        MemberContentDto memberContent = memberService.getMemberContent(id);
+        MemberContentDto memberContent = myPageService.getMemberContent(id);
 
         model.addAttribute("memberContent", memberContent);
 

@@ -1,6 +1,6 @@
 package com.goodjob.api.controller.payment;
 
-import com.goodjob.core.domain.member.service.MemberService;
+import com.goodjob.member.service.MemberService;
 import com.goodjob.common.payment.dto.request.PaymentRequestDto;
 import com.goodjob.common.payment.service.PaymentService;
 import com.goodjob.core.global.rq.Rq;
