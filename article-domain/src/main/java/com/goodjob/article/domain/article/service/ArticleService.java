@@ -91,7 +91,7 @@ public class ArticleService {
     }
 
     private ArticleResponseDto increaseViewCount(Article article) {
-        Long viewCount = article.updateViewCount();
+        article.updateViewCount();
         countCommentsAndSubComments(article);
         Map<String, File> fileMap = getFileMap(article);
         ArticleResponseDto articleResponseDto = articleMapper.toDto(article);
