@@ -1,6 +1,5 @@
 package com.goodjob.member.service;
 
-
 import com.goodjob.common.nickname.service.NicknameGenerator;
 import com.goodjob.member.coin.CoinUt;
 import com.goodjob.member.constant.ProviderType;
