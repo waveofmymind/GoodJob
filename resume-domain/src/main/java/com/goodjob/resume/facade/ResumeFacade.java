@@ -29,7 +29,7 @@ public class ResumeFacade {
     private final SavePredictionUseCase savePredictionUseCase;
     private final KafkaPredictionProducer kafkaPredictionProducer;
 
-    @KafkaListener(topics = "question-prod", groupId = "gptgroup")
+    @KafkaListener(topics = "question-local", groupId = "gptgroup")
     public void generatedQuestionResponseWithKafka(String message) throws JsonProcessingException {
         try {
             CreatePromptRequest request = objectMapper.readValue(message, CreatePromptRequest.class);
@@ -53,7 +53,7 @@ public class ResumeFacade {
 
     }
 
-    @KafkaListener(topics = "advice-prod", groupId = "gptgroup")
+    @KafkaListener(topics = "advice-local", groupId = "gptgroup")
     public void generateAdviceWithKafka(String message) {
         try {
             CreatePromptRequest request = objectMapper.readValue(message, CreatePromptRequest.class);
