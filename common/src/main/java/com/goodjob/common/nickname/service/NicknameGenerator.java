@@ -24,7 +24,7 @@ public class NicknameGenerator {
     public String[] readWordFromFile(String fileName) {
         try {
             ClassPathResource classPathResource = new ClassPathResource(fileName);
-            BufferedReader br = new BufferedReader(new InputStreamReader(classPathResource.getInputStream()));
+            BufferedReader br = new BufferedReader(new InputStreamReader(classPathResource.getInputStream(), "utf-8"));
             String line;
 
             if ((line = br.readLine()) != null) {
