@@ -1,12 +1,13 @@
 package com.goodjob.common.nickname.service;
 
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.Random;
 
-@Service
+@Component
 public class NicknameGenerator {
 
     public String getRandomNickname() {

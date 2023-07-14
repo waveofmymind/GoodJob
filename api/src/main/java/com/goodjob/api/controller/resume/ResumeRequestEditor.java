@@ -10,7 +10,7 @@ import java.beans.PropertyEditorSupport;
 
 public class ResumeRequestEditor extends PropertyEditorSupport {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void setAsText(String input) {
