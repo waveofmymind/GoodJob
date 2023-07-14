@@ -2,6 +2,8 @@ package com.goodjob.resume.facade;
 
 import com.goodjob.common.error.ErrorCode;
 import com.goodjob.common.error.exception.BusinessException;
+import com.goodjob.resume.application.in.DeletePredictionUseCase;
+import com.goodjob.resume.application.outs.DeletePredictionPort;
 import com.goodjob.resume.domain.Prediction;
 import com.goodjob.resume.dto.response.ResponsePredictionDto;
 import com.goodjob.resume.application.outs.FindPredictionPort;
@@ -19,10 +21,11 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class PredictionFacade implements SavePredictionUseCase, FindPredictionUseCase {
+public class PredictionFacade implements SavePredictionUseCase, FindPredictionUseCase, DeletePredictionUseCase {
 
     private final SavePredictionPort savePredictionPort;
     private final FindPredictionPort findPredictionPort;
+    private final DeletePredictionPort deletePredictionPort;
 
     @Override
     @Transactional
@@ -50,5 +53,11 @@ public class PredictionFacade implements SavePredictionUseCase, FindPredictionUs
         return predictions.stream()
                 .map(ResponsePredictionDto::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void deletePrediction(Long id) {
+        deletePredictionPort.deletePrediction(id);
     }
 }

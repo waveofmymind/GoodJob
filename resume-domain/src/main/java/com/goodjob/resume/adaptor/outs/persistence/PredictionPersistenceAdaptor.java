@@ -2,6 +2,7 @@ package com.goodjob.resume.adaptor.outs.persistence;
 
 
 
+import com.goodjob.resume.application.outs.DeletePredictionPort;
 import com.goodjob.resume.domain.Prediction;
 import com.goodjob.resume.application.outs.FindPredictionPort;
 import com.goodjob.resume.application.outs.SavePredictionPort;
@@ -13,7 +14,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class PredictionPersistenceAdaptor implements SavePredictionPort, FindPredictionPort {
+public class PredictionPersistenceAdaptor implements SavePredictionPort, FindPredictionPort, DeletePredictionPort {
 
     private final PredictionRepository predictionRepository;
     @Override
@@ -34,5 +35,10 @@ public class PredictionPersistenceAdaptor implements SavePredictionPort, FindPre
     @Override
     public List<Prediction> findPredictionsByMemberId(Long memberId) {
         return predictionRepository.findAllByMemberId(memberId);
+    }
+
+    @Override
+    public void deletePrediction(Long id) {
+        predictionRepository.deleteById(id);
     }
 }
