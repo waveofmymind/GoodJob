@@ -29,11 +29,10 @@ public class ResumeFacade {
     private final SavePredictionUseCase savePredictionUseCase;
     private final KafkaPredictionProducer kafkaPredictionProducer;
 
-    @KafkaListener(topics = "question-local", groupId = "gptgroup")
+    @KafkaListener(topics = "question-prod", groupId = "gptgroup")
     public void generatedQuestionResponseWithKafka(String message) throws JsonProcessingException {
         try {
             CreatePromptRequest request = objectMapper.readValue(message, CreatePromptRequest.class);
-            log.info("이력서 생성 update request : {}", message);
 
             // memberId가 null이 아닌 경우에만 실행
             if (request.getMemberId() != null) {
@@ -53,11 +52,10 @@ public class ResumeFacade {
 
     }
 
-    @KafkaListener(topics = "advice-local", groupId = "gptgroup")
-    public void generateAdviceWithKafka(String message) {
+    @KafkaListener(topics = "advice-prod", groupId = "gptgroup")
+    public void generateAdviceWithKafka(String message) throws JsonProcessingException {
         try {
             CreatePromptRequest request = objectMapper.readValue(message, CreatePromptRequest.class);
-            log.info("이력서 생성 update request : {}", message);
 
             // memberId가 null이 아닌 경우에만 실행
             if (request.getMemberId() != null) {
@@ -65,28 +63,13 @@ public class ResumeFacade {
                 WhatGeneratedImproveResponse response = gptService.createdImprovementPointsAndAdvice(request.getJob(), request.getCareer(), resumeData);
                 savePredictionUseCase.savePrediction(response.toServiceDto(request.getMemberId()));
             } else {
-                log.debug("비 로그인 유저이므로 데이터가 남지 않습니다.");
+                log.info("비 로그인 유저이므로 데이터가 남지 않습니다.");
             }
 
         } catch (Exception e) {
+            CreatePromptRequest request = objectMapper.readValue(message, CreatePromptRequest.class);
+            kafkaPredictionProducer.sendError(request.getMemberId().toString());
             throw new BusinessException(ErrorCode.CREATE_PREDICTION_QUESTION);
         }
-    }
-
-
-    public WhatGeneratedQuestionResponse generateQuestion(final CreatePromptRequest request) {
-
-        log.debug("이력서 생성 update request : {}", request.toString());
-        List<ResumeRequest> resumeData = request.getResumeRequests();
-        return gptService.createdExpectedQuestionsAndAnswer(request.getJob(), request.getCareer(), resumeData);
-    }
-
-    public WhatGeneratedImproveResponse generateAdvice(final CreatePromptRequest request) {
-
-        log.debug("이력서 생성 update request : {}", request.toString());
-
-        List<ResumeRequest> resumeData = request.getResumeRequests();
-
-        return gptService.createdImprovementPointsAndAdvice(request.getJob(), request.getCareer(), resumeData);
     }
 }
