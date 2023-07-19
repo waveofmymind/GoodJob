@@ -3,6 +3,7 @@ package com.goodjob.api.controller.resume;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.goodjob.member.coin.CoinCheck;
 import com.goodjob.member.coin.CoinUt;
 import com.goodjob.resume.domain.ServiceType;
 import com.goodjob.resume.dto.request.CreatePromptRequest;
@@ -45,18 +46,15 @@ public class ResumeController {
 
     @PostMapping("/questions")
     public String generateQuestion(@ModelAttribute CreatePromptRequest request) throws JsonProcessingException {
-        if (rq.getMember() == null) {
-            request.setMemberId(null);
-        } else {
-            request.setMemberId(rq.getMember().getId());
-            boolean isServiceAvailable = coinUt.isServiceAvailable(rq.getMember());
 
-            if (!isServiceAvailable) {
-                return "resume/coin-shortage";
-            }
+        request.setMemberId(rq.getMember().getId());
 
-            kafkaPredictionProducer.sendQuestionRequest(objectMapper.writeValueAsString(request));
+        boolean isServiceAvailable = coinUt.isServiceAvailable(rq.getMember());
+        if (!isServiceAvailable) {
+            return "resume/coin-shortage";
         }
+
+        kafkaPredictionProducer.sendQuestionRequest(objectMapper.writeValueAsString(request));
 
         return "resume/request-complete";
     }
@@ -68,19 +66,16 @@ public class ResumeController {
 
     @PostMapping("/advices")
     public String generateAdvice(@ModelAttribute CreatePromptRequest request) throws JsonProcessingException {
-        if (rq.getMember() == null) {
-            request.setMemberId(null);
-        } else {
-            request.setMemberId(rq.getMember().getId());
-            request.setMemberId(rq.getMember().getId());
-            boolean isServiceAvailable = coinUt.isServiceAvailable(rq.getMember());
+        request.setMemberId(rq.getMember().getId());
+        request.setMemberId(rq.getMember().getId());
+        boolean isServiceAvailable = coinUt.isServiceAvailable(rq.getMember());
 
-            if (!isServiceAvailable) {
-                return "resume/coin-shortage";
-            }
-
-            kafkaPredictionProducer.sendAdviceRequest(objectMapper.writeValueAsString(request));
+        if (!isServiceAvailable) {
+            return "resume/coin-shortage";
         }
+
+        kafkaPredictionProducer.sendAdviceRequest(objectMapper.writeValueAsString(request));
+
 
         return "resume/request-complete";
     }
