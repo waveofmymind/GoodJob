@@ -3,9 +3,9 @@ package com.goodjob.resume.facade;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.goodjob.resume.adaptor.outs.persistence.KafkaPredictionProducer;
 import com.goodjob.common.error.ErrorCode;
 import com.goodjob.common.error.exception.BusinessException;
+import com.goodjob.resume.adaptor.outs.persistence.ProducerAdapter;
 import com.goodjob.resume.dto.request.CreatePromptRequest;
 import com.goodjob.resume.dto.request.ResumeRequest;
 import com.goodjob.resume.dto.response.WhatGeneratedImproveResponse;
@@ -27,9 +27,9 @@ public class ResumeFacade {
     private final GptService gptService;
     private final ObjectMapper objectMapper;
     private final SavePredictionUseCase savePredictionUseCase;
-    private final KafkaPredictionProducer kafkaPredictionProducer;
+    private final ProducerAdapter producerAdapter;
 
-    @KafkaListener(topics = "question-prod", groupId = "gptgroup")
+    @KafkaListener(topics = "question-local", groupId = "gptgroup")
     public void generatedQuestionResponseWithKafka(String message) throws JsonProcessingException {
         try {
             CreatePromptRequest request = objectMapper.readValue(message, CreatePromptRequest.class);
@@ -46,13 +46,13 @@ public class ResumeFacade {
 
         } catch (Exception e) {
             CreatePromptRequest request = objectMapper.readValue(message, CreatePromptRequest.class);
-            kafkaPredictionProducer.sendError(request.getMemberId().toString());
+            producerAdapter.sendError(request.getMemberId().toString());
             throw new BusinessException(ErrorCode.CREATE_PREDICTION_QUESTION);
         }
 
     }
 
-    @KafkaListener(topics = "advice-prod", groupId = "gptgroup")
+    @KafkaListener(topics = "advice-local", groupId = "gptgroup")
     public void generateAdviceWithKafka(String message) throws JsonProcessingException {
         try {
             CreatePromptRequest request = objectMapper.readValue(message, CreatePromptRequest.class);
@@ -68,7 +68,7 @@ public class ResumeFacade {
 
         } catch (Exception e) {
             CreatePromptRequest request = objectMapper.readValue(message, CreatePromptRequest.class);
-            kafkaPredictionProducer.sendError(request.getMemberId().toString());
+            producerAdapter.sendError(request.getMemberId().toString());
             throw new BusinessException(ErrorCode.CREATE_PREDICTION_QUESTION);
         }
     }
