@@ -39,7 +39,7 @@ public class SecurityConfig {
                         .requestMatchers("/article/create", "/article/detail/**", "/article/update/**", "/article/delete/**", "/comment/create/**", "/comment/update/**", "/comment/delete/**",
                                 "/subComment/create/**", "/subComment/update/**", "/subComment/delete/**", "/likes/like/article/**", "/likes/like/comment/**", "/likes/like/subComment/**",
                                 "/mentoring/list", "/mentoring/detail/**", "/payment/**", "/chat/**",
-                                "/member/edit/**", "/member/applyMentor/**").hasAuthority(ROLE_USER.name())
+                                "/member/edit/**", "/member/applyMentor/**","/resumes/**").hasAuthority(ROLE_USER.name())
                         .requestMatchers("/mentoring/create").hasAuthority(ROLE_MENTOR.name())
                         .requestMatchers("/**", "/resumes/**", "/member/**", "/article/**", "/jobstatistic/**").permitAll()
                 )
