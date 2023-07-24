@@ -28,9 +28,8 @@ public class EmailService {
     private final RedisUt redisUt;
     private static final long VERIFICATION_CODE_TTL = 1000L * 60 * 5;
 
-    @Transactional
     public void sendEmail(EmailType emailType, SendEmailLog sendEmailLog, String verificationCode) {
-        if (emailType == EmailType.JOIN) {
+        if (emailType.equals(EmailType.JOIN)) {
             // 레디스에 verifyCode 저장
             redisUt.setValue(sendEmailLog.getEmail(), verificationCode, VERIFICATION_CODE_TTL);
         }
@@ -42,6 +41,7 @@ public class EmailService {
     }
 
     @Async
+    @Transactional
     public void sendJoinEmail(String email) {
         String uuid = UUID.randomUUID().toString().replaceAll("-", "");
         String verificationCode = uuid.substring(0, 15);
@@ -54,6 +54,7 @@ public class EmailService {
     }
 
     @Async
+    @Transactional
     public void sendPasswordEmail(String username, String email, String password) {
         String title = getEmailTitle(EmailType.PASSWORD);
         String body = getEmailBody(EmailType.PASSWORD, null, password);
@@ -190,6 +191,7 @@ public class EmailService {
                 .body(body)
                 .username(username)
                 .build();
+
         return sendEmailLog;
     }
 }

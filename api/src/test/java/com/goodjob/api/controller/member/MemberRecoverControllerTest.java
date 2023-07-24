@@ -3,8 +3,10 @@ package com.goodjob.api.controller.member;
 
 import com.goodjob.common.email.entity.SendEmailLog;
 import com.goodjob.common.email.service.EmailService;
+import com.goodjob.member.dto.request.JoinRequestDto;
 import com.goodjob.member.entity.Member;
 import com.goodjob.member.service.MemberService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-@Profile("local")
+@ActiveProfiles("local")
 class MemberRecoverControllerTest {
 
     @Autowired
@@ -36,6 +39,17 @@ class MemberRecoverControllerTest {
     @Autowired
     private EmailService emailService;
 
+    @BeforeEach
+    void init() {
+        JoinRequestDto joinRequestDto = new JoinRequestDto();
+        joinRequestDto.setUsername("test");
+        joinRequestDto.setPassword("1234");
+        joinRequestDto.setNickname("tester");
+        joinRequestDto.setEmail("test@test.com");
+
+        memberService.join(joinRequestDto);
+    }
+
     @Test
     @DisplayName("아이디찾기 성공")
     void recoverUsernameSuccess() throws Exception {
@@ -43,7 +57,7 @@ class MemberRecoverControllerTest {
         ResultActions resultActions = mockMvc
                 .perform(post("/member/recover/username")
                         .contentType(MediaType.MULTIPART_FORM_DATA)
-                        .param("email", "test@naver.com")
+                        .param("email", "test@test.com")
                 )
                 .andDo(print());
 

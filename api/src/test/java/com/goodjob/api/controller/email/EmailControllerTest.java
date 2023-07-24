@@ -4,7 +4,12 @@ package com.goodjob.api.controller.email;
 import com.goodjob.common.email.entity.SendEmailLog;
 import com.goodjob.common.email.service.EmailService;
 import com.goodjob.common.redis.RedisUt;
+import com.goodjob.member.dto.request.JoinRequestDto;
+import com.goodjob.member.entity.Member;
+import com.goodjob.member.repository.MemberRepository;
+import com.goodjob.member.service.MemberService;
 import jakarta.servlet.http.Cookie;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
@@ -26,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-@Profile("local")
+@ActiveProfiles("local")
 class EmailControllerTest {
 
     @Autowired
@@ -36,7 +42,21 @@ class EmailControllerTest {
     private EmailService emailService;
 
     @Autowired
+    private MemberService memberService;
+
+    @Autowired
     private RedisUt redisUt;
+
+    @BeforeEach
+    void init() {
+        JoinRequestDto joinRequestDto = new JoinRequestDto();
+        joinRequestDto.setUsername("test");
+        joinRequestDto.setPassword("1234");
+        joinRequestDto.setNickname("tester");
+        joinRequestDto.setEmail("test@test.com");
+
+        memberService.join(joinRequestDto);
+    }
 
     @Test
     @DisplayName("회원가입코드 이메일 전송 성공")

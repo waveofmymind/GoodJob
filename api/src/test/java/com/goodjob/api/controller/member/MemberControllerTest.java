@@ -1,22 +1,23 @@
 package com.goodjob.api.controller.member;
 
 import com.goodjob.common.redis.RedisUt;
+import com.goodjob.member.dto.request.JoinRequestDto;
 import com.goodjob.member.entity.Member;
 import com.goodjob.member.service.MemberService;
 import jakarta.servlet.http.Cookie;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
@@ -33,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-@Profile("local")
+@ActiveProfiles("local")
 class MemberControllerTest {
 
     @Autowired
@@ -52,6 +53,17 @@ class MemberControllerTest {
                 .orElse(null);
 
         return cookieName;
+    }
+
+    @BeforeEach
+    void init() {
+        JoinRequestDto joinRequestDto = new JoinRequestDto();
+        joinRequestDto.setUsername("test");
+        joinRequestDto.setPassword("1234");
+        joinRequestDto.setNickname("tester");
+        joinRequestDto.setEmail("test@test.com");
+
+        memberService.join(joinRequestDto);
     }
 
     @Test
@@ -268,7 +280,10 @@ class MemberControllerTest {
                         .param("password", "1234")
                 )
                 .andReturn();
+
         Member member = memberService.findByUsername("test").orElse(null);
+        assertThat(redisUt.hasValue(String.valueOf(member.getId()))).isTrue();
+
         User user = new User(member.getUsername(), member.getPassword(), member.getAuthorities());
         // 스프링 시큐리티 객체에 저장할 authentication 객체 생성
         UsernamePasswordAuthenticationToken authentication = UsernamePasswordAuthenticationToken.authenticated(user, null, member.getAuthorities());
@@ -312,11 +327,23 @@ class MemberControllerTest {
 
     @Test
     @DisplayName("멘토등록 성공")
-    @WithUserDetails("test")
     void applyMentorSuccess() throws Exception {
+        // GIVEN
+        MvcResult loginResult = mockMvc
+                .perform(post("/member/login")
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .param("username", "test")
+                        .param("password", "1234")
+                )
+                .andReturn();
+
+        MockHttpServletResponse response = loginResult.getResponse();
+        Cookie[] cookies = response.getCookies();
+
         // WHEN
         ResultActions resultActions = mockMvc
                 .perform(post("/member/applyMentor")
+                        .cookie(cookies)
                         .contentType(MediaType.MULTIPART_FORM_DATA)
                         .param("isMentor", String.valueOf(true))
                 )
