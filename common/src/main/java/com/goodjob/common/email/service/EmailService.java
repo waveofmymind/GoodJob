@@ -1,5 +1,6 @@
 package com.goodjob.common.email.service;
 
+import com.goodjob.common.email.constant.EmailType;
 import com.goodjob.common.email.entity.SendEmailLog;
 import com.goodjob.common.email.mailSender.EmailSenderService;
 import com.goodjob.common.email.repository.SendEmailLogRepository;
@@ -27,25 +28,38 @@ public class EmailService {
     private final RedisUt redisUt;
     private static final long VERIFICATION_CODE_TTL = 1000L * 60 * 5;
 
+    @Transactional
+    public void sendEmail(EmailType emailType, SendEmailLog sendEmailLog, String verificationCode) {
+        if (emailType == EmailType.JOIN) {
+            // 레디스에 verifyCode 저장
+            redisUt.setValue(sendEmailLog.getEmail(), verificationCode, VERIFICATION_CODE_TTL);
+        }
+
+        sendEmailLogRepository.save(sendEmailLog);
+
+        RsData trySendRs = trySend(sendEmailLog);
+        setCompleted(sendEmailLog, trySendRs.getResultCode(), trySendRs.getMsg());
+    }
+
     @Async
     public void sendJoinEmail(String email) {
         String uuid = UUID.randomUUID().toString().replaceAll("-", "");
         String verificationCode = uuid.substring(0, 15);
 
-        String title = getEmailTitle("join");
-        String body = getEmailBody("join", verificationCode, null);
+        String title = getEmailTitle(EmailType.JOIN);
+        String body = getEmailBody(EmailType.JOIN, verificationCode, null);
 
         SendEmailLog sendEmailLog = getSendEmailLog(email, title, body, null);
-        sendEmail("join", sendEmailLog, verificationCode);
+        sendEmail(EmailType.JOIN, sendEmailLog, verificationCode);
     }
 
     @Async
     public void sendPasswordEmail(String username, String email, String password) {
-        String title = getEmailTitle("password");
-        String body = getEmailBody("password", null, password);
+        String title = getEmailTitle(EmailType.PASSWORD);
+        String body = getEmailBody(EmailType.PASSWORD, null, password);
 
         SendEmailLog sendEmailLog = getSendEmailLog(email, title, body, username);
-        sendEmail("password", sendEmailLog, null);
+        sendEmail(EmailType.PASSWORD, sendEmailLog, null);
     }
 
     public RsData verifyCode(String email, String providedCode) {
@@ -94,19 +108,6 @@ public class EmailService {
         return RsData.of(resultCode, "메일이 성공적으로 발송되었습니다.");
     }
 
-    @Transactional
-    private void sendEmail(String emailType, SendEmailLog sendEmailLog, String verificationCode) {
-        if (emailType.equals("join")) {
-            // 레디스에 verifyCode 저장
-            redisUt.setValue(sendEmailLog.getEmail(), verificationCode, VERIFICATION_CODE_TTL);
-        }
-
-        sendEmailLogRepository.save(sendEmailLog);
-
-        RsData trySendRs = trySend(sendEmailLog);
-        setCompleted(sendEmailLog, trySendRs.getResultCode(), trySendRs.getMsg());
-    }
-
     private RsData trySend(SendEmailLog sendEmailLog) {
         try {
             emailSenderService.send(sendEmailLog.getEmail(), "no-reply@goodjob.com",
@@ -135,12 +136,12 @@ public class EmailService {
         sendEmailLogRepository.save(sendEmailLog);
     }
 
-    private String getEmailTitle(String emailType) {
+    private String getEmailTitle(EmailType emailType) {
         switch (emailType) {
-            case "join": {
+            case JOIN: {
                 return "[이메일인증] GoodJob 이메일 인증 코드입니다. 코드를 입력하여 회원가입을 완료해주세요.";
             }
-            case "password": {
+            case PASSWORD: {
                 return "[임시비밀번호발급] GoodJob 임시비밀번호 발급 메일입니다. 로그인 후 비밀번호를 변경해주세요.";
             }
             default: {
@@ -149,9 +150,9 @@ public class EmailService {
         }
     }
 
-    private String getEmailBody(String emailType, String verificationCode, String password) {
+    private String getEmailBody(EmailType emailType, String verificationCode, String password) {
         switch (emailType) {
-            case "join":
+            case JOIN:
                 return "<html>"
                         + "<head>"
                         + "<title>이메일 인증 코드</title>"
@@ -164,7 +165,7 @@ public class EmailService {
                         + "<p>감사합니다.</p>"
                         + "</body>"
                         + "</html>";
-            case "password":
+            case PASSWORD:
                 return "<html>"
                         + "<head>"
                         + "<title>임시비밀번호발급</title>"

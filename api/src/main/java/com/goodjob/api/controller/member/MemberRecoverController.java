@@ -1,10 +1,11 @@
 package com.goodjob.api.controller.member;
 
+import com.goodjob.common.email.service.EmailService;
+import com.goodjob.common.rsData.RsData;
 import com.goodjob.member.dto.request.EditRequestDto;
 import com.goodjob.member.entity.Member;
 import com.goodjob.member.service.MemberEditService;
 import com.goodjob.member.service.MemberService;
-import com.goodjob.common.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,7 @@ public class MemberRecoverController {
 
     private final MemberService memberService;
     private final MemberEditService memberEditService;
-    private final EmailVerificationService emailVerificationService;
+    private final EmailService emailService;
 
     @GetMapping("/username")
     @PreAuthorize("isAnonymous()")
@@ -75,7 +76,7 @@ public class MemberRecoverController {
         }
 
         // 메일 전송
-        emailVerificationService.sendPassword(username, member.getEmail(), editRequestDto.getPassword());
+        emailService.sendPasswordEmail(username, member.getEmail(), editRequestDto.getPassword());
 
         return RsData.of("S-1", "가입하신 메일주소로 임시비밀번호가 발송되었습니다.");
     }
