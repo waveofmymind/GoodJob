@@ -50,20 +50,20 @@ public class MemberEditService {
 
             String password = passwordEncoder.encode(editRequestDto.getPassword());
 
-            member.setPassword(password);
+            member.updatePassword(password);
         } else {
             if (member.getNickname().equals(nickname)) {
                 return RsData.of("F-1", "수정된 정보가 없습니다!");
             }
         }
 
-        member.setNickname(nickname);
+        member.updateNickname(nickname);
         memberRepository.save(member);
 
         return RsData.of("S-1", "회원 정보가 수정되었습니다.");
     }
 
-    public EditRequestDto genEditRequestDtoWithTempPassword(Member member) {
+    public EditRequestDto getEditRequestDto(Member member) {
         String tempPassword = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 15);
         EditRequestDto editRequestDto = EditRequestDto.builder()
                 .nickname(member.getNickname())

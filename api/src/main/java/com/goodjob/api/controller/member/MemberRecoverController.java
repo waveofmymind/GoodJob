@@ -68,7 +68,7 @@ public class MemberRecoverController {
         Member member = opMember.get();
 
         // 임시비밀번호 생성 후 회원 비밀번호 변경
-        EditRequestDto editRequestDto = memberEditService.genEditRequestDtoWithTempPassword(member);
+        EditRequestDto editRequestDto = memberEditService.getEditRequestDto(member);
         RsData updateRsData = memberEditService.update(member, editRequestDto);
 
         if (updateRsData.isFail()) {
