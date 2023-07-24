@@ -32,11 +32,9 @@ public class Member extends BaseEntity {
     @Column(unique = true)
     private String username; // 로그인 계정
 
-    @Setter
     private String password;
 
     @Column(unique = true)
-    @Setter
     private String nickname; // 닉네임
 
     private String email;
@@ -109,5 +107,13 @@ public class Member extends BaseEntity {
 
     public void softDelete() {
         this.isDeleted = true;
+    }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
     }
 }

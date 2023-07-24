@@ -1,5 +1,9 @@
 package com.goodjob.api.controller.member;
 
+import com.goodjob.member.entity.Member;
+import com.goodjob.member.repository.MemberRepository;
+import com.goodjob.member.service.MemberService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,11 +23,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-@Profile("local")
+@ActiveProfiles("local")
 class MemberRestControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @BeforeEach
+    void init() {
+        Member member = Member.builder()
+                .username("test")
+                .password("1234")
+                .nickname("tester")
+                .email("test@test.com")
+                .build();
+
+        memberRepository.save(member);
+    }
 
     @Test
     @DisplayName("회원가입 - 아이디 확인 성공")
