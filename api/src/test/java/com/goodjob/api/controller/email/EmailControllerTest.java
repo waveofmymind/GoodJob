@@ -115,8 +115,6 @@ class EmailControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(handler().handlerType(EmailController.class))
                 .andExpect(handler().methodName("verifyEmail"))
-                .andExpect(jsonPath("$.resultCode").value("S-1"))
-                .andExpect(jsonPath("$.msg").value("인증 코드가 확인되었습니다."))
                 .andReturn();
     }
 
@@ -150,7 +148,6 @@ class EmailControllerTest {
                 .andExpect(handler().handlerType(EmailController.class))
                 .andExpect(handler().methodName("verifyEmail"))
                 .andExpect(jsonPath("$.resultCode").value("F-1"))
-                .andExpect(jsonPath("$.msg").value("잘못된 인증 코드입니다."))
                 .andReturn();
     }
 

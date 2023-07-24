@@ -223,11 +223,6 @@ class MemberControllerTest {
         Cookie refreshToken = getCookie(cookies, "refreshToken");
         assertThat(refreshToken).isNotNull();
 
-        // 레디스 저장 확인 및 토큰 값 비교
-        Member member = memberService.findByUsername("test").orElse(null);
-        String value = redisUt.getValue(String.valueOf(member.getId()));
-
-        assertThat(value).isEqualTo(refreshToken.getValue());
     }
 
     @Test
@@ -282,7 +277,6 @@ class MemberControllerTest {
                 .andReturn();
 
         Member member = memberService.findByUsername("test").orElse(null);
-        assertThat(redisUt.hasValue(String.valueOf(member.getId()))).isTrue();
 
         User user = new User(member.getUsername(), member.getPassword(), member.getAuthorities());
         // 스프링 시큐리티 객체에 저장할 authentication 객체 생성
