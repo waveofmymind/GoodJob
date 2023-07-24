@@ -1,6 +1,5 @@
 package com.goodjob.api.controller.member;
 
-import com.goodjob.common.email.service.EmailVerificationService;
 import com.goodjob.member.dto.request.EditRequestDto;
 import com.goodjob.member.entity.Member;
 import com.goodjob.member.service.MemberEditService;

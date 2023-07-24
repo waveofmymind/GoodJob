@@ -1,6 +1,6 @@
 package com.goodjob.api.controller.email;
 
-import com.goodjob.common.email.service.EmailVerificationService;
+import com.goodjob.common.email.service.EmailService;
 import com.goodjob.common.rsData.RsData;
 import com.goodjob.core.global.rq.Rq;
 import jakarta.servlet.http.Cookie;
@@ -16,7 +16,7 @@ import static com.goodjob.common.cookie.constant.CookieType.EMAIL;
 @RequestMapping("/email")
 public class EmailController {
 
-    private final EmailVerificationService emailVerificationService;
+    private final EmailService emailService;
     private final Rq rq;
 
     @PostMapping("/send")
@@ -24,7 +24,7 @@ public class EmailController {
         // 쿠키에 해당 유저의 email 저장
         rq.setCookie(EMAIL.value(), email);
 
-        emailVerificationService.sendVerificationCode(email);
+        emailService.sendJoinEmail(email);
     }
 
     @PostMapping("/verify")
@@ -33,7 +33,7 @@ public class EmailController {
             // 유저의 쿠키에서 이메일 값 가져옴
             Cookie emailCookie = rq.getCookie(EMAIL.value());
 
-            return emailVerificationService.verify(emailCookie.getValue(), verificationCode);
+            return emailService.verifyCode(emailCookie.getValue(), verificationCode);
         } catch (NullPointerException e) {
             return RsData.of("F-1", "이메일 정보가 없습니다. 새로고침 후 다시 시도해주세요.");
         }
