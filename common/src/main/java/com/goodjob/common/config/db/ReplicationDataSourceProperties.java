@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @Configuration
-@Profile("prod")
+@Profile("test")
 @ConfigurationProperties(prefix = "spring.datasource.replication")
 public class ReplicationDataSourceProperties {
 
