@@ -10,12 +10,14 @@ import com.goodjob.resume.ResumeConfigurationLoader;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableCaching
 @SpringBootApplication
 @EnableScheduling
+@EnableFeignClients(basePackages = "com.goodjob.api.feign")
 @Import({CoreConfigurationLoader.class, CommonConfigurationLoader.class, ResumeConfigurationLoader.class, JobConfigurationLoader.class
         , MemberConfigurationLoader.class, ArticleConfigurationLoader.class, MentoringConfigurationLoader.class})
 public class GoodjobApplication {
