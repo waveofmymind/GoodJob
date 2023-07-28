@@ -1,4 +1,4 @@
-package com.goodjob.resume.domain;
+package com.goodjob.resume.domain.resume;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

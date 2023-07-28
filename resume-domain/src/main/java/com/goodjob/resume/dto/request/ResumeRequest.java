@@ -1,5 +1,6 @@
 package com.goodjob.resume.dto.request;
 
+import com.goodjob.resume.domain.resume.ResumeInfo;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -14,4 +15,11 @@ public class ResumeRequest{
 
         @NotBlank
         String content;
+
+        public ResumeInfo toEntity() {
+            return ResumeInfo.builder()
+                    .resumeType(resumeType)
+                    .content(content)
+                    .build();
+        }
 }
