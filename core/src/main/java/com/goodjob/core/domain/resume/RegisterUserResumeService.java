@@ -1,4 +1,4 @@
-package com.goodjob.core.domain.resume
+package com.goodjob.core.domain.resume;
 
 import com.goodjob.core.domain.outbox.AggregateType;
 import com.goodjob.core.domain.outbox.OutboxService;
