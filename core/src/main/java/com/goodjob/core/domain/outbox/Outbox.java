@@ -1,27 +1,24 @@
-package com.goodjob.resume.adaptor.outs.persistence;
+package com.goodjob.core.domain.outbox;
 
 import com.goodjob.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import lombok.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@Getter
 public class Outbox extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String aggregateId;
+    private Long aggregateId;
 
-    private String aggregateType;
+    @Enumerated(EnumType.STRING)
+    private AggregateType aggregateType;
 
     @Column
     private ProcessStatus processStatus = ProcessStatus.READY;

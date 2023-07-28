@@ -1,6 +1,7 @@
 package com.goodjob.resume.dto.request;
 
 
+import com.goodjob.resume.domain.resume.Resume;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,4 +17,13 @@ public class CreatePromptRequest {
     private String job;
     private String career;
     private List<ResumeRequest> resumeRequests;
+
+    public CreateResumeCommand toCommand() {
+        return CreateResumeCommand.builder()
+                .memberId(memberId)
+                .job(job)
+                .career(career)
+                .resumeRequests(resumeRequests)
+                .build();
+    }
 }
