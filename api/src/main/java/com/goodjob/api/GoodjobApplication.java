@@ -14,7 +14,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@EnableCaching
 @SpringBootApplication
 @EnableScheduling
 @EnableFeignClients(basePackages = "com.goodjob.api.feign")
