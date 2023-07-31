@@ -14,6 +14,7 @@ import com.goodjob.article.domain.comment.entity.Comment;
 import com.goodjob.article.domain.hashTag.service.HashTagService;
 import com.goodjob.member.entity.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -32,10 +33,9 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final ArticleMapper articleMapper;
     private final HashTagService hashTagService;
-    private final FileService fileService;
 
-
-    @Transactional
+    @Transactional(readOnly = true)
+    @Cacheable(value = "articles", key = "#page + #id + #sortCode + #category")
     public Page<ArticleResponseDto> findByCategory(int page, int id, int sortCode, String category, String query) {
         Pageable pageable = PageRequest.of(page, 12);
 
@@ -49,6 +49,7 @@ public class ArticleService {
         return convertToPage(articleResponseDtos, pageable);
     }
 
+
     private Page<ArticleResponseDto> convertToPage(List<ArticleResponseDto> articles, Pageable pageable) {
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), articles.size());
@@ -61,12 +62,12 @@ public class ArticleService {
         List<Comment> commentList = article.getCommentList();
         Long sum = 0L;
 
-        for(Comment comment : commentList) {
+        for (Comment comment : commentList) {
             if (!comment.isDeleted()) {
                 sum++;
                 List<SubComment> subCommentList = comment.getSubCommentList();
-                for(SubComment subComment : subCommentList) {
-                    if(!subComment.isDeleted()) {
+                for (SubComment subComment : subCommentList) {
+                    if (!subComment.isDeleted()) {
                         sum++;
                     }
                 }
@@ -80,7 +81,7 @@ public class ArticleService {
     public RsData getArticleResponseDto(Long id) {
         RsData<Article> articleRsData = getArticle(id);
 
-        if(articleRsData.isFail()) {
+        if (articleRsData.isFail()) {
             return articleRsData;
         }
 
@@ -103,7 +104,7 @@ public class ArticleService {
     private Map<String, File> getFileMap(Article article) {
         List<File> files = article.getFileList();
 
-        for(File file : files) {
+        for (File file : files) {
             file.getFileName();
         }
 
@@ -120,13 +121,13 @@ public class ArticleService {
     public RsData getArticle(Long id) {
         Optional<Article> articleOp = articleRepository.findQslById(id);
 
-        if(articleOp.isEmpty()) {
+        if (articleOp.isEmpty()) {
             return RsData.of("F-1", "해당 게시글이 존재하지 않습니다.");
         }
 
         Article article = articleOp.get();
 
-        if(article.isDeleted()) {
+        if (article.isDeleted()) {
             return RsData.of("F-2", "해당 게시글은 이미 삭제되었습니다.");
         }
 
@@ -159,15 +160,14 @@ public class ArticleService {
     public RsData updateArticle(Member author, Long id, ArticleRequestDto articleRequestDto) {
         RsData<Article> articleRsData = getArticle(id);
 
-        if(articleRsData.isFail()) {
+        if (articleRsData.isFail()) {
             return articleRsData;
         }
 
 
-
         Article article = articleRsData.getData();
 
-        if(article.getMember().getId() != author.getId()) {
+        if (article.getMember().getId() != author.getId()) {
             return RsData.of("F-3", "수정 권한이 없습니다.");
         }
 
@@ -183,24 +183,24 @@ public class ArticleService {
     public RsData deleteArticle(Member author, Long id) {
         RsData<Article> articleRsData = getArticle(id);
 
-        if(articleRsData.isFail()) {
+        if (articleRsData.isFail()) {
             return articleRsData;
         }
 
         Article article = articleRsData.getData();
 
-        if(article.getMember().getId() != author.getId()) {
+        if (article.getMember().getId() != author.getId()) {
             return RsData.of("F-3", "삭제 권한이 없습니다.");
         }
 
         List<Comment> commentList = article.getCommentList();
 
-        for(Comment comment : commentList) {
+        for (Comment comment : commentList) {
             comment.setDeleted(true);
 
             List<SubComment> subCommentList = comment.getSubCommentList();
 
-            for(SubComment subComment : subCommentList) {
+            for (SubComment subComment : subCommentList) {
                 subComment.setDeleted(true);
             }
         }
@@ -212,5 +212,9 @@ public class ArticleService {
 
     public List<Article> findAllByMemberId(Long memberId) {
         return articleRepository.findAllByMemberIdOrderByCreatedDateDesc(memberId);
+    }
+
+    private String getCacheKey(int page, int id, int sortCode, String category, String query) {
+        return "articles-" + page + '-' + id + '-' + sortCode + '-' + category + '-' + query;
     }
 }
