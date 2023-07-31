@@ -7,7 +7,28 @@ dependencies {
     implementation project(':member-domain')
     implementation project(':mentoring-domain')
     implementation project(':article-domain')
+
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
+    // resilience4j
+    implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
+
+    // open feign
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
 }
+
+ext {
+    set('springCloudVersion', "2022.0.3")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
 
 bootJar {
     enabled = true

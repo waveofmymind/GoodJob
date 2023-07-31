@@ -3,8 +3,11 @@ package com.goodjob.api.controller.resume;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.goodjob.core.domain.outbox.OutboxService;
+import com.goodjob.core.domain.resume.RegisterUserResumeService;
 import com.goodjob.member.coin.CoinUt;
 import com.goodjob.resume.adaptor.outs.persistence.ProducerAdapter;
+import com.goodjob.resume.application.service.ResumeService;
 import com.goodjob.resume.domain.ServiceType;
 import com.goodjob.resume.dto.request.CreatePromptRequest;
 import com.goodjob.resume.dto.request.ResumeRequest;
@@ -31,6 +34,7 @@ public class ResumeController {
     private final ObjectMapper objectMapper;
     private final PredictionFacade predictionFacade;
     private final CoinUt coinUt;
+    private final RegisterUserResumeService registerUserResumeService;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -52,7 +56,9 @@ public class ResumeController {
         if (!isServiceAvailable) {
             return "resume/coin-shortage";
         }
+        registerUserResumeService.saveUserResume(request.toCommand());
 
+        // TODO 스케줄러로 메시지 발행하도록 변경
         producerAdapter.sendQuestionRequest(objectMapper.writeValueAsString(request));
 
         return "resume/request-complete";
@@ -65,7 +71,6 @@ public class ResumeController {
 
     @PostMapping("/advices")
     public String generateAdvice(@ModelAttribute CreatePromptRequest request) throws JsonProcessingException {
-        request.setMemberId(rq.getMember().getId());
         request.setMemberId(rq.getMember().getId());
         boolean isServiceAvailable = coinUt.isServiceAvailable(rq.getMember());
 
