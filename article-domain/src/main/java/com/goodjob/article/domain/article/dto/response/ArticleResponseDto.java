@@ -7,6 +7,7 @@ import com.goodjob.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class ArticleResponseDto {
+public class ArticleResponseDto implements Serializable {
     private Long id;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
@@ -30,8 +31,8 @@ public class ArticleResponseDto {
     private int category;
 
     public boolean isMemberLikesArticle(Member member) {
-        for(LikesResponseDto likesResponseDto : likesList) {
-            if(likesResponseDto.getMember().getId() == member.getId()) {
+        for (LikesResponseDto likesResponseDto : likesList) {
+            if (likesResponseDto.getMember().getId() == member.getId()) {
                 return true;
             }
         }
@@ -40,7 +41,7 @@ public class ArticleResponseDto {
     }
 
     public String getCategoryDisplayName() {
-        return switch(category) {
+        return switch (category) {
             case 2 -> "취준";
             case 3 -> "자소서";
             case 4 -> "면접";

@@ -20,7 +20,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Article> findQslBySortCode(int id, int sortCode, String category, String kw) {
+    public List<Article>    findQslBySortCode(int id, int sortCode, String category, String kw) {
         List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
 
         BooleanBuilder builder = new BooleanBuilder();

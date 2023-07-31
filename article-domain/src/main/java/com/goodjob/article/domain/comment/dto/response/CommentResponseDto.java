@@ -6,12 +6,13 @@ import com.goodjob.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 @Setter
-public class CommentResponseDto {
+public class CommentResponseDto implements Serializable {
 
     private Long id;
     private LocalDateTime createdDate;
@@ -23,8 +24,8 @@ public class CommentResponseDto {
     private List<SubCommentResponseDto> subCommentList;
 
     public boolean isMemberLikesComment(Member member) {
-        for(LikesResponseDto likesResponseDto : likesList) {
-            if(likesResponseDto.getMember().getId() == member.getId()) {
+        for (LikesResponseDto likesResponseDto : likesList) {
+            if (likesResponseDto.getMember().getId() == member.getId()) {
                 return true;
             }
         }
