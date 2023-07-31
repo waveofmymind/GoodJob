@@ -3,9 +3,11 @@ package com.goodjob.article.domain.keyword.dto.response;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
-public class KeyWordResponseDto {
+public class KeyWordResponseDto implements Serializable {
     private Long id;
     private String content;
 
