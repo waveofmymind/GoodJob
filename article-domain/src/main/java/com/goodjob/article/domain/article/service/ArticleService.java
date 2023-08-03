@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -33,20 +34,23 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final ArticleMapper articleMapper;
     private final HashTagService hashTagService;
+    private final ArticleCacheService articleCacheService;
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "articles", key = "#page + #id + #sortCode + #category")
     public Page<ArticleResponseDto> findByCategory(int page, int id, int sortCode, String category, String query) {
         Pageable pageable = PageRequest.of(page, 12);
+        String key = "findByCategory_" + id + "_" + sortCode + "_" + category + "_" + query + "_" + page;
+        int ttl = 5;
 
-        List<Article> articles = articleRepository.findQslBySortCode(id, sortCode, category, query);
+        return (Page<ArticleResponseDto>) articleCacheService.probabilisticEarlyRecomputationGet(key, args -> {
+            List<Article> articles = articleRepository.findQslBySortCode(id, sortCode, category, query);
+            List<ArticleResponseDto> articleResponseDtos = articles
+                    .stream()
+                    .map(articleMapper::toDto)
+                    .collect(Collectors.toList());
 
-        List<ArticleResponseDto> articleResponseDtos = articles
-                .stream()
-                .map(articleMapper::toDto)
-                .collect(Collectors.toList());
-
-        return convertToPage(articleResponseDtos, pageable);
+            return convertToPage(articleResponseDtos, pageable);
+        }, Collections.emptyList(), ttl);
     }
 
 
