@@ -2,19 +2,17 @@ package com.goodjob.article.domain.article.service;
 
 
 import com.goodjob.article.domain.article.dto.request.ArticleRequestDto;
-import com.goodjob.article.domain.article.mapper.ArticleMapper;
-import com.goodjob.article.domain.file.entity.File;
-import com.goodjob.article.domain.file.service.FileService;
-import com.goodjob.article.domain.subComment.entity.SubComment;
-import com.goodjob.common.rsData.RsData;
 import com.goodjob.article.domain.article.dto.response.ArticleResponseDto;
 import com.goodjob.article.domain.article.entity.Article;
+import com.goodjob.article.domain.article.mapper.ArticleMapper;
 import com.goodjob.article.domain.article.repository.ArticleRepository;
 import com.goodjob.article.domain.comment.entity.Comment;
+import com.goodjob.article.domain.file.entity.File;
 import com.goodjob.article.domain.hashTag.service.HashTagService;
+import com.goodjob.article.domain.subComment.entity.SubComment;
+import com.goodjob.common.rsData.RsData;
 import com.goodjob.member.entity.Member;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -39,7 +37,7 @@ public class ArticleService {
     @Transactional(readOnly = true)
     public Page<ArticleResponseDto> findByCategory(int page, int id, int sortCode, String category, String query) {
         Pageable pageable = PageRequest.of(page, 12);
-        String key = "findByCategory_" + id + "_" + sortCode + "_" + category + "_" + query + "_" + page;
+        String key = getCacheKey(page, id, sortCode, category);
         int ttl = 5;
 
         return (Page<ArticleResponseDto>) articleCacheService.probabilisticEarlyRecomputationGet(key, args -> {
@@ -218,7 +216,7 @@ public class ArticleService {
         return articleRepository.findAllByMemberIdOrderByCreatedDateDesc(memberId);
     }
 
-    private String getCacheKey(int page, int id, int sortCode, String category, String query) {
-        return "articles-" + page + '-' + id + '-' + sortCode + '-' + category + '-' + query;
+    private String getCacheKey(int page, int id, int sortCode, String category) {
+        return "articles-" + page + '-' + id + '-' + sortCode + '-' + category;
     }
 }

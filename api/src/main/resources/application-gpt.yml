@@ -8,3 +8,8 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      retries: 1
+      enable-idempotence: true
+      max-in-flight-requests-per-connection: 2
+
