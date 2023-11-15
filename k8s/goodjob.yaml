@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goodjob
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      project: goodjob
+      category: app
+  template:
+    metadata:
+      labels:
+        project: goodjob
+        category: app
+    spec:
+      containers:
+      - name: goodjob
+        image: waveofmymind/goodjob:${RELEASE_VERSON}
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - secretRef:
+            name: goodjob-config
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: goodjob
+spec:
+  type: NodePort
+  selector:
+    project: goodjob
+    category: app
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+
+  
+
+
